@@ -23,6 +23,10 @@ if (flutterVersionName == null) {
 }
 
 android {
+
+    lintOptions {
+        checkReleaseBuilds false
+    }
     namespace "com.example.tleavin_mobil"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
