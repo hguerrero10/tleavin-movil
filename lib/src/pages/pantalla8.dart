@@ -1,9 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:tleavin_mobil/src/widgets/bodycontent.dart';
 import 'package:image_picker/image_picker.dart';
 import 'pantalla9.dart';
 
-class Pantalla8 extends StatelessWidget {
+class Pantalla8 extends StatefulWidget {
+  const Pantalla8({super.key});
+
+  @override
+  State<Pantalla8> createState() => _Pantalla8State();
+}
+
+class _Pantalla8State extends State<Pantalla8> {
+
+final ImagePicker picker = ImagePicker();
+List<XFile>? _mediaFileList;
+
+Future<void> getCamara() async {
+   final List<XFile> pickedFileList = <XFile>[];
+  final photo = await picker.pickImage(
+    source: ImageSource.camera,
+     maxHeight: 1080,
+     maxWidth: 1920,
+     imageQuality: 100
+  );
+
+  if(photo != null) {
+    await GallerySaver.saveImage(photo.path, albumName: 'TLEAVIN');
+
+    pickedFileList.add(XFile(photo.path));
+    setState(() {
+      _mediaFileList = pickedFileList;
+    });
+  }
+
+  // if(photo != null) {
+  //   pickedFileList.add(photo);
+  //   setState(() {
+  //     _mediaFileList = pickedFileList;
+  //   });
+  // }
+} 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -260,7 +298,9 @@ class Pantalla8 extends StatelessWidget {
                           children: [
                             GestureDetector(
                               onTap: () => {
+                                getCamara()
 
+  
                               },
                               child: Column(
                                 children: [
@@ -274,7 +314,30 @@ class Pantalla8 extends StatelessWidget {
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold
                                     ),
-                                  )
+                                  ),
+                                  // Container(
+                                  //   height: 200,
+                                  //   width: 200,
+                                  //   child: ListView.builder(
+                                  //     key: UniqueKey(),
+                                  //     itemBuilder: (BuildContext context, int index) {
+                                  //       return Semantics(
+                                  //         label: 'image_picker_example_picked_image',
+                                  //         child: Image.file(
+                                  //         File(_mediaFileList![index].path),
+                                  //         errorBuilder: (BuildContext context, Object error,
+                                  //             StackTrace? stackTrace) {
+                                  //           return const Center(
+                                  //               child:
+                                  //                   Text('This image type is not supported'));
+                                  //         },
+                                  //       )
+                                                  
+                                  //       );
+                                  //     },
+                                  //   ),
+                                  // )
+
                                 ],
                               ),
                             ),

@@ -71,52 +71,52 @@ class _LoginFormState extends State<LoginForm> {
                         child: _inputPassword('Contraseña', 'Contraseña invalida', TextInputType.visiblePassword, _passwordController, Icons.vpn_key_outlined),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 15, bottom: 15),
+                        padding: const EdgeInsets.only(top: 15, bottom: 40),
                         child: _buttons('Iniciar Sesion', const Color.fromRGBO(242, 211, 0, 1)  , () => {
-                              Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (context) {
-                                    return HomeScreen(
-                                    );
-                                  }
-                                )
-                              )
+                          Navigator.of(context).push(
+                              MaterialPageRoute(builder: (context) {
+                                return HomeScreen(
+                                );
+                              }
+                            )
+                          )
                         }),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left:15, right: 15),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            TextButton(
-                              child: const Text(
-                                'Crear cuenta',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                )
-                              ),
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (context) {
-                                    return RegisterScreen(
-                                      // userRepository: _userRepository,
-                                    );
-                                  }
-                                )
-                              );
-                              },
-                            ),
-                            // TextButton(
-                            //   child: const Text(
-                            //     'Restablecer contraseña',
-                            //     style: TextStyle(
-                            //       color: Colors.white,
-                            //     )
-                            //   ),
-                            //   onPressed: () {},
-                            // ),
-                          ],
-                        ),
-                      )
+                      // Padding(
+                      //   padding: const EdgeInsets.only(left:15, right: 15),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: <Widget>[
+                      //       TextButton(
+                      //         child: const Text(
+                      //           'Crear cuenta',
+                      //           style: TextStyle(
+                      //             color: Colors.white,
+                      //           )
+                      //         ),
+                      //         onPressed: () {
+                      //           Navigator.of(context).push(
+                      //             MaterialPageRoute(builder: (context) {
+                      //               return RegisterScreen(
+                      //                 // userRepository: _userRepository,
+                      //               );
+                      //             }
+                      //           )
+                      //         );
+                      //         },
+                      //       ),
+                      //       // TextButton(
+                      //       //   child: const Text(
+                      //       //     'Restablecer contraseña',
+                      //       //     style: TextStyle(
+                      //       //       color: Colors.white,
+                      //       //     )
+                      //       //   ),
+                      //       //   onPressed: () {},
+                      //       // ),
+                      //     ],
+                      //   ),
+                      // )
                     ],
                   )
                 )

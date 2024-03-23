@@ -102,13 +102,7 @@ class _Pantalla5State extends State<Pantalla5> {
               crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   ElevatedButton(
-                    onPressed: () async{
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => Pantalla6()),
-                      // );
-              
-
+                    onPressed: () {
                         scanQR();
                     },
                     style: ButtonStyle(

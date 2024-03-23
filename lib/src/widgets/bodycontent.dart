@@ -12,16 +12,15 @@ class Cuerpo extends StatefulWidget {
 
 class _CuerpoState extends State<Cuerpo> {
     
-    DateTime ahora = DateTime.now();
-    var formatoFecha = DateFormat('dd/MM/yyyy HH:mm');
-    String fecha = '';
+    final DateFormat dateFormat = DateFormat('dd/MM/yyyy'); 
+    var format;
+    var dateString;
 
     @override
     void initState() {
       initializeDateFormatting();
-      String fechaFormateada = formatoFecha.format(ahora);
-      fecha = fechaFormateada;
-      print(fechaFormateada); 
+      format = DateFormat.yMMMMd('es');
+      dateString = format.format(DateTime.now());
       
       super.initState();
     }
@@ -33,7 +32,7 @@ class _CuerpoState extends State<Cuerpo> {
         children: <Widget>[
           Container(
             padding: EdgeInsets.only(left: 16, right: 16),
-            child: const Column(
+            child:  Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
@@ -43,24 +42,56 @@ class _CuerpoState extends State<Cuerpo> {
                   ),
                 ),
                 SizedBox(height: 5),
-                Text(
-                  'Fecha: ',
-                  // fecha,
-                  style: TextStyle(
-                    fontSize: 19.0,
+                  Row(
+                    children: [
+                      Text(
+                        'Fecha: ',
+                        style: TextStyle(
+                          fontSize: 19,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                      Text(
+                        dateString,
+                        style: TextStyle(
+                          fontSize: 19,
+                        ),
+                      ),
+                    ],
                   ),
+                Row(
+                  children: [
+                    Text(
+                      'Usuario: ',
+                      style: TextStyle(
+                        fontSize: 19,
+                        fontWeight: FontWeight.bold
+                      ),
+                    ),
+                    Text(
+                      'Inspector Calidad',
+                      style: TextStyle(
+                        fontSize: 19,
+                      ),
+                    ),
+                  ],
                 ),
-                Text(
-                  'Usuario: Inspector Calidad',
-                  style: TextStyle(
-                    fontSize: 19.0,
-                  ),
-                ),
-                Text(
-                  'Ubicacion: Puerto Lazaro Cardenas',
-                  style: TextStyle(
-                    fontSize: 19.0,
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      'Ubicacion: ',
+                      style: TextStyle(
+                        fontSize: 19,
+                        fontWeight: FontWeight.bold
+                      ),
+                    ),
+                    Text(
+                      'Puerto Lazaro Cardenas',
+                      style: TextStyle(
+                        fontSize: 19,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

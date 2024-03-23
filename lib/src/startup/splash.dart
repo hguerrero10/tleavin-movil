@@ -31,10 +31,21 @@ class _SplashScreenState extends State<SplashScreen> {
                 width: 317 
               )
             ),
-            const SizedBox(height: 10),
+            // Center(
+            //   child: Text(
+            //     'VIN',
+            //     style: TextStyle(
+            //       fontSize: 19,
+            //       fontWeight: FontWeight.bold,
+
+            //       color: Color.fromRGBO(242, 211, 0, 1),
+            //     ),
+            //   )
+            // ),
+            const SizedBox(height: 50),
             const CircularProgressIndicator(
               backgroundColor: Colors.transparent,
-              valueColor: AlwaysStoppedAnimation<Color>(Color.fromRGBO(242, 211, 0, 0)),
+              valueColor: AlwaysStoppedAnimation<Color>(Color.fromRGBO(242, 211, 0, 1)),
               strokeWidth: 5,
             )
           ],
