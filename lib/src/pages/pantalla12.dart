@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/src/pages/pantalla13.dart';
-import 'package:tleavin_mobil/src/widgets/bodycontent.dart';
+import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 
 class Pantalla12 extends StatefulWidget {
   const Pantalla12({super.key});
@@ -342,10 +342,7 @@ class _Pantalla12State extends State<Pantalla12> {
                         color: Colors.white
                       ),
                     ),
-                  ),
-
-                  
-
+                  )
                 ]
               )
             ),

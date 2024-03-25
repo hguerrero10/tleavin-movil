@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tleavin_mobil/src/widgets/bodycontent.dart';
-import 'pantalla11.dart';
+import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
+import 'registro_unidad_ss.dart';
 
 class Pantalla10 extends StatelessWidget {
   @override
@@ -201,10 +201,10 @@ class Pantalla10 extends StatelessWidget {
                   SizedBox(height: 30),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Pantalla11()),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => Pantalla11()),
+                      // );
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),

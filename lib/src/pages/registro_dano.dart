@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
-import 'package:tleavin_mobil/src/widgets/bodycontent.dart';
+import 'package:tleavin_mobil/src/pages/inspeccion_vin.dart';
+import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:image_picker/image_picker.dart';
-import 'pantalla9.dart';
+import 'resumen_dano.dart';
 
-class Pantalla8 extends StatefulWidget {
-  const Pantalla8({super.key});
+class Registro_Dano extends StatefulWidget {
+  final vin;
+  final panel;
+
+  const Registro_Dano({super.key, this.vin, this.panel});
 
   @override
-  State<Pantalla8> createState() => _Pantalla8State();
+  State<Registro_Dano> createState() => _Registro_DanoState();
 }
 
-class _Pantalla8State extends State<Pantalla8> {
+class _Registro_DanoState extends State<Registro_Dano> {
 
 final ImagePicker picker = ImagePicker();
 List<XFile>? _mediaFileList;
@@ -46,49 +50,49 @@ Future<void> getCamara() async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pantalla 8'),
+        title: const Text('Registro de Daños'),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Cuerpo(),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'Unidad TLEA-458',
-                    style: TextStyle(
-                      fontSize: 16.0
-                    ),
-                  ),
-                  Text(
-                    'Bitacora: 789654',
-                    style: TextStyle(
-                      fontSize: 16.0
-                    ),
-                  ),
-                ]
-              )
-            ),
-            SizedBox(height: 30),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'Verificado 1 de 8',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // Container(
+            //   padding: EdgeInsets.symmetric(horizontal: 16.0),
+            //   child: const Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: <Widget>[
+            //       Text(
+            //         'Unidad TLEA-458',
+            //         style: TextStyle(
+            //           fontSize: 16.0
+            //         ),
+            //       ),
+            //       Text(
+            //         'Bitacora: 789654',
+            //         style: TextStyle(
+            //           fontSize: 16.0
+            //         ),
+            //       ),
+            //     ]
+            //   )
+            // ),
+            // SizedBox(height: 30),
+            // Container(
+            //   padding: EdgeInsets.symmetric(horizontal: 16.0),
+            //   child: const Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: <Widget>[
+            //       Text(
+            //         'Verificado 1 de 8',
+            //         style: TextStyle(
+            //           fontSize: 20,
+            //           fontWeight: FontWeight.bold
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: Divider(
@@ -105,14 +109,15 @@ Future<void> getCamara() async {
                 children: <Widget>[
                   Table(
                     border: TableBorder.all(),
-                    children: const [
+                    children: [
                       TableRow(
                         children: [
                           TableCell(
                               child: Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: Text(
-                                  '3GTPUCEK2G274842',
+                                  // '3GTPUCEK2G274842',
+                                  widget.vin,
                                   style: TextStyle(
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.bold
@@ -174,7 +179,7 @@ Future<void> getCamara() async {
                                 border: Border.all(color: Colors.black),
                               ),
                               child: Text(
-                                '',
+                                widget.panel,
                                 style: TextStyle(
                                   fontSize: 16.0
                                 ),
@@ -365,7 +370,12 @@ Future<void> getCamara() async {
                         ),
                         SizedBox(height: 20),
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => InspeccionVin(vin: widget.vin)),
+                            );
+                          },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
                             padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(18.0)),
@@ -389,7 +399,7 @@ Future<void> getCamara() async {
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => Pantalla9()),
+                              MaterialPageRoute(builder: (context) => Resumen_Dano(vin: widget.vin)),
                             );
                           },
                           style: ButtonStyle(

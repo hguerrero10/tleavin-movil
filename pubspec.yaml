@@ -42,8 +42,9 @@ dependencies:
   camera: ^0.9.4+5
   sqflite:
   gallery_saver: ^2.3.2
-  
-  
+  connectivity_widget: ^1.6.0
+  geolocator: ^8.0.0
+  geocoding: ^2.0.0
 
 dev_dependencies:
   flutter_test:

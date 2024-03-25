@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tleavin_mobil/src/widgets/bodycontent.dart';
-import 'pantalla5.dart';
+import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
+import 'compra_vin.dart';
 
 class Pantalla4 extends StatelessWidget {
   @override
@@ -213,7 +213,7 @@ class Pantalla4 extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Pantalla5()),
+                    MaterialPageRoute(builder: (context) => Compra_Vin()),
                   );
                 },
                 style: ButtonStyle(

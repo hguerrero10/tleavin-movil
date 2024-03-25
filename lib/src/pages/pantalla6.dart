@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tleavin_mobil/src/widgets/bodycontent.dart';
+import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 
-import 'pantalla7.dart';
+import 'inspeccion_vin.dart';
 
 class Pantalla6 extends StatelessWidget {
   @override
@@ -177,7 +177,7 @@ class Pantalla6 extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Pantalla7()),
+                        MaterialPageRoute(builder: (context) => InspeccionVin()),
                       );
                     },
                     style: ButtonStyle(

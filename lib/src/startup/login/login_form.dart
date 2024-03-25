@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tleavin_mobil/src/home/home.dart';
-import 'package:tleavin_mobil/src/startup/register/register_screen.dart';
+import 'package:tleavin_mobil/database/db.dart';
+import 'package:tleavin_mobil/model/usuario.dart';
+import 'package:tleavin_mobil/src/home/inicio.dart';
+// import 'package:tleavin_mobil/src/startup/register/register_screen.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -80,6 +82,14 @@ class _LoginFormState extends State<LoginForm> {
                               }
                             )
                           )
+
+                            // if(usuario.text.isNotEmpty && password.text.isNotEmpty) {
+                            //   // animacionEnviar();  
+                            //   login();
+                            // } 
+                            // else {
+                            //   // toast('Por favor llena los campos');
+                            // }
                         }),
                       ),
                       // Padding(
@@ -127,19 +137,47 @@ class _LoginFormState extends State<LoginForm> {
       ),
     );
   }
-  
 
+  // login() async {
+  //   DatabaseProvider.db.login(usuario.text.trim(), password.text.trim()).then((value)  {
+  //     if(value.id == null) {
+  //       bloc.addError();
+  //       toast('Inicio fallido');
+  //     } 
+  //     else {
+  //       bloc.addBoton();
+  //       setState(() {
+  //         usuarioModel = Usuario(
+  //           usuario: value.usuario,
+  //           nombre: value.nombre,
+  //           numero_empleado: value.numero_empleado,
+  //           password: value.password,
+  //           isLogged: 'true',
+  //           cargo: value.cargo,
+  //           status: value.status,
+  //         );
+  //       });
+        
+  //       // log(value.toString());
+  //       // DatabaseProvider.db.updateUsuario(usuarioModel!);
+  //       // bloc.addUser(value);
+  //       Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const HomeForm()), (Route<dynamic> route) => false);
+  //     }
+  //     bloc.deleteBoton();
+  //   });
+  // }
+  
   final kBoxDecorationStyle = BoxDecoration(
-  color: Colors.black38,
-  borderRadius: BorderRadius.circular(5.0),
-  boxShadow: const [
-    BoxShadow(
-      color: Colors.transparent,
-      blurRadius: 6.0,
-      offset: Offset(0, 2),
-    ),
-  ],
-);
+    color: Colors.black38,
+    borderRadius: BorderRadius.circular(5.0),
+    boxShadow: const [
+      BoxShadow(
+        color: Colors.transparent,
+        blurRadius: 6.0,
+        offset: Offset(0, 2),
+      ),
+    ],
+  );
 
   Widget _input(String placeholder, String mensaje, TextInputType tipo, TextEditingController controller, IconData icon, [bool isPassword = false, bool isfocus = false]) {
     return Container(

@@ -1,56 +1,65 @@
 import 'package:flutter/material.dart';
-import 'package:tleavin_mobil/src/widgets/bodycontent.dart';
+import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'pantalla10.dart';
 
-class Pantalla9 extends StatelessWidget {
+class Resumen_Dano extends StatefulWidget {
+  final vin;
+  const Resumen_Dano({super.key, this.vin});
+
+  @override
+  State<Resumen_Dano> createState() => _Resumen_DanoState();
+}
+
+class _Resumen_DanoState extends State<Resumen_Dano> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pantalla 9'),
+        title: const Text('Resumen de Daños'),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Cuerpo(),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'Unidad TLEA-458',
-                    style: TextStyle(
-                      fontSize: 16.0
-                    ),
-                  ),
-                  Text(
-                    'Bitacora: 789654',
-                    style: TextStyle(
-                      fontSize: 16.0
-                    ),
-                  ),
+            // Container(
+            //   padding: EdgeInsets.symmetric(horizontal: 16.0),
+            //   child: const Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: <Widget>[
+            //       Text(
+            //         'Unidad TLEA-458',
+            //         style: TextStyle(
+            //           fontSize: 16.0
+            //         ),
+            //       ),
+            //       Text(
+            //         'Bitacora: 789654',
+            //         style: TextStyle(
+            //           fontSize: 16.0
+            //         ),
+            //       ),
 
-                ]
-              )
-            ),
-            SizedBox(height: 10),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: const Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'Verificado 1 de 8',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            //     ]
+            //   )
+            // ),
+            // SizedBox(height: 10),
+            // Container(
+            //   padding: EdgeInsets.symmetric(horizontal: 16.0),
+            //   child: const Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: <Widget>[
+            //       Text(
+            //         'Verificado 1 de 8',
+            //         style: TextStyle(
+            //           fontSize: 20,
+            //           fontWeight: FontWeight.bold
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: Divider(
@@ -67,16 +76,17 @@ class Pantalla9 extends StatelessWidget {
                 children: <Widget>[
                   Table(
                     border: TableBorder.all(),
-                    children: const [
+                    children: [
                       TableRow(
                         children: [
                           TableCell(
                               child: Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: Text(
-                                  '3GTPUCEK2G274842',
+                                  // '3GTPUCEK2G274842',
+                                  widget.vin,
                                   style: TextStyle(
-                                    fontSize: 18.0,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.bold
                                   ),
                                 ),
@@ -92,7 +102,7 @@ class Pantalla9 extends StatelessWidget {
                                 child: Text(
                                   '2022 Chevrolet Silverdo 4WD',
                                   style: TextStyle(
-                                    fontSize: 18.0,
+                                    fontSize: 16,
                                   ),
                                 ),
                               ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tleavin_mobil/src/widgets/bodycontent.dart';
+import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 
 class Pantalla14 extends StatefulWidget {
   const Pantalla14({super.key});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tleavin_mobil/src/widgets/bodycontent.dart';
+import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'pantalla4.dart';
 
 class Pantalla3 extends StatelessWidget {
