@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/src/startup/login/login_screen.dart';
-// import 'package:tleavin_mobil/src/startup/splash.dart';
+
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Inicio',
       theme: ThemeData(
-        colorSchemeSeed: Color.fromRGBO(242, 211, 0, 1),
+        colorSchemeSeed: const Color.fromRGBO(242, 211, 0, 1),
       ),
-      home: LoginScreen(),
-      // home: SplashScreen(),
+      home: const LoginScreen()
     );
   }
 }

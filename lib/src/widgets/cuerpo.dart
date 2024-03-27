@@ -43,8 +43,8 @@ class _CuerpoState extends State<Cuerpo> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            padding: EdgeInsets.only(left: 16, right: 16),
-            child:  Column(
+            padding: const EdgeInsets.only(left: 16, right: 16),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Row(
@@ -52,7 +52,7 @@ class _CuerpoState extends State<Cuerpo> {
                   children: [
                     Row(
                       children: [
-                        Text(
+                        const Text(
                           'Fecha: ',
                           style: TextStyle(
                             fontSize: 19,
@@ -61,34 +61,39 @@ class _CuerpoState extends State<Cuerpo> {
                         ),
                         Text(
                           dateString,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 19,
                           ),
                         ),
                       ],
                     ),
-                    Container(
-                      width: 80,
-                      child: ConnectivityWidget(
-                        builder: (context, isOnline) => Center(
-                          child: Text("${isOnline ? 'ON' : 'OFF'}", style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: isOnline ? Colors.green : Colors.red))
-                          // isOnline ? Image.asset(
-                          //       'assets/img/verde.png',
-                          //       width: 30,
-                          //       height: 30,
-                          //     ) :
-                          //     Image.asset(
-                          //       'assets/img/verde.png',
-                          //       width: 30,
-                          //       height: 30,
-                          // )
+                    const SizedBox(height: 5),
+                    ConnectivityWidget(
+                      builder: (context, isOnline) => Center(
+                        child: Text(
+                          isOnline ? "ON" : "OFF", 
+                          style: TextStyle(
+                            fontSize: 10, 
+                            fontWeight: FontWeight.bold, 
+                            color: isOnline ? Colors.green : Colors.red
+                          )
                         )
-                      ),
-                    ),
+                        // isOnline ? Image.asset(
+                        //       'assets/img/verde.png',
+                        //       width: 30,
+                        //       height: 30,
+                        //     ) :
+                        //     Image.asset(
+                        //       'assets/img/verde.png',
+                        //       width: 30,
+                        //       height: 30,
+                        // )
+                      )
+                    )
                   ],
                 ),
-                SizedBox(height: 5),
-                Row(
+                const SizedBox(height: 5),
+                const Row(
                   children: [
                     Text(
                       'Usuario: ',
@@ -107,7 +112,7 @@ class _CuerpoState extends State<Cuerpo> {
                 ),
                 Row(
                   children: [
-                    Text(
+                    const Text(
                       'Ubicacion: ',
                       style: TextStyle(
                         fontSize: 19,
@@ -117,7 +122,7 @@ class _CuerpoState extends State<Cuerpo> {
                     Text(
                       // 'Puerto Lazaro Cardenas',
                       ubi,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 19,
                       ),
                     ),
@@ -135,11 +140,8 @@ class _CuerpoState extends State<Cuerpo> {
       List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
       Placemark place = placemarks[0];
       setState(() {
+        print(place);
         ubi = '${place.administrativeArea}, ${place.country}';
       });
-
-      print(place);
-
-      print('${place.locality}, ${place.administrativeArea}, ${place.country}');
     }
   }

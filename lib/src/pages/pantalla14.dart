@@ -17,16 +17,15 @@ class _Pantalla14State extends State<Pantalla14> {
       ),
       body: SingleChildScrollView(
         child: Container(
-             padding: EdgeInsets.all(16.0),
+             padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
-                //border: Border.all(),
                 borderRadius: BorderRadius.circular(10.0),
               ),
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Cuerpo(),
-              SizedBox(height: 60),
+              const Cuerpo(),
+              const SizedBox(height: 60),
               Center(
                 child: Image.asset(
                   'assets/img/logistica.png',
@@ -34,8 +33,8 @@ class _Pantalla14State extends State<Pantalla14> {
                   height: 250,
                 ),
               ),
-               SizedBox(height: 30),
-              Text(
+              const SizedBox(height: 30),
+              const Text(
                 'Embarque en Camino',
                 style: TextStyle(
                   fontSize: 20,

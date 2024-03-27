@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tleavin_mobil/src/pages/pantalla13.dart';
+import 'package:tleavin_mobil/src/pages/resumen_carga/resumen_viaje.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 
 class Pantalla12 extends StatefulWidget {
@@ -20,25 +20,23 @@ class _Pantalla12State extends State<Pantalla12> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Cuerpo(),
+            const Cuerpo(),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
+                  const Text(
                     'Resumen del Viaje',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold
                     ),
                   ),
-
-
                    Center(
                     child: Table(
                       border: TableBorder.all(),
-                      children: [
+                      children: const [
                         TableRow(
                           children: [
                             TableCell(
@@ -121,7 +119,7 @@ class _Pantalla12State extends State<Pantalla12> {
                             ),
                             TableCell(
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(8.0),
                                 child: Center(
                                     child: Text('VIN'),
                                   ),
@@ -129,7 +127,7 @@ class _Pantalla12State extends State<Pantalla12> {
                             ),
                             TableCell(
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(8.0),
                                 child: Center(
                                     child: Text('VIN'),
                                   ),
@@ -137,7 +135,7 @@ class _Pantalla12State extends State<Pantalla12> {
                             ),
                             TableCell(
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(8.0),
                                 child: Center(
                                     child: Text('VIN'),
                                   ),
@@ -145,7 +143,7 @@ class _Pantalla12State extends State<Pantalla12> {
                             ),
                             TableCell(
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(8.0),
                                 child: Center(
                                     child: Text('VIN'),
                                   ),
@@ -153,7 +151,7 @@ class _Pantalla12State extends State<Pantalla12> {
                             ),
                             TableCell(
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(8.0),
                                 child: Center(
                                     child: Text('VIN'),
                                   ),
@@ -165,7 +163,7 @@ class _Pantalla12State extends State<Pantalla12> {
                           children: [
                             TableCell(
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(8.0),
                                 child: Center(
                                   child: Text('Daño 2'),
                                 ),
@@ -174,17 +172,7 @@ class _Pantalla12State extends State<Pantalla12> {
                             TableCell(
                               child: Center(
                                 child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                  child: Text('Daño 2'),
-                                ),
-                              ),
-                              ),
-                            ),
-                            TableCell(
-                              child: Center(
-                                child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(8.0),
                                 child: Center(
                                   child: Text('Daño 2'),
                                 ),
@@ -194,7 +182,7 @@ class _Pantalla12State extends State<Pantalla12> {
                             TableCell(
                               child: Center(
                                 child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(8.0),
                                 child: Center(
                                   child: Text('Daño 2'),
                                 ),
@@ -204,7 +192,7 @@ class _Pantalla12State extends State<Pantalla12> {
                             TableCell(
                               child: Center(
                                 child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(8.0),
                                 child: Center(
                                   child: Text('Daño 2'),
                                 ),
@@ -214,7 +202,17 @@ class _Pantalla12State extends State<Pantalla12> {
                             TableCell(
                               child: Center(
                                 child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text('Daño 2'),
+                                ),
+                              ),
+                              ),
+                            ),
+                            TableCell(
+                              child: Center(
+                                child: Padding(
+                                padding: EdgeInsets.all(8.0),
                                 child: Center(
                                   child: Text('Daño 2'),
                                 ),
@@ -227,7 +225,7 @@ class _Pantalla12State extends State<Pantalla12> {
                           children: [
                             TableCell(
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(8.0),
                                 child: Center(
                                   child: Text('Daño 3'),
                                 ),
@@ -236,7 +234,7 @@ class _Pantalla12State extends State<Pantalla12> {
                             TableCell(
                               child: Center(
                                 child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(8.0),
                                 child: Center(
                                   child: Text('Daño 2'),
                                 ),
@@ -246,7 +244,7 @@ class _Pantalla12State extends State<Pantalla12> {
                             TableCell(
                               child: Center(
                                 child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(8.0),
                                 child: Center(
                                   child: Text('Daño 2'),
                                 ),
@@ -256,7 +254,7 @@ class _Pantalla12State extends State<Pantalla12> {
                             TableCell(
                               child: Center(
                                 child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(8.0),
                                 child: Center(
                                   child: Text('Daño 2'),
                                 ),
@@ -266,7 +264,7 @@ class _Pantalla12State extends State<Pantalla12> {
                             TableCell(
                               child: Center(
                                 child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(8.0),
                                 child: Center(
                                   child: Text('Daño 2'),
                                 ),
@@ -276,7 +274,7 @@ class _Pantalla12State extends State<Pantalla12> {
                             TableCell(
                               child: Center(
                                 child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(8.0),
                                 child: Center(
                                   child: Text('Daño 2'),
                                 ),
@@ -288,28 +286,25 @@ class _Pantalla12State extends State<Pantalla12> {
                       ],
                     ),
                   ),
-
-                  SizedBox(height: 30),
-
-
+                  const SizedBox(height: 30),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Pantalla13()),
+                        MaterialPageRoute(builder: (context) => const ResumenViaje()),
                       );
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(18.0)),
-                      minimumSize: MaterialStateProperty.all<Size>(Size(double.infinity, 50)),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
+                      minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16)
                         ),
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Completar Compra - Firmas',
                       style: TextStyle(
                         fontSize: 20.0,
@@ -317,7 +312,7 @@ class _Pantalla12State extends State<Pantalla12> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {
                       // Navigator.push(
@@ -327,15 +322,15 @@ class _Pantalla12State extends State<Pantalla12> {
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(18.0)),
-                      minimumSize: MaterialStateProperty.all<Size>(Size(double.infinity, 50)),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
+                      minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16)
                         ),
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Registrar Posiciones',
                       style: TextStyle(
                         fontSize: 20.0,

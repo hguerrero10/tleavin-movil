@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'compra_vin.dart';
 
-class Pantalla4 extends StatelessWidget {
+class Pantalla4 extends StatefulWidget {
+  const Pantalla4({super.key});
+
+  @override
+  State<Pantalla4> createState() => _Pantalla4State();
+}
+
+class _Pantalla4State extends State<Pantalla4> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,9 +20,9 @@ class Pantalla4 extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Cuerpo(),
+            const Cuerpo(),
             Container(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                 //border: Border.all(),
                 borderRadius: BorderRadius.circular(10.0),
@@ -33,9 +40,9 @@ class Pantalla4 extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 17),
+            const SizedBox(height: 17),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -51,14 +58,14 @@ class Pantalla4 extends StatelessWidget {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
+                                    const Text(
                                       '3GTPUCEK2G274842',
                                       style: TextStyle(
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.bold
                                       ),
                                     ),
-                                    SizedBox(height: 10),
+                                    const SizedBox(height: 10),
                                     ElevatedButton(
                                       onPressed: () {
                                         
@@ -67,7 +74,7 @@ class Pantalla4 extends StatelessWidget {
                                         backgroundColor: MaterialStateProperty.all<Color>(Colors.purple),
                                         
                                       ),
-                                      child: Text('VERIFICAR', style: TextStyle(color: Colors.white)),
+                                      child: const Text('VERIFICAR', style: TextStyle(color: Colors.white)),
                                     ),
                                   ],
                                 ),
@@ -76,7 +83,7 @@ class Pantalla4 extends StatelessWidget {
                           ),
                         ],
                       ),
-                      TableRow(
+                      const TableRow(
                         children: [
                           TableCell(
                               child: Padding(
@@ -93,7 +100,7 @@ class Pantalla4 extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   Table(
                     border: TableBorder.all(),
                     children: [
@@ -106,14 +113,14 @@ class Pantalla4 extends StatelessWidget {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
+                                    const Text(
                                       '3GTPUCEK2G274842',
                                       style: TextStyle(
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.bold
                                       ),
                                     ),
-                                    SizedBox(height: 10),
+                                    const SizedBox(height: 10),
                                       ElevatedButton(
                                       onPressed: () {
                                         
@@ -122,7 +129,7 @@ class Pantalla4 extends StatelessWidget {
                                         backgroundColor: MaterialStateProperty.all<Color>(Colors.purple),
                                         
                                       ),
-                                      child: Text('VERIFICAR', style: TextStyle(color: Colors.white)),
+                                      child: const Text('VERIFICAR', style: TextStyle(color: Colors.white)),
                                     ),
                                   ],
                                 ),
@@ -131,7 +138,7 @@ class Pantalla4 extends StatelessWidget {
                           ),
                         ],
                       ),
-                      TableRow(
+                      const TableRow(
                         children: [
                           TableCell(
                               child: Padding(
@@ -148,7 +155,7 @@ class Pantalla4 extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   Table(
                     border: TableBorder.all(),
                     children: [
@@ -161,14 +168,14 @@ class Pantalla4 extends StatelessWidget {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
+                                    const Text(
                                       '3GTPUCEK2G274842',
                                       style: TextStyle(
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.bold
                                       ),
                                     ),
-                                    SizedBox(height: 10),
+                                    const SizedBox(height: 10),
                                       ElevatedButton(
                                       onPressed: () {
                                         
@@ -177,7 +184,7 @@ class Pantalla4 extends StatelessWidget {
                                         backgroundColor: MaterialStateProperty.all<Color>(Colors.purple),
                                         
                                       ),
-                                      child: Text('VERIFICAR', style: TextStyle(color: Colors.white)),
+                                      child: const Text('VERIFICAR', style: TextStyle(color: Colors.white)),
                                     ),
                                   ],
                                 ),
@@ -186,7 +193,7 @@ class Pantalla4 extends StatelessWidget {
                           ),
                         ],
                       ),
-                      TableRow(
+                      const TableRow(
                         children: [
                           TableCell(
                               child: Padding(
@@ -206,26 +213,26 @@ class Pantalla4 extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 25),
+            const SizedBox(height: 25),
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => Compra_Vin()),
+                    MaterialPageRoute(builder: (context) => const CompraVin()),
                   );
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
-                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(16.0)),
+                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
                   shape: MaterialStateProperty.all(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16)
                     ),
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   'Verificar Todos - Comenzar',
                   style: TextStyle(
                     fontSize: 18.0,
@@ -234,7 +241,7 @@ class Pantalla4 extends StatelessWidget {
                 ),
               ),
             ),
-              SizedBox(height: 25),
+              const SizedBox(height: 25),
           ],
         ),
       ),

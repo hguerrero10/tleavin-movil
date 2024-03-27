@@ -23,111 +23,55 @@ class _InspeccionVinState extends State<InspeccionVin> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Cuerpo(),
-            // Container(
-            //   padding: EdgeInsets.symmetric(horizontal: 16.0),
-            //   child: const Column(
-            //     crossAxisAlignment: CrossAxisAlignment.start,
-            //     children: <Widget>[
-            //       Text(
-            //         'Unidad TLEA-458',
-            //         style: TextStyle(
-            //           fontSize: 16.0
-            //         ),
-            //       ),
-            //       Text(
-            //         'Bitacora: 789654',
-            //         style: TextStyle(
-            //           fontSize: 16.0
-            //         ),
-            //       ),
-
-            //     ]
-            //   )
-            // ),
-            // SizedBox(height: 10),
-            // Container(
-            //   padding: EdgeInsets.symmetric(horizontal: 16.0),
-            //   child: const Column(
-            //     crossAxisAlignment: CrossAxisAlignment.start,
-            //     children: <Widget>[
-            //       Text(
-            //         'Verificado 1 de 8',
-            //         style: TextStyle(
-            //           fontSize: 20,
-            //           fontWeight: FontWeight.bold
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Divider(
+            const Cuerpo(),
+             Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: const Divider(
                 color: Colors.black,
                 thickness: 1.0,
                 height: 20.0,
               ),
             ),
-            SizedBox(height: 10),
+            const Padding(
+              padding: EdgeInsets.all(10),
+              child: Text(
+                'Registro de Daños',
+                style: TextStyle(
+                  fontSize: 23,
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+            ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Table(
-                    border: TableBorder.all(),
+                  Row(
                     children: [
-                      TableRow(
-                        children: [
-                          TableCell(
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  widget.vin,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold
-                                  ),
-                                ),
-                              ),
-                          ),
-                        ],
+                      const Text(
+                        'VIN: ',
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold
+                        ),
                       ),
-                      TableRow(
-                        children: [
-                          TableCell(
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  '2022 Chevrolet Silverdo 4WD',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
+                      Text(
+                        widget.vin,
+                        style: const TextStyle(
+                          fontSize: 17
+                        ),
+                      )
                     ],
                   ),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: Text(
-                'Registro de Daños',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold
-                ),
-              ),
-            ),
+            const SizedBox(height: 20),
             Center(
               child: Container(
-                width: 300,
-                height: 360,
+                width: 360,
+                height: 440,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/img/inspeccion_vehiculo.jpg'),
@@ -136,41 +80,53 @@ class _InspeccionVinState extends State<InspeccionVin> {
                 ),
                 child: Stack(
                   children: [
-                    _boton(20, 125, '1', () => {
+                    _boton(30, 115, 'Frente', () => {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Registro_Dano(vin: widget.vin, panel: '1')),
+                        MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'Frente')),
                       )
                     }),
-                    _boton(160, 30, '2', () => {
+                    _boton(140, 115, 'Interior', () => {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Registro_Dano(vin: widget.vin, panel: '2')),
+                        MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'Interior')),
                       )
                     }),
-                    _boton(160, 125, '3', () => {
+                    _botonVertical(160, 40, 1, 'Izquierda', () => {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Registro_Dano(vin: widget.vin, panel: '3')),
+                        MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'Izquierda')),
                       )
                     }),
-                    _boton(160, 220, '4', () => {
+                    _boton(230, 115, 'Arriba', () => {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Registro_Dano(vin: widget.vin, panel: '4')),
+                        MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'Arriba')),
                       )
                     }),
-                    _boton(300, 125, '5', () => {
+                    _botonVertical(160, 290, 3, 'Derecha', () => {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Registro_Dano(vin: widget.vin, panel: '5')),
+                        MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'Derecha')),
+                      )
+                    }),
+                    _boton(390, 115, 'Tracera', () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'Tracera')),
+                      )
+                    }),
+                    _boton(330, 205, 'Accesorios', () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'Accesorios')),
                       )
                     })
                   ],
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -178,22 +134,22 @@ class _InspeccionVinState extends State<InspeccionVin> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Registro_Unidad_SS(vin: widget.vin, tipo: 'Unidad Sucia')),
+                      MaterialPageRoute(builder: (context) => RegistroUnidadSS(vin: widget.vin, tipo: 'Unidad Sucia')),
                     );
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
-                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(16.0)),
+                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
                     shape: MaterialStateProperty.all(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16)
                       ),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Unidad Sucia',
                     style: TextStyle(
-                      fontSize: 18.0,
+                      fontSize: 18,
                       color: Colors.white
                     ),
                   ),
@@ -202,19 +158,19 @@ class _InspeccionVinState extends State<InspeccionVin> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Registro_Unidad_SS(vin: widget.vin, tipo: 'Unidad Sin Daños')),
+                      MaterialPageRoute(builder: (context) => RegistroUnidadSS(vin: widget.vin, tipo: 'Unidad Sin Daños')),
                     );
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
-                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(16.0)),
+                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
                     shape: MaterialStateProperty.all(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16)
                       ),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Sin Daños',
                     style: TextStyle(
                       fontSize: 18.0,
@@ -224,7 +180,7 @@ class _InspeccionVinState extends State<InspeccionVin> {
                 ),
               ],
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
           ]
         )
       )
@@ -235,27 +191,60 @@ class _InspeccionVinState extends State<InspeccionVin> {
     return Positioned(
       top: top,
       left: left,
-      child: SizedBox(
-        height: 50,
-        width: 50,
+      child:  SizedBox(
+        height: 30,
+        width: 130,
         child: ElevatedButton(
           style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.purple),
-          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(16)),
           shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50)
               ),
             ),
           ),
+          onPressed: onTap,
           child: Text(
             text,
             style: const TextStyle(
               color: Colors.white,
-              fontWeight: FontWeight.bold
+              fontWeight: FontWeight.bold,
+              fontSize: 15
             ),
           ),
-          onPressed: onTap,
+        ),
+      ),
+    );
+  }
+
+  Widget _botonVertical(double top, double left, int rote, String text, onTap) {
+    return Positioned(
+      top: top,
+      left: left,
+      child: RotatedBox(
+        quarterTurns: rote,
+        child: SizedBox(
+          height: 30,
+          width: 130,
+          child: ElevatedButton(
+            style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.purple),
+            shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50)
+                ),
+              ),
+            ),
+            onPressed: onTap,
+            child: Text(
+              text,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 15
+              ),
+            ),
+          ),
         ),
       )
     );

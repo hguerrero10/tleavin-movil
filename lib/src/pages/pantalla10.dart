@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
-import 'registro_unidad_ss.dart';
 
-class Pantalla10 extends StatelessWidget {
+class Pantalla10 extends StatefulWidget {
+  const Pantalla10({super.key});
+
+  @override
+  State<Pantalla10> createState() => _Pantalla10State();
+}
+
+class _Pantalla10State extends State<Pantalla10> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,9 +22,8 @@ class Pantalla10 extends StatelessWidget {
           children: <Widget>[
             const Cuerpo(),
             Container(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
-                //border: Border.all(),
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: const Column(
@@ -32,9 +38,9 @@ class Pantalla10 extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 17),
+            const SizedBox(height: 17),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -46,18 +52,18 @@ class Pantalla10 extends StatelessWidget {
                           TableCell(
                             child: Center(
                               child: Padding(
-                                padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
+                                    const Text(
                                       '3GTPUCEK2G274842',
                                       style: TextStyle(
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.bold
                                       ),
                                     ),
-                                    SizedBox(height: 10),
+                                    const SizedBox(height: 10),
                                     ElevatedButton(
                                       onPressed: () {
                                         
@@ -65,7 +71,7 @@ class Pantalla10 extends StatelessWidget {
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.green,
                                       ),
-                                      child: Text(
+                                      child: const Text(
                                         'VERIFICADO',
                                         style: TextStyle(
                                           color: Colors.white
@@ -79,7 +85,7 @@ class Pantalla10 extends StatelessWidget {
                           ),
                         ],
                       ),
-                      TableRow(
+                      const TableRow(
                         children: [
                           TableCell(
                               child: Padding(
@@ -96,7 +102,7 @@ class Pantalla10 extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   Table(
                     border: TableBorder.all(),
                     children: [
@@ -105,23 +111,23 @@ class Pantalla10 extends StatelessWidget {
                           TableCell(
                             child: Center(
                               child: Padding(
-                                padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
+                                    const Text(
                                       '3GTPUCEK2G274842',
                                       style: TextStyle(
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.bold
                                       ),
                                     ),
-                                    SizedBox(height: 10),
+                                    const SizedBox(height: 10),
                                     ElevatedButton(
                                       onPressed: () {
                                         
                                       },
-                                      child: Text('VERIFICAR'),
+                                      child: const Text('VERIFICAR'),
                                     ),
                                   ],
                                 ),
@@ -130,7 +136,7 @@ class Pantalla10 extends StatelessWidget {
                           ),
                         ],
                       ),
-                      TableRow(
+                      const TableRow(
                         children: [
                           TableCell(
                               child: Padding(
@@ -147,7 +153,7 @@ class Pantalla10 extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   Table(
                     border: TableBorder.all(),
                     children: [
@@ -156,23 +162,23 @@ class Pantalla10 extends StatelessWidget {
                           TableCell(
                             child: Center(
                               child: Padding(
-                                padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
+                                    const Text(
                                       '3GTPUCEK2G274842',
                                       style: TextStyle(
                                         fontSize: 18.0,
                                         fontWeight: FontWeight.bold
                                       ),
                                     ),
-                                    SizedBox(height: 10),
+                                    const SizedBox(height: 10),
                                     ElevatedButton(
                                       onPressed: () {
                                         
                                       },
-                                      child: Text('VERIFICAR'),
+                                      child: const Text('VERIFICAR'),
                                     ),
                                   ],
                                 ),
@@ -181,7 +187,7 @@ class Pantalla10 extends StatelessWidget {
                           ),
                         ],
                       ),
-                      TableRow(
+                      const TableRow(
                         children: [
                           TableCell(
                               child: Padding(
@@ -198,7 +204,7 @@ class Pantalla10 extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   ElevatedButton(
                     onPressed: () {
                       // Navigator.push(
@@ -208,14 +214,14 @@ class Pantalla10 extends StatelessWidget {
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(16.0)),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
                       shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16)
                           ),
                         ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Verificar Todos - Comenzar',
                       style: TextStyle(
                         fontSize: 18.0,
@@ -223,7 +229,7 @@ class Pantalla10 extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                 ],
               ),
             ),

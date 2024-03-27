@@ -26,7 +26,7 @@ class DatabaseProvider {
     return await openDatabase(path, version: 1, onOpen: (db) {},
       onCreate: (Database db, int version) async {
       await db.execute(
-        "CREATE TABLE usuario (numero_empleado INTEGER PRIMARY KEY UNIQUE, nombre VARCHAR, usuario VARCHAR, password VARCHAR, isLogged bool, cargo VARCHAR, estado INTEGER)"
+        "CREATE TABLE usuario (numero_empleado INTEGER PRIMARY KEY UNIQUE, nombre VARCHAR, usuario VARCHAR, password VARCHAR, isLogged INTERGER, cargo VARCHAR, estado VARCHAR)"
       );
 
       await db.execute(
@@ -44,7 +44,7 @@ class DatabaseProvider {
   Future<Usuario> login(String usuario, String password) async {
     final db = await database;
     late Usuario usuario = Usuario();
-    var res = await db.rawQuery("SELECT * FROM usuario WHERE usuario = '$usuario' and password = '$password' and estado = 1");
+    var res = await db.rawQuery("SELECT * FROM usuario WHERE usuario = '$usuario' and password = '$password' and estado = 'A'");
     
     if (res.isNotEmpty) {
       usuario = Usuario.fromMap(res.first);

@@ -3,14 +3,14 @@ import 'package:tleavin_mobil/src/pages/inspeccion_vin.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
-class Compra_Vin extends StatefulWidget {
-  const Compra_Vin({super.key});
+class CompraVin extends StatefulWidget {
+  const CompraVin({super.key});
 
   @override
-  State<Compra_Vin> createState() => _Compra_VinState();
+  State<CompraVin> createState() => _CompraVinState();
 }
 
-class _Compra_VinState extends State<Compra_Vin> {
+class _CompraVinState extends State<CompraVin> {
   final qrTextController = TextEditingController();
   var qrbar = '';
 
@@ -19,8 +19,8 @@ class _Compra_VinState extends State<Compra_Vin> {
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode("#ff6666", "Cancelar", true, ScanMode.QR);
       qrTextController.text = barcodeScanRes;
-      qrbar = barcodeScanRes;
-    } catch (e) {
+    } 
+    catch (e) {
       print('Error al escanear: $e');
     }
   }
@@ -35,7 +35,7 @@ class _Compra_VinState extends State<Compra_Vin> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Cuerpo(),
+            const Cuerpo(),
             // Container(
             //   padding: EdgeInsets.all(16.0),
             //   decoration: BoxDecoration(
@@ -71,14 +71,14 @@ class _Compra_VinState extends State<Compra_Vin> {
             //   ),
             // ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Divider(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: const Divider(
                 color: Colors.black,
                 thickness: 1.0,
                 height: 20.0,
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 30),
             // Row(
             //   mainAxisAlignment: MainAxisAlignment.center,
             //   children: [
@@ -95,9 +95,8 @@ class _Compra_VinState extends State<Compra_Vin> {
             //     ),
             //   ],
             // ),
-            SizedBox(width: 20),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -108,14 +107,14 @@ class _Compra_VinState extends State<Compra_Vin> {
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
-                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(16.0)),
+                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
                         shape: MaterialStateProperty.all(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16)
                             ),
                           ),
                       ),
-                      child: Text(
+                      child: const Text(
                         'Escanear VIN',
                         style: TextStyle(
                           fontSize: 18.0,
@@ -124,23 +123,25 @@ class _Compra_VinState extends State<Compra_Vin> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextField(
                     controller: qrTextController,
                     maxLength: 17,
+                    keyboardType: TextInputType.text,
                     textAlign: TextAlign.center,
-                    decoration: InputDecoration(
+                    textCapitalization: TextCapitalization.characters,
+                    decoration: const InputDecoration(
                       hintText: 'VIN',
                       hintStyle: TextStyle(
                         color: Colors.grey
                       ),
                     ),
                   ),
-
-                  SizedBox(height: 20),
-
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
+                      qrbar = qrTextController.text;
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => InspeccionVin(vin: qrbar)),
@@ -148,14 +149,14 @@ class _Compra_VinState extends State<Compra_Vin> {
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(16.0)),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
                       shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16)
                           ),
                         ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Inspeccion',
                       style: TextStyle(
                         fontSize: 18.0,
@@ -163,7 +164,6 @@ class _Compra_VinState extends State<Compra_Vin> {
                       ),
                     ),
                   ),
-
                 ]
               )
             ),

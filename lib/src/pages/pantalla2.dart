@@ -2,20 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'pantalla3.dart';
 
-class Pantalla2 extends StatelessWidget {
+class Pantalla2 extends StatefulWidget {
+  const Pantalla2({super.key});
+
+  @override
+  State<Pantalla2> createState() => _Pantalla2State();
+}
+
+class _Pantalla2State extends State<Pantalla2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pantalla 2'),
+        title: const Text('Pantalla 2'),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Cuerpo(),
+            const Cuerpo(),
             Container(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -35,7 +42,7 @@ class Pantalla2 extends StatelessWidget {
                           ),
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Ver Embarques', 
                       style: TextStyle(
                         fontSize: 18.0,
@@ -43,10 +50,10 @@ class Pantalla2 extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 40.0),
+                  const SizedBox(height: 40.0),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Divider(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: const Divider(
                       color: Colors.black,
                       thickness: 1.0,
                       height: 20.0,
@@ -57,21 +64,21 @@ class Pantalla2 extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        SizedBox(height: 30.0),
-                        Text(
+                        const SizedBox(height: 30.0),
+                        const Text(
                           'Unidad',
                           style: TextStyle(
                             fontSize: 20.0
                           ),
                         ),
-                        SizedBox(height: 10.0),
-                        TextField(
+                        const SizedBox(height: 10.0),
+                        const TextField(
                           decoration: InputDecoration(
                             labelText: 'Ingrese la unidad',
                             border: OutlineInputBorder(),
                           ),
                         ),
-                        SizedBox(height: 20.0),
+                        const SizedBox(height: 20.0),
                         ElevatedButton(
                           onPressed: () {
                             Navigator.push(
@@ -88,7 +95,7 @@ class Pantalla2 extends StatelessWidget {
                               ),
                             ),
                           ),
-                          child: Text(
+                          child: const Text(
                             'Realizar Carga', 
                             style: TextStyle(
                               fontSize: 18.0,
@@ -96,16 +103,16 @@ class Pantalla2 extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(height: 20.0),
+                        const SizedBox(height: 20.0),
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Divider(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: const Divider(
                             color: Colors.black,
                             thickness: 1.0,
                             height: 20.0,
                           ),
                         ),
-                        SizedBox(height: 20.0),
+                        const SizedBox(height: 20.0),
                         ElevatedButton(
                           onPressed: () {
                             // Navigator.push(
@@ -122,7 +129,7 @@ class Pantalla2 extends StatelessWidget {
                               ),
                             ),
                           ),
-                          child: Text(
+                          child: const Text(
                             'Embarque Manual', 
                             style: TextStyle(
                               fontSize: 18.0,

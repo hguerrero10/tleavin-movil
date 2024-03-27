@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:tleavin_mobil/src/pages/inspeccion_vin.dart';
@@ -5,49 +7,52 @@ import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:image_picker/image_picker.dart';
 import 'resumen_dano.dart';
 
-class Registro_Dano extends StatefulWidget {
+class RegistroDano extends StatefulWidget {
   final vin;
   final panel;
 
-  const Registro_Dano({super.key, this.vin, this.panel});
+  const RegistroDano({super.key, this.vin, this.panel});
 
   @override
-  State<Registro_Dano> createState() => _Registro_DanoState();
+  State<RegistroDano> createState() => _RegistroDanoState();
 }
 
-class _Registro_DanoState extends State<Registro_Dano> {
+class _RegistroDanoState extends State<RegistroDano> {
 
-final ImagePicker picker = ImagePicker();
-List<XFile>? _mediaFileList;
+  List<int> list = <int>[1, 2, 3, 5, 6, 7, 8, 9, 10];
+  final ImagePicker picker = ImagePicker();
+  // List<XFile>? _mediaFileList;
 
-Future<void> getCamara() async {
-   final List<XFile> pickedFileList = <XFile>[];
-  final photo = await picker.pickImage(
-    source: ImageSource.camera,
-     maxHeight: 1080,
-     maxWidth: 1920,
-     imageQuality: 100
-  );
+  Future<void> getCamara() async {
+    final List<XFile> pickedFileList = <XFile>[];
+    final photo = await picker.pickImage(
+      source: ImageSource.camera,
+      maxHeight: 1080,
+      maxWidth: 1920,
+      imageQuality: 100
+    );
 
-  if(photo != null) {
-    await GallerySaver.saveImage(photo.path, albumName: 'TLEAVIN');
+    if(photo != null) {
+      await GallerySaver.saveImage(photo.path, albumName: 'TLEAVIN');
 
-    pickedFileList.add(XFile(photo.path));
-    setState(() {
-      _mediaFileList = pickedFileList;
-    });
-  }
+      pickedFileList.add(XFile(photo.path));
+      // setState(() {
+      //   _mediaFileList = pickedFileList;
+      // });
+    }
 
-  // if(photo != null) {
-  //   pickedFileList.add(photo);
-  //   setState(() {
-  //     _mediaFileList = pickedFileList;
-  //   });
-  // }
-} 
+    // if(photo != null) {
+    //   pickedFileList.add(photo);
+    //   setState(() {
+    //     _mediaFileList = pickedFileList;
+    //   });
+    // }
+  } 
 
   @override
   Widget build(BuildContext context) {
+    int dropdownValue = list.first;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Registro de Daños'),
@@ -57,42 +62,6 @@ Future<void> getCamara() async {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Cuerpo(),
-            // Container(
-            //   padding: EdgeInsets.symmetric(horizontal: 16.0),
-            //   child: const Column(
-            //     crossAxisAlignment: CrossAxisAlignment.start,
-            //     children: <Widget>[
-            //       Text(
-            //         'Unidad TLEA-458',
-            //         style: TextStyle(
-            //           fontSize: 16.0
-            //         ),
-            //       ),
-            //       Text(
-            //         'Bitacora: 789654',
-            //         style: TextStyle(
-            //           fontSize: 16.0
-            //         ),
-            //       ),
-            //     ]
-            //   )
-            // ),
-            // SizedBox(height: 30),
-            // Container(
-            //   padding: EdgeInsets.symmetric(horizontal: 16.0),
-            //   child: const Column(
-            //     crossAxisAlignment: CrossAxisAlignment.start,
-            //     children: <Widget>[
-            //       Text(
-            //         'Verificado 1 de 8',
-            //         style: TextStyle(
-            //           fontSize: 20,
-            //           fontWeight: FontWeight.bold
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: Divider(
@@ -107,186 +76,70 @@ Future<void> getCamara() async {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Table(
-                    border: TableBorder.all(),
+                  Row(
                     children: [
-                      TableRow(
-                        children: [
-                          TableCell(
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  // '3GTPUCEK2G274842',
-                                  widget.vin,
-                                  style: TextStyle(
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.bold
-                                  ),
-                                ),
-                              ),
-                          ),
-                        ],
+                      Text(
+                        'VIN: ',
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold
+                        ),
                       ),
-                      TableRow(
-                        children: [
-                          TableCell(
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  '2022 Chevrolet Silverdo 4WD',
-                                  style: TextStyle(
-                                    fontSize: 18.0,
-                                  ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      Text(
+                        widget.vin,
+                        style: TextStyle(
+                          fontSize: 17
+                        ),
+                      )
                     ],
                   ),
-                ],
-              ),
-            ),
-            SizedBox(height: 30),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Table(
-                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                    children: [
-                      TableRow(
-                        children: [
-                          TableCell(
-                            child: Container(
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black),
-                              ),
-                              child: Text(
-                                'Area:',
-                                style: TextStyle(
-                                  fontSize: 16.0
-                                ),
-                              ),
-                            ),
-                          ),
-                          TableCell(
-                            child: Container(
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black),
-                              ),
-                              child: Text(
-                                widget.panel,
-                                style: TextStyle(
-                                  fontSize: 16.0
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                  _titulo('Area:'),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: Text(
+                      widget.panel,
+                      style: TextStyle(
+                        fontSize: 17
                       ),
-                      TableRow(
-                        children: [
-                          TableCell(
-                            child: Container(
-                              padding: EdgeInsets.all(8.0),
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black),
-                                ),
-                              child: Text(
-                                'Tipo:',
-                                style: TextStyle(
-                                  fontSize: 16.0
-                                ),
-                              ),
-                            ),
-                          ),
-                          TableCell(
-                            child: Container(
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black),
-                              ),
-                              child: Text(
-                                '',
-                                style: TextStyle(
-                                  fontSize: 16.0
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      TableRow(
-                        children: [
-                          TableCell(
-                            child: Container(
-                              padding: EdgeInsets.all(8.0),
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black),
-                                ),
-                              child: Text(
-                                'Gravedad:',
-                                style: TextStyle(
-                                  fontSize: 16.0
-                                ),
-                              ),
-                            ),
-                          ),
-                          TableCell(
-                            child: Container(
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black),
-                              ),
-                              child: Text(
-                                '',
-                                style: TextStyle(
-                                  fontSize: 16.0
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      TableRow(
-                        children: [
-                          TableCell(
-                            child: Container(
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black),
-                              ),
-                              child: Text(
-                                'Ubicacion:',
-                                style: TextStyle(
-                                  fontSize: 16.0
-                                ),
-                              ),
-                            ),
-                          ),
-                          TableCell(
-                            child: Container(
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black),
-                              ),
-                              child: Text(
-                                '',
-                                style: TextStyle(
-                                  fontSize: 16.0
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ]
+                    ),
                   ),
-                  SizedBox(height: 25.0,),
+                  SizedBox(height: 10),
+                  _titulo('Tipo:'),
+                  Container(
+                    height: 50,
+                    width: MediaQuery.of(context).size.width,
+                    margin: const EdgeInsets.only(left: 20, right: 20),
+                    child: DropdownButton<int>(
+                      items: list.map((int value) {
+                        return DropdownMenuItem<int>(
+                          value: value,
+                          child: Text(value.toString()),
+                        );
+                      }).toList(),
+                      onChanged: (_) {},
+                    ),
+    
+                  ),
+                  SizedBox(height: 10),
+                  _titulo('Severidad:'),
+                  Container(
+                    height: 50,
+                    width: MediaQuery.of(context).size.width,
+                    margin: const EdgeInsets.only(left: 20, right: 20),
+                    child: DropdownMenu<int>(
+                      initialSelection: list.first,
+                      onSelected: (int? value) {
+                        setState(() {
+                          dropdownValue = value!;
+                        });
+                      },
+                      dropdownMenuEntries: list.map<DropdownMenuEntry<int>>((int value) {
+                        return DropdownMenuEntry<int>(value: value, label: value.toString());
+                      }).toList(),
+                    )
+                  ),
+       
+                  SizedBox(height: 25),
                   TextField(
                     decoration: InputDecoration(
                       labelText: 'NOTAS',
@@ -302,11 +155,7 @@ Future<void> getCamara() async {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             GestureDetector(
-                              onTap: () => {
-                                getCamara()
-
-  
-                              },
+                              onTap: () => getCamara(),
                               child: Column(
                                 children: [
                                   Image.asset(
@@ -346,26 +195,6 @@ Future<void> getCamara() async {
                                 ],
                               ),
                             ),
-                            SizedBox(width: 20),
-                            // ElevatedButton(
-                            //   onPressed: () {},
-                            //   style: ButtonStyle(
-                            //     backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
-                            //     padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(18.0)),
-                            //     shape: MaterialStateProperty.all(
-                            //       RoundedRectangleBorder(
-                            //         borderRadius: BorderRadius.circular(16)
-                            //       ),
-                            //     ),
-                            //   ),
-                            //   child: Text(
-                            //     'Adjuntar Imagen',
-                            //     style: TextStyle(
-                            //       fontSize: 20.0,
-                            //       color: Colors.white
-                            //     ),
-                            //   ),
-                            // ),
                           ],
                         ),
                         SizedBox(height: 20),
@@ -399,7 +228,7 @@ Future<void> getCamara() async {
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => Resumen_Dano(vin: widget.vin)),
+                              MaterialPageRoute(builder: (context) => ResumenDano(vin: widget.vin)),
                             );
                           },
                           style: ButtonStyle(
@@ -426,10 +255,27 @@ Future<void> getCamara() async {
                 ]
               )
             ),
-            SizedBox(height: 30),
+            SizedBox(height: 20),
           ]
         )
       )
+    );
+  }
+
+  Widget _titulo(String titulo) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: Text(
+            titulo,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+              fontSize: 17
+            ),
+          ),
+        )
+      ],
     );
   }
 }

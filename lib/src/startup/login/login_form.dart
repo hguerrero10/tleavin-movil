@@ -77,8 +77,7 @@ class _LoginFormState extends State<LoginForm> {
                         child: _buttons('Iniciar Sesion', const Color.fromRGBO(242, 211, 0, 1)  , () => {
                           Navigator.of(context).push(
                               MaterialPageRoute(builder: (context) {
-                                return HomeScreen(
-                                );
+                                return const HomeScreen();
                               }
                             )
                           )

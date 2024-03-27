@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tleavin_mobil/src/pages/resumen_carga/resumen_viaje.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
-import 'pantalla10.dart';
 
 class Resumen_Dano extends StatefulWidget {
   final vin;
@@ -271,16 +271,21 @@ class _Resumen_DanoState extends State<Resumen_Dano> {
                         ),
                         SizedBox(height: 10),
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Resumen_viaje()),
+                            );
+                          },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
                             padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(18.0)),
                             minimumSize: MaterialStateProperty.all<Size>(Size(double.infinity, 50)),
                             shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16)
-                          ),
-                        ),
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16)
+                              ),
+                            ),
                           ),
                           child: Text(
                             'Finalizar',
@@ -293,10 +298,10 @@ class _Resumen_DanoState extends State<Resumen_Dano> {
                         SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => Pantalla10()),
-                            );
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(builder: (context) => Pantalla10()),
+                            // );
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(Colors.red),

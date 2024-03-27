@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'pantalla4.dart';
 
-class Pantalla3 extends StatelessWidget {
+class Pantalla3 extends StatefulWidget {
+  const Pantalla3({super.key});
+
+  @override
+  State<Pantalla3> createState() => _Pantalla3State();
+}
+
+class _Pantalla3State extends State<Pantalla3> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,22 +20,22 @@ class Pantalla3 extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Cuerpo(),
+            const  Cuerpo(),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 8.0),
+                  const SizedBox(height: 8.0),
                   Container(
                     width: 350.0,
-                    margin: EdgeInsets.all(6.0),
+                    margin: const EdgeInsets.all(6.0),
                     decoration: BoxDecoration(
                       border: Border.all(),
                     ),
                     child: _buildTablaRegistros1()
                   ),
-                  SizedBox(height: 10.0),
+                  const SizedBox(height: 10.0),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
@@ -45,7 +52,7 @@ class Pantalla3 extends StatelessWidget {
                           ),
                         ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Realizar Carga',
                       style: TextStyle(
                         fontSize: 18.0,
@@ -56,22 +63,22 @@ class Pantalla3 extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Divider(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: const Divider(
                 color: Colors.black,
                 thickness: 1.0,
                 height: 20.0,
               ),
             ),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 8.0),
+                  const SizedBox(height: 8.0),
                   Container(
                     width: 350.0,
                     margin: EdgeInsets.all(6.0),
@@ -80,7 +87,7 @@ class Pantalla3 extends StatelessWidget {
                     ),
                     child: _buildTablaRegistros2()
                   ),
-                  SizedBox(height: 10.0),
+                  const SizedBox(height: 10.0),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
@@ -97,7 +104,7 @@ class Pantalla3 extends StatelessWidget {
                           ),
                         ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Realizar Carga',
                       style: TextStyle(
                         fontSize: 18.0,
@@ -116,7 +123,7 @@ class Pantalla3 extends StatelessWidget {
 
   Widget _buildTablaRegistros1() {
     return DataTable(
-      columns: [
+      columns: const [
         DataColumn(
           label: Text(
             'Unidad',
@@ -134,7 +141,7 @@ class Pantalla3 extends StatelessWidget {
           )
         ),
       ],
-      rows: [
+      rows: const [
         DataRow(cells: [
           DataCell(Text('TLEA-124')),
           DataCell(Text('Mazda')),
@@ -153,11 +160,11 @@ class Pantalla3 extends StatelessWidget {
 
   Widget _buildTablaRegistros2() {
     return DataTable(
-      columns: [
+      columns: const [
         DataColumn(label: Text('Unidad')),
         DataColumn(label: Text('Cliente')),
       ],
-      rows: [
+      rows: const [
         DataRow(cells: [
           DataCell(Text('TLEA-124')),
           DataCell(Text('Mazda'))

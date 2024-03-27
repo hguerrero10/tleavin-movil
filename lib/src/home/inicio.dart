@@ -4,6 +4,7 @@ import 'package:tleavin_mobil/model/usuario.dart';
 import 'package:tleavin_mobil/src/pages/compra_vin.dart';
 import 'package:tleavin_mobil/src/pages/pantalla2.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
+// import 'package:tleavin_mobil/src/widgets/drawer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,7 +15,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  Usuario usuario = new Usuario();
+  Usuario usuario = Usuario();
 
   @override
   void initState() {
@@ -28,16 +29,17 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // drawer: MenuDrawer(),
       appBar: AppBar(
-        title: Text('Inicio'),
+        title: const Text('Inicio'),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: const Text(
                 'Sistema TLEAVIN ',
                 style: TextStyle(
                   fontSize: 25,
@@ -45,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            Cuerpo(),
+            const Cuerpo(),
             // Row(
             //   mainAxisAlignment: MainAxisAlignment.center,
             //   children: [
@@ -62,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
             //   ],
             // ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: const Divider(
                 color: Colors.black,
                 thickness: 1.0,
@@ -71,41 +73,41 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             // Sección media
             Container(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
+                  const Text(
                     'Ultima Sincronizacion: 2024-02-20 12:45',
                     style: TextStyle(
                       fontSize: 18.0,
                     ),
                   ),
-                  SizedBox(height: 15.0),
-                  Text(
+                  const SizedBox(height: 15.0),
+                  const Text(
                     'Perido: 2024-02-10  2024-02-20',
                     style: TextStyle(
                       fontSize: 18.0,
                     ),
                   ),
-                  SizedBox(height: 16.0),
+                  const SizedBox(height: 16.0),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Pantalla2()),
+                        MaterialPageRoute(builder: (context) => const Pantalla2()),
                       );
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(16.0)),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16)
                         ),
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Actualizar Viajes',
                       style: TextStyle(
                         fontSize: 18.0,
@@ -118,8 +120,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             // Línea divisoria
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Divider(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: const Divider(
                 color: Colors.black,
                 thickness: 1.0,
                 height: 20.0,
@@ -127,31 +129,31 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             // Sección inferior
             Container(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
+                  const Text(
                     'La DB del dispositivo tiene 3 cargas pendiente por enviar.',
                     style: TextStyle(
                       fontSize: 18.0,
                     ),
                   ),
-                  SizedBox(height: 16.0),
+                  const SizedBox(height: 16.0),
                   ElevatedButton(
                     onPressed: () {
                       // Acción del botón
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(16.0)),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16)
                         ),
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Enviar Cargas',
                       style: TextStyle(
                         fontSize: 18.0,
@@ -159,31 +161,31 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20.0),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => Compra_Vin()),
-                            );
-                          },
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
-                            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(16.0)),
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16)
-                              ),
-                            ),
-                          ),
-                          child: Text(
-                            'Embarque Manual', 
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              color: Colors.white
-                            ),
-                          ),
+                  const SizedBox(height: 20.0),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const CompraVin()),
+                      );
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16)
                         ),
+                      ),
+                    ),
+                    child: const Text(
+                      'Embarque Manual', 
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        color: Colors.white
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

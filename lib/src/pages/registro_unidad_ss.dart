@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/src/pages/resumen_dano.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 
-class Registro_Unidad_SS extends StatefulWidget {
+class RegistroUnidadSS extends StatefulWidget {
 
   final vin;
   final tipo;
-  const Registro_Unidad_SS({super.key, this.vin, this.tipo});
+  const RegistroUnidadSS({super.key, this.vin, this.tipo});
 
   @override
-  State<Registro_Unidad_SS> createState() => _Registro_Unidad_SSState();
+  State<RegistroUnidadSS> createState() => _RegistroUnidadSSState();
 }
 
-class _Registro_Unidad_SSState extends State<Registro_Unidad_SS> {
+class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +24,9 @@ class _Registro_Unidad_SSState extends State<Registro_Unidad_SS> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Cuerpo(),
+            const Cuerpo(),
             // Container(
-            //   padding: EdgeInsets.symmetric(horizontal: 16.0),
+            //   padding: EdgeInsets.symmetric(horizontal: 16),
             //   child: const Column(
             //     crossAxisAlignment: CrossAxisAlignment.start,
             //     children: <Widget>[
@@ -46,9 +46,9 @@ class _Registro_Unidad_SSState extends State<Registro_Unidad_SS> {
             //     ]
             //   )
             // ),
-            // SizedBox(height: 20),
+            // const SizedBox(height: 20),
             // Container(
-            //   padding: EdgeInsets.symmetric(horizontal: 16.0),
+            //   padding: EdgeInsets.symmetric(horizontal: 16),
             //   child: const Column(
             //     crossAxisAlignment: CrossAxisAlignment.start,
             //     children: <Widget>[
@@ -63,16 +63,16 @@ class _Registro_Unidad_SSState extends State<Registro_Unidad_SS> {
             //   ),
             // ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Divider(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: const Divider(
                 color: Colors.black,
-                thickness: 1.0,
-                height: 20.0,
+                thickness: 1,
+                height: 20,
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -83,11 +83,11 @@ class _Registro_Unidad_SSState extends State<Registro_Unidad_SS> {
                         children: [
                           TableCell(
                               child: Padding(
-                                padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: Text(
                                   // '3GTPUCEK2G274842',
                                   widget.vin,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.bold
                                   ),
@@ -96,7 +96,7 @@ class _Registro_Unidad_SSState extends State<Registro_Unidad_SS> {
                           ),
                         ],
                       ),
-                      TableRow(
+                      const TableRow(
                         children: [
                           TableCell(
                               child: Padding(
@@ -113,21 +113,21 @@ class _Registro_Unidad_SSState extends State<Registro_Unidad_SS> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Text(
                     widget.tipo,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.bold
                     ),
                   ),
-                  Text(
+                  const Text(
                     'Adjunte 1 fotografía por cada lado de la unidad.',
                     style: TextStyle(
                       fontSize: 15,
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Center(
                     child: Column(
                       children: [
@@ -136,7 +136,7 @@ class _Registro_Unidad_SSState extends State<Registro_Unidad_SS> {
                           width: 130,
                           height: 130,
                         ),
-                        Text(
+                        const Text(
                           'Tomar Fotografia',
                           style: TextStyle(
                             fontWeight: FontWeight.bold
@@ -145,32 +145,32 @@ class _Registro_Unidad_SSState extends State<Registro_Unidad_SS> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 20),
-                  TextField(
+                  const SizedBox(height: 20),
+                  const TextField(
                     decoration: InputDecoration(
                       labelText: 'NOTAS',
                       border: OutlineInputBorder(),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Resumen_Dano(vin: widget.vin)),
+                        MaterialPageRoute(builder: (context) => ResumenDano(vin: widget.vin)),
                       );
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(18.0)),
-                      minimumSize: MaterialStateProperty.all<Size>(Size(double.infinity, 50)),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
+                      minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16)
                         ),
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Finalizar',
                       style: TextStyle(
                         fontSize: 20.0,
@@ -181,7 +181,7 @@ class _Registro_Unidad_SSState extends State<Registro_Unidad_SS> {
                 ],
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
           ]
         )
       )

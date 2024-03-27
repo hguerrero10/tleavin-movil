@@ -3,7 +3,15 @@ import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 
 import 'inspeccion_vin.dart';
 
-class Pantalla6 extends StatelessWidget {
+class Pantalla6 extends StatefulWidget {
+  const Pantalla6({super.key});
+
+  @override
+  State<Pantalla6> createState() => _Pantalla6State();
+}
+
+class _Pantalla6State extends State<Pantalla6> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +24,7 @@ class Pantalla6 extends StatelessWidget {
           children: <Widget>[
             const Cuerpo(),
             Container(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
               ),
@@ -48,7 +56,7 @@ class Pantalla6 extends StatelessWidget {
               ),
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: const Divider(
                 color: Colors.black,
                 thickness: 1.0,
@@ -83,15 +91,15 @@ class Pantalla6 extends StatelessWidget {
                       TableRow(
                         children: [
                           TableCell(
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  '2022 Chevrolet Silverdo 4WD',
-                                  style: TextStyle(
-                                    fontSize: 18.0,
-                                  ),
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                '2022 Chevrolet Silverdo 4WD',
+                                style: TextStyle(
+                                  fontSize: 18.0,
                                 ),
                               ),
+                            ),
                           ),
                         ],
                       ),
@@ -101,25 +109,23 @@ class Pantalla6 extends StatelessWidget {
               ),
             ),
             Center(
-              child: Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/img/checkMarkGreen.png',
-                      width: 180,
-                      height: 190,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/img/checkMarkGreen.png',
+                    height: 190,
+                    width: 180,
+                  ),
+                  const Text(
+                    'El vehiculo forma parte del viaje',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18.0,
                     ),
-                    const Text(
-                      'El vehiculo forma parte del viaje',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                      ),
-                      textAlign: TextAlign.center,
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
             ),
             const SizedBox(height: 30),
@@ -130,7 +136,7 @@ class Pantalla6 extends StatelessWidget {
                   onPressed: () {},
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
-                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(16.0)),
+                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
                     shape: MaterialStateProperty.all(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16)
@@ -150,7 +156,7 @@ class Pantalla6 extends StatelessWidget {
                   onPressed: () {},
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(16.0)),
+                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
                     shape: MaterialStateProperty.all(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16)
@@ -177,12 +183,12 @@ class Pantalla6 extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => InspeccionVin()),
+                        MaterialPageRoute(builder: (context) => const InspeccionVin()),
                       );
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(16.0)),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16)
@@ -200,7 +206,7 @@ class Pantalla6 extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 20)
+            const SizedBox(height: 20)
           ],
         ),
       ),
