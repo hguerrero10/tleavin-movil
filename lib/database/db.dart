@@ -2,10 +2,12 @@ import 'dart:io';
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:tleavin_mobil/model/dano.dart';
+import 'package:tleavin_mobil/model/evidencia.dart';
+import 'package:tleavin_mobil/model/vin.dart';
+import 'package:tleavin_mobil/model/usuario.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:tleavin_mobil/model/dispositivo.dart';
-import 'package:tleavin_mobil/model/usuario.dart';
-import 'package:tleavin_mobil/model/vin.dart';
 
 class DatabaseProvider {
 
@@ -30,7 +32,15 @@ class DatabaseProvider {
       );
 
       await db.execute(
-        "CREATE TABLE vin (id INTEGER PRIMARY KEY AUTOINCREMENT, viaje INTEGER, cartaporte INTEGER, vin VARCHAR UNIQUE, distrib_clave VARCHAR, dest_nombre VARCHAR, ruta_clave INTEGER, ruta_nombre VARCHAR, origen VARCHAR, destino VARCHAR, modelo VARCHAR, marca VARCHAR, posicion VARCHAR, orientacion VARCHAR, fecha_carga VARCHAR, fecha_creacion VARCHAR, fecha_sync VARCHAR)"
+        "CREATE TABLE vin (id INTEGER PRIMARY KEY AUTOINCREMENT, viaje INTEGER, cartaporte INTEGER, vin VARCHAR UNIQUE, distrib_clave VARCHAR, dest_nombre VARCHAR, ruta_clave INTEGER, ruta_nombre VARCHAR, origen VARCHAR, destino VARCHAR, modelo VARCHAR, marca VARCHAR, posicion VARCHAR, orientacion VARCHAR, fecha_carga DATE, fecha_creacion DATE, fecha_sync DATE)"
+      );
+
+      await db.execute(
+        "CREATE TABLE dano (id INTEGER PRIMARY KEY AUTOINCREMENT, vin VARCHAR, panel VARCHAR, area INTERGER, tipo INTERGER, severidad INTERGER fecha_creacion DATE)"
+      );
+
+      await db.execute(
+        "CREATE TABLE evidencia (id INTEGER PRIMARY KEY AUTOINCREMENT, vin VARCHAR, dano VARCHAR, nombre VARCHAR, notas VARCHAR, fechahora DATE, archivo TEXT)"
       );
 
       await db.execute(
@@ -41,12 +51,12 @@ class DatabaseProvider {
 
   // CRUD USUARIOS
 
-  Future<Usuario> login(String usuario, String password) async {
+  Future<Usuario> login(String user, String password) async {
     final db = await database;
     late Usuario usuario = Usuario();
-    var res = await db.rawQuery("SELECT * FROM usuario WHERE usuario = '$usuario' and password = '$password' and estado = 'A'");
-    
-    if (res.isNotEmpty) {
+    var res = await db.rawQuery("SELECT * FROM usuario WHERE usuario = '$user' and password = '$password' and estado = 'A'");
+
+    if(res.isNotEmpty) {
       usuario = Usuario.fromMap(res.first);
     }
 
@@ -56,7 +66,13 @@ class DatabaseProvider {
   Future<int> insertarUsuario(Usuario nuevoRegistro) async {
     var db = await database;
     int res = await db.insert("usuario", nuevoRegistro.toMap());
+
     return res;
+  }
+
+  actualizarUsuario(Usuario usuario) async {
+    final db = await database;
+    return db.update('usuario',  usuario.toMap() , where: "numero_empleado = ?" , whereArgs: [usuario.numeroEmpleado]);
   }
 
   Future<List<Usuario>>obtenerUsuarios() async {
@@ -78,6 +94,7 @@ class DatabaseProvider {
   Future<int> insertarVin(Vin nuevoRegistro) async {
     var db = await database;
     int res = await db.insert("vin", nuevoRegistro.toMap());
+
     return res;
   }
 
@@ -100,6 +117,62 @@ class DatabaseProvider {
     return listaVins;
   }
 
+  // CRUD DAÑO 
+
+  Future<int> insertarDano(Dano nuevoRegistro) async {
+    var db = await database;
+    int res = await db.insert("dano", nuevoRegistro.toMap());
+
+    return res;
+  }
+
+  actualizarDano(Dano dano) async {
+    final db = await database;
+    return db.update('dano',  dano.toMap() , where: "id = ?" , whereArgs: [dano.id], );
+  }
+
+  Future<List<Dano>>obtenerDano() async {
+    final db = await database;
+    List<Dano> listaDanos;
+    var res = await db.query("dano");
+
+    if (res.isNotEmpty) {
+      listaDanos =  res.map((c) => Dano.fromMap(c)).toList();
+    } 
+    else {
+      listaDanos = [];
+    }
+    return listaDanos;
+  }
+
+  // CRUD EVIDENCIA
+
+  Future<int> insertarEvidencia(Evidencia nuevoRegistro) async {
+    var db = await database;
+    int res = await db.insert("evidencia", nuevoRegistro.toMap());
+
+    return res;
+  }
+
+  actualizarEvidencia(Evidencia evidencia) async {
+    final db = await database;
+    return db.update('evidencia',  evidencia.toMap() , where: "id = ?" , whereArgs: [evidencia.id], );
+  }
+
+  Future<List<Evidencia>>obtenerEvidencia() async {
+    final db = await database;
+    List<Evidencia> listaEvidencia;
+    var res = await db.query("evidencia");
+
+    if (res.isNotEmpty) {
+      listaEvidencia =  res.map((c) => Evidencia.fromMap(c)).toList();
+    } 
+    else {
+      listaEvidencia = [];
+    }
+    return listaEvidencia;
+  }
+  
   // CRUD DISPOSITIVOS
   
   Future<int> insertarDispositivo(Dispositivo nuevoRegistro) async {

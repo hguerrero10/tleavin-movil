@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tleavin_mobil/src/pages/compra_vin.dart';
 import 'package:tleavin_mobil/src/pages/registro_unidad_ss.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'registro_dano.dart';
@@ -17,7 +18,18 @@ class _InspeccionVinState extends State<InspeccionVin> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Inspeccion VIN'),
+        backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
+        title: const Text(
+          'Inspeccion VIN',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black
+          ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_sharp),
+          onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const CompraVin()), (Route<dynamic> route) => false)
+        )
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -138,7 +150,7 @@ class _InspeccionVinState extends State<InspeccionVin> {
                     );
                   },
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
                     padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
                     shape: MaterialStateProperty.all(
                       RoundedRectangleBorder(
@@ -162,7 +174,7 @@ class _InspeccionVinState extends State<InspeccionVin> {
                     );
                   },
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
                     padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
                     shape: MaterialStateProperty.all(
                       RoundedRectangleBorder(
@@ -196,7 +208,7 @@ class _InspeccionVinState extends State<InspeccionVin> {
         width: 130,
         child: ElevatedButton(
           style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.purple),
+          backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
           shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50)
@@ -228,7 +240,7 @@ class _InspeccionVinState extends State<InspeccionVin> {
           width: 130,
           child: ElevatedButton(
             style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.purple),
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
             shape: MaterialStateProperty.all(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50)

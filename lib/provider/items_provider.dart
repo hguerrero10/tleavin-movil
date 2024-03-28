@@ -1,0 +1,88 @@
+import 'dart:async';
+import 'package:tleavin_mobil/model/usuario.dart';
+
+class ItemsProvider {
+
+  final itemStreamController = StreamController.broadcast();
+
+  Stream get getStream => itemStreamController.stream;
+
+  final Map items = {'item': []};
+
+  bool boton = false;
+  bool error = false;
+  bool loginInsert = false;
+  bool loginInsertTimeOut = false;
+  bool registroUser = false;
+
+  Usuario? usuario;
+
+  void addUser(Usuario item) {
+    if(item.toString().isNotEmpty) {
+      itemP.usuario = Usuario(
+        numeroEmpleado: item.numeroEmpleado,
+        nombre: item.nombre,
+        usuario: item.usuario,
+        password: item.password,
+        isLogged: item.isLogged,
+        cargo: item.cargo,
+        estado: item.estado
+      );
+    }
+    
+    itemP.itemStreamController.sink.add(itemP.usuario);
+  }
+
+  void addBoton() {
+    itemP.boton = true;
+    itemP.itemStreamController.sink.add(boton);
+  }
+
+  void deleteBoton() {
+    itemP.boton = false;
+    itemP.itemStreamController.sink.add(boton);
+  }
+
+  void addError() {
+    itemP.error = true;
+    itemP.itemStreamController.sink.add(error);
+  }
+
+  void deleteError() {
+    itemP.error = false;
+    itemP.itemStreamController.sink.add(error);
+  }
+
+    void addLoginInsert() {
+    itemP.loginInsert = true;
+    itemP.itemStreamController.sink.add(loginInsert);
+  }
+
+  void deleteLoginInsert() {
+    itemP.loginInsert = false;
+    itemP.itemStreamController.sink.add(loginInsert);
+  }
+
+  void addLoginInsertTimeOut() {
+    itemP.loginInsertTimeOut = true;
+    itemP.itemStreamController.sink.add(loginInsertTimeOut);
+  }
+
+  void deleteLoginInsertTimeOut() {
+    itemP.loginInsertTimeOut = false;
+    itemP.itemStreamController.sink.add(loginInsertTimeOut);
+  }
+
+  void addRegistroUser() {
+    itemP.registroUser = true;
+    itemP.itemStreamController.sink.add(registroUser);
+  }
+
+  void deleteRegistroUser() {
+    itemP.registroUser = false;
+    itemP.itemStreamController.sink.add(registroUser);
+  }
+
+}
+
+final itemP = ItemsProvider();

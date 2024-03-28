@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/src/pages/resumen_carga/resumen_viaje.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 
-class Resumen_Dano extends StatefulWidget {
+class ResumenDano extends StatefulWidget {
   final vin;
-  const Resumen_Dano({super.key, this.vin});
+  const ResumenDano({super.key, this.vin});
 
   @override
-  State<Resumen_Dano> createState() => _Resumen_DanoState();
+  State<ResumenDano> createState() => _ResumenDanoState();
 }
 
-class _Resumen_DanoState extends State<Resumen_Dano> {
+class _ResumenDanoState extends State<ResumenDano> {
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +18,10 @@ class _Resumen_DanoState extends State<Resumen_Dano> {
       appBar: AppBar(
         title: const Text('Resumen de Daños'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
+      body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Cuerpo(),
+            const Cuerpo(),
             // Container(
             //   padding: EdgeInsets.symmetric(horizontal: 16.0),
             //   child: const Column(
@@ -61,16 +60,16 @@ class _Resumen_DanoState extends State<Resumen_Dano> {
             //   ),
             // ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Divider(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: const Divider(
                 color: Colors.black,
                 thickness: 1.0,
                 height: 20.0,
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -81,11 +80,11 @@ class _Resumen_DanoState extends State<Resumen_Dano> {
                         children: [
                           TableCell(
                               child: Padding(
-                                padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: Text(
                                   // '3GTPUCEK2G274842',
                                   widget.vin,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold
                                   ),
@@ -94,7 +93,7 @@ class _Resumen_DanoState extends State<Resumen_Dano> {
                           ),
                         ],
                       ),
-                      TableRow(
+                      const TableRow(
                         children: [
                           TableCell(
                               child: Padding(
@@ -116,7 +115,7 @@ class _Resumen_DanoState extends State<Resumen_Dano> {
             ),
             const SizedBox(height: 20),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -124,7 +123,7 @@ class _Resumen_DanoState extends State<Resumen_Dano> {
                     child: Table(
                       border: TableBorder.all(),
                       children: [
-                        TableRow(
+                        const TableRow(
                           children: [
                             TableCell(
                               child: Center(
@@ -225,7 +224,7 @@ class _Resumen_DanoState extends State<Resumen_Dano> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Column(
                       children: [
                         ElevatedButton(
@@ -248,7 +247,7 @@ class _Resumen_DanoState extends State<Resumen_Dano> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: () {},
                           style: ButtonStyle(
@@ -269,25 +268,25 @@ class _Resumen_DanoState extends State<Resumen_Dano> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => Resumen_viaje()),
+                              MaterialPageRoute(builder: (context) => const ResumenViaje()),
                             );
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
-                            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(18.0)),
-                            minimumSize: MaterialStateProperty.all<Size>(Size(double.infinity, 50)),
+                            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
+                            minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
                             shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16)
                               ),
                             ),
                           ),
-                          child: Text(
+                          child: const Text(
                             'Finalizar',
                             style: TextStyle(
                               fontSize: 20.0,
@@ -295,7 +294,7 @@ class _Resumen_DanoState extends State<Resumen_Dano> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: () {
                             // Navigator.push(
@@ -305,15 +304,15 @@ class _Resumen_DanoState extends State<Resumen_Dano> {
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
-                            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(18.0)),
-                            minimumSize: MaterialStateProperty.all<Size>(Size(double.infinity, 50)),
+                            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
+                            minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
                             shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16)
                               ),
                             ),
                           ),
-                          child: Text(
+                          child: const Text(
                             'Rechazar',
                             style: TextStyle(
                               fontSize: 20.0,
@@ -325,11 +324,9 @@ class _Resumen_DanoState extends State<Resumen_Dano> {
                     ),
                 ]
               )
-            ),
-            SizedBox(height: 30)
+            )
           ]
         )
-      )
     );
   }
 }

@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/usuario.dart';
+import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/pages/compra_vin.dart';
 import 'package:tleavin_mobil/src/pages/pantalla2.dart';
+import 'package:tleavin_mobil/src/startup/login/login_form.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
+import 'dart:developer';
 // import 'package:tleavin_mobil/src/widgets/drawer.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class InicioScreen extends StatefulWidget {
+  const InicioScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<InicioScreen> createState() => _InicioScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _InicioScreenState extends State<InicioScreen> {
 
   Usuario usuario = Usuario();
 
@@ -21,9 +24,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
 
-    // crearUsuario();
 
     getUsuarios();
+    crearUsuario();
   }
 
   @override
@@ -31,22 +34,45 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       // drawer: MenuDrawer(),
       appBar: AppBar(
-        title: const Text('Inicio'),
+        backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
+        title: const Text(
+          'Inicio',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () => logout()
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: const Text(
-                'Sistema TLEAVIN ',
-                style: TextStyle(
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold
+                Container(
+                  padding: const EdgeInsets.only(top: 10, left: 16),
+                  child: Row(
+                  children: [
+                    const Text(
+                      'Bienvenido ',
+                      style: TextStyle(
+                        fontSize: 21,
+                        fontWeight: FontWeight.bold
+                      ),
+                    ),
+                    Text(
+                      itemP.usuario!.nombre!,
+                      style: const TextStyle(
+                        fontSize: 21,
+                      ),
+                    ),
+                  ],
+                                ),
                 ),
-              ),
-            ),
             const Cuerpo(),
             // Row(
             //   mainAxisAlignment: MainAxisAlignment.center,
@@ -99,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     },
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
                       padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
@@ -145,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       // Acción del botón
                     },
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
                       padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
@@ -163,14 +189,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 20.0),
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const CompraVin()),
-                      );
-                    },
+                    onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const CompraVin()), (Route<dynamic> route) => false),
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
                       padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
@@ -195,24 +216,42 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  logout() async{
+    usuario = Usuario(
+      numeroEmpleado: itemP.usuario!.numeroEmpleado,
+      nombre: itemP.usuario!.nombre,
+      usuario: itemP.usuario!.usuario,
+      password: itemP.usuario!.password,
+      isLogged: 0,
+      cargo: itemP.usuario!.cargo,
+      estado: itemP.usuario!.estado
+    );
+
+    await DatabaseProvider.db.actualizarUsuario(usuario);
+
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+      builder: (context) => const LoginForm()
+    ),
+      (Route<dynamic> route) => false
+    );
+  }
+
   Future getUsuarios() async {
     try{
       await DatabaseProvider.db.obtenerUsuarios().then((value) {
         setState(() {
-          // servidorPublicoList = value;
-
-          print('usuarios => $value');
+          log('usuarios => $value');
         });
       });
     } 
     catch (e) {
-      print('error => $e');
+      log('error => $e');
     }
   }
 
   crearUsuario() async {
     usuario = Usuario(
-      numero_empleado: 2044,
+      numeroEmpleado: 2044,
       nombre: 'Hugo Guerrero',
       usuario: 'h_guerrero', 
       password: 'Hugo1010', 
@@ -221,6 +260,11 @@ class _HomeScreenState extends State<HomeScreen> {
       estado: 'A'
     );
 
-    await DatabaseProvider.db.insertarUsuario(usuario);
+    try{
+      await DatabaseProvider.db.insertarUsuario(usuario);
+    } 
+    catch (e) {
+      log('error => $e');
+    }
   }
 }

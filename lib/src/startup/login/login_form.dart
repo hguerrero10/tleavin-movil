@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/usuario.dart';
+import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/home/inicio.dart';
 // import 'package:tleavin_mobil/src/startup/register/register_screen.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:developer';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -13,22 +16,22 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
 
-  final TextEditingController _emailController = TextEditingController();
+  Usuario? usuario;
+
+  final TextEditingController _userController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   bool pass = false;
-  bool get isPopulated => _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
+  bool get isPopulated => _userController.text.isNotEmpty && _passwordController.text.isNotEmpty;
 
   @override
   void initState() {
     super.initState();
-    _emailController.addListener(_onEmailChanged);
-    _passwordController.addListener(_onPasswordChanged);
   }
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _userController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -39,132 +42,154 @@ class _LoginFormState extends State<LoginForm> {
       body: SafeArea(
         bottom: false,
         top: false,
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              opacity: 97,
-              image: AssetImage("assets/img/fondo_login.jpg"),
-              fit: BoxFit.cover
+        child: StreamBuilder(
+          stream: itemP.getStream,
+          initialData: itemP.registroUser,
+          builder:(context, snapshot) {
+          return Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                opacity: 97,
+                image: AssetImage("assets/img/fondo_login.jpg"),
+                fit: BoxFit.cover
+              ),
             ),
-          ),
-          child: SizedBox(
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                Align(
-                  alignment: FractionalOffset.bottomCenter,
-                  child: Wrap(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 260),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset('assets/img/logo_tlea.png', width: 270, height: 220),
-                          ],
+            child: SizedBox(
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Align(
+                    alignment: FractionalOffset.bottomCenter,
+                    child: Wrap(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 260),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset('assets/img/logo_tlea.png', width: 270, height: 220),
+                            ],
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5, bottom: 5),
-                        child: _input('Usuario', 'Usuario invalido', TextInputType.text, _emailController, Icons.person, false, false),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5, bottom: 5),
-                        child: _inputPassword('Contraseña', 'Contraseña invalida', TextInputType.visiblePassword, _passwordController, Icons.vpn_key_outlined),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15, bottom: 40),
-                        child: _buttons('Iniciar Sesion', const Color.fromRGBO(242, 211, 0, 1)  , () => {
-                          Navigator.of(context).push(
-                              MaterialPageRoute(builder: (context) {
-                                return const HomeScreen();
-                              }
-                            )
-                          )
-
-                            // if(usuario.text.isNotEmpty && password.text.isNotEmpty) {
-                            //   // animacionEnviar();  
-                            //   login();
-                            // } 
-                            // else {
-                            //   // toast('Por favor llena los campos');
-                            // }
-                        }),
-                      ),
-                      // Padding(
-                      //   padding: const EdgeInsets.only(left:15, right: 15),
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //     children: <Widget>[
-                      //       TextButton(
-                      //         child: const Text(
-                      //           'Crear cuenta',
-                      //           style: TextStyle(
-                      //             color: Colors.white,
-                      //           )
-                      //         ),
-                      //         onPressed: () {
-                      //           Navigator.of(context).push(
-                      //             MaterialPageRoute(builder: (context) {
-                      //               return RegisterScreen(
-                      //                 // userRepository: _userRepository,
-                      //               );
-                      //             }
-                      //           )
-                      //         );
-                      //         },
-                      //       ),
-                      //       // TextButton(
-                      //       //   child: const Text(
-                      //       //     'Restablecer contraseña',
-                      //       //     style: TextStyle(
-                      //       //       color: Colors.white,
-                      //       //     )
-                      //       //   ),
-                      //       //   onPressed: () {},
-                      //       // ),
-                      //     ],
-                      //   ),
-                      // )
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5, bottom: 5),
+                          child: _input('Usuario', 'Usuario invalido', TextInputType.text, _userController, Icons.person, false, false),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5, bottom: 5),
+                          child: _inputPassword('Contraseña', 'Contraseña invalida', TextInputType.visiblePassword, _passwordController, Icons.vpn_key_outlined),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15, bottom: 40),
+                          child: _buttons('Iniciar Sesion', const Color.fromRGBO(242, 211, 0, 1)  , () => {
+                            // Navigator.of(context).push(
+                            //     MaterialPageRoute(builder: (context) {
+                            //       return const InicioScreen();
+                            //     }
+                            //   )
+                            // )
+          
+                            if(_userController.text.isNotEmpty && _passwordController.text.isNotEmpty) {
+                              // animacionEnviar();  
+                              login()
+                            } 
+                            else {
+                                Fluttertoast.showToast(
+                                msg: "Favor de llenar los campos",
+                                toastLength: Toast.LENGTH_LONG,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: 20
+                              )
+                            }
+                          }),
+                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.only(left:15, right: 15),
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //     children: <Widget>[
+                        //       TextButton(
+                        //         child: const Text(
+                        //           'Crear cuenta',
+                        //           style: TextStyle(
+                        //             color: Colors.white,
+                        //           )
+                        //         ),
+                        //         onPressed: () {
+                        //           Navigator.of(context).push(
+                        //             MaterialPageRoute(builder: (context) {
+                        //               return RegisterScreen(
+                        //                 // userRepository: _userRepository,
+                        //               );
+                        //             }
+                        //           )
+                        //         );
+                        //         },
+                        //       ),
+                        //       // TextButton(
+                        //       //   child: const Text(
+                        //       //     'Restablecer contraseña',
+                        //       //     style: TextStyle(
+                        //       //       color: Colors.white,
+                        //       //     )
+                        //       //   ),
+                        //       //   onPressed: () {},
+                        //       // ),
+                        //     ],
+                        //   ),
+                        // )
+                      ],
+                    )
                   )
-                )
-              ],
-            ),
-          )
-        ),
+                ],
+              ),
+            )
+          );
+        }),
       ),
     );
   }
 
-  // login() async {
-  //   DatabaseProvider.db.login(usuario.text.trim(), password.text.trim()).then((value)  {
-  //     if(value.id == null) {
-  //       bloc.addError();
-  //       toast('Inicio fallido');
-  //     } 
-  //     else {
-  //       bloc.addBoton();
-  //       setState(() {
-  //         usuarioModel = Usuario(
-  //           usuario: value.usuario,
-  //           nombre: value.nombre,
-  //           numero_empleado: value.numero_empleado,
-  //           password: value.password,
-  //           isLogged: 'true',
-  //           cargo: value.cargo,
-  //           status: value.status,
-  //         );
-  //       });
+  login() async {
+    DatabaseProvider.db.login(_userController.text.trim(), _passwordController.text.trim()).then((value)  {
+      if(value.numeroEmpleado == null) {
+        itemP.addError();
+        Fluttertoast.showToast(
+          msg: "Inicio Fallido",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0
+        );
+      } 
+      else {
+        itemP.addBoton();
+        setState(() {
+          usuario = Usuario(
+            numeroEmpleado: value.numeroEmpleado,
+            usuario: value.usuario,
+            nombre: value.nombre,
+            password: value.password,
+            isLogged: 1,
+            cargo: value.cargo,
+            estado: value.estado,
+          );
+        });
         
-  //       // log(value.toString());
-  //       // DatabaseProvider.db.updateUsuario(usuarioModel!);
-  //       // bloc.addUser(value);
-  //       Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const HomeForm()), (Route<dynamic> route) => false);
-  //     }
-  //     bloc.deleteBoton();
-  //   });
-  // }
+        log(value.toString());
+        DatabaseProvider.db.actualizarUsuario(usuario!);
+        itemP.addUser(value);
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const InicioScreen()), (Route<dynamic> route) => false);
+      }
+      itemP.deleteBoton();
+    });
+  }
+
   
   final kBoxDecorationStyle = BoxDecoration(
     color: Colors.black38,
@@ -293,13 +318,5 @@ class _LoginFormState extends State<LoginForm> {
         ],
       ),
     );
-  }
-
-  void _onEmailChanged() {
-    // _loginBloc.add(EmailChanged(email: _emailController.text));
-  }
-
-  void _onPasswordChanged() {
-    // _loginBloc.add(PasswordChanged(password: _passwordController.text));
   }
 }

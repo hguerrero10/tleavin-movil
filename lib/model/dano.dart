@@ -2,14 +2,18 @@ class Dano{
   int? id;
   String? vin;
   String? panel;
-  String? nombre;
+  int? area;
+  int? tipo;
+  int? severidad;
   String? fecha_creacion;
 
   Dano({
     this.id,
     this.vin,
     this.panel,
-    this.nombre,
+    this.area,
+    this.tipo,
+    this.severidad,
     this.fecha_creacion
   });
 
@@ -22,7 +26,9 @@ class Dano{
     id: map['id'],
     vin: map['vin'].toString(),
     panel: map['panel'].toString(),
-    nombre: map['nombre'].toString(),
+    area: map['area'],
+    tipo: map['tipo'],
+    severidad: map['severidad'],
     fecha_creacion: map['fecha_creacion'].toString()
   );
 
@@ -30,7 +36,9 @@ class Dano{
     "id": id,
     "vin": vin,
     "panel": panel,
-    "nombre": nombre,
+    "area": area,
+    "tipo": tipo,
+    "severidad": severidad,
     "fecha_creacion": fecha_creacion
   };
 }

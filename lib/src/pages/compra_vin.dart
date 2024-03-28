@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:tleavin_mobil/src/home/inicio.dart';
 import 'package:tleavin_mobil/src/pages/inspeccion_vin.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-
+import 'dart:developer';
 class CompraVin extends StatefulWidget {
   const CompraVin({super.key});
 
@@ -11,17 +13,17 @@ class CompraVin extends StatefulWidget {
 }
 
 class _CompraVinState extends State<CompraVin> {
-  final qrTextController = TextEditingController();
+  final _qrTextController = TextEditingController();
   var qrbar = '';
 
   Future<void> scanQR() async {
     String barcodeScanRes;
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode("#ff6666", "Cancelar", true, ScanMode.QR);
-      qrTextController.text = barcodeScanRes;
+      _qrTextController.text = barcodeScanRes;
     } 
     catch (e) {
-      print('Error al escanear: $e');
+      log('Error al escanear: $e');
     }
   }
 
@@ -29,7 +31,18 @@ class _CompraVinState extends State<CompraVin> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('VIN'),
+        backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
+        title: const Text(
+          'VIN',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black
+          ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_sharp),
+          onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const InicioScreen()), (Route<dynamic> route) => false)
+        )
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -106,7 +119,7 @@ class _CompraVinState extends State<CompraVin> {
                           scanQR();
                       },
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
                         padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
                         shape: MaterialStateProperty.all(
                             RoundedRectangleBorder(
@@ -125,7 +138,7 @@ class _CompraVinState extends State<CompraVin> {
                   ),
                   const SizedBox(height: 20),
                   TextField(
-                    controller: qrTextController,
+                    controller: _qrTextController,
                     maxLength: 17,
                     keyboardType: TextInputType.text,
                     textAlign: TextAlign.center,
@@ -137,18 +150,33 @@ class _CompraVinState extends State<CompraVin> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 30),
+
                   ElevatedButton(
                     onPressed: () {
-                      qrbar = qrTextController.text;
+                      qrbar = _qrTextController.text;
 
+                    if(_qrTextController.text.isNotEmpty && (_qrTextController.text.length >= 17)) {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => InspeccionVin(vin: qrbar)),
                       );
+                    } 
+                    else {
+                        Fluttertoast.showToast(
+                        msg: "Escanear o Escribir VIN",
+                        toastLength: Toast.LENGTH_LONG,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 20
+                      );
+                    }
+
                     },
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
                       padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
                       shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
@@ -157,13 +185,13 @@ class _CompraVinState extends State<CompraVin> {
                         ),
                     ),
                     child: const Text(
-                      'Inspeccion',
+                      'Realizar Inspeccion',
                       style: TextStyle(
                         fontSize: 18.0,
                         color: Colors.white
                       ),
                     ),
-                  ),
+                  )
                 ]
               )
             ),
