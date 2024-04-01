@@ -16,6 +16,8 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
 
+  Usuario nuevousuario = Usuario();
+
   Usuario? usuario;
 
   final TextEditingController _userController = TextEditingController();
@@ -26,6 +28,8 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   void initState() {
+    crearUsuario();
+
     super.initState();
   }
 
@@ -158,7 +162,7 @@ class _LoginFormState extends State<LoginForm> {
       if(value.numeroEmpleado == null) {
         itemP.addError();
         Fluttertoast.showToast(
-          msg: "Inicio Fallido",
+          msg: "Contraseña y/o Usuario incorrectos",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
@@ -190,7 +194,6 @@ class _LoginFormState extends State<LoginForm> {
     });
   }
 
-  
   final kBoxDecorationStyle = BoxDecoration(
     color: Colors.black38,
     borderRadius: BorderRadius.circular(5.0),
@@ -202,6 +205,26 @@ class _LoginFormState extends State<LoginForm> {
       ),
     ],
   );
+
+  crearUsuario() async {
+    nuevousuario = Usuario(
+      numeroEmpleado: 2044,
+      nombre: 'Hugo Guerrero',
+      usuario: 'h_guerrero', 
+      password: 'Hugo1010', 
+      isLogged: 0,
+      cargo: 'Desarrollador',
+      estado: 'A'
+    );
+
+    try{
+      await DatabaseProvider.db.insertarUsuario(nuevousuario);
+      log('insertado');
+    } 
+    catch (e) {
+      log('error => $e');
+    }
+  }
 
   Widget _input(String placeholder, String mensaje, TextInputType tipo, TextEditingController controller, IconData icon, [bool isPassword = false, bool isfocus = false]) {
     return Container(

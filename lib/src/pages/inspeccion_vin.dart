@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:tleavin_mobil/src/pages/compra_vin.dart';
+import 'package:tleavin_mobil/database/db.dart';
+import 'package:tleavin_mobil/src/pages/vins/registro_vin.dart';
 import 'package:tleavin_mobil/src/pages/registro_unidad_ss.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'registro_dano.dart';
@@ -14,6 +17,14 @@ class InspeccionVin extends StatefulWidget {
 }
 
 class _InspeccionVinState extends State<InspeccionVin> {
+
+  @override
+  void initState() {
+    getVins();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -197,6 +208,19 @@ class _InspeccionVinState extends State<InspeccionVin> {
         )
       )
     );
+  }
+
+  Future getVins() async {
+    try{
+      await DatabaseProvider.db.obtenerListaVins().then((value) {
+        setState(() {
+          log('vins => $value');
+        });
+      });
+    } 
+    catch (e) {
+      log('error => $e');
+    }
   }
 
   Widget _boton(double top, double left, String text, onTap) {

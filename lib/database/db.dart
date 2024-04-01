@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:async';
 import 'package:path/path.dart';
@@ -32,15 +33,15 @@ class DatabaseProvider {
       );
 
       await db.execute(
-        "CREATE TABLE vin (id INTEGER PRIMARY KEY AUTOINCREMENT, viaje INTEGER, cartaporte INTEGER, vin VARCHAR UNIQUE, distrib_clave VARCHAR, dest_nombre VARCHAR, ruta_clave INTEGER, ruta_nombre VARCHAR, origen VARCHAR, destino VARCHAR, modelo VARCHAR, marca VARCHAR, posicion VARCHAR, orientacion VARCHAR, fecha_carga DATE, fecha_creacion DATE, fecha_sync DATE)"
+        "CREATE TABLE vin (id INTEGER PRIMARY KEY AUTOINCREMENT, viaje INTEGER, cartaporte INTEGER, vin VARCHAR UNIQUE, distrib_clave VARCHAR, dest_nombre VARCHAR, ruta_clave INTEGER, ruta_nombre VARCHAR, origen VARCHAR, destino VARCHAR, modelo VARCHAR, marca VARCHAR, posicion VARCHAR, orientacion VARCHAR, compra INTEGER, fecha_carga DATE, fecha_creacion DATE, fecha_sync DATE)"
       );
 
       await db.execute(
-        "CREATE TABLE dano (id INTEGER PRIMARY KEY AUTOINCREMENT, vin VARCHAR, panel VARCHAR, area INTERGER, tipo INTERGER, severidad INTERGER fecha_creacion DATE)"
+        "CREATE TABLE dano (id INTEGER PRIMARY KEY AUTOINCREMENT, vin VARCHAR, panel VARCHAR, area INTERGER, tipo INTERGER, severidad INTERGER, nota VARCHAR, fecha_creacion DATE)"
       );
 
       await db.execute(
-        "CREATE TABLE evidencia (id INTEGER PRIMARY KEY AUTOINCREMENT, vin VARCHAR, dano VARCHAR, nombre VARCHAR, notas VARCHAR, fechahora DATE, archivo TEXT)"
+        "CREATE TABLE evidencia (id INTEGER PRIMARY KEY AUTOINCREMENT, vin VARCHAR, dano VARCHAR, nombre VARCHAR, archivo TEXT, fechahora DATE)"
       );
 
       await db.execute(
@@ -81,7 +82,7 @@ class DatabaseProvider {
     var res = await db.query("usuario");
 
     if (res.isNotEmpty) {
-      listaUsuarios =  res.map((c) => Usuario.fromMap(c)).toList();
+      listaUsuarios =  res.map((u) => Usuario.fromMap(u)).toList();
     } 
     else {
       listaUsuarios = [];
@@ -103,19 +104,80 @@ class DatabaseProvider {
     return db.update('vin',  vin.toMap() , where: "id = ?" , whereArgs: [vin.id], );
   }
 
-  Future<List<Vin>>obtenerVins() async {
+  Future<List<Vin>>obtenerListaVins() async {
     final db = await database;
     List<Vin> listaVins;
     var res = await db.query("vin");
+    log(res.toString());
 
     if (res.isNotEmpty) {
-      listaVins =  res.map((c) => Vin.fromMap(c)).toList();
+      listaVins =  res.map((v) => Vin.fromMap(v)).toList();
     } 
     else {
       listaVins = [];
     }
     return listaVins;
   }
+
+  Future<List>obtenerInfoVin(vin) async {
+    final db = await database;
+    List vins = [];
+
+    var res = await db.query("vin WHERE vin = '$vin'");
+    var res2 = await db.query("dano WHERE vin = '$vin'");
+    var res3 = await db.query("evidencia WHERE vin = '$vin'");
+
+    if (res.isNotEmpty) {
+      vins.addAll(res);
+    }
+
+    if (res2.isNotEmpty) {
+      vins.addAll(res2);
+    }
+
+    if (res3.isNotEmpty) {
+      vins.addAll(res3);
+    }
+
+    if(vins.isEmpty) {
+      vins = [];
+    }
+
+    return vins;
+  }
+
+  Future<List>obtenerTipoVin() async {
+    final db = await database;
+    List vins = [];
+    var res = await db.query("vin");
+
+    if (res.isNotEmpty) {
+      vins.addAll(res);
+    }
+
+    if(vins.isEmpty) {
+      vins = [];
+    }
+
+    return vins;
+  }
+
+  Future<List>checarVinExistente(chVin) async {
+    final db = await database;
+    List vins = [];
+    var res = await db.query("vin where vin = '$chVin'");
+
+    if (res.isNotEmpty) {
+      vins.addAll(res);
+    }
+
+    if(vins.isEmpty) {
+      vins = [];
+    }
+
+    return vins;
+  }
+
 
   // CRUD DAÑO 
 
@@ -137,7 +199,7 @@ class DatabaseProvider {
     var res = await db.query("dano");
 
     if (res.isNotEmpty) {
-      listaDanos =  res.map((c) => Dano.fromMap(c)).toList();
+      listaDanos =  res.map((d) => Dano.fromMap(d)).toList();
     } 
     else {
       listaDanos = [];

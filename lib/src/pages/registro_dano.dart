@@ -12,7 +12,7 @@ import 'package:tleavin_mobil/model/evidencia.dart';
 import 'package:tleavin_mobil/model/vin.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/home/inicio.dart';
-import 'package:tleavin_mobil/src/pages/compra_vin.dart';
+import 'package:tleavin_mobil/src/pages/vins/registro_vin.dart';
 import 'package:tleavin_mobil/src/pages/inspeccion_vin.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:image_picker/image_picker.dart';
@@ -28,20 +28,24 @@ class RegistroDano extends StatefulWidget {
 }
 
 class _RegistroDanoState extends State<RegistroDano> {
-  var format;
+  var formato;
   var formatWH;
-  var dateString;
+  var fecha;
+  var fechaH;
 
   final _notasTextController = TextEditingController();
+
   List<int> list = <int>[1, 2, 3, 5, 6, 7, 8, 9, 10];
+
   final ImagePicker picker = ImagePicker();
+
   String? base64Foto1;
   String? base64Foto2;
   String? base64Foto3;
   String? base64Foto4;
   List<XFile>? _mediaFileList;
+  var evidenciasDano = [];
 
-  Vin? vin;
   Dano? dano;
   Evidencia? evidencia;
 
@@ -49,8 +53,8 @@ class _RegistroDanoState extends State<RegistroDano> {
     final List<XFile> pickedFileList = <XFile>[];
     final photo = await picker.pickImage(
       source: ImageSource.camera,
-      maxHeight: 1080,
-      maxWidth: 1920,
+      maxHeight: 720,
+      maxWidth: 1280,
       imageQuality: 100
     );
 
@@ -65,33 +69,36 @@ class _RegistroDanoState extends State<RegistroDano> {
   }
 
   convertirBase64(value, foto) async {
-    log(foto.toString());
-    if(value != null) {
 
+    if(value != null) {
       final imageData = await File(value).readAsBytes();
       
       if(foto == 1) {
         base64Foto1 = null;
         base64Foto1 = base64Encode(imageData);
-        log(base64Foto1.toString());
+        // log(base64Foto1.toString());
+        evidenciasDano.add(base64Foto1);
       }
 
       if(foto == 2) {
         base64Foto2 = null;
         base64Foto2 = base64Encode(imageData);
-        log(base64Foto2.toString());
+        // log(base64Foto2.toString());
+        evidenciasDano.add(base64Foto2);
       }
 
       if(foto == 3) {
         base64Foto3 = null;
         base64Foto3 = base64Encode(imageData);
-        log(base64Foto3.toString());
+        // log(base64Foto3.toString());
+        evidenciasDano.add(base64Foto3);
       }
 
       if(foto == 4) {
         base64Foto4 = null;
         base64Foto4 = base64Encode(imageData);
-        log(base64Foto4.toString());
+        // log(base64Foto4.toString());
+        evidenciasDano.add(base64Foto4);
       }
       
     }
@@ -100,10 +107,10 @@ class _RegistroDanoState extends State<RegistroDano> {
   @override
   void initState() {
     initializeDateFormatting();
-    format = DateFormat('yyyy/MM/dd'); 
+    formato = DateFormat('yyyy/MM/dd'); 
     formatWH = DateFormat('yyyy/MM/dd HH:mm:ss'); 
-    log(format.format(DateTime.now()));
-    log(formatWH.format(DateTime.now()));
+    fecha = formato.format(DateTime.now());
+    fechaH = formatWH.format(DateTime.now());
     
     super.initState();
   }
@@ -132,24 +139,24 @@ class _RegistroDanoState extends State<RegistroDano> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Cuerpo(),
+            const Cuerpo(),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Divider(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: const Divider(
                 color: Colors.black,
                 thickness: 1.0,
                 height: 20.0,
               ),         
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Row(
                     children: [
-                      Text(
+                      const Text(
                         'VIN: ',
                         style: TextStyle(
                           fontSize: 17,
@@ -158,7 +165,7 @@ class _RegistroDanoState extends State<RegistroDano> {
                       ),
                       Text(
                         widget.vin,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 17
                         ),
                       )
@@ -166,7 +173,7 @@ class _RegistroDanoState extends State<RegistroDano> {
                   ),
                   Row(
                     children: [
-                      Text(
+                      const Text(
                         'Panel Seleccinado: ',
                         style: TextStyle(
                           fontSize: 17,
@@ -175,13 +182,13 @@ class _RegistroDanoState extends State<RegistroDano> {
                       ),
                       Text(
                         widget.panel,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 17
                         ),
                       )
                     ],
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   _titulo('Area:'),
                   Container(
                     height: 50,
@@ -197,7 +204,7 @@ class _RegistroDanoState extends State<RegistroDano> {
                       onChanged: (_) {},
                     )
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   _titulo('Tipo:'),
                   Container(
                     height: 50,
@@ -214,7 +221,7 @@ class _RegistroDanoState extends State<RegistroDano> {
                     ),
     
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   _titulo('Severidad:'),
                   // Container(
                   //   height: 50,
@@ -246,7 +253,7 @@ class _RegistroDanoState extends State<RegistroDano> {
                       onChanged: (_) {},
                     )
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -263,7 +270,7 @@ class _RegistroDanoState extends State<RegistroDano> {
                                     width: 40,
                                     height: 40,
                                   ),
-                                  Text(
+                                  const Text(
                                     'Lejos',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold
@@ -290,8 +297,8 @@ class _RegistroDanoState extends State<RegistroDano> {
                                   //     },
                                   //   ),
                                   // )
-                                ],
-                              ),
+                                ]
+                              )
                             ),
                             GestureDetector(
                               onTap: () => getCamara(2),
@@ -300,13 +307,13 @@ class _RegistroDanoState extends State<RegistroDano> {
                                   Image.asset(
                                     'assets/img/camara.png',
                                     width: 40,
-                                    height: 40,
+                                    height: 40
                                   ),
-                                  Text(
+                                  const Text(
                                     'Angulo 1',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold
-                                    ),
+                                    )
                                   ),
                                   // Container(
                                   //   height: 200,
@@ -341,7 +348,7 @@ class _RegistroDanoState extends State<RegistroDano> {
                                     width: 40,
                                     height: 40,
                                   ),
-                                  Text(
+                                  const Text(
                                     'Angulo 2',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold
@@ -380,7 +387,7 @@ class _RegistroDanoState extends State<RegistroDano> {
                                     width: 40,
                                     height: 40,
                                   ),
-                                  Text(
+                                  const Text(
                                     'Angulo 3',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold
@@ -412,7 +419,7 @@ class _RegistroDanoState extends State<RegistroDano> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         TextField(
                           controller: _notasTextController,
                           keyboardType: TextInputType.text,
@@ -421,10 +428,10 @@ class _RegistroDanoState extends State<RegistroDano> {
                             hintText: 'Notas',
                             hintStyle: TextStyle(
                               color: Colors.grey
-                            ),
-                          ),
+                            )
+                          )
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         ElevatedButton(
                           onPressed: () {
                             Navigator.push(
@@ -434,15 +441,15 @@ class _RegistroDanoState extends State<RegistroDano> {
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(18.0)),
-                            minimumSize: MaterialStateProperty.all<Size>(Size(double.infinity, 50)),
+                            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
+                            minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
                             shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16)
                           ),
                         ),
                           ),
-                          child: Text(
+                          child: const Text(
                             'Registrar Otro Daño',
                             style: TextStyle(
                               fontSize: 20.0,
@@ -450,7 +457,7 @@ class _RegistroDanoState extends State<RegistroDano> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         ElevatedButton(
                           onPressed: () {
                             // Navigator.push(
@@ -458,34 +465,34 @@ class _RegistroDanoState extends State<RegistroDano> {
                             //   MaterialPageRoute(builder: (context) => ResumenDano(vin: widget.vin)),
                             // );
 
-
-
+                            log(evidenciasDano.length.toString());
+                            guardarDano();
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(18.0)),
-                            minimumSize: MaterialStateProperty.all<Size>(Size(double.infinity, 50)),
+                            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
+                            minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
                             shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16)
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16)
+                              )
+                            ),
                           ),
-                        ),
-                          ),
-                          child: Text(
+                          child: const Text(
                             'Finalizar',
                             style: TextStyle(
                               fontSize: 20.0,
                               color: Colors.white
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                            )
+                          )
+                        )
+                      ]
+                    )
+                  )
                 ]
               )
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
           ]
         )
       )
@@ -502,12 +509,13 @@ class _RegistroDanoState extends State<RegistroDano> {
               fontWeight: FontWeight.bold,
               color: Colors.black,
               fontSize: 17
-            ),
-          ),
+            )
+          )
         )
-      ],
+      ]
     );
   }
+
   guardarDano() async {
     dano = Dano(
       vin: widget.vin,
@@ -515,23 +523,31 @@ class _RegistroDanoState extends State<RegistroDano> {
       area: 1,
       tipo: 4,
       severidad: 5,
-      fecha_creacion: format.format(DateTime.now())
-    );
-
-    evidencia = Evidencia(
-      vin: widget.vin,
-      dano: null,
-      nombre: null,
-      notas: null,
-      fechahora: formatWH.format(DateTime.now()),
-      archivo: null
+      nota: _notasTextController.text,
+      fecha_creacion: fecha
     );
 
     await DatabaseProvider.db.insertarDano(dano!).then((value) async {
+      log('dano insertado');
       itemP.addBoton();
-      Navigator.pop(context);
       itemP.deleteBoton();
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const InicioScreen()), (route) => false);
+
+      for(var ed in evidenciasDano) {
+        evidencia = Evidencia(
+          vin: widget.vin,
+          dano: null,
+          nombre: null,
+          archivo: ed,
+          fechahora: fechaH
+        );
+
+        await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) async {
+          log('evidencia insertado');
+        }).timeout(const Duration(seconds: 30), onTimeout: () {
+          itemP.addError();
+        });
+      }
+      // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const InicioScreen()), (route) => false);
     }).timeout(const Duration(seconds: 30), onTimeout: () {
       itemP.addError();
     });

@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/usuario.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
-import 'package:tleavin_mobil/src/pages/compra_vin.dart';
-import 'package:tleavin_mobil/src/pages/pantalla2.dart';
+import 'package:tleavin_mobil/src/pages/vins/registro_vin.dart';
+import 'package:tleavin_mobil/src/pages/vins/vins_disponibles.dart';
 import 'package:tleavin_mobil/src/startup/login/login_form.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
+import 'package:flutter/cupertino.dart';
 import 'dart:developer';
 // import 'package:tleavin_mobil/src/widgets/drawer.dart';
 
@@ -24,9 +25,9 @@ class _InicioScreenState extends State<InicioScreen> {
   void initState() {
     super.initState();
 
-
     getUsuarios();
-    crearUsuario();
+    getdanos();
+    getevidencia();
   }
 
   @override
@@ -51,100 +52,28 @@ class _InicioScreenState extends State<InicioScreen> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.only(top: 10, left: 16),
-                  child: Row(
-                  children: [
-                    const Text(
-                      'Bienvenido ',
-                      style: TextStyle(
-                        fontSize: 21,
-                        fontWeight: FontWeight.bold
-                      ),
-                    ),
-                    Text(
-                      itemP.usuario!.nombre!,
-                      style: const TextStyle(
-                        fontSize: 21,
-                      ),
-                    ),
-                  ],
-                                ),
+            Container(
+              padding: const EdgeInsets.only(top: 10, left: 16),
+              child: Row(
+              children: [
+                const Text(
+                  'Bienvenido ',
+                  style: TextStyle(
+                    fontSize: 21,
+                    fontWeight: FontWeight.bold
+                  ),
                 ),
+                Text(
+                  itemP.usuario!.nombre!,
+                  style: const TextStyle(
+                    fontSize: 21,
+                  ),
+                ),
+              ],
+            ),
+          ),
             const Cuerpo(),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: [
-            //     Image.asset(
-            //       'assets/img/nube5G.png',
-            //       width: 180,
-            //       height: 190,
-            //     ),
-            //     Image.asset(
-            //       'assets/img/nubeGris.png',
-            //       width: 180,
-            //       height: 190,
-            //     ),
-            //   ],
-            // ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: const Divider(
-                color: Colors.black,
-                thickness: 1.0,
-                height: 10.0,
-              ),
-            ),
-            // Sección media
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const Text(
-                    'Ultima Sincronizacion: 2024-02-20 12:45',
-                    style: TextStyle(
-                      fontSize: 18.0,
-                    ),
-                  ),
-                  const SizedBox(height: 15.0),
-                  const Text(
-                    'Perido: 2024-02-10  2024-02-20',
-                    style: TextStyle(
-                      fontSize: 18.0,
-                    ),
-                  ),
-                  const SizedBox(height: 16.0),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const Pantalla2()),
-                      );
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16)
-                        ),
-                      ),
-                    ),
-                    child: const Text(
-                      'Actualizar Viajes',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        color: Colors.white
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // Línea divisoria
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: const Divider(
@@ -153,66 +82,13 @@ class _InicioScreenState extends State<InicioScreen> {
                 height: 20.0,
               ),
             ),
-            // Sección inferior
-            Container(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const Text(
-                    'La DB del dispositivo tiene 3 cargas pendiente por enviar.',
-                    style: TextStyle(
-                      fontSize: 18.0,
-                    ),
-                  ),
-                  const SizedBox(height: 16.0),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Acción del botón
-                    },
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16)
-                        ),
-                      ),
-                    ),
-                    child: const Text(
-                      'Enviar Cargas',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        color: Colors.white
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20.0),
-                  ElevatedButton(
-                    onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const CompraVin()), (Route<dynamic> route) => false),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16)
-                        ),
-                      ),
-                    ),
-                    child: const Text(
-                      'Embarque Manual', 
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        color: Colors.white
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            const SizedBox(height: 40),
+            _cuadricula1(),
+            const SizedBox(height: 10),
+            _cuadricula2()
           ]
         )
-      ),
+      )
     );
   }
 
@@ -249,22 +125,121 @@ class _InicioScreenState extends State<InicioScreen> {
     }
   }
 
-  crearUsuario() async {
-    usuario = Usuario(
-      numeroEmpleado: 2044,
-      nombre: 'Hugo Guerrero',
-      usuario: 'h_guerrero', 
-      password: 'Hugo1010', 
-      isLogged: 0,
-      cargo: 'Desarrollador',
-      estado: 'A'
-    );
-
+  Future getdanos() async {
     try{
-      await DatabaseProvider.db.insertarUsuario(usuario);
+      await DatabaseProvider.db.obtenerDano().then((value) {
+        setState(() {
+          log('dano => $value');
+        });
+      });
     } 
     catch (e) {
       log('error => $e');
     }
+  }
+
+  Future getevidencia() async {
+    try{
+      await DatabaseProvider.db.obtenerEvidencia().then((value) {
+        setState(() {
+          log('evidencia => ${value.length}');
+        });
+      });
+    } 
+    catch (e) {
+      log('error => $e');
+    }
+  }
+
+
+
+
+
+
+  Widget _cuadricula1() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _panel(CupertinoIcons.car_detailed, () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const CompraVin()), (Route<dynamic> route) => false), 'Comprar vin'),
+          _panel(Icons.abc_outlined, () => Navigator.pushNamed(context, 'report'), 'Reportar')
+          // _panel(Icons.account_box_sharp, () => Navigator.pushNamed(context, 'viewreport'), 'Ver Reportes'),
+        ]
+      )
+    );
+  }
+  
+  Widget _cuadricula2() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _panel(CupertinoIcons.list_bullet_below_rectangle, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VinsDisponibles())), 'Vins Disponibles'),
+          _panel(Icons.padding, () => Navigator.pushNamed(context, 'contact'), 'Contacto')
+          // _panel(Icons.face, () => Navigator.pushNamed(context, 'predial'), 'Predial'),
+        ]
+      )
+    );
+  }
+
+  Widget _panel(icono, onPress, text) {
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.4),
+            spreadRadius: 1,
+            blurRadius: 5,
+            offset: const Offset(0, 3) // changes position of shadow
+          )
+        ]
+      ),
+      child: SizedBox(
+        height: 140,
+        width: MediaQuery.of(context).size.width * 0.4,
+        child: ElevatedButton(
+          style: ButtonStyle(
+            shadowColor: MaterialStateProperty.all<Color>(Colors.grey),
+            overlayColor: MaterialStateProperty.all<Color>(Colors.grey[200]!),
+            backgroundColor: MaterialStateProperty.all<Color>(const Color.fromRGBO(242, 211, 0, 3)),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20))
+              )
+            ),
+            textStyle: MaterialStateProperty.all<TextStyle>(
+              const TextStyle(
+                color: Colors.black,
+              )
+            )
+          ),
+          onPressed: onPress,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icono,
+                color: Colors.black,
+                size: 50
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold
+                  )
+                )
+              )
+            ]
+          )
+        )
+      )
+    );
   }
 }
