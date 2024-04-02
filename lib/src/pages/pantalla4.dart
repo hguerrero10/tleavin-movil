@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
-import 'vins/registro_vin.dart';
+import 'vin/registro_vin.dart';
 
 class Pantalla4 extends StatefulWidget {
   const Pantalla4({super.key});

@@ -3,8 +3,12 @@ import 'dart:io';
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:tleavin_mobil/model/area_Dano.dart';
+import 'package:tleavin_mobil/model/cliente.dart';
 import 'package:tleavin_mobil/model/dano.dart';
 import 'package:tleavin_mobil/model/evidencia.dart';
+import 'package:tleavin_mobil/model/severidad.dart';
+import 'package:tleavin_mobil/model/tipo_dano.dart';
 import 'package:tleavin_mobil/model/vin.dart';
 import 'package:tleavin_mobil/model/usuario.dart';
 import 'package:path_provider/path_provider.dart';
@@ -47,6 +51,33 @@ class DatabaseProvider {
       await db.execute(
         "CREATE TABLE dispositivo (id INTEGER PRIMARY KEY AUTOINCREMENT, descripcion VARCHAR, api_key VARCHAR, usuario INTEGER, notas VARCHAR)"
       );
+
+
+
+
+
+
+
+
+
+
+
+      await db.execute(
+        "CREATE TABLE cliente (id INTEGER PRIMARY KEY AUTOINCREMENT, idAdvan INTEGER, cliente VARCHAR)"
+      );
+
+      await db.execute(
+        "CREATE TABLE area_dano (id INTEGER PRIMARY KEY AUTOINCREMENT, area VARCHAR, descripcion VARCHAR)"
+      );
+
+      await db.execute(
+        "CREATE TABLE tipo_dano (id INTEGER PRIMARY KEY AUTOINCREMENT, descripcion VARCHAR)"
+      );
+
+      await db.execute(
+        "CREATE TABLE severidad (id INTEGER PRIMARY KEY AUTOINCREMENT, tipo VARCHAR, descripcion VARCHAR)"
+      );
+
     });
   }
 
@@ -261,4 +292,95 @@ class DatabaseProvider {
     }
     return listDispositivo;
   }
+
+
+
+
+
+
+  // CRUD AREA / TIPO DANO / SEVERIDAD / CLIENTE
+
+  Future<List<Cliente>>obtenerCliente() async {
+    final db = await database;
+    List<Cliente> lista;
+    var res = await db.query("cliente");
+
+    if (res.isNotEmpty) {
+      lista =  res.map((u) => Cliente.fromMap(u)).toList();
+    } 
+    else {
+      lista = [];
+    }
+    return lista;
+  }
+
+  Future<int> insertarCliente(Cliente nuevoRegistro) async {
+    var db = await database;
+    int res = await db.insert("cliente", nuevoRegistro.toMap());
+
+    return res;
+  }
+
+  Future<List<AreaDano>>obtenerAreaDano() async {
+    final db = await database;
+    List<AreaDano> lista;
+    var res = await db.query("area_dano");
+
+    if (res.isNotEmpty) {
+      lista =  res.map((u) => AreaDano.fromMap(u)).toList();
+    } 
+    else {
+      lista = [];
+    }
+    return lista;
+  }
+
+  Future<int> insertarAreaDano(AreaDano nuevoRegistro) async {
+    var db = await database;
+    int res = await db.insert("area_dano", nuevoRegistro.toMap());
+
+    return res;
+  }
+
+  Future<List<TipoDano>>obtenerTipoDano() async {
+    final db = await database;
+    List<TipoDano> lista;
+    var res = await db.query("tipo_dano");
+
+    if (res.isNotEmpty) {
+      lista =  res.map((u) => TipoDano.fromMap(u)).toList();
+    } 
+    else {
+      lista = [];
+    }
+    return lista;
+  }
+
+  Future<int> insertarTipoDano(TipoDano nuevoRegistro) async {
+    var db = await database;
+    int res = await db.insert("tipo_dano", nuevoRegistro.toMap());
+
+    return res;
+  }
+
+  Future<List<Severidad>>obtenerSeveridad() async {
+    final db = await database;
+    List<Severidad> lista;
+    var res = await db.query("severidad");
+
+    if (res.isNotEmpty) {
+      lista =  res.map((u) => Severidad.fromMap(u)).toList();
+    } 
+    else {
+      lista = [];
+    }
+    return lista;
+  }
+
+  Future<int> insertarSeveridad(Severidad nuevoRegistro) async {
+      var db = await database;
+      int res = await db.insert("severidad", nuevoRegistro.toMap());
+
+      return res;
+    }
 }

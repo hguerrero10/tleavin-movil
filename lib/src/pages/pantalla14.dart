@@ -17,12 +17,12 @@ class _Pantalla14State extends State<Pantalla14> {
       ),
       body: SingleChildScrollView(
         child: Container(
-             padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
+          padding: const EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
           child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Cuerpo(),
               const SizedBox(height: 60),

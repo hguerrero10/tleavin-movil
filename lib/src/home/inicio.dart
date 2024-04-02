@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/database/db.dart';
+import 'package:tleavin_mobil/model/area_Dano.dart';
+import 'package:tleavin_mobil/model/cliente.dart';
+import 'package:tleavin_mobil/model/severidad.dart';
+import 'package:tleavin_mobil/model/tipo_dano.dart';
 import 'package:tleavin_mobil/model/usuario.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
-import 'package:tleavin_mobil/src/pages/vins/registro_vin.dart';
-import 'package:tleavin_mobil/src/pages/vins/vins_disponibles.dart';
+import 'package:tleavin_mobil/src/pages/vin/registro_vin.dart';
+import 'package:tleavin_mobil/src/pages/vin/vins_disponibles.dart';
 import 'package:tleavin_mobil/src/startup/login/login_form.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,14 +24,17 @@ class InicioScreen extends StatefulWidget {
 class _InicioScreenState extends State<InicioScreen> {
 
   Usuario usuario = Usuario();
+  AreaDano areadano = AreaDano();
+  TipoDano tipodano = TipoDano();
+  Severidad severidad = Severidad();
+  Cliente cliente = Cliente();
 
   @override
   void initState() {
-    super.initState();
 
-    getUsuarios();
-    getdanos();
-    getevidencia();
+    registrarAreaDano();
+
+    super.initState();
   }
 
   @override
@@ -112,48 +119,44 @@ class _InicioScreenState extends State<InicioScreen> {
     );
   }
 
-  Future getUsuarios() async {
+  registrarAreaDano() async {
+    areadano = AreaDano(
+      area: 'L-Izquierdo', 
+      descripcion: 'TAPA DE GASOLINA/PUERTA DE CARGA DE BATERIA'
+    );
+
+    tipodano = TipoDano(
+      descripcion: 'DOBLADO'
+    );
+
+    cliente = Cliente(
+      idAdvan: 10,
+      cliente: 'MAZDA',
+    );
+
+    severidad = Severidad(
+      tipo: 'HASTA E INCLUYENDO 1" DE LARGO/DIÁMETRO',
+      descripcion: 'MENOS DE 2,5 CM',
+    );
+
     try{
-      await DatabaseProvider.db.obtenerUsuarios().then((value) {
-        setState(() {
-          log('usuarios => $value');
-        });
-      });
+      await DatabaseProvider.db.insertarAreaDano(areadano);
+      log('insertado are');
+
+      await DatabaseProvider.db.insertarTipoDano(tipodano);
+      log('insertado tipo');
+
+      await DatabaseProvider.db.insertarCliente(cliente);
+      log('insertado cli');
+  
+      await DatabaseProvider.db.insertarSeveridad(severidad);
+      log('insertado ser');
+      
     } 
     catch (e) {
       log('error => $e');
     }
   }
-
-  Future getdanos() async {
-    try{
-      await DatabaseProvider.db.obtenerDano().then((value) {
-        setState(() {
-          log('dano => $value');
-        });
-      });
-    } 
-    catch (e) {
-      log('error => $e');
-    }
-  }
-
-  Future getevidencia() async {
-    try{
-      await DatabaseProvider.db.obtenerEvidencia().then((value) {
-        setState(() {
-          log('evidencia => ${value.length}');
-        });
-      });
-    } 
-    catch (e) {
-      log('error => $e');
-    }
-  }
-
-
-
-
 
 
   Widget _cuadricula1() {

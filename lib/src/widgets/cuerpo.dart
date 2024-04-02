@@ -82,27 +82,31 @@ class _CuerpoState extends State<Cuerpo> {
                     ],
                   ),
                   const SizedBox(height: 5),
-                  ConnectivityWidget(
-                    builder: (context, isOnline) => Center(
-                      child: Text(
-                        isOnline ? "ON" : "OFF", 
-                        style: TextStyle(
-                          fontSize: 10, 
-                          fontWeight: FontWeight.bold, 
-                          color: isOnline ? Colors.green : Colors.red
+                  SizedBox(
+                    width: 30,
+                    height: 20,
+                    child: ConnectivityWidget(
+                      builder: (context, isOnline) => Center(
+                        child: Text(
+                          isOnline ? "ON" : "OFF", 
+                          style: TextStyle(
+                            fontSize: 10, 
+                            fontWeight: FontWeight.bold, 
+                            color: isOnline ? Colors.green : Colors.red
+                          )
                         )
+                        // isOnline ? Image.asset(
+                        //       'assets/img/verde.png',
+                        //       width: 30,
+                        //       height: 30,
+                        //     ) :
+                        //     Image.asset(
+                        //       'assets/img/verde.png',
+                        //       width: 30,
+                        //       height: 30,
+                        // )
                       )
-                      // isOnline ? Image.asset(
-                      //       'assets/img/verde.png',
-                      //       width: 30,
-                      //       height: 30,
-                      //     ) :
-                      //     Image.asset(
-                      //       'assets/img/verde.png',
-                      //       width: 30,
-                      //       height: 30,
-                      // )
-                    )
+                    ),
                   )
                 ],
               ),

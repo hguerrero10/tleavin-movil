@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:tleavin_mobil/src/pages/pantalla14.dart';
-import 'package:tleavin_mobil/src/pages/resumen_dano.dart';
+import 'package:tleavin_mobil/src/pages/dano/resumen_dano.dart';
 import 'package:tleavin_mobil/src/pages/resumen_carga/widget/firma_inspector.dart';
 
 class ResumenViaje extends StatefulWidget {

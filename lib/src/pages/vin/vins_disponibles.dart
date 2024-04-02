@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/vin.dart';
-import 'package:tleavin_mobil/src/pages/vins/detalle_vin_dis.dart';
+import 'package:tleavin_mobil/src/pages/vin/detalle_vin_dis.dart';
 
 class VinsDisponibles extends StatefulWidget {
   const VinsDisponibles({super.key});
@@ -44,43 +44,36 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
             childAspectRatio: 1.0,
             crossAxisCount: 2,
             crossAxisSpacing: 40,
-            mainAxisSpacing: 90,
               children: List.generate(snapshot.data!.length, (index) {
-                return Tooltip(
-                  message: '${snapshot.data![index].vin}',
-                  decoration: const BoxDecoration(
-                    color: Colors.black
-                  ),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => DetalleVin(vin: '${snapshot.data![index].vin}')));
-                    },
-                    child: Column(
-                      children: <Widget>[
-                        const SizedBox(
-                          child: Icon(CupertinoIcons.car_detailed, color: Colors.black, size: 90),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  '${snapshot.data![index].vin}',
-                                  textAlign: TextAlign.center ,
-                                  style: const TextStyle(
-                                    fontSize: 13,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold
-                                  )
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => DetalleVin(vin: '${snapshot.data![index].vin}')));
+                  },
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        child: Icon(CupertinoIcons.car_detailed, color: snapshot.data![index].compra == 1 ? Colors.green : Colors.black, size: 90),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              child: Text(
+                                '${snapshot.data![index].vin}',
+                                textAlign: TextAlign.center ,
+                                style: const TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold
                                 )
                               )
-                            ]
-                          )
+                            )
+                          ]
                         )
-                      ]
-                    )
+                      )
+                    ]
                   )
                 );
               }

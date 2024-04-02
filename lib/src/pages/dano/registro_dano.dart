@@ -9,13 +9,13 @@ import 'package:gallery_saver/gallery_saver.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/dano.dart';
 import 'package:tleavin_mobil/model/evidencia.dart';
-import 'package:tleavin_mobil/model/vin.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
-import 'package:tleavin_mobil/src/home/inicio.dart';
-import 'package:tleavin_mobil/src/pages/vins/registro_vin.dart';
+import 'package:tleavin_mobil/src/pages/dano/listas.dart';
+import 'package:tleavin_mobil/src/pages/vin/registro_vin.dart';
 import 'package:tleavin_mobil/src/pages/inspeccion_vin.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 class RegistroDano extends StatefulWidget {
   final vin;
@@ -38,13 +38,23 @@ class _RegistroDanoState extends State<RegistroDano> {
   List<int> list = <int>[1, 2, 3, 5, 6, 7, 8, 9, 10];
 
   final ImagePicker picker = ImagePicker();
+  List<XFile>? _mediaFileList;
 
   String? base64Foto1;
   String? base64Foto2;
   String? base64Foto3;
   String? base64Foto4;
-  List<XFile>? _mediaFileList;
   var evidenciasDano = [];
+
+  List<ListasA> listaAreaDanos = [];
+  List<ListasT> listaTipoDanos = [];
+  List<ListasS> listaSeveridad = [];
+  List<String> listaCliente = [];
+  
+  String? selectArea;
+  String? selectTipo;
+  String? selectSeve;
+  String? selectClien;
 
   Dano? dano;
   Evidencia? evidencia;
@@ -69,7 +79,6 @@ class _RegistroDanoState extends State<RegistroDano> {
   }
 
   convertirBase64(value, foto) async {
-
     if(value != null) {
       final imageData = await File(value).readAsBytes();
       
@@ -111,14 +120,14 @@ class _RegistroDanoState extends State<RegistroDano> {
     formatWH = DateFormat('yyyy/MM/dd HH:mm:ss'); 
     fecha = formato.format(DateTime.now());
     fechaH = formatWH.format(DateTime.now());
+
+    getListas();
     
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    int dropdownValue = list.first;
-
     return Scaffold(
         appBar: AppBar(
         // backgroundColor: Colors.black,
@@ -190,69 +199,13 @@ class _RegistroDanoState extends State<RegistroDano> {
                   ),
                   const SizedBox(height: 10),
                   _titulo('Area:'),
-                  Container(
-                    height: 50,
-                    width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.only(left: 20, right: 20),
-                    child: DropdownButton<int>(
-                      items: list.map((int value) {
-                        return DropdownMenuItem<int>(
-                          value: value,
-                          child: Text(value.toString()),
-                        );
-                      }).toList(),
-                      onChanged: (_) {},
-                    )
-                  ),
+                  _dropDownArea(),
                   const SizedBox(height: 10),
                   _titulo('Tipo:'),
-                  Container(
-                    height: 50,
-                    width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.only(left: 20, right: 20),
-                    child: DropdownButton<int>(
-                      items: list.map((int value) {
-                        return DropdownMenuItem<int>(
-                          value: value,
-                          child: Text(value.toString()),
-                        );
-                      }).toList(),
-                      onChanged: (_) {},
-                    ),
-    
-                  ),
+                  _dropDownTipo(),
                   const SizedBox(height: 10),
                   _titulo('Severidad:'),
-                  // Container(
-                  //   height: 50,
-                  //   width: MediaQuery.of(context).size.width,
-                  //   margin: const EdgeInsets.only(left: 20, right: 20),
-                  //   child: DropdownMenu<int>(
-                  //     initialSelection: list.first,
-                  //     onSelected: (int? value) {
-                  //       setState(() {
-                  //         dropdownValue = value!;
-                  //       });
-                  //     },
-                  //     dropdownMenuEntries: list.map<DropdownMenuEntry<int>>((int value) {
-                  //       return DropdownMenuEntry<int>(value: value, label: value.toString());
-                  //     }).toList(),
-                  //   )
-                  // ),
-                  Container(
-                    height: 50,
-                    width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.only(left: 20, right: 20),
-                    child: DropdownButton<int>(
-                      items: list.map((int value) {
-                        return DropdownMenuItem<int>(
-                          value: value,
-                          child: Text(value.toString()),
-                        );
-                      }).toList(),
-                      onChanged: (_) {},
-                    )
-                  ),
+                  _dropDownSeveridad(),
                   const SizedBox(height: 30),
                   Center(
                     child: Column(
@@ -499,6 +452,35 @@ class _RegistroDanoState extends State<RegistroDano> {
     );
   }
 
+  Future<List<ListasA>> getListas() async {
+    List<ListasA> resultados = [];
+
+    try {
+      await DatabaseProvider.db.obtenerAreaDano().then((value) {
+        setState(() {
+          listaAreaDanos = value.map((item) => ListasA(valor: item.id.toString(), texto: '${item.id} : ${item.descripcion}')).toList();
+        });
+      });
+
+      await DatabaseProvider.db.obtenerTipoDano().then((value) {
+        setState(() {
+          listaTipoDanos = value.map((item) => ListasT(valor: item.id.toString(), texto: '${item.id} : ${item.descripcion}')).toList();
+        });
+      });
+
+      await DatabaseProvider.db.obtenerSeveridad().then((value) {
+        setState(() {
+          listaSeveridad = value.map((item) => ListasS(valor: item.id.toString(), texto: '${item.id} : ${item.descripcion}')).toList();
+        });
+      });
+    } 
+    catch (e) {
+      log('error => $e');
+    }
+
+    return resultados;
+  }
+
   Widget _titulo(String titulo) {
     return Row(
       children: <Widget>[
@@ -516,18 +498,109 @@ class _RegistroDanoState extends State<RegistroDano> {
     );
   }
 
+  Widget _dropDownArea() {
+    return Container(
+      height: 60,
+      width: MediaQuery.of(context).size.width * 2,
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+          border: Border.all(
+            color: Colors.grey[200]!
+          )
+      ),
+      child: DropdownSearch<ListasA>(
+          items: listaAreaDanos,
+          dropdownDecoratorProps: const DropDownDecoratorProps(
+          dropdownSearchDecoration: InputDecoration(
+            hintText: "Selecciona"
+          ),
+        ),
+        onChanged: (ListasA? item) {
+          setState(() {
+            selectArea = (item?.valor);
+            log(selectArea.toString());
+          });
+        },
+        itemAsString: (ListasA item) => item.texto,
+      )
+
+    );
+  }
+
+  Widget _dropDownTipo() {
+    return Container(
+      height: 60,
+      width: MediaQuery.of(context).size.width * 2,
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+          border: Border.all(
+            color: Colors.grey[200]!
+          )
+      ),
+      child: DropdownSearch<ListasT>(
+          items: listaTipoDanos,
+          dropdownDecoratorProps: const DropDownDecoratorProps(
+          dropdownSearchDecoration: InputDecoration(
+            hintText: "Selecciona"
+          ),
+        ),
+        onChanged: (ListasT? item) {
+          setState(() {
+            selectTipo = (item?.valor);
+            log(selectTipo.toString());
+          });
+        },
+        itemAsString: (ListasT item) => item.texto,
+      )
+
+    );
+  }
+
+  Widget _dropDownSeveridad() {
+    return Container(
+      height: 60,
+      width: MediaQuery.of(context).size.width * 2,
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+          border: Border.all(
+            color: Colors.grey[200]!
+          )
+      ),
+      child: DropdownSearch<ListasS>(
+          items: listaSeveridad,
+          dropdownDecoratorProps: const DropDownDecoratorProps(
+          dropdownSearchDecoration: InputDecoration(
+            hintText: "Selecciona"
+          ),
+        ),
+        onChanged: (ListasS? item) {
+          setState(() {
+            selectSeve = (item?.valor);
+            log(selectSeve.toString());
+          });
+        },
+        itemAsString: (ListasS item) => item.texto,
+      )
+
+    );
+  }
+
   guardarDano() async {
     dano = Dano(
       vin: widget.vin,
       panel: widget.panel,
-      area: 1,
-      tipo: 4,
-      severidad: 5,
+      area: int.parse(selectArea.toString()),
+      tipo: int.parse(selectTipo.toString()),
+      severidad: int.parse(selectSeve.toString()),
       nota: _notasTextController.text,
       fecha_creacion: fecha
     );
 
     await DatabaseProvider.db.insertarDano(dano!).then((value) async {
+      log(value.toString());
       log('dano insertado');
       itemP.addBoton();
       itemP.deleteBoton();
