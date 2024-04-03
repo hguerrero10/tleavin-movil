@@ -6,7 +6,7 @@ import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/vin.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/home/inicio.dart';
-import 'package:tleavin_mobil/src/pages/inspeccion_vin.dart';
+import 'package:tleavin_mobil/src/pages/vin/inspeccion_vin.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'dart:developer';
@@ -70,14 +70,6 @@ class _CompraVinState extends State<CompraVin> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const Cuerpo(),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: const Divider(
-                color: Colors.black,
-                thickness: 1.0,
-                height: 20.0,
-              ),
-            ),
             const SizedBox(height: 30),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),

@@ -11,8 +11,9 @@ import 'package:tleavin_mobil/model/dano.dart';
 import 'package:tleavin_mobil/model/evidencia.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/pages/dano/listas.dart';
+import 'package:tleavin_mobil/src/pages/dano/resumen_dano.dart';
 import 'package:tleavin_mobil/src/pages/vin/registro_vin.dart';
-import 'package:tleavin_mobil/src/pages/inspeccion_vin.dart';
+import 'package:tleavin_mobil/src/pages/vin/inspeccion_vin.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -34,8 +35,6 @@ class _RegistroDanoState extends State<RegistroDano> {
   var fechaH;
 
   final _notasTextController = TextEditingController();
-
-  List<int> list = <int>[1, 2, 3, 5, 6, 7, 8, 9, 10];
 
   final ImagePicker picker = ImagePicker();
   List<XFile>? _mediaFileList;
@@ -63,9 +62,12 @@ class _RegistroDanoState extends State<RegistroDano> {
     final List<XFile> pickedFileList = <XFile>[];
     final photo = await picker.pickImage(
       source: ImageSource.camera,
-      maxHeight: 720,
-      maxWidth: 1280,
-      imageQuality: 100
+      maxHeight: 20,
+      maxWidth: 20,
+      imageQuality: 5
+      // maxHeight: 720,
+      // maxWidth: 1280,
+      // imageQuality: 100
     );
 
     if(photo != null) {
@@ -130,7 +132,6 @@ class _RegistroDanoState extends State<RegistroDano> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-        // backgroundColor: Colors.black,
         backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
         title: const Text(
           'Registrar Daño',
@@ -149,14 +150,6 @@ class _RegistroDanoState extends State<RegistroDano> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const Cuerpo(),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: const Divider(
-                color: Colors.black,
-                thickness: 1.0,
-                height: 20.0,
-              ),         
-            ),
             const SizedBox(height: 10),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -228,28 +221,7 @@ class _RegistroDanoState extends State<RegistroDano> {
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold
                                     ),
-                                  ),
-                                  // Container(
-                                  //   height: 200,
-                                  //   width: 200,
-                                  //   child: ListView.builder(
-                                  //     key: UniqueKey(),
-                                  //     itemBuilder: (BuildContext context, int index) {
-                                  //       return Semantics(
-                                  //         label: 'image_picker_example_picked_image',
-                                  //         child: Image.file(
-                                  //         File(_mediaFileList![index].path),
-                                  //         errorBuilder: (BuildContext context, Object error,
-                                  //             StackTrace? stackTrace) {
-                                  //           return const Center(
-                                  //               child:
-                                  //                   Text('This image type is not supported'));
-                                  //         },
-                                  //       )                             
-                                  //       );
-                                  //     },
-                                  //   ),
-                                  // )
+                                  )
                                 ]
                               )
                             ),
@@ -268,27 +240,6 @@ class _RegistroDanoState extends State<RegistroDano> {
                                       fontWeight: FontWeight.bold
                                     )
                                   ),
-                                  // Container(
-                                  //   height: 200,
-                                  //   width: 200,
-                                  //   child: ListView.builder(
-                                  //     key: UniqueKey(),
-                                  //     itemBuilder: (BuildContext context, int index) {
-                                  //       return Semantics(
-                                  //         label: 'image_picker_example_picked_image',
-                                  //         child: Image.file(
-                                  //         File(_mediaFileList![index].path),
-                                  //         errorBuilder: (BuildContext context, Object error,
-                                  //             StackTrace? stackTrace) {
-                                  //           return const Center(
-                                  //               child:
-                                  //                   Text('This image type is not supported'));
-                                  //         },
-                                  //       )                             
-                                  //       );
-                                  //     },
-                                  //   ),
-                                  // )
                                 ],
                               ),
                             ),
@@ -307,27 +258,6 @@ class _RegistroDanoState extends State<RegistroDano> {
                                       fontWeight: FontWeight.bold
                                     ),
                                   ),
-                                  // Container(
-                                  //   height: 200,
-                                  //   width: 200,
-                                  //   child: ListView.builder(
-                                  //     key: UniqueKey(),
-                                  //     itemBuilder: (BuildContext context, int index) {
-                                  //       return Semantics(
-                                  //         label: 'image_picker_example_picked_image',
-                                  //         child: Image.file(
-                                  //         File(_mediaFileList![index].path),
-                                  //         errorBuilder: (BuildContext context, Object error,
-                                  //             StackTrace? stackTrace) {
-                                  //           return const Center(
-                                  //               child:
-                                  //                   Text('This image type is not supported'));
-                                  //         },
-                                  //       )                             
-                                  //       );
-                                  //     },
-                                  //   ),
-                                  // )
                                 ],
                               ),
                             ),
@@ -386,11 +316,12 @@ class _RegistroDanoState extends State<RegistroDano> {
                         ),
                         const SizedBox(height: 20),
                         ElevatedButton(
-                          onPressed: () {
+                          onPressed: () => {
+                            guardarDano(),
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => InspeccionVin(vin: widget.vin)),
-                            );
+                              MaterialPageRoute(builder: (context) => InspeccionVin(vin: widget.vin))
+                            )
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
@@ -412,14 +343,12 @@ class _RegistroDanoState extends State<RegistroDano> {
                         ),
                         const SizedBox(height: 10),
                         ElevatedButton(
-                          onPressed: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => ResumenDano(vin: widget.vin)),
-                            // );
-
-                            log(evidenciasDano.length.toString());
-                            guardarDano();
+                          onPressed: () => {
+                            guardarDano(),
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => ResumenDano(vin: widget.vin))
+                            )
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
@@ -592,6 +521,7 @@ class _RegistroDanoState extends State<RegistroDano> {
     dano = Dano(
       vin: widget.vin,
       panel: widget.panel,
+      registroTipo: 'Regular',
       area: int.parse(selectArea.toString()),
       tipo: int.parse(selectTipo.toString()),
       severidad: int.parse(selectSeve.toString()),
@@ -608,7 +538,7 @@ class _RegistroDanoState extends State<RegistroDano> {
       for(var ed in evidenciasDano) {
         evidencia = Evidencia(
           vin: widget.vin,
-          dano: null,
+          dano: value,
           nombre: null,
           archivo: ed,
           fechahora: fechaH
@@ -620,7 +550,8 @@ class _RegistroDanoState extends State<RegistroDano> {
           itemP.addError();
         });
       }
-      // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const InicioScreen()), (route) => false);
+
+      // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const ResumenDano()), (route) => false);
     }).timeout(const Duration(seconds: 30), onTimeout: () {
       itemP.addError();
     });

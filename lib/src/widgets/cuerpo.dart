@@ -129,10 +129,15 @@ class _CuerpoState extends State<Cuerpo> {
                   ),
                 ],
               ),
-            ],
-          ),
-        ),
-      ],
+              const Divider(
+                color: Colors.black,
+                thickness: 1.0,
+                height: 20
+              )
+            ]
+          )
+        )
+      ]
     );
   }
 

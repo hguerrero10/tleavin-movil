@@ -1,3 +1,5 @@
+import 'package:tleavin_mobil/model/dano.dart';
+
 class Vin{
   int? id;
   int? viaje;
@@ -17,6 +19,7 @@ class Vin{
   String? fecha_carga;
   String? fecha_creacion;
   String? fecha_sync;
+  List<Dano> danos;
 
   Vin({
     this.id,
@@ -36,12 +39,13 @@ class Vin{
     this.compra,
     this.fecha_carga,
     this.fecha_creacion,
-    this.fecha_sync
+    this.fecha_sync,
+    this.danos = const [],
   });
 
   @override
   String toString() {
-    return 'Vin { viaje: $viaje, cartaporte: $cartaporte, vin: $vin, distrib_clave: $distrib_clave, dest_nombre: $dest_nombre, ruta_clave: $ruta_clave, ruta_nombre: $ruta_nombre, origen: $origen, destino: $destino, modelo: $modelo, marca: $marca, posicion: $posicion, orientacion: $orientacion, compra: $compra, fecha_carga: $fecha_carga, fecha_creacion: $fecha_creacion, fecha_sync: $fecha_sync }';
+    return 'Vin { viaje: $viaje, cartaporte: $cartaporte, vin: $vin, distrib_clave: $distrib_clave, dest_nombre: $dest_nombre, ruta_clave: $ruta_clave, ruta_nombre: $ruta_nombre, origen: $origen, destino: $destino, modelo: $modelo, marca: $marca, posicion: $posicion, orientacion: $orientacion, compra: $compra, fecha_carga: $fecha_carga, fecha_creacion: $fecha_creacion, fecha_sync: $fecha_sync. id: $id }';
   }
 
   factory Vin.fromMap(Map<String, dynamic> map) => Vin(

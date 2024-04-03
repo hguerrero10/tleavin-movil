@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 
-class Pantalla14 extends StatefulWidget {
-  const Pantalla14({super.key});
+class SalidaViaje extends StatefulWidget {
+  const SalidaViaje({super.key});
 
   @override
-  State<Pantalla14> createState() => _Pantalla14State();
+  State<SalidaViaje> createState() => _SalidaViajeState();
 }
 
-class _Pantalla14State extends State<Pantalla14> {
+class _SalidaViajeState extends State<SalidaViaje> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pantalla 14'),
+        title: const Text('Salida del Viaje'),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -40,10 +40,10 @@ class _Pantalla14State extends State<Pantalla14> {
                   fontSize: 20,
                   fontWeight: FontWeight.bold
                 ),
-              ),
-            ],
-          ),
-        ),
+              )
+            ]
+          )
+        )
       )
     );
   }

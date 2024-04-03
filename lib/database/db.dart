@@ -24,61 +24,53 @@ class DatabaseProvider {
   Future<Database> get database async {
     if (_database != null) return _database!;
     _database = await initDB();
+
     return _database!;
   }
 
   initDB() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, "tleavin.db");
+
     return await openDatabase(path, version: 1, onOpen: (db) {},
       onCreate: (Database db, int version) async {
-      await db.execute(
-        "CREATE TABLE usuario (numero_empleado INTEGER PRIMARY KEY UNIQUE, nombre VARCHAR, usuario VARCHAR, password VARCHAR, isLogged INTERGER, cargo VARCHAR, estado VARCHAR)"
-      );
+        await db.execute(
+          "CREATE TABLE usuario (numero_empleado INTEGER PRIMARY KEY UNIQUE, nombre VARCHAR, usuario VARCHAR, password VARCHAR, isLogged INTERGER, cargo VARCHAR, estado VARCHAR)"
+        );
 
-      await db.execute(
-        "CREATE TABLE vin (id INTEGER PRIMARY KEY AUTOINCREMENT, viaje INTEGER, cartaporte INTEGER, vin VARCHAR UNIQUE, distrib_clave VARCHAR, dest_nombre VARCHAR, ruta_clave INTEGER, ruta_nombre VARCHAR, origen VARCHAR, destino VARCHAR, modelo VARCHAR, marca VARCHAR, posicion VARCHAR, orientacion VARCHAR, compra INTEGER, fecha_carga DATE, fecha_creacion DATE, fecha_sync DATE)"
-      );
+        await db.execute(
+          "CREATE TABLE vin (id INTEGER PRIMARY KEY AUTOINCREMENT, viaje INTEGER, cartaporte INTEGER, vin VARCHAR UNIQUE, distrib_clave VARCHAR, dest_nombre VARCHAR, ruta_clave INTEGER, ruta_nombre VARCHAR, origen VARCHAR, destino VARCHAR, modelo VARCHAR, marca VARCHAR, posicion VARCHAR, orientacion VARCHAR, compra INTEGER, fecha_carga DATE, fecha_creacion DATE, fecha_sync DATE)"
+        );
 
-      await db.execute(
-        "CREATE TABLE dano (id INTEGER PRIMARY KEY AUTOINCREMENT, vin VARCHAR, panel VARCHAR, area INTERGER, tipo INTERGER, severidad INTERGER, nota VARCHAR, fecha_creacion DATE)"
-      );
+        await db.execute(
+          "CREATE TABLE dano (id INTEGER PRIMARY KEY AUTOINCREMENT, vin VARCHAR, panel VARCHAR, registroTipo VARCHAR, area INTERGER, tipo INTERGER, severidad INTERGER, nota VARCHAR, fecha_creacion DATE)"
+        );
 
-      await db.execute(
-        "CREATE TABLE evidencia (id INTEGER PRIMARY KEY AUTOINCREMENT, vin VARCHAR, dano VARCHAR, nombre VARCHAR, archivo TEXT, fechahora DATE)"
-      );
+        await db.execute(
+          "CREATE TABLE evidencia (id INTEGER PRIMARY KEY AUTOINCREMENT, vin VARCHAR, dano INTEGER, nombre VARCHAR, archivo TEXT, fechahora DATE)"
+        );
 
-      await db.execute(
-        "CREATE TABLE dispositivo (id INTEGER PRIMARY KEY AUTOINCREMENT, descripcion VARCHAR, api_key VARCHAR, usuario INTEGER, notas VARCHAR)"
-      );
+        await db.execute(
+          "CREATE TABLE dispositivo (id INTEGER PRIMARY KEY AUTOINCREMENT, descripcion VARCHAR, api_key VARCHAR, usuario INTEGER, notas VARCHAR)"
+        );
 
+        await db.execute(
+          "CREATE TABLE cliente (id INTEGER PRIMARY KEY AUTOINCREMENT, idAdvan INTEGER, cliente VARCHAR)"
+        );
 
+        await db.execute(
+          "CREATE TABLE area_dano (id INTEGER PRIMARY KEY AUTOINCREMENT, area VARCHAR, descripcion VARCHAR)"
+        );
 
+        await db.execute(
+          "CREATE TABLE tipo_dano (id INTEGER PRIMARY KEY AUTOINCREMENT, descripcion VARCHAR)"
+        );
 
-
-
-
-
-
-
-
-      await db.execute(
-        "CREATE TABLE cliente (id INTEGER PRIMARY KEY AUTOINCREMENT, idAdvan INTEGER, cliente VARCHAR)"
-      );
-
-      await db.execute(
-        "CREATE TABLE area_dano (id INTEGER PRIMARY KEY AUTOINCREMENT, area VARCHAR, descripcion VARCHAR)"
-      );
-
-      await db.execute(
-        "CREATE TABLE tipo_dano (id INTEGER PRIMARY KEY AUTOINCREMENT, descripcion VARCHAR)"
-      );
-
-      await db.execute(
-        "CREATE TABLE severidad (id INTEGER PRIMARY KEY AUTOINCREMENT, tipo VARCHAR, descripcion VARCHAR)"
-      );
-
-    });
+        await db.execute(
+          "CREATE TABLE severidad (id INTEGER PRIMARY KEY AUTOINCREMENT, tipo VARCHAR, descripcion VARCHAR)"
+        );
+      }
+    );
   }
 
   // CRUD USUARIOS
@@ -132,50 +124,281 @@ class DatabaseProvider {
 
   actualizarVin(Vin vin) async {
     final db = await database;
-    return db.update('vin',  vin.toMap() , where: "id = ?" , whereArgs: [vin.id], );
+    return db.update('vin',  vin.toMap() , where: "vin = ?" , whereArgs: [vin.vin] );
   }
 
   Future<List<Vin>>obtenerListaVins() async {
-    final db = await database;
-    List<Vin> listaVins;
-    var res = await db.query("vin");
-    log(res.toString());
+  final db = await database;
+  List<Vin> listaVins;
+  var res = await db.query("vin");
 
-    if (res.isNotEmpty) {
-      listaVins =  res.map((v) => Vin.fromMap(v)).toList();
-    } 
-    else {
-      listaVins = [];
+  if (res.isNotEmpty) {
+    listaVins =  res.map((v) => Vin.fromMap(v)).toList();
+  } 
+  else {
+    listaVins = [];
+  }
+  return listaVins;
+}
+
+  // Future<List> obtenerInfoVin(vin) async {
+  Future<List<Map<String, dynamic>>> obtenerInfoVin(vin) async {
+    Database db = await database;
+    // final data = await db.rawQuery("SELECT * FROM vin as v INNER JOIN dano as d ON v.vin = d.vin where v.vin = '$vin'",);
+    List<Map> data = await db.rawQuery("SELECT * FROM vin as v INNER JOIN dano as d ON v.vin = d.vin INNER JOIN evidencia as e on e.dano = d.id where v.vin = '$vin'");
+
+  
+    if(data.isNotEmpty) {
+      // log(data.toString());
+      // Map<String, List<Dano>> danosPorVIN = {};
+
+      // for(var dano in data) {
+      //   if(danosPorVIN.containsKey(dano['vin'])) {
+      //     danosPorVIN[dano['vin']]!.add(dano);
+      //   } 
+      //   else {
+      //     danosPorVIN[dano['vin']] = [dano];
+      //   }
+      // }
+      // List<Map<String, dynamic>> data = [
+      //   // Aquí irían tus datos
+      // ];
+
+      Map<String, List<Dano>> danosPorVIN = {};
+
+      // for(var danoData in data) {
+      //   if(danoData.containsKey('vin')) {
+      //     String? vin = danoData['vin'];
+      //     if (vin != null) {
+      //       Dano dano = Dano(
+      //         id: danoData['id'],
+      //         vin: vin,
+      //         panel: danoData['panel'],
+      //         registroTipo: danoData['registroTipo'],
+      //         area: danoData['area'],
+      //         tipo: danoData['tipo'],
+      //         severidad: danoData['severidad'],
+      //         nota: danoData['nota'],
+      //         fecha_creacion: danoData['fechaCreacion'],
+      //         evidencias: [],
+      //       );
+
+      //       if(danosPorVIN.containsKey(vin)) {
+      //         danosPorVIN[vin]!.add(dano);
+      //       } 
+      //       else {
+      //         danosPorVIN[vin] = [dano];
+      //       }
+      //     }
+      //   }
+      // }
+
+
+
+
+
+
+
+/// este es mas cerca
+//  for (var danoData in data) {
+//     if (danoData.containsKey('vin')) {
+//       String? vinId = danoData['vin']; // Suponiendo que 'vin' contiene el ID del VIN
+//       if (vinId != null) {
+//         Vin vin = Vin(
+//           id: danoData['id'],
+//           viaje: danoData['viaje'],
+//           cartaporte: danoData['cartaporte'],
+//           vin: danoData['vin'],
+//           distrib_clave: danoData['distrib_clave'],
+//           dest_nombre: danoData['dest_nombre'],
+//           ruta_clave: danoData['ruta_clave'],
+//           ruta_nombre: danoData['ruta_nombre'],
+//           origen: danoData['origen'],
+//           destino: danoData['destino'],
+//           modelo: danoData['modelo'],
+//           marca: danoData['marca'],
+//           posicion: danoData['posicion'],
+//           orientacion: danoData['orientacion'],
+//           compra: danoData['compra'],
+//           fecha_carga: danoData['fecha_carga'],
+//           fecha_creacion: danoData['fecha_creacion'],
+//           fecha_sync: danoData['fecha_sync'],
+//         );
+
+//         Dano dano = Dano(
+//           id: danoData['id'],
+//           vin: vin.toString(),
+//           panel: danoData['panel'],
+//           registroTipo: danoData['registroTipo'],
+//           area: danoData['area'],
+//           tipo: danoData['tipo'],
+//           severidad: danoData['severidad'],
+//           nota: danoData['nota'],
+//           fecha_creacion: danoData['fecha_creacion'],
+//           evidencias: [],
+//         );
+
+//         List<Evidencia> evidencias = [];
+
+//         if(danoData.containsKey('evidencias')) {
+//           List<dynamic> evidenciasData = danoData['evidencias'];
+//           for (var evidenciaData in evidenciasData) {
+//             Evidencia evidencia = Evidencia(
+//               id: evidenciaData['id'],
+//               nombre: evidenciaData['nombre'],
+//               archivo: evidenciaData['archivo'],
+//               fechahora: evidenciaData['fechahora'],
+//             );
+//             evidencias.add(evidencia);
+//           }
+//         }
+
+//         dano.evidencias = evidencias;
+
+//         if (danosPorVIN.containsKey(vinId)) {
+//           danosPorVIN[vinId]!.add(dano);
+//         } else {
+//           danosPorVIN[vinId] = [dano];
+//         }
+//       }
+//     }
+//   }
+
+
+
+
+
+
+for (var danoData in data) {
+    if (danoData.containsKey('vin')) {
+      String? vinId = danoData['vin']; // Suponiendo que 'vin' contiene el ID del VIN
+      if (vinId != null) {
+        Dano dano = Dano(
+          id: danoData['id'],
+          panel: danoData['panel'],
+          registroTipo: danoData['registroTipo'],
+          area: danoData['area'],
+          tipo: danoData['tipo'],
+          severidad: danoData['severidad'],
+          nota: danoData['nota'],
+          fecha_creacion: danoData['fechaCreacion'],
+          evidencias: [],
+        );
+
+        List<Evidencia> evidencias = [];
+
+        if (danoData.containsKey('evidencias')) {
+          List<dynamic> evidenciasData = danoData['evidencias'];
+          for (var evidenciaData in evidenciasData) {
+            Evidencia evidencia = Evidencia(
+              id: evidenciaData['id'],
+              nombre: evidenciaData['nombre'],
+              archivo: evidenciaData['archivo'],
+              fechahora: evidenciaData['fechahora'],
+            );
+            evidencias.add(evidencia);
+          }
+        }
+
+        dano.evidencias = evidencias;
+
+        if (danosPorVIN.containsKey(vinId)) {
+          danosPorVIN[vinId]!.add(dano);
+        } else {
+          danosPorVIN[vinId] = [dano];
+        }
+      }
     }
-    return listaVins;
   }
 
-  Future<List>obtenerInfoVin(vin) async {
-    final db = await database;
-    List vins = [];
 
-    var res = await db.query("vin WHERE vin = '$vin'");
-    var res2 = await db.query("dano WHERE vin = '$vin'");
-    var res3 = await db.query("evidencia WHERE vin = '$vin'");
 
-    if (res.isNotEmpty) {
-      vins.addAll(res);
+
+
+
+
+
+
+      log(danosPorVIN.toString());
+
+
+ 
     }
 
-    if (res2.isNotEmpty) {
-      vins.addAll(res2);
-    }
-
-    if (res3.isNotEmpty) {
-      vins.addAll(res3);
-    }
-
-    if(vins.isEmpty) {
-      vins = [];
-    }
-
-    return vins;
+    return [];
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // Future<List>obtenerInfoVin(vin) async {
+  //   final db = await database;
+  //   var data = [];
+  //   var data2 = [];
+  //   var data3 = [];
+
+  //   var infov = [];
+
+  //   var res = await db.query("vin WHERE vin = '$vin'");
+  //   var res2 = await db.query("dano WHERE vin = '$vin'");
+  //   // var res3 = await db.query("evidencia WHERE dano = 1");
+  
+  //   if(res.isNotEmpty) {
+  //     data = ([{"vi": res}]);
+  //     infov.add(data);
+
+  //     // log(data.toString());
+  //   }
+
+  //   if(res2.isNotEmpty) {
+  //     for (var item in res2) {
+  //       data2.add({"da": item});
+  //     }
+
+  //     infov.add(data2);
+  //     // log(data2.toString());
+  //   }
+
+
+  //   // if(res3.isNotEmpty) {
+  //   //   for (var item in res3) {
+  //   //     data3.add({"evvvvvvv": item});
+  //   //   }
+
+  //   //   infov.add(data3);
+  //   //   // log(data3.toString());
+  //   // }
+
+  //   if(infov.isEmpty) {
+  //     infov = [];
+  //   }
+
+  //   // log(infov.toString());
+
+  //   return infov;
+  // }
 
   Future<List>obtenerTipoVin() async {
     final db = await database;
@@ -208,7 +431,6 @@ class DatabaseProvider {
 
     return vins;
   }
-
 
   // CRUD DAÑO 
 
@@ -248,9 +470,9 @@ class DatabaseProvider {
   }
 
   actualizarEvidencia(Evidencia evidencia) async {
-    final db = await database;
-    return db.update('evidencia',  evidencia.toMap() , where: "id = ?" , whereArgs: [evidencia.id], );
-  }
+  final db = await database;
+  return db.update('evidencia',  evidencia.toMap() , where: "id = ?" , whereArgs: [evidencia.id], );
+}
 
   Future<List<Evidencia>>obtenerEvidencia() async {
     final db = await database;
@@ -322,18 +544,18 @@ class DatabaseProvider {
   }
 
   Future<List<AreaDano>>obtenerAreaDano() async {
-    final db = await database;
-    List<AreaDano> lista;
-    var res = await db.query("area_dano");
+      final db = await database;
+      List<AreaDano> lista;
+      var res = await db.query("area_dano");
 
-    if (res.isNotEmpty) {
-      lista =  res.map((u) => AreaDano.fromMap(u)).toList();
-    } 
-    else {
-      lista = [];
+      if (res.isNotEmpty) {
+        lista =  res.map((u) => AreaDano.fromMap(u)).toList();
+      } 
+      else {
+        lista = [];
+      }
+      return lista;
     }
-    return lista;
-  }
 
   Future<int> insertarAreaDano(AreaDano nuevoRegistro) async {
     var db = await database;

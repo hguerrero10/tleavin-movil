@@ -1,8 +1,8 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/database/db.dart';
+import 'package:tleavin_mobil/model/dano.dart';
+import 'package:tleavin_mobil/model/evidencia.dart';
 import 'package:tleavin_mobil/model/vin.dart';
 import 'package:tleavin_mobil/src/pages/vin/detalle_vin_dis.dart';
 
@@ -16,6 +16,10 @@ class VinsDisponibles extends StatefulWidget {
 class _VinsDisponiblesState extends State<VinsDisponibles> {
 
   Vin? vin;
+  Dano? dano;
+  Evidencia? evidencia;
+
+  var infoydatos = [];
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +34,60 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
           )
         )
       ),
-      body: comprados()
+      body: listaDeVins()
     );
   }
 
-  Widget comprados() {
+  obtenerDatos(v) async {
+    var datos = await DatabaseProvider.db.obtenerInfoVin(v);
+    setState(() {
+      infoydatos = datos;
+    });
+
+    // vin = Vin(
+      // id: ele['vi'].id.toString(),
+      // viaje: ele['viaje'],
+      // cartaporte: ele['cartaporte'],
+      // vin: ele['vin'],
+      // distrib_clave: ele['distrib_clave'],
+      // dest_nombre: ele['dest_nombre'],
+      // ruta_clave: ele['ruta_clave'],
+      // ruta_nombre: ele['ruta_nombre'],
+      // origen: ele['origen'],
+      // destino: ele['destino'],
+      // modelo: ele['modelo'],
+      // marca: ele['marca'],
+      // posicion: ele['posicion'],
+      // orientacion: ele['orientacion'],
+      // compra: ele['compra'],
+      // fecha_carga: ele['fecha_carga'],
+      // fecha_creacion: ele['fecha_creacion'],
+      // fecha_sync: ele['fecha_sync']
+    // );
+      
+    // dano = Dano(
+    //   id: datos[1]['id'],
+    //   vin: datos[1]['vin'],
+    //   panel: datos[1]['panel'], 
+    //   registroTipo: datos[1]['registroTipo'], 
+    //   area: datos[1]['area'], 
+    //   tipo: datos[1]['tipo'], 
+    //   severidad: datos[1]['severidad'],
+    //   nota: datos[1]['nota'],
+    //   fecha_creacion: datos[1]['fecha_creacion']
+    // );
+
+    // evidencia = Evidencia(
+    //   id: datos[2]['id'],
+    //   vin: datos[2]['vin'],
+    //   dano: datos[2]['dano'],
+    //   nombre: datos[2]['nombre'],
+    //   archivo: datos[2]['archivo'],
+    //   fechahora: datos[2]['fechahora']
+    // );
+  }
+
+  Widget listaDeVins() {
     return StreamBuilder<List>(
       stream: DatabaseProvider.db.obtenerListaVins().asStream(),
       builder: (context, AsyncSnapshot<List>snapshot) {
@@ -46,14 +99,13 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
             crossAxisSpacing: 40,
               children: List.generate(snapshot.data!.length, (index) {
                 return GestureDetector(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => DetalleVin(vin: '${snapshot.data![index].vin}')));
+                  onTap: () async => {
+                    await obtenerDatos('${snapshot.data![index].vin}'),
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => DetalleVin(inf: infoydatos)))
                   },
                   child: Column(
                     children: <Widget>[
-                      SizedBox(
-                        child: Icon(CupertinoIcons.car_detailed, color: snapshot.data![index].compra == 1 ? Colors.green : Colors.black, size: 90),
-                      ),
+                      SizedBox(child: Icon(CupertinoIcons.car_detailed, color: snapshot.data![index].compra == 1 ? Colors.green : Colors.black, size: 90)),
                       Padding(
                         padding: const EdgeInsets.only(top: 5),
                         child: Row(
@@ -106,86 +158,6 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
               color: Color.fromRGBO(242, 211, 0, 1)
             )
           );
-        }
-      }
-    );
-  }
-
-  Widget noComprados() {
-    return StreamBuilder<List>(
-      stream: DatabaseProvider.db.obtenerTipoVin().asStream(),
-      builder: (context, AsyncSnapshot<List>snapshot) {
-        if (snapshot.hasData) {
-          return snapshot.data!.isNotEmpty ? GridView.count(
-            childAspectRatio: 1.0,
-            padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
-            crossAxisCount: 3,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 60,
-              children: List.generate(snapshot.data!.length, (index) {
-                return GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    height: 120,
-                    width: 120,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: const Column(
-                      children: <Widget>[
-                        SizedBox(
-                          width: 90,
-                          height: 70,
-                          child: Icon(CupertinoIcons.doc_fill, color: Colors.white, size: 70),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              // Flexible(
-                              //   child: Text(
-                              //     '${snapshot.data![index]['fecha']} ${snapshot.data![index]['hora']}',
-                              //     textAlign: TextAlign.center ,
-                              //     style: TextStyle(
-                              //       color: Colors.grey[200],
-                              //       fontSize: 11
-                              //     ),
-                              //   ),
-                              // ),
-                            ]
-                          )
-                        )
-                      ]
-                    )
-                  )
-                );
-              }
-            )
-          ) : Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(CupertinoIcons.doc_fill , color: Colors.grey[300], size: 60,),
-                const SizedBox(height: 10),
-                SizedBox(
-                  width: 250,
-                  child: Text(
-                    'No hay vins disponibles',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.grey[300],
-                      fontSize: 19
-                    ),
-                  ),
-                )
-              ]
-            )
-          );
-        } 
-        else {
-          return const Center(child: CircularProgressIndicator());
         }
       }
     );

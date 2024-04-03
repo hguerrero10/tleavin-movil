@@ -1,7 +1,7 @@
 class Evidencia{
   int? id;
   String? vin;
-  String? dano;
+  int? dano;
   String? nombre;
   String? archivo;
   String? fechahora;
@@ -23,7 +23,7 @@ class Evidencia{
   factory Evidencia.fromMap(Map<String, dynamic> map) => Evidencia(
     id: map['id'],
     vin: map['vin'].toString(),
-    dano: map['dano'].toString(),
+    dano: map['dano'],
     nombre: map['nombre'].toString(),
     archivo: map['archivo'].toString(),
     fechahora: map['fechahora'].toString()

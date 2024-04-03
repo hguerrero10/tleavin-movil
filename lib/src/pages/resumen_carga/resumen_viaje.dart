@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
-import 'package:tleavin_mobil/src/pages/pantalla14.dart';
+import 'package:tleavin_mobil/src/pages/viaje/salida_viaje.dart';
 import 'package:tleavin_mobil/src/pages/dano/resumen_dano.dart';
 import 'package:tleavin_mobil/src/pages/resumen_carga/widget/firma_inspector.dart';
 
@@ -142,7 +142,7 @@ class _ResumenViajeState extends State<ResumenViaje> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const Pantalla14()),
+                  MaterialPageRoute(builder: (context) => const SalidaViaje()),
                 );
               },
               style: ButtonStyle(

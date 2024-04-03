@@ -6,6 +6,7 @@ import 'package:tleavin_mobil/model/severidad.dart';
 import 'package:tleavin_mobil/model/tipo_dano.dart';
 import 'package:tleavin_mobil/model/usuario.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
+import 'package:tleavin_mobil/src/pages/viaje/armar_viaje.dart';
 import 'package:tleavin_mobil/src/pages/vin/registro_vin.dart';
 import 'package:tleavin_mobil/src/pages/vin/vins_disponibles.dart';
 import 'package:tleavin_mobil/src/startup/login/login_form.dart';
@@ -81,14 +82,6 @@ class _InicioScreenState extends State<InicioScreen> {
             ),
           ),
             const Cuerpo(),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: const Divider(
-                color: Colors.black,
-                thickness: 1.0,
-                height: 20.0,
-              ),
-            ),
             const SizedBox(height: 40),
             _cuadricula1(),
             const SizedBox(height: 10),
@@ -158,7 +151,6 @@ class _InicioScreenState extends State<InicioScreen> {
     }
   }
 
-
   Widget _cuadricula1() {
     return Padding(
       padding: const EdgeInsets.only(top: 10),
@@ -166,7 +158,7 @@ class _InicioScreenState extends State<InicioScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           _panel(CupertinoIcons.car_detailed, () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const CompraVin()), (Route<dynamic> route) => false), 'Comprar vin'),
-          _panel(Icons.abc_outlined, () => Navigator.pushNamed(context, 'report'), 'Reportar')
+          _panel(Icons.route_outlined, () => Navigator.push(context,MaterialPageRoute(builder: (context) => const ArmarViaje())), 'Armar Viaje')
           // _panel(Icons.account_box_sharp, () => Navigator.pushNamed(context, 'viewreport'), 'Ver Reportes'),
         ]
       )
@@ -204,8 +196,8 @@ class _InicioScreenState extends State<InicioScreen> {
         width: MediaQuery.of(context).size.width * 0.4,
         child: ElevatedButton(
           style: ButtonStyle(
-            shadowColor: MaterialStateProperty.all<Color>(Colors.grey),
-            overlayColor: MaterialStateProperty.all<Color>(Colors.grey[200]!),
+            shadowColor: MaterialStateProperty.all<Color>(Colors.black),
+            overlayColor: MaterialStateProperty.all<Color>(Colors.black12),
             backgroundColor: MaterialStateProperty.all<Color>(const Color.fromRGBO(242, 211, 0, 3)),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               const RoundedRectangleBorder(

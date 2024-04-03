@@ -5,7 +5,7 @@ import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/src/pages/vin/registro_vin.dart';
 import 'package:tleavin_mobil/src/pages/dano/registro_unidad_ss.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
-import 'dano/registro_dano.dart';
+import '../dano/registro_dano.dart';
 
 class InspeccionVin extends StatefulWidget {
 
@@ -47,14 +47,6 @@ class _InspeccionVinState extends State<InspeccionVin> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const Cuerpo(),
-             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: const Divider(
-                color: Colors.black,
-                thickness: 1.0,
-                height: 20.0,
-              ),
-            ),
             const Padding(
               padding: EdgeInsets.all(10),
               child: Text(

@@ -63,15 +63,6 @@ class _Pantalla3State extends State<Pantalla3> {
                 ],
               ),
             ),
-            const SizedBox(height: 16.0),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: const Divider(
-                color: Colors.black,
-                thickness: 1.0,
-                height: 20.0,
-              ),
-            ),
             const SizedBox(height: 8.0),
             Padding(
               padding: const EdgeInsets.all(16.0),

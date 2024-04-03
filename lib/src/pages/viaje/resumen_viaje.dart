@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:tleavin_mobil/src/pages/resumen_carga/resumen_viaje.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 
-class Pantalla12 extends StatefulWidget {
-  const Pantalla12({super.key});
+class ResumenViaje extends StatefulWidget {
+  const ResumenViaje({super.key});
 
   @override
-  State<Pantalla12> createState() => _Pantalla12State();
+  State<ResumenViaje> createState() => _ResumenViajeState();
 }
 
-class _Pantalla12State extends State<Pantalla12> {
+class _ResumenViajeState extends State<ResumenViaje> {
   @override
   Widget build(BuildContext context) {
      return Scaffold(
       appBar: AppBar(
-        title: const Text('Pantalla 12'),
+        title: const Text('Resumen de Viaje'),
       ),
       body: SingleChildScrollView(
         child: Column(
