@@ -48,12 +48,9 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
     final List<XFile> pickedFileList = <XFile>[];
     final photo = await picker.pickImage(
       source: ImageSource.camera,
-      // maxHeight: 720,
-      // maxWidth: 1280,
-      // imageQuality: 100
-      maxHeight: 200,
-      maxWidth: 200,
-      imageQuality: 10
+      maxHeight: 720,
+      maxWidth: 1280,
+      imageQuality: 100
     );
 
     if(photo != null) {
@@ -129,15 +126,6 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const Cuerpo(),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: const Divider(
-                color: Colors.black,
-                thickness: 1,
-                height: 20,
-              ),
-            ),
-            const SizedBox(height: 10),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(

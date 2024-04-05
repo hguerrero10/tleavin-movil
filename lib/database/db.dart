@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
 import 'dart:developer';
@@ -110,6 +111,7 @@ class DatabaseProvider {
     else {
       listaUsuarios = [];
     }
+
     return listaUsuarios;
   }
 
@@ -141,13 +143,13 @@ class DatabaseProvider {
     return listaVins;
   }
 
-  Future<List<Map<String, dynamic>>> obtenerInfoVin(vin) async {
+  Future<List> obtenerInfoVin(vin) async {
     Database db = await database;
     List<Map> data = await db.rawQuery("SELECT * FROM vin as v INNER JOIN dano as d ON v.vin = d.vin INNER JOIN evidencia as e on e.iddano = d.idd where v.vin = '$vin'");
 
-    if(data.isNotEmpty) {
-      Map<String, dynamic> organizedData = {};
+    Map<String, dynamic> organizedData = {};
 
+    if(data.isNotEmpty) {
       for(var item in data) {
         String vin = item['vin'];
         int iddano = item['iddano'];
@@ -187,7 +189,7 @@ class DatabaseProvider {
         } 
         else {
           var obvin = {
-            'idv': item['idv'],
+            "idv": item['idv'],
             'viaje': item['viaje'],
             'cartaporte': item['cartaporte'],
             'vin': vin,
@@ -206,28 +208,37 @@ class DatabaseProvider {
             'fecha_creacion': item['fecha_creacion'],
             'fecha_sync': item['fecha_sync'],
             'danoos': [
-            //   {
-            //     'iddano': iddano,
-            //     'panel': item['panel'],
-            //     'registroTipo': item['registroTipo'],
-            //     'area': item['area'],
-            //     'tipo': item['tipo'],
-            //     'severidad': item['severidad'],
-            //     'nota': item['nota'],
-            //     'fecha_creacion': item['fecha_creacion'],
-            //     'evidencias': [evidence]
-            //   }
+
             ]
           };
 
           organizedData[vin] = {'vinp': obvin, 'danoos': []};
         }
       }
-
-      log(organizedData.values.toString());
     }
 
-    return [];
+    // log(organizedData.values.toString());
+
+    // var jsonObject = jsonDecode(jsonString);
+
+    // log(organizedData.values.toString());
+
+    // Map<String, dynamic> jsonData = jsonDecode(organizedData.values.toList().toString());
+
+    // List<dynamic> danoos = jsonData['vinp']['danoos'];
+
+    // List<dynamic> danoosList = [];
+
+    // for (var dano in danoos) {
+    //   danoosList.add(dano);
+    // }
+
+    // log(danoosList.toString());
+
+    
+
+
+    return organizedData.values.toList();
   }
 
 

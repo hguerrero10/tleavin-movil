@@ -10,6 +10,8 @@ class ArmarViaje extends StatefulWidget {
 
 class _ArmarViajeState extends State<ArmarViaje> {
 
+  final _viajeTextController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,6 +30,10 @@ class _ArmarViajeState extends State<ArmarViaje> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const Cuerpo(),
+
+
+
+
            
           ],
         ),

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/database/db.dart';
@@ -40,8 +42,10 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
 
   obtenerDatos(v) async {
     var datos = await DatabaseProvider.db.obtenerInfoVin(v);
+
     setState(() {
       infoydatos = datos;
+      // log(datos.toString());
     });
 
     // vin = Vin(
@@ -114,7 +118,7 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                             Flexible(
                               child: Text(
                                 '${snapshot.data![index].vin}',
-                                textAlign: TextAlign.center ,
+                                textAlign: TextAlign.center,
                                 style: const TextStyle(
                                   fontSize: 13,
                                   color: Colors.black,
@@ -135,7 +139,11 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Icon(CupertinoIcons.doc_fill , color: Colors.grey[300], size: 60),
+                Icon(
+                  CupertinoIcons.doc_fill , 
+                  color: Colors.grey[300], 
+                  size: 60
+                ),
                 const SizedBox(height: 10),
                 SizedBox(
                   width: 250,

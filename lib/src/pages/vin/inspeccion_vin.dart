@@ -98,43 +98,49 @@ class _InspeccionVinState extends State<InspeccionVin> {
                     _boton(30, 115, 'Frente', () => {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'Frente')),
+                        MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'FRENTE')),
                       )
                     }),
                     _boton(140, 115, 'Interior', () => {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'Interior')),
+                        MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'INTERIOR')),
                       )
                     }),
-                    _botonVertical(160, 40, 1, 'Izquierda', () => {
+                    _botonVertical(150, 40, 1, 'L-Izquierdo', () => {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'Izquierda')),
+                        MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'L-IZQUIERDO')),
                       )
                     }),
-                    _boton(230, 115, 'Arriba', () => {
+                    _boton(230, 115, 'P-Superior', () => {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'Arriba')),
+                        MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'P-SUPERIOR')),
                       )
                     }),
-                    _botonVertical(160, 290, 3, 'Derecha', () => {
+                    _botonVertical(150, 290, 3, 'L-Derecho', () => {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'Derecha')),
+                        MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'L-DERECHO')),
                       )
                     }),
-                    _boton(390, 115, 'Tracera', () => {
+                    _boton(390, 115, 'P-Tracera', () => {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'Tracera')),
+                        MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'P-TRACERA')),
+                      )
+                    }),
+                    _boton(350, 10, 'B-Vehiculo', () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'B-VEHICULO')),
                       )
                     }),
                     _boton(330, 205, 'Accesorios', () => {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'Accesorios')),
+                        MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'ACCESORIOS')),
                       )
                     })
                   ],
@@ -149,7 +155,7 @@ class _InspeccionVinState extends State<InspeccionVin> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => RegistroUnidadSS(vin: widget.vin, tipo: 'Unidad Sucia')),
+                      MaterialPageRoute(builder: (context) => RegistroUnidadSS(vin: widget.vin, tipo: 'Unidad Sucia'))
                     );
                   },
                   style: ButtonStyle(
@@ -173,7 +179,7 @@ class _InspeccionVinState extends State<InspeccionVin> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => RegistroUnidadSS(vin: widget.vin, tipo: 'Unidad Sin Daños')),
+                      MaterialPageRoute(builder: (context) => RegistroUnidadSS(vin: widget.vin, tipo: 'Unidad Sin Daños'))
                     );
                   },
                   style: ButtonStyle(
@@ -253,7 +259,7 @@ class _InspeccionVinState extends State<InspeccionVin> {
         quarterTurns: rote,
         child: SizedBox(
           height: 30,
-          width: 130,
+          width: 140,
           child: ElevatedButton(
             style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),

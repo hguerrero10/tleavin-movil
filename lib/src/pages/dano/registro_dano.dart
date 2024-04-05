@@ -62,12 +62,9 @@ class _RegistroDanoState extends State<RegistroDano> {
     final List<XFile> pickedFileList = <XFile>[];
     final photo = await picker.pickImage(
       source: ImageSource.camera,
-      maxHeight: 10,
-      maxWidth: 10,
-      imageQuality: 2
-      // maxHeight: 720,
-      // maxWidth: 1280,
-      // imageQuality: 100
+      maxHeight: 720,
+      maxWidth: 1280,
+      imageQuality: 100
     );
 
     if(photo != null) {
