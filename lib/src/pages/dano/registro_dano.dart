@@ -62,9 +62,9 @@ class _RegistroDanoState extends State<RegistroDano> {
     final List<XFile> pickedFileList = <XFile>[];
     final photo = await picker.pickImage(
       source: ImageSource.camera,
-      maxHeight: 20,
-      maxWidth: 20,
-      imageQuality: 5
+      maxHeight: 10,
+      maxWidth: 10,
+      imageQuality: 2
       // maxHeight: 720,
       // maxWidth: 1280,
       // imageQuality: 100
@@ -176,7 +176,7 @@ class _RegistroDanoState extends State<RegistroDano> {
                   Row(
                     children: [
                       const Text(
-                        'Panel Seleccinado: ',
+                        'Panel Seleccionado: ',
                         style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold
@@ -433,10 +433,7 @@ class _RegistroDanoState extends State<RegistroDano> {
       width: MediaQuery.of(context).size.width * 2,
       padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-          border: Border.all(
-            color: Colors.grey[200]!
-          )
+        borderRadius: BorderRadius.circular(5)
       ),
       child: DropdownSearch<ListasA>(
           items: listaAreaDanos,
@@ -464,9 +461,9 @@ class _RegistroDanoState extends State<RegistroDano> {
       padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
-          border: Border.all(
-            color: Colors.grey[200]!
-          )
+          // border: Border.all(
+          //   color: Colors.grey[200]!
+          // )
       ),
       child: DropdownSearch<ListasT>(
           items: listaTipoDanos,
@@ -493,10 +490,7 @@ class _RegistroDanoState extends State<RegistroDano> {
       width: MediaQuery.of(context).size.width * 2,
       padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-          border: Border.all(
-            color: Colors.grey[200]!
-          )
+        borderRadius: BorderRadius.circular(5)
       ),
       child: DropdownSearch<ListasS>(
           items: listaSeveridad,
@@ -530,7 +524,6 @@ class _RegistroDanoState extends State<RegistroDano> {
     );
 
     await DatabaseProvider.db.insertarDano(dano!).then((value) async {
-      log(value.toString());
       log('dano insertado');
       itemP.addBoton();
       itemP.deleteBoton();
@@ -538,7 +531,7 @@ class _RegistroDanoState extends State<RegistroDano> {
       for(var ed in evidenciasDano) {
         evidencia = Evidencia(
           vin: widget.vin,
-          dano: value,
+          iddano: value,
           nombre: null,
           archivo: ed,
           fechahora: fechaH
@@ -550,8 +543,6 @@ class _RegistroDanoState extends State<RegistroDano> {
           itemP.addError();
         });
       }
-
-      // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const ResumenDano()), (route) => false);
     }).timeout(const Duration(seconds: 30), onTimeout: () {
       itemP.addError();
     });

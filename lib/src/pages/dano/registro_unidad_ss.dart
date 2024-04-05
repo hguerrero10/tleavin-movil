@@ -351,7 +351,7 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
       for(var ed in evidenciasDano) {
         evidencia = Evidencia(
           vin: widget.vin,
-          dano: value,
+          iddano: value,
           nombre: null,
           archivo: ed,
           fechahora: fechaH

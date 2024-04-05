@@ -1,7 +1,7 @@
 import 'package:tleavin_mobil/model/dano.dart';
 
 class Vin{
-  int? id;
+  int? idv;
   int? viaje;
   int? cartaporte;
   String? vin;
@@ -19,10 +19,10 @@ class Vin{
   String? fecha_carga;
   String? fecha_creacion;
   String? fecha_sync;
-  List<Dano> danos;
+  List<Dano>? danos;
 
   Vin({
-    this.id,
+    this.idv,
     this.viaje,
     this.cartaporte,
     this.vin,
@@ -45,11 +45,11 @@ class Vin{
 
   @override
   String toString() {
-    return 'Vin { viaje: $viaje, cartaporte: $cartaporte, vin: $vin, distrib_clave: $distrib_clave, dest_nombre: $dest_nombre, ruta_clave: $ruta_clave, ruta_nombre: $ruta_nombre, origen: $origen, destino: $destino, modelo: $modelo, marca: $marca, posicion: $posicion, orientacion: $orientacion, compra: $compra, fecha_carga: $fecha_carga, fecha_creacion: $fecha_creacion, fecha_sync: $fecha_sync. id: $id }';
+    return 'Vin { viaje: $viaje, cartaporte: $cartaporte, vin: $vin, distrib_clave: $distrib_clave, dest_nombre: $dest_nombre, ruta_clave: $ruta_clave, ruta_nombre: $ruta_nombre, origen: $origen, destino: $destino, modelo: $modelo, marca: $marca, posicion: $posicion, orientacion: $orientacion, compra: $compra, fecha_carga: $fecha_carga, fecha_creacion: $fecha_creacion, fecha_sync: $fecha_sync, danos: $danos, idv: $idv }';
   }
 
   factory Vin.fromMap(Map<String, dynamic> map) => Vin(
-    id: map['id'],
+    idv: map['idv'],
     viaje: map['viaje'],
     cartaporte: map['cartaporte'],
     vin: map['vin'].toString(),
@@ -66,11 +66,12 @@ class Vin{
     compra: map['compra'],
     fecha_carga: map['fecha_carga'].toString(),
     fecha_creacion: map['fecha_creacion'].toString(),
-    fecha_sync: map['fecha_sync'].toString()
+    fecha_sync: map['fecha_sync'].toString(),
+    danos: map['danos']
   );
 
   Map<String, dynamic> toMap() => {
-    "id": id,
+    "idv": idv,
     "viaje": viaje,
     "cartaporte": cartaporte,
     "vin": vin,
@@ -93,7 +94,7 @@ class Vin{
   dynamic operator()  {
     var key;
     switch (key) {
-      case 'id': return id;
+      case 'idv': return idv;
       case 'viaje': return viaje;
       case 'cartaporte': return cartaporte;
       case 'vin': return vin;
@@ -111,6 +112,7 @@ class Vin{
       case 'fecha_carga': return fecha_carga;
       case 'fecha_creacion': return fecha_creacion;
       case 'fecha_sync': return fecha_sync;
+      case 'danos': return danos;
       default: throw ArgumentError('Invalid key: $key');
     }
   }

@@ -263,7 +263,7 @@ class _ResumenDanoState extends State<ResumenDano> {
 
   realizarCompra() async {
     vin = Vin(
-      id: 1,
+      idv: 1,
       viaje: null,
       cartaporte: null,
       vin: widget.vin,
@@ -279,7 +279,7 @@ class _ResumenDanoState extends State<ResumenDano> {
       orientacion: null, 
       compra: 1, 
       fecha_carga: null, 
-      fecha_creacion: '2024/04/02',
+      fecha_creacion: '2024/04/04',
       fecha_sync: null
     );
 

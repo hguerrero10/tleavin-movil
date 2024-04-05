@@ -1,7 +1,7 @@
 import 'package:tleavin_mobil/model/evidencia.dart';
 
 class Dano{
-  int? id;
+  int? idd;
   String? vin;
   String? panel;
   String? registroTipo;
@@ -10,10 +10,10 @@ class Dano{
   int? severidad;
   String? nota;
   String? fecha_creacion;
-  List<Evidencia> evidencias;
+  List<Evidencia>? evidencias;
 
   Dano({
-    this.id,
+    this.idd,
     this.vin,
     this.panel,
     this.registroTipo,
@@ -27,11 +27,11 @@ class Dano{
 
   @override
   String toString() {
-    return 'Dano { vin: $vin, panel: $panel, registroTipo: $registroTipo, area: $area, tipo: $tipo, severidad: $severidad, nota: $nota, fecha_creacion: $fecha_creacion, id: $id }';
+    return 'Dano { vin: $vin, panel: $panel, registroTipo: $registroTipo, area: $area, tipo: $tipo, severidad: $severidad, nota: $nota, fecha_creacion: $fecha_creacion, idd: $idd }';
   }
 
   factory Dano.fromMap(Map<String, dynamic> map) => Dano(
-    id: map['id'],
+    idd: map['idd'],
     vin: map['vin'].toString(),
     panel: map['panel'].toString(),
     registroTipo: map['registroTipo'].toString(),
@@ -39,11 +39,12 @@ class Dano{
     tipo: map['tipo'],
     severidad: map['severidad'],
     nota: map['nota'].toString(),
-    fecha_creacion: map['fecha_creacion'].toString()
+    fecha_creacion: map['fecha_creacion'].toString(),
+    evidencias: map['evidencias']
   );
 
   Map<String, dynamic> toMap() => {
-    "id": id,
+    "idd": idd,
     "vin": vin,
     "panel": panel,
     "registroTipo": registroTipo,
