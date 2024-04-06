@@ -16,6 +16,7 @@ class ItemsProvider {
   bool registroUser = false;
 
   Usuario? usuario;
+  String? ubicacion;
 
   void addUser(Usuario item) {
     if(item.toString().isNotEmpty) {
@@ -31,6 +32,11 @@ class ItemsProvider {
     }
     
     itemP.itemStreamController.sink.add(itemP.usuario);
+  }
+
+  addUbi(item) {
+    itemP.ubicacion = item;
+    itemStreamController.sink.add(itemP.ubicacion);
   }
 
   void addBoton() {

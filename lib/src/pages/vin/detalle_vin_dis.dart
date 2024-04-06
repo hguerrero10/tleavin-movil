@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:widget_zoom/widget_zoom.dart';
 
@@ -78,13 +77,12 @@ class _DetalleVinState extends State<DetalleVin> {
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold
-            ),
+            )
           ),
           Text(
             sub ?? '',
             style: const TextStyle(
-              fontSize: 18,
-
+              fontSize: 18
             )
           )
         ]
@@ -103,7 +101,7 @@ class _DetalleVinState extends State<DetalleVin> {
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold
-            ),
+            )
           ),
           SizedBox(
             width: 230,
@@ -111,12 +109,11 @@ class _DetalleVinState extends State<DetalleVin> {
               sub ?? '',
               style: const TextStyle(
                 fontSize: 18,
-            
               )
-            ),
+            )
           )
         ]
-      ),
+      )
     );
   }
 
@@ -124,6 +121,7 @@ class _DetalleVinState extends State<DetalleVin> {
     return ListView.builder(
       shrinkWrap: true,
       itemCount: da.length,
+      physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         final dato = da[index];
         var totalda = index + 1;
@@ -132,7 +130,7 @@ class _DetalleVinState extends State<DetalleVin> {
           shadowColor: Colors.black,
           surfaceTintColor: const Color.fromRGBO(242, 211, 0, 1),
           child: SizedBox(
-              height: 630,
+              height: 660,
               width: MediaQuery.of(context).size.width,
               child: Container(
                   padding: const EdgeInsets.only(left:16, right: 16),

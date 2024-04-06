@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/database/db.dart';
-import 'package:tleavin_mobil/model/area_Dano.dart';
+import 'package:tleavin_mobil/model/areaDano.dart';
 import 'package:tleavin_mobil/model/cliente.dart';
 import 'package:tleavin_mobil/model/severidad.dart';
 import 'package:tleavin_mobil/model/tipo_dano.dart';

@@ -244,10 +244,10 @@ class _InspeccionVinState extends State<InspeccionVin> {
               color: Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 15
-            ),
-          ),
-        ),
-      ),
+            )
+          )
+        )
+      )
     );
   }
 
@@ -266,8 +266,8 @@ class _InspeccionVinState extends State<InspeccionVin> {
             shape: MaterialStateProperty.all(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50)
-                ),
-              ),
+                )
+              )
             ),
             onPressed: onTap,
             child: Text(

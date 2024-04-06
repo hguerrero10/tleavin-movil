@@ -7,6 +7,8 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:connectivity_widget/connectivity_widget.dart';
 import 'dart:developer';
 
+import 'package:tleavin_mobil/provider/items_provider.dart';
+
 class Cuerpo extends StatefulWidget {
   const Cuerpo({super.key});
 
@@ -30,7 +32,12 @@ class _CuerpoState extends State<Cuerpo> {
       // if (permission == LocationPermission.whileInUse) {}
     }
     else {
-      // obtenerUbicacion();
+      if(itemP.ubicacion != '') {
+        ubi = itemP.ubicacion.toString();
+      }
+      else {
+        // obtenerUbicacion();
+      }
     }
   }
 
@@ -39,7 +46,10 @@ class _CuerpoState extends State<Cuerpo> {
     initializeDateFormatting();
     format = DateFormat.yMMMMd('es');
     dateString = format.format(DateTime.now());
-    // requestLocationPermission();
+
+     
+            requestLocationPermission();
+        
     
     super.initState();
   }
@@ -121,7 +131,6 @@ class _CuerpoState extends State<Cuerpo> {
                     ),
                   ),
                   Text(
-                    // 'Puerto Lazaro Cardenas',
                     ubi,
                     style: const TextStyle(
                       fontSize: 19,
@@ -146,8 +155,14 @@ class _CuerpoState extends State<Cuerpo> {
     List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
     Placemark place = placemarks[0];
     setState(() {
-      log(place.toString());
-      ubi = '${place.administrativeArea}, ${place.country}';
+      itemP.addUbi('${place.administrativeArea}, ${place.country}');
+
+      if(itemP.ubicacion != '') {
+        ubi = itemP.ubicacion.toString();
+      }
+      else {
+        ubi = '${place.administrativeArea}, ${place.country}';
+      }
     });
   }
 }

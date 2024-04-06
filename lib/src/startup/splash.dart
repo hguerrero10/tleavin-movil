@@ -5,7 +5,7 @@ class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
@@ -46,11 +46,11 @@ class _SplashScreenState extends State<SplashScreen> {
             const CircularProgressIndicator(
               backgroundColor: Colors.transparent,
               valueColor: AlwaysStoppedAnimation<Color>(Color.fromRGBO(242, 211, 0, 1)),
-              strokeWidth: 5,
+              strokeWidth: 5
             )
-          ],
-        ),
-      )     
+          ]
+        )
+      )
     );
   }
 }

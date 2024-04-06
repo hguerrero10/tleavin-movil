@@ -40,12 +40,12 @@ class _Pantalla3State extends State<Pantalla3> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Pantalla4()),
+                        MaterialPageRoute(builder: (context) => const Pantalla4()),
                       );
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(16.0)),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
                       shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16)
@@ -72,7 +72,7 @@ class _Pantalla3State extends State<Pantalla3> {
                   const SizedBox(height: 8.0),
                   Container(
                     width: 350.0,
-                    margin: EdgeInsets.all(6.0),
+                    margin: const EdgeInsets.all(6.0),
                     decoration: BoxDecoration(
                       border: Border.all(),
                     ),
@@ -83,32 +83,32 @@ class _Pantalla3State extends State<Pantalla3> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Pantalla4()),
+                        MaterialPageRoute(builder: (context) => const Pantalla4()),
                       );
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(16.0)),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
                       shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16)
-                          ),
-                        ),
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16)
+                        )
+                      )
                     ),
                     child: const Text(
                       'Realizar Carga',
                       style: TextStyle(
                         fontSize: 18.0,
                         color: Colors.white
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+                      )
+                    )
+                  )
+                ]
+              )
+            )
+          ]
+        )
+      )
     );
   }
 
