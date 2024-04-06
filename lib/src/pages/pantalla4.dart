@@ -54,7 +54,7 @@ class _Pantalla4State extends State<Pantalla4> {
                           TableCell(
                             child: Center(
                               child: Padding(
-                                padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
@@ -109,7 +109,7 @@ class _Pantalla4State extends State<Pantalla4> {
                           TableCell(
                             child: Center(
                               child: Padding(
-                                padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
@@ -164,7 +164,7 @@ class _Pantalla4State extends State<Pantalla4> {
                           TableCell(
                             child: Center(
                               child: Padding(
-                                padding: EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [

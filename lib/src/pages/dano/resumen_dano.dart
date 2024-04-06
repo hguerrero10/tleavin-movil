@@ -140,7 +140,7 @@ class _ResumenDanoState extends State<ResumenDano> {
                           TableCell(
                             child: Center(
                               child: Padding(
-                                padding:  EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(8.0),
                                 child: Image.asset(
                                     'assets/img/imagen.png',
                                     width: 50,
@@ -153,9 +153,9 @@ class _ResumenDanoState extends State<ResumenDano> {
                       ),
                       TableRow(
                         children: [
-                          TableCell(
+                          const TableCell(
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: EdgeInsets.all(8.0),
                               child: Center(
                                 child: Text('Daño 3'),
                               ),
