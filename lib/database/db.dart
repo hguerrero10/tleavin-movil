@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:tleavin_mobil/model/viaje.dart';
 import 'package:tleavin_mobil/model/vin.dart';
 import 'package:tleavin_mobil/model/dano.dart';
 import 'package:tleavin_mobil/model/usuario.dart';
@@ -37,6 +38,8 @@ class DatabaseProvider {
           "CREATE TABLE usuario (numero_empleado INTEGER PRIMARY KEY UNIQUE, nombre VARCHAR, usuario VARCHAR, password VARCHAR, isLogged INTERGER, cargo VARCHAR, estado VARCHAR)"
         );
 
+
+
         await db.execute(
           "CREATE TABLE vin (idv INTEGER PRIMARY KEY AUTOINCREMENT, viaje INTEGER, cartaporte INTEGER, vin VARCHAR UNIQUE, distrib_clave VARCHAR, dest_nombre VARCHAR, ruta_clave INTEGER, ruta_nombre VARCHAR, origen VARCHAR, destino VARCHAR, modelo VARCHAR, marca VARCHAR, posicion VARCHAR, orientacion VARCHAR, compra INTEGER, fecha_carga DATE, fecha_creacion DATE, fecha_sync DATE)"
         );
@@ -49,9 +52,13 @@ class DatabaseProvider {
           "CREATE TABLE evidencia (ide INTEGER PRIMARY KEY AUTOINCREMENT, vin VARCHAR, iddano INTEGER, nombre VARCHAR, archivo TEXT, fechahora DATE)"
         );
 
+
+
         await db.execute(
           "CREATE TABLE dispositivo (id INTEGER PRIMARY KEY AUTOINCREMENT, descripcion VARCHAR, api_key VARCHAR, usuario INTEGER, notas VARCHAR)"
         );
+
+
 
         await db.execute(
           "CREATE TABLE cliente (id INTEGER PRIMARY KEY AUTOINCREMENT, idAdvan INTEGER, cliente VARCHAR)"
@@ -67,6 +74,10 @@ class DatabaseProvider {
 
         await db.execute(
           "CREATE TABLE severidad (id INTEGER PRIMARY KEY AUTOINCREMENT, tipo VARCHAR, descripcion VARCHAR)"
+        );
+
+        await db.execute(
+          "CREATE TABLE viaje (idviaje INTEGER PRIMARY KEY AUTOINCREMENT, supervisor VARCHAR, folio_bitacora INTEGER, cartaporte INTEGER, bitacora_fecha_carga VARCHAR, num_eco_unidad INTEGER, nombre_operador VARCHAR, cliente_clave INTEGER, cliente_nombre VARCHAR, ruta_clave INTEGER, ruta_nombre VARCHAR, etiqueta VARCHAR, status_carga VARCHAR, notas VARCHAR, registrada_por VARCHAR, tipo_viaje VARCHAR, semana VARCHAR, fecha_creacion VARCHAR, fecha_sync VARCHAR)"
         );
       }
     );
@@ -138,154 +149,159 @@ class DatabaseProvider {
     else {
       listaVins = [];
     }
+
     return listaVins;
   }
 
   Future<List> obtenerInfoVin(vin) async {
     Database db = await database;
-    List<Map> data = await db.rawQuery("SELECT * FROM vin as v INNER JOIN dano as d ON v.vin = d.vin INNER JOIN evidencia as e on e.iddano = d.idd where v.vin = '$vin'");
-
+    List<Map> dataD = await db.rawQuery("SELECT * FROM dano where vin = '$vin'");
     Map<String, dynamic> organizedData = {};
 
-    if(data.isNotEmpty) {
-      for(var item in data) {
-        String vin = item['vin'];
-        int iddano = item['iddano'];
-        int ide = item['ide'];
+    if(dataD.isEmpty) {
+      List<Map> data = await db.rawQuery("SELECT * FROM vin where vin = '$vin'");
+        if(data.isNotEmpty) {
+        for(var item in data) {
+          String vin = item['vin'] ?? '';
+          int iddano = item['iddano'] ?? 0;
+          int ide = item['ide'] ?? 0;
 
-        var evidence = {
-          'ide': ide,
-          'fechahora': item['fechahora'],
-          'archivo': item['archivo']
-        };
-
-        if(organizedData.containsKey(vin)) {
-          bool found = false;
-          for(var dano in organizedData[vin]!['danoos']) {
-            if(dano['iddano'] == iddano) {
-              dano['evidencias'].add(evidence);
-              found = true;
-              break;
-            }
-          }
-
-          if(!found) {
-            var newDano = {
-              'iddano': iddano,
-              'panel': item['panel'],
-              'registroTipo': item['registroTipo'],
-              'area': item['area'],
-              'tipo': item['tipo'],
-              'severidad': item['severidad'],
-              'nota': item['nota'],
-              'fecha_creacion': item['fecha_creacion'],
-              'evidencias': [evidence]
-            };
-
-            organizedData[vin]!['danoos'].add(newDano); 
-          }
-        } 
-        else {
-          var obvin = {
-            "idv": item['idv'],
-            'viaje': item['viaje'],
-            'cartaporte': item['cartaporte'],
-            'vin': vin,
-            'distrib_clave': item['distrib_clave'],
-            'dest_nombre': item['dest_nombre'],
-            'ruta_clave': item['ruta_clave'],
-            'ruta_nombre': item['ruta_nombre'],
-            'origen': item['origen'],
-            'destino': item['destino'],
-            'modelo': item['modelo'],
-            'marca': item['marca'],
-            'posicion': item['posicion'],
-            'orientacion': item['orientacion'],
-            'compra': item['compra'],
-            'fecha_carga': item['fecha_carga'],
-            'fecha_creacion': item['fecha_creacion'],
-            'fecha_sync': item['fecha_sync'],
-            'danoos': [
-
-            ]
+          var evidence = {
+            'ide': ide,
+            'fechahora': item['fechahora'],
+            'archivo': item['archivo']
           };
 
-          organizedData[vin] = {'vinp': obvin, 'danoos': []};
+          if(organizedData.containsKey(vin)) {
+            bool found = false;
+            for(var dano in organizedData[vin]!['danoos']) {
+              if(dano['iddano'] == iddano) {
+                dano['evidencias'].add(evidence);
+                found = true;
+                break;
+              }
+            }
+
+            if(!found) {
+              var newDano = {
+                'iddano': iddano,
+                'panel': item['panel'],
+                'registroTipo': item['registroTipo'],
+                'area': item['area'],
+                'tipo': item['tipo'],
+                'severidad': item['severidad'],
+                'nota': item['nota'],
+                'fecha_creacion': item['fecha_creacion'],
+                'evidencias': [evidence]
+              };
+
+              organizedData[vin]!['danoos'].add(newDano); 
+            }
+          } 
+          else {
+            var obvin = {
+              "idv": item['idv'],
+              'viaje': item['viaje'],
+              'cartaporte': item['cartaporte'],
+              'vin': vin,
+              'distrib_clave': item['distrib_clave'],
+              'dest_nombre': item['dest_nombre'],
+              'ruta_clave': item['ruta_clave'],
+              'ruta_nombre': item['ruta_nombre'],
+              'origen': item['origen'],
+              'destino': item['destino'],
+              'modelo': item['modelo'],
+              'marca': item['marca'],
+              'posicion': item['posicion'],
+              'orientacion': item['orientacion'],
+              'compra': item['compra'],
+              'fecha_carga': item['fecha_carga'],
+              'fecha_creacion': item['fecha_creacion'],
+              'fecha_sync': item['fecha_sync'],
+              'danoos': [
+
+              ]
+            };
+
+            organizedData[vin] = {'vinp': obvin, 'danoos': []};
+          }
+        }
+      }
+    }
+    else {
+      List<Map> data = await db.rawQuery("SELECT * FROM vin as v LEFT JOIN dano as d ON v.vin = d.vin INNER JOIN evidencia as e on e.iddano = d.idd where v.vin = '$vin'");
+
+      if(data.isNotEmpty) {
+        for(var item in data) {
+          String vin = item['vin'] ?? '';
+          int iddano = item['iddano'] ?? 0;
+          int ide = item['ide'] ?? 0;
+
+          var evidence = {
+            'ide': ide,
+            'fechahora': item['fechahora'],
+            'archivo': item['archivo']
+          };
+
+          if(organizedData.containsKey(vin)) {
+            bool found = false;
+            for(var dano in organizedData[vin]!['danoos']) {
+              if(dano['iddano'] == iddano) {
+                dano['evidencias'].add(evidence);
+                found = true;
+                break;
+              }
+            }
+
+            if(!found) {
+              var newDano = {
+                'iddano': iddano,
+                'panel': item['panel'],
+                'registroTipo': item['registroTipo'],
+                'area': item['area'],
+                'tipo': item['tipo'],
+                'severidad': item['severidad'],
+                'nota': item['nota'],
+                'fecha_creacion': item['fecha_creacion'],
+                'evidencias': [evidence]
+              };
+
+              organizedData[vin]!['danoos'].add(newDano); 
+            }
+          } 
+          else {
+            var obvin = {
+              "idv": item['idv'],
+              'viaje': item['viaje'],
+              'cartaporte': item['cartaporte'],
+              'vin': vin,
+              'distrib_clave': item['distrib_clave'],
+              'dest_nombre': item['dest_nombre'],
+              'ruta_clave': item['ruta_clave'],
+              'ruta_nombre': item['ruta_nombre'],
+              'origen': item['origen'],
+              'destino': item['destino'],
+              'modelo': item['modelo'],
+              'marca': item['marca'],
+              'posicion': item['posicion'],
+              'orientacion': item['orientacion'],
+              'compra': item['compra'],
+              'fecha_carga': item['fecha_carga'],
+              'fecha_creacion': item['fecha_creacion'],
+              'fecha_sync': item['fecha_sync'],
+              'danoos': [
+
+              ]
+            };
+
+            organizedData[vin] = {'vinp': obvin, 'danoos': []};
+          }
         }
       }
     }
 
-    // log(organizedData.values.toString());
-
-    // var jsonObject = jsonDecode(jsonString);
-
-    // log(organizedData.values.toString());
-
-    // Map<String, dynamic> jsonData = jsonDecode(organizedData.values.toList().toString());
-
-    // List<dynamic> danoos = jsonData['vinp']['danoos'];
-
-    // List<dynamic> danoosList = [];
-
-    // for (var dano in danoos) {
-    //   danoosList.add(dano);
-    // }
-
-    // log(danoosList.toString());
-
-    
-
-
     return organizedData.values.toList();
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // Future<List> obtenerInfoVin(vin) async {
-  //   final db = await database;
-  //   var data = [];
-  //   var data2 = [];
-  //   var data3 = [];
-  //   var infov = [];
-  //   var res = await db.query("vin WHERE vin = '$vin'");
-  //   var res2 = await db.query("dano WHERE vin = '$vin'");
-  //   // var res3 = await db.query("evidencia WHERE dano = 1");
-  //   if(res.isNotEmpty) {
-  //     data = ([{"vi": res}]);
-  //     infov.add(data);
-  //     // log(data.toString());
-  //   }
-  //   if(res2.isNotEmpty) {
-  //     for (var item in res2) {
-  //       data2.add({"da": item});
-  //     }
-  //     infov.add(data2);
-  //     // log(data2.toString());
-  //   }
-  //   // if(res3.isNotEmpty) {
-  //   //   for (var item in res3) {
-  //   //     data3.add({"evvvvvvv": item});
-  //   //   }
-  //   //   infov.add(data3);
-  //   //   // log(data3.toString());
-  //   // }
-  //   if(infov.isEmpty) {
-  //     infov = [];
-  //   }
-  //   // log(infov.toString());
-  //   return infov;
-  // }
 
   Future<List> obtenerTipoVin() async {
     final db = await database;
@@ -309,6 +325,22 @@ class DatabaseProvider {
     var res = await db.query("vin where vin = '$chVin'");
 
     if (res.isNotEmpty) {
+      vins.addAll(res);
+    }
+
+    if(vins.isEmpty) {
+      vins = [];
+    }
+
+    return vins;
+  }
+
+  Future<List> checarVinParaViaje(vinViaje) async {
+    final db = await database;
+    List vins = [];
+    var res = await db.query("vin WHERE vin = '$vinViaje' AND compra = 1");
+
+    if(res.isNotEmpty) {
       vins.addAll(res);
     }
 
@@ -426,18 +458,18 @@ class DatabaseProvider {
   }
 
   Future<List<AreaDano>> obtenerAreaDano() async {
-      final db = await database;
-      List<AreaDano> lista;
-      var res = await db.query("area_dano");
+    final db = await database;
+    List<AreaDano> lista;
+    var res = await db.query("area_dano");
 
-      if (res.isNotEmpty) {
-        lista =  res.map((u) => AreaDano.fromMap(u)).toList();
-      } 
-      else {
-        lista = [];
-      }
-      return lista;
+    if (res.isNotEmpty) {
+      lista =  res.map((u) => AreaDano.fromMap(u)).toList();
+    } 
+    else {
+      lista = [];
     }
+    return lista;
+  }
 
   Future<int> insertarAreaDano(AreaDano nuevoRegistro) async {
     var db = await database;
@@ -482,9 +514,34 @@ class DatabaseProvider {
   }
 
   Future<int> insertarSeveridad(Severidad nuevoRegistro) async {
-      var db = await database;
-      int res = await db.insert("severidad", nuevoRegistro.toMap());
+    var db = await database;
+    int res = await db.insert("severidad", nuevoRegistro.toMap());
 
-      return res;
+    return res;
+  }
+
+  // CRUD VIAJES
+
+  Future<List<Viaje>> obtenerViajes() async {
+    List<Viaje> lista;
+    final db = await database;
+    var res = await db.query("area_dano");
+
+    if (res.isNotEmpty) {
+      lista = res.map((u) => Viaje.fromMap(u)).toList();
+    } 
+    else {
+      lista = [];
     }
+
+    return lista;
+  }
+
+  Future<int> insertarViaje(Viaje nuevoRegistro) async {
+    var db = await database;
+    int res = await db.insert("viaje", nuevoRegistro.toMap());
+
+    return res;
+  }
+
 }

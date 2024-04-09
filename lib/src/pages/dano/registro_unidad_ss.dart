@@ -97,6 +97,19 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
     }
   }
 
+
+  var resumen;
+
+  obtenerResumen(v) async {
+    var datos = await DatabaseProvider.db.obtenerInfoVin(v);
+    setState(() {
+      resumen = datos;
+    });
+
+    await guardarDano();
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenDano(resu: resumen)), (Route<dynamic> route) => false);
+  }
+
   @override
   void initState() {
     initializeDateFormatting();
@@ -280,13 +293,7 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
                         ),
                         const SizedBox(height: 20),
                         ElevatedButton(
-                          onPressed: () => {
-                            guardarDano(),
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => ResumenDano(vin: widget.vin)),
-                            )
-                          },
+                          onPressed: () => obtenerResumen(widget.vin),
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
                             padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),

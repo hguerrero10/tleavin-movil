@@ -36,7 +36,7 @@ class _CuerpoState extends State<Cuerpo> {
         ubi = itemP.ubicacion.toString();
       }
       else {
-        // obtenerUbicacion();
+        obtenerUbicacion();
       }
     }
   }
@@ -46,10 +46,8 @@ class _CuerpoState extends State<Cuerpo> {
     initializeDateFormatting();
     format = DateFormat.yMMMMd('es');
     dateString = format.format(DateTime.now());
-
      
-            requestLocationPermission();
-        
+    requestLocationPermission();    
     
     super.initState();
   }
@@ -67,58 +65,58 @@ class _CuerpoState extends State<Cuerpo> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Container(
-          padding: const EdgeInsets.only(left: 16, right: 16),
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Row(
-                    children: [
-                      const Text(
-                        'Fecha: ',
-                        style: TextStyle(
-                          fontSize: 19,
-                          fontWeight: FontWeight.bold
-                        ),
-                      ),
-                      Text(
-                        dateString,
-                        style: const TextStyle(
-                          fontSize: 19,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 5),
                   SizedBox(
-                    width: 30,
-                    height: 20,
+                    width:10,
+                    height:10,
                     child: ConnectivityWidget(
                       builder: (context, isOnline) => Center(
-                        child: Text(
-                          isOnline ? "ON" : "OFF", 
-                          style: TextStyle(
-                            fontSize: 10, 
-                            fontWeight: FontWeight.bold, 
-                            color: isOnline ? Colors.green : Colors.red
-                          )
-                        )
-                        // isOnline ? Image.asset(
-                        //       'assets/img/verde.png',
-                        //       width: 30,
-                        //       height: 30,
-                        //     ) :
-                        //     Image.asset(
-                        //       'assets/img/verde.png',
-                        //       width: 30,
-                        //       height: 30,
+                        child: 
+                        // Text(
+                        //   isOnline ? "ON" : "OFF", 
+                        //   style: TextStyle(
+                        //     fontSize: 10, 
+                        //     fontWeight: FontWeight.bold, 
+                        //     color: isOnline ? Colors.green : Colors.red
+                        //   )
                         // )
+                        isOnline ? Image.asset(
+                              'assets/img/verde.png',
+                              width:10,
+                              height:10,
+                            ) :
+                            Image.asset(
+                              'assets/img/verde.png',
+                              width:10,
+                              height:10,
+                        )
                       )
-                    ),
-                  )
+                    )
+                  ),
                 ],
+              ),
+              Row(
+                children: [
+                  const Text(
+                    'Fecha: ',
+                    style: TextStyle(
+                      fontSize: 19,
+                      fontWeight: FontWeight.bold
+                    ),
+                  ),
+                  Text(
+                    dateString,
+                    style: const TextStyle(
+                      fontSize: 19,
+                    )
+                  )
+                ]
               ),
               const SizedBox(height: 5),
               Row(
@@ -156,6 +154,7 @@ class _CuerpoState extends State<Cuerpo> {
     Placemark place = placemarks[0];
     setState(() {
       itemP.addUbi('${place.administrativeArea}, ${place.country}');
+      ubi = '${place.administrativeArea}, ${place.country}';
 
       if(itemP.ubicacion != '') {
         ubi = itemP.ubicacion.toString();

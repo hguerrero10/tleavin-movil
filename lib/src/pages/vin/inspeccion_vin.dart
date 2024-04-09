@@ -1,14 +1,10 @@
-import 'dart:developer';
-
+import '../dano/registro_dano.dart';
 import 'package:flutter/material.dart';
-import 'package:tleavin_mobil/database/db.dart';
+import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:tleavin_mobil/src/pages/vin/registro_vin.dart';
 import 'package:tleavin_mobil/src/pages/dano/registro_unidad_ss.dart';
-import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
-import '../dano/registro_dano.dart';
 
 class InspeccionVin extends StatefulWidget {
-
   final vin;
   const InspeccionVin({super.key, this.vin});
 
@@ -20,7 +16,6 @@ class _InspeccionVinState extends State<InspeccionVin> {
 
   @override
   void initState() {
-    getVins();
 
     super.initState();
   }
@@ -143,9 +138,9 @@ class _InspeccionVinState extends State<InspeccionVin> {
                         MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'ACCESORIOS')),
                       )
                     })
-                  ],
-                ),
-              ),
+                  ]
+                )
+              )
             ),
             const SizedBox(height: 20),
             Row(
@@ -164,16 +159,16 @@ class _InspeccionVinState extends State<InspeccionVin> {
                     shape: MaterialStateProperty.all(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16)
-                      ),
-                    ),
+                      )
+                    )
                   ),
                   child: const Text(
                     'Unidad Sucia',
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.white
-                    ),
-                  ),
+                    )
+                  )
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -196,29 +191,16 @@ class _InspeccionVinState extends State<InspeccionVin> {
                     style: TextStyle(
                       fontSize: 18.0,
                       color: Colors.white
-                    ),
-                  ),
-                ),
-              ],
+                    )
+                  )
+                )
+              ]
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 30)
           ]
         )
       )
     );
-  }
-
-  Future getVins() async {
-    try{
-      await DatabaseProvider.db.obtenerListaVins().then((value) {
-        setState(() {
-          log('vins => $value');
-        });
-      });
-    } 
-    catch (e) {
-      log('error => $e');
-    }
   }
 
   Widget _boton(double top, double left, String text, onTap) {
@@ -234,8 +216,8 @@ class _InspeccionVinState extends State<InspeccionVin> {
           shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50)
-              ),
-            ),
+              )
+            )
           ),
           onPressed: onTap,
           child: Text(
@@ -262,8 +244,8 @@ class _InspeccionVinState extends State<InspeccionVin> {
           width: 140,
           child: ElevatedButton(
             style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
-            shape: MaterialStateProperty.all(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
+              shape: MaterialStateProperty.all(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50)
                 )
@@ -276,10 +258,10 @@ class _InspeccionVinState extends State<InspeccionVin> {
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 15
-              ),
-            ),
-          ),
-        ),
+              )
+            )
+          )
+        )
       )
     );
   }

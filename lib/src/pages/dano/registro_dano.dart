@@ -110,6 +110,21 @@ class _RegistroDanoState extends State<RegistroDano> {
       }
       
     }
+
+    log(evidenciasDano.length.toString());
+  }
+
+  var resumen;
+
+  obtenerResumen(v) async {
+    await guardarDano();
+    
+    var datos = await DatabaseProvider.db.obtenerInfoVin(v);
+    setState(() {
+      resumen = datos;
+    });
+
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenDano(resu: resumen)), (Route<dynamic> route) => false);
   }
 
   @override
@@ -135,7 +150,7 @@ class _RegistroDanoState extends State<RegistroDano> {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.black
-          ),
+          )
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_sharp),
@@ -313,12 +328,12 @@ class _RegistroDanoState extends State<RegistroDano> {
                         ),
                         const SizedBox(height: 20),
                         ElevatedButton(
-                          onPressed: () => {
-                            guardarDano(),
+                          onPressed: () async  {
+                            await guardarDano();
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => InspeccionVin(vin: widget.vin))
-                            )
+                            );
                           },
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
@@ -340,13 +355,7 @@ class _RegistroDanoState extends State<RegistroDano> {
                         ),
                         const SizedBox(height: 10),
                         ElevatedButton(
-                          onPressed: () => {
-                            guardarDano(),
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => ResumenDano(vin: widget.vin))
-                            )
-                          },
+                          onPressed: () async => obtenerResumen(widget.vin),
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
                             padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
@@ -442,7 +451,6 @@ class _RegistroDanoState extends State<RegistroDano> {
         onChanged: (ListasA? item) {
           setState(() {
             selectArea = (item?.valor);
-            log(selectArea.toString());
           });
         },
         itemAsString: (ListasA item) => item.texto,
@@ -472,7 +480,6 @@ class _RegistroDanoState extends State<RegistroDano> {
         onChanged: (ListasT? item) {
           setState(() {
             selectTipo = (item?.valor);
-            log(selectTipo.toString());
           });
         },
         itemAsString: (ListasT item) => item.texto,
@@ -499,7 +506,6 @@ class _RegistroDanoState extends State<RegistroDano> {
         onChanged: (ListasS? item) {
           setState(() {
             selectSeve = (item?.valor);
-            log(selectSeve.toString());
           });
         },
         itemAsString: (ListasS item) => item.texto,
@@ -525,6 +531,8 @@ class _RegistroDanoState extends State<RegistroDano> {
       itemP.addBoton();
       itemP.deleteBoton();
 
+      log(evidenciasDano.length.toString());
+
       for(var ed in evidenciasDano) {
         evidencia = Evidencia(
           vin: widget.vin,
@@ -534,13 +542,14 @@ class _RegistroDanoState extends State<RegistroDano> {
           fechahora: fechaH
         );
 
-        await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) async {
+        await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) {
           log('evidencia insertado');
-        }).timeout(const Duration(seconds: 30), onTimeout: () {
+          log('$value');
+        }).timeout(const Duration(seconds: 60), onTimeout: () {
           itemP.addError();
         });
-      }
-    }).timeout(const Duration(seconds: 30), onTimeout: () {
+      }                          
+    }).timeout(const Duration(seconds: 60), onTimeout: () {
       itemP.addError();
     });
   }

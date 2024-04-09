@@ -160,15 +160,15 @@ class _CompraVinState extends State<CompraVin> {
                       style: TextStyle(
                         fontSize: 18.0,
                         color: Colors.white
-                      ),
-                    ),
+                      )
+                    )
                   )
                 ]
               )
-            ),
-          ],
-        ),
-      ),
+            )
+          ]
+        )
+      )
     );
   }
 

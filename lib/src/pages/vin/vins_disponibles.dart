@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/database/db.dart';
@@ -29,6 +31,7 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
     var datos = await DatabaseProvider.db.obtenerInfoVin(v);
     setState(() {
       infoydatos = datos;
+      log(infoydatos.toString());
     });
 
     Navigator.push(context, MaterialPageRoute(builder: (context) => DetalleVin(inf: infoydatos)));
@@ -115,11 +118,11 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                 Expanded(
                   child: vinsDisponibles(todosVins),
                 )
-              ],
-            ),
+              ]
+            )
           )
         ]
-      ),
+      )
     );
   }
           
@@ -200,5 +203,4 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
       );
     }
   }
-
 }

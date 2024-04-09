@@ -39,11 +39,11 @@ class _DetalleVinState extends State<DetalleVin> {
           )
         )
       ),
-      body: _buildItem(widget.inf)
+      body: infoDeVin(widget.inf)
     );
   }
 
-  Widget _buildItem(vi) {
+  Widget infoDeVin(vi) {
     return ListView.builder(
       itemCount: vi.length,
       itemBuilder: (context, index) {
@@ -86,7 +86,7 @@ class _DetalleVinState extends State<DetalleVin> {
             )
           )
         ]
-      ),
+      )
     );
   }
 
@@ -125,6 +125,10 @@ class _DetalleVinState extends State<DetalleVin> {
       itemBuilder: (context, index) {
         final dato = da[index];
         var totalda = index + 1;
+        // log(dato['evidencias'].length.toString());
+        // log(dato['iddano'].toString());
+        // log(dato['panel'].toString());
+
         return Card(
           elevation: 3,
           shadowColor: Colors.black,
@@ -133,13 +137,13 @@ class _DetalleVinState extends State<DetalleVin> {
               height: 660,
               width: MediaQuery.of(context).size.width,
               child: Container(
-                  padding: const EdgeInsets.only(left:16, right: 16),
+                padding: const EdgeInsets.only(left:16, right: 16),
                 child: Column(
                   children: <Widget>[
                     ListTile(
                       leading: const Icon(
                         Icons.dangerous,
-                        size: 30,
+                        size: 30
                       ),
                       title: Row(
                         children: [

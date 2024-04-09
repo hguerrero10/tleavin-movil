@@ -1,5 +1,5 @@
 class Viaje{
-  int? id;
+  int? idviaje;
   String? supervisor;
   int? folio_bitacora;
   int? cartaporte;
@@ -20,7 +20,7 @@ class Viaje{
   String? fecha_sync;
 
   Viaje({
-    this.id,
+    this.idviaje,
     this.supervisor,
     this.folio_bitacora,
     this.cartaporte,
@@ -41,13 +41,13 @@ class Viaje{
     this.fecha_sync
   });
 
-  // @override
-  // String toString() {
-  //   return 'Viaje { supervisor: $supervisor, folio_bitacora: $folio_bitacora, cartaporte: $cartaporte, bitacora_fecha_carga: $bitacora_fecha_carga, num_eco_unidad: $num_eco_unidad, nombre_operador: $nombre_operador, cliente_nombre: $cliente_nombre, cliente_clave: $cliente_clave, ruta_clave: $ruta_clave, ruta_nombre: $ruta_nombre, etiqueta: $etiqueta, status_carga: $status_carga, notas: $notas, registrada_por: $registrada_por, tipo_viaje: $tipo_viaje, semana: $semana, fecha_creacion: $fecha_creacion, fecha_sync: $fecha_sync }';
-  // }
+  @override
+  String toString() {
+    return 'Viaje { supervisor: $supervisor, folio_bitacora: $folio_bitacora, cartaporte: $cartaporte, bitacora_fecha_carga: $bitacora_fecha_carga, num_eco_unidad: $num_eco_unidad, nombre_operador: $nombre_operador, cliente_nombre: $cliente_nombre, cliente_clave: $cliente_clave, ruta_clave: $ruta_clave, ruta_nombre: $ruta_nombre, etiqueta: $etiqueta, status_carga: $status_carga, notas: $notas, registrada_por: $registrada_por, tipo_viaje: $tipo_viaje, semana: $semana, fecha_creacion: $fecha_creacion, fecha_sync: $fecha_sync, idviaje: $idviaje }';
+  }
 
   factory Viaje.fromMap(Map<String, dynamic> map) => Viaje(
-    id: map['id'],
+    idviaje: map['idviaje'],
     supervisor: map['supervisor'].toString(),
     folio_bitacora: map['folio_bitacora'],
     cartaporte: map['cartaporte'],
@@ -69,7 +69,7 @@ class Viaje{
   );
 
   Map<String, dynamic> toMap() => {
-    "id": id,
+    "idviaje": idviaje,
     "supervisor": supervisor,
     "folio_bitacora": folio_bitacora,
     "cartaporte": cartaporte,

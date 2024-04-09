@@ -6,6 +6,7 @@ import 'package:tleavin_mobil/model/severidad.dart';
 import 'package:tleavin_mobil/model/tipo_dano.dart';
 import 'package:tleavin_mobil/model/usuario.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
+import 'package:tleavin_mobil/src/pages/sincronizacion/enviar.dart';
 import 'package:tleavin_mobil/src/pages/viaje/armar_viaje.dart';
 import 'package:tleavin_mobil/src/pages/vin/registro_vin.dart';
 import 'package:tleavin_mobil/src/pages/vin/vins_disponibles.dart';
@@ -61,27 +62,27 @@ class _InicioScreenState extends State<InicioScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+            const Cuerpo(),
             Container(
               padding: const EdgeInsets.only(top: 10, left: 16),
               child: Row(
-              children: [
-                const Text(
-                  'Bienvenido ',
-                  style: TextStyle(
-                    fontSize: 21,
-                    fontWeight: FontWeight.bold
+                children: [
+                  const Text(
+                    'Bienvenido ',
+                    style: TextStyle(
+                      fontSize: 21,
+                      fontWeight: FontWeight.bold
+                    ),
                   ),
-                ),
-                Text(
-                  itemP.usuario!.nombre!,
-                  style: const TextStyle(
-                    fontSize: 21,
-                  ),
-                ),
-              ],
+                  Text(
+                    itemP.usuario!.nombre!,
+                    style: const TextStyle(
+                      fontSize: 21,
+                    ),
+                  )
+                ]
+              )
             ),
-          ),
-            const Cuerpo(),
             const SizedBox(height: 40),
             _cuadricula1(),
             const SizedBox(height: 10),
@@ -106,8 +107,7 @@ class _InicioScreenState extends State<InicioScreen> {
     await DatabaseProvider.db.actualizarUsuario(usuario);
 
     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
-      builder: (context) => const LoginForm()
-    ),
+      builder: (context) => const LoginForm()),
       (Route<dynamic> route) => false
     );
   }
@@ -144,7 +144,6 @@ class _InicioScreenState extends State<InicioScreen> {
   
       await DatabaseProvider.db.insertarSeveridad(severidad);
       log('insertado ser');
-      
     } 
     catch (e) {
       log('error => $e');
@@ -157,9 +156,8 @@ class _InicioScreenState extends State<InicioScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _panel(CupertinoIcons.car_detailed, () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const CompraVin()), (Route<dynamic> route) => false), 'Comprar vin'),
-          _panel(Icons.route_outlined, () => Navigator.push(context,MaterialPageRoute(builder: (context) => const ArmarViaje())), 'Armar Viaje')
-          // _panel(Icons.account_box_sharp, () => Navigator.pushNamed(context, 'viewreport'), 'Ver Reportes'),
+          _panel(CupertinoIcons.car_detailed, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CompraVin())), 'Comprar vin'),
+          _panel(CupertinoIcons.list_bullet_below_rectangle, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VinsDisponibles())), 'Vins Disponibles')
         ]
       )
     );
@@ -171,9 +169,8 @@ class _InicioScreenState extends State<InicioScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _panel(CupertinoIcons.list_bullet_below_rectangle, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VinsDisponibles())), 'Vins Disponibles'),
-          _panel(Icons.padding, () => Navigator.pushNamed(context, 'contact'), 'Contacto')
-          // _panel(Icons.face, () => Navigator.pushNamed(context, 'predial'), 'Predial'),
+          _panel(Icons.route_outlined, () => Navigator.push(context,MaterialPageRoute(builder: (context) => const ArmarViaje())), 'Armar Viaje'),
+          _panel(Icons.upload, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Sincronizar())), 'Sincronizar')
         ]
       )
     );
