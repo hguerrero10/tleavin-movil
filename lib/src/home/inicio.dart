@@ -72,13 +72,13 @@ class _InicioScreenState extends State<InicioScreen> {
                     style: TextStyle(
                       fontSize: 21,
                       fontWeight: FontWeight.bold
-                    ),
+                    )
                   ),
                   Text(
                     itemP.usuario!.nombre!,
                     style: const TextStyle(
                       fontSize: 21,
-                    ),
+                    )
                   )
                 ]
               )
@@ -86,14 +86,48 @@ class _InicioScreenState extends State<InicioScreen> {
             const SizedBox(height: 40),
             _cuadricula1(),
             const SizedBox(height: 10),
-            _cuadricula2()
+            _cuadricula2(),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              child: ElevatedButton(
+                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Sincronizar())),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(15)),
+                  minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)
+                    )
+                  )
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.upload,
+                      color: Colors.white,
+                      size: 30
+                    ),
+                    Text(
+                      'Sincronizar',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white
+                      )
+                    )
+                  ]
+                )
+              )
+            )
           ]
         )
       )
     );
   }
 
-  logout() async{
+  logout() async {
     usuario = Usuario(
       numeroEmpleado: itemP.usuario!.numeroEmpleado,
       nombre: itemP.usuario!.nombre,
@@ -122,14 +156,29 @@ class _InicioScreenState extends State<InicioScreen> {
       descripcion: 'DOBLADO'
     );
 
-    cliente = Cliente(
-      idAdvan: 10,
-      cliente: 'MAZDA',
-    );
-
     severidad = Severidad(
       tipo: 'HASTA E INCLUYENDO 1" DE LARGO/DIÁMETRO',
       descripcion: 'MENOS DE 2,5 CM',
+    );
+
+    var cliente1 = Cliente(
+      idAdvan: 10,
+      cliente: 'AMERICAN HONDA',
+    );
+
+    var cliente2 = Cliente(
+      idAdvan: 11,
+      cliente: 'AUDI',
+    );
+
+    var cliente3 = Cliente(
+      idAdvan: 12,
+      cliente: 'BMW',
+    );
+
+    var cliente4 = Cliente(
+      idAdvan: 13,
+      cliente: 'CHIREY',
     );
 
     try{
@@ -139,11 +188,20 @@ class _InicioScreenState extends State<InicioScreen> {
       await DatabaseProvider.db.insertarTipoDano(tipodano);
       log('insertado tipo');
 
-      await DatabaseProvider.db.insertarCliente(cliente);
-      log('insertado cli');
-  
       await DatabaseProvider.db.insertarSeveridad(severidad);
-      log('insertado ser');
+      log('insertado severidad');
+
+      // await DatabaseProvider.db.insertarCliente(cliente1);
+      // log('insertado cli');
+  
+      // await DatabaseProvider.db.insertarCliente(cliente2);
+      // log('insertado clie');
+
+      // await DatabaseProvider.db.insertarCliente(cliente3);
+      // log('insertado clie');
+
+      // await DatabaseProvider.db.insertarCliente(cliente4);
+      // log('insertado clie');
     } 
     catch (e) {
       log('error => $e');
@@ -170,7 +228,7 @@ class _InicioScreenState extends State<InicioScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           _panel(Icons.route_outlined, () => Navigator.push(context,MaterialPageRoute(builder: (context) => const ArmarViaje())), 'Armar Viaje'),
-          _panel(Icons.upload, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Sincronizar())), 'Sincronizar')
+          _panel(Icons.list_alt_sharp, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Sincronizar())), 'Viajes')
         ]
       )
     );
@@ -184,7 +242,7 @@ class _InicioScreenState extends State<InicioScreen> {
             color: Colors.grey.withOpacity(0.4),
             spreadRadius: 1,
             blurRadius: 5,
-            offset: const Offset(0, 3) // changes position of shadow
+            offset: const Offset(0, 3)
           )
         ]
       ),
@@ -192,6 +250,7 @@ class _InicioScreenState extends State<InicioScreen> {
         height: 140,
         width: MediaQuery.of(context).size.width * 0.4,
         child: ElevatedButton(
+          onPressed: onPress,
           style: ButtonStyle(
             shadowColor: MaterialStateProperty.all<Color>(Colors.black),
             overlayColor: MaterialStateProperty.all<Color>(Colors.black12),
@@ -207,7 +266,6 @@ class _InicioScreenState extends State<InicioScreen> {
               )
             )
           ),
-          onPressed: onPress,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

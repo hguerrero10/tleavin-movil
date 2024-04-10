@@ -181,7 +181,8 @@ class _LoginFormState extends State<LoginForm> {
             password: value.password,
             isLogged: 1,
             cargo: value.cargo,
-            estado: value.estado,
+            locacion: value.locacion,
+            estado: value.estado
           );
         });
         
@@ -214,6 +215,7 @@ class _LoginFormState extends State<LoginForm> {
       password: 'Hugo1010', 
       isLogged: 0,
       cargo: 'Desarrollador',
+      locacion: 'Salinas',
       estado: 'A'
     );
 

@@ -57,12 +57,15 @@ class _ResumenDanoState extends State<ResumenDano> {
   }
 
   Widget infoVin(vi) {
+
+    log(vi.toString());
     return ListView.builder(
       itemCount: vi.length,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
 
       //  datosVin = '${vi[index]['vinp']}';
+      log(vi[index]['danoos'].toString());
         return SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(15),
@@ -196,7 +199,7 @@ class _ResumenDanoState extends State<ResumenDano> {
                 children: [
                   TableCell(
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(16),
                       child: Center(
                         child: Text('Daño:  $totalda')
                       )
@@ -205,8 +208,8 @@ class _ResumenDanoState extends State<ResumenDano> {
                   TableCell(
                     child: Center(
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('${dato['area']} - ${dato['tipo']} - ${dato['severidad']}')
+                        padding: const EdgeInsets.all(16),
+                        child: dato['area'] != null ? Text('${dato['area']} - ${dato['tipo']} - ${dato['severidad']}') : Text('${dato['registroTipo']}')
                         // Image.asset(
                         //   'assets/img/imagen.png',
                         //   width: 50,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
-import 'package:tleavin_mobil/src/pages/viaje/salida_viaje.dart';
+import 'package:tleavin_mobil/src/pages/resumen_carga/hacershowdialogsalidaviaje.dart';
 import 'package:tleavin_mobil/src/pages/dano/resumen_dano.dart';
 import 'package:tleavin_mobil/src/pages/resumen_carga/widget/firma_inspector.dart';
 

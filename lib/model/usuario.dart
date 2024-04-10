@@ -5,6 +5,7 @@ class Usuario {
   String? password;
   int? isLogged;
   String? cargo;
+  String? locacion;
   String? estado;
 
   Usuario({
@@ -14,12 +15,13 @@ class Usuario {
     this.password,
     this.isLogged,
     this.cargo,
+    this.locacion,
     this.estado
   });
 
   @override
   String toString() {
-    return 'Usuario { nombre: $nombre, usuario: $usuario, password: $password, isLogged: $isLogged, cargo: $cargo, estado: $estado, numero_empleado: $numeroEmpleado }';
+    return 'Usuario { nombre: $nombre, usuario: $usuario, password: $password, isLogged: $isLogged, cargo: $cargo, locacion: $locacion, estado: $estado, numero_empleado: $numeroEmpleado }';
   }
 
   factory Usuario.fromMap(Map<String, dynamic> map) => Usuario(
@@ -29,6 +31,7 @@ class Usuario {
     password: map['password'].toString(),
     isLogged: map['isLogged'],
     cargo: map['cargo'].toString(),
+    locacion: map['locacion'].toString(),
     estado: map['estado'].toString()
   );
 
@@ -39,6 +42,7 @@ class Usuario {
     "password": password,
     "isLogged": isLogged,
     "cargo": cargo,
+    "locacion": locacion,
     "estado": estado
   };
 }

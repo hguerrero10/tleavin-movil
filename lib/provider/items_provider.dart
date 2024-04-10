@@ -27,6 +27,7 @@ class ItemsProvider {
         password: item.password,
         isLogged: item.isLogged,
         cargo: item.cargo,
+        locacion: item.locacion,
         estado: item.estado
       );
     }

@@ -510,7 +510,6 @@ class _RegistroDanoState extends State<RegistroDano> {
         },
         itemAsString: (ListasS item) => item.texto,
       )
-
     );
   }
 

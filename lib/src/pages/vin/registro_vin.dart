@@ -97,7 +97,7 @@ class _CompraVinState extends State<CompraVin> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 30),
                   TextField(
                     controller: _qrTextController,
                     maxLength: 17,
@@ -111,7 +111,7 @@ class _CompraVinState extends State<CompraVin> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 50),
                   ElevatedButton(
                     onPressed: () async {
                       qrbar = _qrTextController.text;

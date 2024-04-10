@@ -11,11 +11,11 @@ class Viaje{
   int? ruta_clave;
   String? ruta_nombre;
   String? etiqueta;
-  String? status_carga;
+  int? status_carga;
   String? notas;
   String? registrada_por;
   String? tipo_viaje;
-  String? semana;
+  int? semana;
   String? fecha_creacion;
   String? fecha_sync;
 
@@ -59,11 +59,11 @@ class Viaje{
     ruta_clave: map['ruta_clave'],
     ruta_nombre: map['ruta_nombre'].toString(),
     etiqueta: map['etiqueta'].toString(),
-    status_carga: map['status_carga'].toString(),
+    status_carga: map['status_carga'],
     notas: map['notas'].toString(),
     registrada_por: map['registrada_por'].toString(),
     tipo_viaje: map['tipo_viaje'].toString(),
-    semana: map['semana'].toString(),
+    semana: map['semana'],
     fecha_creacion: map['fecha_creacion'].toString(),
     fecha_sync: map['fecha_sync'].toString()
   );

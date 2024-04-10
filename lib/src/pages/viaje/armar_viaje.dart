@@ -1,9 +1,15 @@
 import 'dart:developer';
 
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:tleavin_mobil/database/db.dart';
+import 'package:tleavin_mobil/model/viaje.dart';
+import 'package:tleavin_mobil/provider/items_provider.dart';
+import 'package:tleavin_mobil/src/pages/dano/listas.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 
 class ArmarViaje extends StatefulWidget {
@@ -19,9 +25,48 @@ class _ArmarViajeState extends State<ArmarViaje> {
   final _nombreOpTextController = TextEditingController();
   final _origenTextController = TextEditingController();
   final _destinoTextController = TextEditingController();
+  final _notaTextController = TextEditingController();
 
   var listaVinsViaje = [];
   String? vinEscaneado;
+  Viaje? viaje;
+
+  var formato;
+  var fecha;
+
+  List<ListasA> listaCliente = [];
+  String? selectClie;
+  String? selectClieText;
+
+  Future<List<ListasA>> getListas() async {
+    List<ListasA> resultados = [];
+
+    try {
+      await DatabaseProvider.db.obtenerCliente().then((value) {
+        setState(() {
+          listaCliente = value.map((item) => ListasA(valor: item.idAdvan.toString(), texto: '${item.cliente}')).toList();
+        });
+      });
+    } 
+    catch (e) {
+      log('error => $e');
+    }
+
+    return resultados;
+  }
+
+  @override
+  void initState() {
+    initializeDateFormatting();
+    formato = DateFormat('yyyy/MM/dd'); 
+    fecha = formato.format(DateTime.now());
+
+    _origenTextController.text = itemP.usuario!.locacion!;
+
+    getListas();
+    
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,56 +81,93 @@ class _ArmarViajeState extends State<ArmarViaje> {
           )
         )
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const Cuerpo(),
+      body: CustomScrollView(
+        slivers: [
+         SliverFillRemaining(
+            hasScrollBody: false,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+              const Cuerpo(),
 
-            _titulo('Numero Eco.'),
-            _inputs(_ecoTextController, 'Escriba Numero Economico', TextInputType.number),
-            const SizedBox(height: 10),
+              _titulo('Numero Eco.'),
+              _inputs(_ecoTextController, 'Escriba Numero Economico', TextInputType.number),
+              const SizedBox(height: 10),
 
-            _titulo('Nombre Operador'),
-            _inputs(_nombreOpTextController, 'Escriba Nombre del Operador', TextInputType.text),
-            const SizedBox(height: 10),
+              _titulo('Nombre Operador'),
+              _inputs(_nombreOpTextController, 'Escriba Nombre del Operador', TextInputType.text),
+              const SizedBox(height: 10),
 
-            _titulo('Origen'),
-            _inputs(_origenTextController, 'Escriba el Origen del Viaje', TextInputType.text),
-            const SizedBox(height: 10),
+              _titulo('Cliente'),
+              _dropDownCliente(),
+              const SizedBox(height: 10),
 
-            _titulo('Destino '),
-            _inputs(_destinoTextController, 'Escriba el Destino del Viaje', TextInputType.text),
-            const SizedBox(height: 30),
+              _titulo('Origen'),
+              _inputs(_origenTextController, 'Escriba el Origen del Viaje', TextInputType.text),
+              const SizedBox(height: 10),
 
-            Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16),
-              child: ElevatedButton(
-                onPressed: () => scanQR(),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(15)),
-                  minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)
+              _titulo('Destino '),
+              _inputs(_destinoTextController, 'Escriba el Destino del Viaje', TextInputType.text),
+              const SizedBox(height: 30),
+
+              Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16),
+                child: ElevatedButton(
+                  onPressed: () => scanQR(),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(15)),
+                    minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)
+                      )
+                    )
+                  ),
+                  child: const Text(
+                    'Seleccionar Vin',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white
                     )
                   )
-                ),
-                child: const Text(
-                  'Seleccionar Vin',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white
+                )
+              ),
+              const SizedBox(height: 30),
+              Expanded(child: SizedBox( height: 200, child: vinsSeleccionados(listaVinsViaje))),
+              const SizedBox(height: 30),
+
+              _inputs(_notaTextController, 'Nota', TextInputType.text),
+              
+              const SizedBox(height: 30),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16),
+                child: ElevatedButton(
+                  onPressed: () => crearViaje(),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(15)),
+                    minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 40)),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)
+                      )
+                    )
+                  ),
+                  child: const Text(
+                    'Registrar viaje',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white
+                    )
                   )
                 )
-              )
-            ),
-            const SizedBox(height: 30),
-            // vinEscaneado != null ? Expanded(child: vinsSeleccionados(vinEscaneado)) : const SizedBox(),
-            const SizedBox(height: 30)
-          ]
-        )
+              ),
+              const SizedBox(height: 30)
+            ]
+          )
+         )
+        ]
       )
     );
   }
@@ -106,15 +188,20 @@ class _ArmarViajeState extends State<ArmarViaje> {
   Future checarVinParaViaje(v) async {
     try{
       await DatabaseProvider.db.checarVinParaViaje(v).then((value) {
-        setState(() {
-          var vinvalido = value.length;
-          
-          if(vinvalido > 0) {
-            listaVinsViaje.add(value[0]['vin']);
+
+        var vinvalido = value.length;
+        
+        if(vinvalido > 0) {
+          int index = listaVinsViaje.indexOf(v);
+
+          if(index == -1) {
+            setState(() {
+              listaVinsViaje.add(value[0]['vin']);
+            });
           }
           else {
             Fluttertoast.showToast(
-              msg: "VIN no comprado o registrado",
+              msg: "El VIN ya encuentra en el viaje",
               toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.BOTTOM,
               timeInSecForIosWeb: 1,
@@ -123,9 +210,18 @@ class _ArmarViajeState extends State<ArmarViaje> {
               fontSize: 16.0
             );
           }
-
-          log(listaVinsViaje.toString());
-        });
+        }
+        else {
+          Fluttertoast.showToast(
+            msg: "VIN no Comprado o no Registrado",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0
+          );
+        }
       });
     } 
     catch (e) {
@@ -150,6 +246,32 @@ class _ArmarViajeState extends State<ArmarViaje> {
     );
   }
 
+  Widget _dropDownCliente() {
+    return Container(
+      height: 60,
+      width: MediaQuery.of(context).size.width * 2,
+      padding: const EdgeInsets.only(left: 16, right: 16,),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5)
+      ),
+      child: DropdownSearch<ListasA>(
+          items: listaCliente,
+          dropdownDecoratorProps: const DropDownDecoratorProps(
+          dropdownSearchDecoration: InputDecoration(
+            hintText: "Selecciona"
+          ),
+        ),
+        onChanged: (ListasA? item) {
+          setState(() {
+            selectClie = (item?.valor);
+            selectClieText = (item?.texto);
+          });
+        },
+        itemAsString: (ListasA item) => item.texto,
+      )
+    );
+  }
+
   Widget _titulo(tit) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -164,11 +286,12 @@ class _ArmarViajeState extends State<ArmarViaje> {
   }
 
   Widget vinsSeleccionados(listav) {
-    return ListView.builder(
+    return listav != null ? ListView.builder(
       itemCount: listav.length,
+      shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
-        return  Padding(
+        return Padding(
           padding: const EdgeInsets.only(left: 16, right: 16),
           child: Card(
             child: ListTile(
@@ -181,6 +304,52 @@ class _ArmarViajeState extends State<ArmarViaje> {
           )
         );
       }
+    ) : const SizedBox();
+  }
+
+  crearViaje() async {
+    viaje = Viaje(
+      supervisor: itemP.usuario!.nombre!,
+      folio_bitacora: null ,
+      cartaporte: null,
+      bitacora_fecha_carga: null,
+      num_eco_unidad: _ecoTextController.text,
+      nombre_operador: _nombreOpTextController.text,
+      cliente_clave: int.parse(selectClie.toString()),
+      cliente_nombre: selectClieText,
+      ruta_clave: null,
+      ruta_nombre: null,
+      etiqueta: null,
+      status_carga: 0,
+      notas: null,
+      registrada_por: itemP.usuario!.usuario!,
+      tipo_viaje: null,
+      semana: null,
+      fecha_creacion: fecha,
+      fecha_sync: null,
     );
+
+    log(viaje.toString());
+
+    await DatabaseProvider.db.insertarViaje(viaje!).then((value) async {
+      log('viaje insertado');
+
+      for(var ed in listaVinsViaje) {
+        var vinsviaje = (
+          vin: ed,
+          viaje: value
+        );
+
+        log(vinsviaje.toString());
+
+        await DatabaseProvider.db.asignarVinViaje(vinsviaje).then((value) {
+          log('vin asignado');
+        }).timeout(const Duration(seconds: 30), onTimeout: () {
+          itemP.addError();
+        });
+      }
+    }).timeout(const Duration(seconds: 30), onTimeout: () {
+      itemP.addError();
+    });
   }
 }

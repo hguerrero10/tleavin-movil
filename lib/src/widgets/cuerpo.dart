@@ -5,7 +5,6 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:connectivity_widget/connectivity_widget.dart';
-import 'dart:developer';
 
 import 'package:tleavin_mobil/provider/items_provider.dart';
 
@@ -47,7 +46,7 @@ class _CuerpoState extends State<Cuerpo> {
     format = DateFormat.yMMMMd('es');
     dateString = format.format(DateTime.now());
      
-    requestLocationPermission();    
+    // requestLocationPermission();    
     
     super.initState();
   }
@@ -87,14 +86,14 @@ class _CuerpoState extends State<Cuerpo> {
                         //   )
                         // )
                         isOnline ? Image.asset(
-                              'assets/img/verde.png',
-                              width:10,
-                              height:10,
-                            ) :
-                            Image.asset(
-                              'assets/img/verde.png',
-                              width:10,
-                              height:10,
+                          'assets/img/verde.png',
+                          width:10,
+                          height:10,
+                        ) :
+                        Image.asset(
+                          'assets/img/verde.png',
+                          width:10,
+                          height:10,
                         )
                       )
                     )
@@ -129,7 +128,7 @@ class _CuerpoState extends State<Cuerpo> {
                     ),
                   ),
                   Text(
-                    ubi,
+                    itemP.usuario!.locacion!,
                     style: const TextStyle(
                       fontSize: 19,
                     ),

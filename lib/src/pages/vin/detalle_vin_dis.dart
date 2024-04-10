@@ -53,10 +53,12 @@ class _DetalleVinState extends State<DetalleVin> {
             child: Column(
               children: [
                 _encabezados('VIN: ', vi[index]['vinp']['vin']),
-                _encabezados('Marca: ', vi[index]['vinp']['marca']),
-                _encabezados('Modelo: ', vi[index]['vinp']['modelo']),
+                _encabezados('Marca: ', vi[index]['vinp']['marca'] != null ? '${vi[index]['vinp']['marca']}' : 'Sin Identificar'),
+                _encabezados('Modelo: ', vi[index]['vinp']['modelo'] != null ? '${vi[index]['vinp']['modelo']}' : 'Sin Identificar'),
                 _encabezados('Comprado: ', vi[index]['vinp']['compra'] == 0 ? 'No' : 'Si'),
+                _encabezados('Viaje: ', vi[index]['vinp']['viaje'] != null ? ' ${vi[index]['vinp']['viaje']}' : 'Sin Asignar'),
                 _encabezados('Fecha de registro: ', vi[index]['vinp']['fecha_creacion']),
+                const SizedBox(height: 10),
                 _cardDanos(vi[index]['danoos']),
               ]
             ),
@@ -91,29 +93,26 @@ class _DetalleVinState extends State<DetalleVin> {
   }
 
   Widget _encabezadosCard(tit, sub) {
-    return Container(
-      padding: const EdgeInsets.only(bottom: 4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-            tit ?? '',
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Text(
+          tit ?? '',
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold
+          )
+        ),
+        SizedBox(
+          width: 230,
+          child: Text(
+            sub ?? '',
             style: const TextStyle(
               fontSize: 18,
-              fontWeight: FontWeight.bold
-            )
-          ),
-          SizedBox(
-            width: 230,
-            child: Text(
-              sub ?? '',
-              style: const TextStyle(
-                fontSize: 18,
-              )
             )
           )
-        ]
-      )
+        )
+      ]
     );
   }
 
@@ -125,16 +124,12 @@ class _DetalleVinState extends State<DetalleVin> {
       itemBuilder: (context, index) {
         final dato = da[index];
         var totalda = index + 1;
-        // log(dato['evidencias'].length.toString());
-        // log(dato['iddano'].toString());
-        // log(dato['panel'].toString());
-
         return Card(
           elevation: 3,
           shadowColor: Colors.black,
           surfaceTintColor: const Color.fromRGBO(242, 211, 0, 1),
           child: SizedBox(
-              height: 660,
+              height: 690,
               width: MediaQuery.of(context).size.width,
               child: Container(
                 padding: const EdgeInsets.only(left:16, right: 16),
@@ -182,12 +177,12 @@ class _DetalleVinState extends State<DetalleVin> {
                         ],
                       )
                     ),
+
                     dato['area'] == null ? const SizedBox() : _encabezados('Area: ', '${dato['area']}'),
                     dato['tipo'] == null ? const SizedBox() : _encabezados('Tipo: ', '${dato['tipo']}'),
                     dato['severidad'] == null ? const SizedBox() : _encabezados('Severidad: ', '${dato['severidad']}'),
              
-
-                    dato['severidad'] == null ? _encabezados('Unidad: ', '${dato['registroTipo'].split(' ')[1]}') : const SizedBox(),
+                    dato['severidad'] == null ? _encabezados('Estado: ', '${dato['registroTipo']}') : const SizedBox(),
 
                     dato['area'] == null ? const SizedBox() : _encabezados('Codificacion: ', '${dato['area']}${dato['tipo']}-${dato['severidad']}'),
                     _encabezadosCard('Notas: ', '${dato['nota']}'),

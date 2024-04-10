@@ -101,12 +101,14 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
   var resumen;
 
   obtenerResumen(v) async {
+    await guardarDano();
+
+    
     var datos = await DatabaseProvider.db.obtenerInfoVin(v);
     setState(() {
       resumen = datos;
     });
 
-    await guardarDano();
     Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenDano(resu: resumen)), (Route<dynamic> route) => false);
   }
 

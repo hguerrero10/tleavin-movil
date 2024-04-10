@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:async';
+import 'dart:developer';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:tleavin_mobil/model/viaje.dart';
@@ -35,7 +36,7 @@ class DatabaseProvider {
     return await openDatabase(path, version: 1, onOpen: (db) {},
       onCreate: (Database db, int version) async {
         await db.execute(
-          "CREATE TABLE usuario (numero_empleado INTEGER PRIMARY KEY UNIQUE, nombre VARCHAR, usuario VARCHAR, password VARCHAR, isLogged INTERGER, cargo VARCHAR, estado VARCHAR)"
+          "CREATE TABLE usuario (numero_empleado INTEGER PRIMARY KEY UNIQUE, nombre VARCHAR, usuario VARCHAR, password VARCHAR, isLogged INTERGER, cargo VARCHAR, locacion VARCHAR, estado VARCHAR)"
         );
 
 
@@ -61,7 +62,7 @@ class DatabaseProvider {
 
 
         await db.execute(
-          "CREATE TABLE cliente (id INTEGER PRIMARY KEY AUTOINCREMENT, idAdvan INTEGER, cliente VARCHAR)"
+          "CREATE TABLE cliente (idAdvan INTEGER PRIMARY KEY, cliente VARCHAR)"
         );
 
         await db.execute(
@@ -77,7 +78,7 @@ class DatabaseProvider {
         );
 
         await db.execute(
-          "CREATE TABLE viaje (idviaje INTEGER PRIMARY KEY AUTOINCREMENT, supervisor VARCHAR, folio_bitacora INTEGER, cartaporte INTEGER, bitacora_fecha_carga VARCHAR, num_eco_unidad INTEGER, nombre_operador VARCHAR, cliente_clave INTEGER, cliente_nombre VARCHAR, ruta_clave INTEGER, ruta_nombre VARCHAR, etiqueta VARCHAR, status_carga VARCHAR, notas VARCHAR, registrada_por VARCHAR, tipo_viaje VARCHAR, semana VARCHAR, fecha_creacion VARCHAR, fecha_sync VARCHAR)"
+          "CREATE TABLE viaje (idviaje INTEGER PRIMARY KEY AUTOINCREMENT, supervisor VARCHAR, folio_bitacora INTEGER, cartaporte INTEGER, bitacora_fecha_carga VARCHAR, num_eco_unidad VARCHAR, nombre_operador VARCHAR, cliente_clave INTEGER, cliente_nombre VARCHAR, ruta_clave INTEGER, ruta_nombre VARCHAR, etiqueta VARCHAR, status_carga INTEGER, notas VARCHAR, registrada_por VARCHAR, tipo_viaje VARCHAR, semana INTEGER, fecha_creacion VARCHAR, fecha_sync VARCHAR)"
         );
       }
     );
@@ -351,6 +352,11 @@ class DatabaseProvider {
     return vins;
   }
 
+  asignarVinViaje(vv) async {
+    final db = await database;
+    return db.update('vin', {'viaje' : vv.viaje}, where: "vin = ?", whereArgs: [vv.vin]);
+  }
+
   // CRUD DAÑO 
 
   Future<int> insertarDano(Dano nuevoRegistro) async {
@@ -525,9 +531,9 @@ class DatabaseProvider {
   Future<List<Viaje>> obtenerViajes() async {
     List<Viaje> lista;
     final db = await database;
-    var res = await db.query("area_dano");
-
-    if (res.isNotEmpty) {
+    var res = await db.query("viaje");
+    log(res.toString());
+    if(res.isNotEmpty) {
       lista = res.map((u) => Viaje.fromMap(u)).toList();
     } 
     else {
