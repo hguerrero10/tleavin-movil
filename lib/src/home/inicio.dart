@@ -8,11 +8,13 @@ import 'package:tleavin_mobil/model/usuario.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/pages/sincronizacion/enviar.dart';
 import 'package:tleavin_mobil/src/pages/viaje/armar_viaje.dart';
+import 'package:tleavin_mobil/src/pages/viaje/viajes_armados.dart';
 import 'package:tleavin_mobil/src/pages/vin/registro_vin.dart';
 import 'package:tleavin_mobil/src/pages/vin/vins_disponibles.dart';
 import 'package:tleavin_mobil/src/startup/login/login_form.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:animated_icon/animated_icon.dart';
 import 'dart:developer';
 // import 'package:tleavin_mobil/src/widgets/drawer.dart';
 
@@ -106,10 +108,19 @@ class _InicioScreenState extends State<InicioScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
-                      Icons.upload,
+                      Icons.swap_vert,
                       color: Colors.white,
                       size: 30
                     ),
+                    // AnimateIcon(
+                    //     onTap: () {},
+                    //     iconType: IconType.continueAnimation,
+                    //     height: 30,
+                    //     width: 30,
+                    //     color: Colors.white,
+                    //     animateIcon: AnimateIcons.cloud,
+                    // ),
+                    SizedBox(width: 10),
                     Text(
                       'Sincronizar',
                       style: TextStyle(
@@ -228,7 +239,7 @@ class _InicioScreenState extends State<InicioScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           _panel(Icons.route_outlined, () => Navigator.push(context,MaterialPageRoute(builder: (context) => const ArmarViaje())), 'Armar Viaje'),
-          _panel(Icons.list_alt_sharp, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Sincronizar())), 'Viajes')
+          _panel(Icons.list_alt_sharp, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ViajesArmados())), 'Viajes')
         ]
       )
     );

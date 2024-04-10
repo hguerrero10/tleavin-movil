@@ -9,6 +9,7 @@ import 'package:tleavin_mobil/src/home/inicio.dart';
 import 'package:tleavin_mobil/src/pages/vin/inspeccion_vin.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+
 import 'dart:developer';
 
 class CompraVin extends StatefulWidget {
@@ -81,18 +82,32 @@ class _CompraVinState extends State<CompraVin> {
                       onPressed: () => scanQR(),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16.0)),
+                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(10)),
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16)
                           ),
                         ),
                       ),
-                      child: const Text(
-                        'Escanear VIN',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.white
+                      child: Container(
+                        width: 200,
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.qr_code_2_outlined,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              'Escanear VIN',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                color: Colors.white
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),

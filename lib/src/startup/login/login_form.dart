@@ -53,7 +53,7 @@ class _LoginFormState extends State<LoginForm> {
           return Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                opacity: 97,
+                opacity: 95,
                 image: AssetImage("assets/img/fondo_login.jpg"),
                 fit: BoxFit.cover
               ),
@@ -67,7 +67,7 @@ class _LoginFormState extends State<LoginForm> {
                     child: Wrap(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 260),
+                          padding: const EdgeInsets.only(bottom: 200),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -145,15 +145,15 @@ class _LoginFormState extends State<LoginForm> {
                         //     ],
                         //   ),
                         // )
-                      ],
+                      ]
                     )
                   )
-                ],
-              ),
+                ]
+              )
             )
           );
-        }),
-      ),
+        })
+      )
     );
   }
 
@@ -295,11 +295,11 @@ class _LoginFormState extends State<LoginForm> {
                   }
                 ),
                 hintStyle: const TextStyle(color: Colors.white, fontSize: 17),
-              ),
-            ),
-          ),
-        ],
-      ),
+              )
+            )
+          )
+        ]
+      )
     );
   }
 

@@ -550,4 +550,87 @@ class DatabaseProvider {
     return res;
   }
 
+   Future<List> obtenerInfoViaje(vin) async {
+    Database db = await database;
+    Map<String, dynamic> organizedData = {};
+
+    List<Map> data = await db.rawQuery("SELECT * FROM viaje as via INNER JOIN vin as v on via.idviaje = v.viaje LEFT JOIN dano as d ON v.vin = d.vin INNER JOIN evidencia as e on e.iddano = d.idd where v.vin = '$vin'");
+
+    log(data.toString());
+    // if(data.isNotEmpty) {
+    //   for(var item in data) {
+    //     String vin = item['vin'] ?? '';
+    //     int iddano = item['iddano'] ?? 0;
+    //     int ide = item['ide'] ?? 0;
+
+    //     var evidence = {
+    //       'ide': ide,
+    //       'fechahora': item['fechahora'],
+    //       'archivo': item['archivo']
+    //     };
+
+    //     if(organizedData.containsKey(vin)) {
+    //       bool found = false;
+    //       for(var dano in organizedData[vin]!['danoos']) {
+    //         if(dano['iddano'] == iddano) {
+    //           dano['evidencias'].add(evidence);
+    //           found = true;
+    //           break;
+    //         }
+    //       }
+
+    //       if(!found) {
+    //         var newDano = {
+    //           'iddano': iddano,
+    //           'panel': item['panel'],
+    //           'registroTipo': item['registroTipo'],
+    //           'area': item['area'],
+    //           'tipo': item['tipo'],
+    //           'severidad': item['severidad'],
+    //           'nota': item['nota'],
+    //           'fecha_creacion': item['fecha_creacion'],
+    //           'evidencias': [evidence]
+    //         };
+
+    //         organizedData[vin]!['danoos'].add(newDano); 
+    //       }
+    //     } 
+    //     else {
+    //       var obvin = {
+    //         "idv": item['idv'],
+    //         'viaje': item['viaje'],
+    //         'cartaporte': item['cartaporte'],
+    //         'vin': vin,
+    //         'distrib_clave': item['distrib_clave'],
+    //         'dest_nombre': item['dest_nombre'],
+    //         'ruta_clave': item['ruta_clave'],
+    //         'ruta_nombre': item['ruta_nombre'],
+    //         'origen': item['origen'],
+    //         'destino': item['destino'],
+    //         'modelo': item['modelo'],
+    //         'marca': item['marca'],
+    //         'posicion': item['posicion'],
+    //         'orientacion': item['orientacion'],
+    //         'compra': item['compra'],
+    //         'fecha_carga': item['fecha_carga'],
+    //         'fecha_creacion': item['fecha_creacion'],
+    //         'fecha_sync': item['fecha_sync'],
+    //         'danoos': [
+
+    //         ]
+    //       };
+
+    //       organizedData[vin] = {'vinp': obvin, 'danoos': []};
+    //     }
+    //   }
+    // }
+    
+    return organizedData.values.toList();
+  }
+
+  Future borrarViaje(idviaje) async {
+    final db = await database;
+
+    return db.delete("viaje", where: "idviaje = ?", whereArgs: [idviaje]);
+  }
 }
