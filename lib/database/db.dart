@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
 import 'dart:developer';
@@ -78,7 +79,7 @@ class DatabaseProvider {
         );
 
         await db.execute(
-          "CREATE TABLE viaje (idviaje INTEGER PRIMARY KEY AUTOINCREMENT, supervisor VARCHAR, folio_bitacora INTEGER, cartaporte INTEGER, bitacora_fecha_carga VARCHAR, num_eco_unidad VARCHAR, nombre_operador VARCHAR, cliente_clave INTEGER, cliente_nombre VARCHAR, ruta_clave INTEGER, ruta_nombre VARCHAR, etiqueta VARCHAR, status_carga INTEGER, notas VARCHAR, registrada_por VARCHAR, tipo_viaje VARCHAR, semana INTEGER, fecha_creacion VARCHAR, fecha_sync VARCHAR)"
+          "CREATE TABLE viaje (idviaje INTEGER PRIMARY KEY AUTOINCREMENT, supervisor VARCHAR, folio_bitacora INTEGER, cartaporte INTEGER, bitacora_fecha_carga VARCHAR, num_eco_unidad VARCHAR, nombre_operador VARCHAR, cliente_clave INTEGER, cliente_nombre VARCHAR, ruta_clave INTEGER, ruta_nombre VARCHAR, origen VARCHAR, destino VARCHAR, etiqueta VARCHAR, status_carga INTEGER, notas VARCHAR, registrada_por VARCHAR, tipo_viaje VARCHAR, semana INTEGER, fecha_creacion VARCHAR, fecha_sync VARCHAR)"
         );
       }
     );
@@ -532,7 +533,7 @@ class DatabaseProvider {
     List<Viaje> lista;
     final db = await database;
     var res = await db.query("viaje");
-    log(res.toString());
+
     if(res.isNotEmpty) {
       lista = res.map((u) => Viaje.fromMap(u)).toList();
     } 
@@ -550,81 +551,186 @@ class DatabaseProvider {
     return res;
   }
 
-   Future<List> obtenerInfoViaje(vin) async {
+  Future<List> obtenerInfoViaje(idvia) async {
+    Database db = await database;
+
+    List<Map> data = await db.rawQuery("SELECT * FROM viaje as via INNER JOIN vin as v on via.idviaje = v.viaje where via.idviaje = $idvia");
+    Map<String, dynamic> viajesAgrupados = {};
+    Map<String, dynamic> viajesAgrupadosfafg = {};
+    final jsonString  = jsonEncode(data);
+
+    if(data.isNotEmpty) {
+
+      for (var viaje in data) {
+        final idViaje = viaje['idviaje'];
+
+          var obviaje = {
+            "idviaje": viaje['idviaje'],
+            "supervisor": viaje['supervisor'],
+            "folio_bitacora": viaje['folio_bitacora'],
+            "cartaporte": viaje['cartaporte'],
+            "bitacora_fecha_carga": viaje['bitacora_fecha_carga'],
+            "num_eco_unidad": viaje['num_eco_unidad'],
+            "nombre_operador": viaje['nombre_operador'],
+            "cliente_clave": viaje['cliente_clave'],
+            "cliente_nombre": viaje['cliente_nombre'],
+            "ruta_clave": viaje['ruta_clave'],
+            "ruta_nombre": viaje['ruta_nombre'],
+            "origen": viaje['origen'],
+            "destino": viaje['destino'],
+            "etiqueta": viaje['etiqueta'],
+            "status_carga": viaje['status_carga'],
+            "notas": viaje['notas'],
+            "registrada_por": viaje['registrada_por'],
+            "tipo_viaje": viaje['tipo_viaje'],
+            "semana": viaje['semana'],
+            "fecha_creacion": viaje['fecha_creacion'],
+            "fecha_sync": viaje['fecha_sync'],
+            "$idViaje": []
+          };
+
+          var obvin = {
+            "idv": viaje['idv'],
+            'viaje': viaje['viaje'],
+            'cartaporte': viaje['cartaporte'],
+            'vin': viaje['vin'],
+            'distrib_clave': viaje['distrib_clave'],
+            'dest_nombre': viaje['dest_nombre'],
+            'ruta_clave': viaje['ruta_clave'],
+            'ruta_nombre': viaje['ruta_nombre'],
+            'origen': viaje['origen'],
+            'destino': viaje['destino'],
+            'modelo': viaje['modelo'],
+            'marca': viaje['marca'],
+            'posicion': viaje['posicion'],
+            'orientacion': viaje['orientacion'],
+            'compra': viaje['compra'],
+            'fecha_carga': viaje['fecha_carga'],
+            'fecha_creacion': viaje['fecha_creacion'],
+            'fecha_sync': viaje['fecha_sync']
+          };
+
+
+          // obviaje[idViaje.toString()] ??= [];
+          // obviaje[idViaje.toString()]!.add(obvin);
+          viajesAgrupados[idViaje.toString()] ??= [];  
+          viajesAgrupados[idViaje.toString()]!.add(obvin);
+
+          obviaje[idViaje.toString()]!.add(viajesAgrupados);
+
+          viajesAgrupadosfafg = obviaje;
+        
+      }
+
+      log(viajesAgrupadosfafg.toString());
+      // log(viajesAgrupados.toString());
+    }
+      
+    return viajesAgrupados.values.toList();
+  }
+
+  Future<List> enviarViajeServer(idvia) async {
     Database db = await database;
     Map<String, dynamic> organizedData = {};
 
-    List<Map> data = await db.rawQuery("SELECT * FROM viaje as via INNER JOIN vin as v on via.idviaje = v.viaje LEFT JOIN dano as d ON v.vin = d.vin INNER JOIN evidencia as e on e.iddano = d.idd where v.vin = '$vin'");
+    List<Map> data = await db.rawQuery("SELECT * FROM viaje as via INNER JOIN vin as v on via.idviaje = v.viaje LEFT JOIN dano as d ON v.vin = d.vin INNER JOIN evidencia as e on e.iddano = d.idd where via.idviaje = '$idvia'");
 
-    log(data.toString());
-    // if(data.isNotEmpty) {
-    //   for(var item in data) {
-    //     String vin = item['vin'] ?? '';
-    //     int iddano = item['iddano'] ?? 0;
-    //     int ide = item['ide'] ?? 0;
+    if(data.isNotEmpty) {
+      for(var item in data) {
+        String vin = item['vin'] ?? '';
+        int iddano = item['iddano'] ?? 0;
+        int ide = item['ide'] ?? 0;
 
-    //     var evidence = {
-    //       'ide': ide,
-    //       'fechahora': item['fechahora'],
-    //       'archivo': item['archivo']
-    //     };
+        var evidence = {
+          'ide': ide,
+          'fechahora': item['fechahora'],
+          'archivo': item['archivo']
+        };
 
-    //     if(organizedData.containsKey(vin)) {
-    //       bool found = false;
-    //       for(var dano in organizedData[vin]!['danoos']) {
-    //         if(dano['iddano'] == iddano) {
-    //           dano['evidencias'].add(evidence);
-    //           found = true;
-    //           break;
-    //         }
-    //       }
+        if(organizedData.containsKey(vin)) {
+          bool found = false;
+          for(var dano in organizedData[vin]!['danoos']) {
+            if(dano['iddano'] == iddano) {
+              dano['evidencias'].add(evidence);
+              found = true;
+              break;
+            }
+          }
 
-    //       if(!found) {
-    //         var newDano = {
-    //           'iddano': iddano,
-    //           'panel': item['panel'],
-    //           'registroTipo': item['registroTipo'],
-    //           'area': item['area'],
-    //           'tipo': item['tipo'],
-    //           'severidad': item['severidad'],
-    //           'nota': item['nota'],
-    //           'fecha_creacion': item['fecha_creacion'],
-    //           'evidencias': [evidence]
-    //         };
+          if(!found) {
+            var newDano = {
+              'iddano': iddano,
+              'panel': item['panel'],
+              'registroTipo': item['registroTipo'],
+              'area': item['area'],
+              'tipo': item['tipo'],
+              'severidad': item['severidad'],
+              'nota': item['nota'],
+              'fecha_creacion': item['fecha_creacion'],
+              'evidencias': [evidence]
+            };
 
-    //         organizedData[vin]!['danoos'].add(newDano); 
-    //       }
-    //     } 
-    //     else {
-    //       var obvin = {
-    //         "idv": item['idv'],
-    //         'viaje': item['viaje'],
-    //         'cartaporte': item['cartaporte'],
-    //         'vin': vin,
-    //         'distrib_clave': item['distrib_clave'],
-    //         'dest_nombre': item['dest_nombre'],
-    //         'ruta_clave': item['ruta_clave'],
-    //         'ruta_nombre': item['ruta_nombre'],
-    //         'origen': item['origen'],
-    //         'destino': item['destino'],
-    //         'modelo': item['modelo'],
-    //         'marca': item['marca'],
-    //         'posicion': item['posicion'],
-    //         'orientacion': item['orientacion'],
-    //         'compra': item['compra'],
-    //         'fecha_carga': item['fecha_carga'],
-    //         'fecha_creacion': item['fecha_creacion'],
-    //         'fecha_sync': item['fecha_sync'],
-    //         'danoos': [
+            organizedData[vin]!['danoos'].add(newDano); 
+          }
+        } 
+        else {
+          var obviaje = {
+            "idviaje": item['idviaje'],
+            "supervisor": item['supervisor'],
+            "folio_bitacora": item['folio_bitacora'],
+            "cartaporte": item['cartaporte'],
+            "bitacora_fecha_carga": item['bitacora_fecha_carga'],
+            "num_eco_unidad": item['num_eco_unidad'],
+            "nombre_operador": item['nombre_operador'],
+            "cliente_clave": item['cliente_clave'],
+            "cliente_nombre": item['cliente_nombre'],
+            "ruta_clave": item['ruta_clave'],
+            "ruta_nombre": item['ruta_nombre'],
+            "origen": item['origen'],
+            "destino": item['destino'],
+            "etiqueta": item['etiqueta'],
+            "status_carga": item['status_carga'],
+            "notas": item['notas'],
+            "registrada_por": item['registrada_por'],
+            "tipo_viaje": item['tipo_viaje'],
+            "semana": item['semana'],
+            "fecha_creacion": item['fecha_creacion'],
+            "fecha_sync": item['fecha_sync']
+          };
 
-    //         ]
-    //       };
+          var obvin = {
+            "idv": item['idv'],
+            'viaje': item['viaje'],
+            'cartaporte': item['cartaporte'],
+            'vin': vin,
+            'distrib_clave': item['distrib_clave'],
+            'dest_nombre': item['dest_nombre'],
+            'ruta_clave': item['ruta_clave'],
+            'ruta_nombre': item['ruta_nombre'],
+            'origen': item['origen'],
+            'destino': item['destino'],
+            'modelo': item['modelo'],
+            'marca': item['marca'],
+            'posicion': item['posicion'],
+            'orientacion': item['orientacion'],
+            'compra': item['compra'],
+            'fecha_carga': item['fecha_carga'],
+            'fecha_creacion': item['fecha_creacion'],
+            'fecha_sync': item['fecha_sync'],
+            'danoos': [
 
-    //       organizedData[vin] = {'vinp': obvin, 'danoos': []};
-    //     }
-    //   }
-    // }
-    
+            ]
+          };
+
+          organizedData[vin] = {'viajep': obviaje, 'vinp': obvin, 'danoos': []};
+        }
+
+        final String jsonString  = jsonEncode(organizedData);
+
+        log(jsonString.toString());
+      }
+    }
+      
     return organizedData.values.toList();
   }
 

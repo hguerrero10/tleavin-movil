@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/vin.dart';
 import 'package:tleavin_mobil/src/home/inicio.dart';
@@ -252,5 +253,15 @@ class _ResumenDanoState extends State<ResumenDano> {
     log(vin.toString());
 
     await DatabaseProvider.db.actualizarVin(vin!);
+
+    Fluttertoast.showToast(
+      msg: "VIN comprado con Exito!",
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 20
+    );
   }
 }

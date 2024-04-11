@@ -25,7 +25,6 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
 
   var infoydatos = [];
   var todosVins = [];
-  
 
   obtenerDatos(v) async {
     var datos = await DatabaseProvider.db.obtenerInfoVin(v);
@@ -113,7 +112,7 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                         )
                       )
                     ]
-                  ),
+                  )
                 ),
                 Expanded(
                   child: vinsDisponibles(todosVins),
@@ -127,80 +126,71 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
   }
           
   Widget vinsDisponibles(da) {
-    if(da.isNotEmpty) {
-      return da.isNotEmpty ? GridView.count(
-        padding: const EdgeInsets.only(left: 10, right: 10, top: 20),
-        childAspectRatio: 1.0,
-        crossAxisCount: 2,
-        crossAxisSpacing: 40,
-          children: List.generate(da.length, (index) {
-            return GestureDetector(
-              onTap: () async => await obtenerDatos('${da[index].vin}'),
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    child: Icon(
-                      CupertinoIcons.car_detailed, 
-                      color: da[index].compra == 1 ? Colors.green : Colors.black,
-                      size: 90
-                    )
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          child: Text(
-                            '${da[index].vin}',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold
-                            )
+    return da.isNotEmpty ? GridView.count(
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 20),
+      childAspectRatio: 1.0,
+      crossAxisCount: 2,
+      crossAxisSpacing: 40,
+        children: List.generate(da.length, (index) {
+          return GestureDetector(
+            onTap: () async => await obtenerDatos('${da[index].vin}'),
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  child: Icon(
+                    CupertinoIcons.car_detailed, 
+                    color: da[index].compra == 1 ? Colors.green : Colors.black,
+                    size: 90
+                  )
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          '${da[index].vin}',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold
                           )
                         )
-                      ]
-                    )
+                      )
+                    ]
                   )
-                ]
-              )
-            );
-          }
-        )
-      ) : Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(
-              CupertinoIcons.doc_fill , 
-              color: Colors.grey[300], 
-              size: 60
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: 250,
-              child: Text(
-                'No hay vins disponibles',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.grey[300],
-                  fontSize: 19
                 )
+              ]
+            )
+          );
+        }
+      )
+    ) : Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(
+            CupertinoIcons.car_detailed , 
+            color: Colors.grey[300], 
+            size: 60
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            width: 250,
+            child: Text(
+              'No hay VINs disponibles',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.grey[300],
+                fontSize: 19
               )
             )
-          ]
-        )
-      );
-    } 
-    else {
-      return const Center(
-        child: CircularProgressIndicator(
-          color: Color.fromRGBO(242, 211, 0, 1)
-        )
-      );
-    }
+          )
+        ]
+      )
+    );
   }
 }

@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/viaje.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
+import 'package:tleavin_mobil/src/home/inicio.dart';
 import 'package:tleavin_mobil/src/pages/dano/listas.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 
@@ -319,6 +320,8 @@ class _ArmarViajeState extends State<ArmarViaje> {
       cliente_nombre: selectClieText,
       ruta_clave: null,
       ruta_nombre: null,
+      origen: _origenTextController.text,
+      destino: _destinoTextController.text,
       etiqueta: null,
       status_carga: 0,
       notas: null,
@@ -348,8 +351,21 @@ class _ArmarViajeState extends State<ArmarViaje> {
           itemP.addError();
         });
       }
+
+      Fluttertoast.showToast(
+        msg: "Viaje armado con Exito!",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 20
+      );
+
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const InicioScreen()), (Route<dynamic> route) => false);
     }).timeout(const Duration(seconds: 30), onTimeout: () {
       itemP.addError();
     });
+
   }
 }

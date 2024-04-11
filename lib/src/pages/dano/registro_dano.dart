@@ -37,7 +37,6 @@ class _RegistroDanoState extends State<RegistroDano> {
   final _notasTextController = TextEditingController();
 
   final ImagePicker picker = ImagePicker();
-  List<XFile>? _mediaFileList;
 
   String? base64Foto1;
   String? base64Foto2;
@@ -71,7 +70,6 @@ class _RegistroDanoState extends State<RegistroDano> {
       await GallerySaver.saveImage(photo.path, albumName: 'TLEAVIN');
       setState(() {
         pickedFileList.add(XFile(photo.path));
-        _mediaFileList = pickedFileList;
         convertirBase64(photo.path, foto);
       });
     }

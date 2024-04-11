@@ -14,7 +14,6 @@ import 'package:tleavin_mobil/src/pages/vin/vins_disponibles.dart';
 import 'package:tleavin_mobil/src/startup/login/login_form.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:animated_icon/animated_icon.dart';
 import 'dart:developer';
 // import 'package:tleavin_mobil/src/widgets/drawer.dart';
 
@@ -146,6 +145,7 @@ class _InicioScreenState extends State<InicioScreen> {
       password: itemP.usuario!.password,
       isLogged: 0,
       cargo: itemP.usuario!.cargo,
+      locacion: itemP.usuario!.locacion,
       estado: itemP.usuario!.estado
     );
 
@@ -202,17 +202,17 @@ class _InicioScreenState extends State<InicioScreen> {
       await DatabaseProvider.db.insertarSeveridad(severidad);
       log('insertado severidad');
 
-      // await DatabaseProvider.db.insertarCliente(cliente1);
-      // log('insertado cli');
+      await DatabaseProvider.db.insertarCliente(cliente1);
+      log('insertado cli');
   
-      // await DatabaseProvider.db.insertarCliente(cliente2);
-      // log('insertado clie');
+      await DatabaseProvider.db.insertarCliente(cliente2);
+      log('insertado clie');
 
-      // await DatabaseProvider.db.insertarCliente(cliente3);
-      // log('insertado clie');
+      await DatabaseProvider.db.insertarCliente(cliente3);
+      log('insertado clie');
 
-      // await DatabaseProvider.db.insertarCliente(cliente4);
-      // log('insertado clie');
+      await DatabaseProvider.db.insertarCliente(cliente4);
+      log('insertado clie');
     } 
     catch (e) {
       log('error => $e');
@@ -282,8 +282,8 @@ class _InicioScreenState extends State<InicioScreen> {
             children: [
               Icon(
                 icono,
-                color: Colors.black,
-                size: 50
+                size: 50,
+                color: Colors.black
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 10),
@@ -291,8 +291,8 @@ class _InicioScreenState extends State<InicioScreen> {
                   text,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    color: Colors.black,
                     fontSize: 16,
+                    color: Colors.black,
                     fontWeight: FontWeight.bold
                   )
                 )

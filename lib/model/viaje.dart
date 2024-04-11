@@ -10,6 +10,8 @@ class Viaje{
   String? cliente_nombre;
   int? ruta_clave;
   String? ruta_nombre;
+  String? origen;
+  String? destino;
   String? etiqueta;
   int? status_carga;
   String? notas;
@@ -31,6 +33,8 @@ class Viaje{
     this.cliente_nombre,
     this.ruta_clave,
     this.ruta_nombre,
+    this.origen,
+    this.destino,
     this.etiqueta,
     this.status_carga,
     this.notas,
@@ -43,7 +47,7 @@ class Viaje{
 
   @override
   String toString() {
-    return 'Viaje { supervisor: $supervisor, folio_bitacora: $folio_bitacora, cartaporte: $cartaporte, bitacora_fecha_carga: $bitacora_fecha_carga, num_eco_unidad: $num_eco_unidad, nombre_operador: $nombre_operador, cliente_nombre: $cliente_nombre, cliente_clave: $cliente_clave, ruta_clave: $ruta_clave, ruta_nombre: $ruta_nombre, etiqueta: $etiqueta, status_carga: $status_carga, notas: $notas, registrada_por: $registrada_por, tipo_viaje: $tipo_viaje, semana: $semana, fecha_creacion: $fecha_creacion, fecha_sync: $fecha_sync, idviaje: $idviaje }';
+    return 'Viaje { supervisor: $supervisor, folio_bitacora: $folio_bitacora, cartaporte: $cartaporte, bitacora_fecha_carga: $bitacora_fecha_carga, num_eco_unidad: $num_eco_unidad, nombre_operador: $nombre_operador, cliente_nombre: $cliente_nombre, cliente_clave: $cliente_clave, ruta_clave: $ruta_clave, ruta_nombre: $ruta_nombre, origen: $origen, destino: $destino, etiqueta: $etiqueta, status_carga: $status_carga, notas: $notas, registrada_por: $registrada_por, tipo_viaje: $tipo_viaje, semana: $semana, fecha_creacion: $fecha_creacion, fecha_sync: $fecha_sync, idviaje: $idviaje }';
   }
 
   factory Viaje.fromMap(Map<String, dynamic> map) => Viaje(
@@ -58,6 +62,8 @@ class Viaje{
     cliente_nombre: map['cliente_nombre'].toString(),
     ruta_clave: map['ruta_clave'],
     ruta_nombre: map['ruta_nombre'].toString(),
+    origen: map['origen'].toString(),
+    destino: map['destino'].toString(),
     etiqueta: map['etiqueta'].toString(),
     status_carga: map['status_carga'],
     notas: map['notas'].toString(),
@@ -80,6 +86,8 @@ class Viaje{
     "cliente_nombre": cliente_nombre,
     "ruta_clave": ruta_clave,
     "ruta_nombre": ruta_nombre,
+    "origen": origen,
+    "destino": destino,
     "etiqueta": etiqueta,
     "status_carga": status_carga,
     "notas": notas,

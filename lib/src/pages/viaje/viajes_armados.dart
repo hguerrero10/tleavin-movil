@@ -1,8 +1,8 @@
-import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/database/db.dart';
+import 'dart:developer';
+
+import 'package:tleavin_mobil/src/pages/viaje/detalle_viaje.dart';
 
 class ViajesArmados extends StatefulWidget {
   const ViajesArmados({super.key});
@@ -14,19 +14,23 @@ class ViajesArmados extends StatefulWidget {
 class _ViajesArmadosState extends State<ViajesArmados> {
   
   var listaViajes = [];
+  var informacionDelViaje = [];
 
   obtenerViajes() async {
     var data = await DatabaseProvider.db.obtenerViajes();
-
-    log(data.toString());
 
     setState(() {
       listaViajes = data;
     });
   }
 
-  obtenerViaje(infviaje) {
-    
+  obtenerViaje(infviaje) async {
+    var data = await DatabaseProvider.db.obtenerInfoViaje(infviaje);
+    // log(data.toString());
+
+    informacionDelViaje = data;
+
+    Navigator.push(context, MaterialPageRoute(builder: (context) => DetalleDeViaje(viaje: informacionDelViaje)));
   }
 
   @override
@@ -55,7 +59,6 @@ class _ViajesArmadosState extends State<ViajesArmados> {
             hasScrollBody: true,
             child: Column(
               children: [
-
                 Expanded(child: viajes(listaViajes))
               ]
             )
@@ -66,17 +69,16 @@ class _ViajesArmadosState extends State<ViajesArmados> {
   }
 
   Widget viajes(via) {
-    return ListView.builder(
+    return via.length != 0 ? ListView.builder(
       shrinkWrap: true,
       itemCount: via.length,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         final dato = via[index];
-        var totalda = index + 1;
-        return via.length > 0 ? GestureDetector(
-          onTap: () async => await obtenerViaje('${via[index].idviaje}'),
+        return GestureDetector(
+          onTap: () async => await obtenerViaje('${dato.idviaje}'),
           child: Container(
-            height: 170,
+            height: 190,
             width: double.maxFinite,
             margin: const EdgeInsets.only(left: 16, right:16, top: 16, bottom: 16),
             decoration: BoxDecoration(
@@ -97,116 +99,68 @@ class _ViajesArmadosState extends State<ViajesArmados> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
-                      '${via[index].idviaje}',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.white
-                      )
-                    ),
-                    Text(
-                      '${via[index].num_eco_unidad}',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.white
-                      )
-                    ),
-                    Text(
-                      '${via[index].nombre_operador}',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.white
-                      )
-                    )
+                    _encabezadosCard('Viaje: ', '${dato.idviaje}'),
+                    _encabezadosCard('Numero Eco.: ', '${dato.num_eco_unidad}'),
+                    _encabezadosCard('Nombre Ope.: ', '${dato.nombre_operador}'),
+                    _encabezadosCard('Origen: ', '${dato.origen}'),
+                    _encabezadosCard('Destino: ', '${dato.destino}')
                   ]
                 )
               )
             )
           )
-        ): Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Icon(
-              CupertinoIcons.doc_fill , 
-              color: Colors.grey[300], 
-              size: 60
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: 250,
-              child: Text(
-                'No hay vins disponibles',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.grey[300],
-                  fontSize: 19
-                )
+        );
+      }
+    ) : Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.route, 
+            color: Colors.grey[300],
+            size: 60
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            width: 250,
+            child: Text(
+              'No hay viajes disponibles',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.grey[300],
+                fontSize: 19
               )
             )
-          ]
-        )
-      );
-      }
+          )
+        ]
+      )
     );
   }
-                  // Padding(
-                  //   padding: const EdgeInsets.only(top: 5),
-                  //   child: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.center,
-                  //     children: [
-                  //       Flexible(
-                  //         child: Text(
-                  //           '${via[index].idviaje}',
-                  //           textAlign: TextAlign.center,
-                  //           style: const TextStyle(
-                  //             fontSize: 13,
-                  //             color: Colors.black,
-                  //             fontWeight: FontWeight.bold
-                  //           )
-                  //         )
-                  //       )
-                  //     ]
-                  //   )
-                  // )
-//                 ]
-//               )
-//             );
-//           }
-//         )
-//       ) : Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           crossAxisAlignment: CrossAxisAlignment.center,
-//           children: [
-//             Icon(
-//               CupertinoIcons.doc_fill , 
-//               color: Colors.grey[300], 
-//               size: 60
-//             ),
-//             const SizedBox(height: 10),
-//             SizedBox(
-//               width: 250,
-//               child: Text(
-//                 'No hay vins disponibles',
-//                 textAlign: TextAlign.center,
-//                 style: TextStyle(
-//                   color: Colors.grey[300],
-//                   fontSize: 19
-//                 )
-//               )
-//             )
-//           ]
-//         )
-//       );
-//     } 
-//     else {
-//       return const Center(
-//         child: CircularProgressIndicator(
-//           color: Color.fromRGBO(242, 211, 0, 1)
-//         )
-//       );
-//     }
-//   }
+
+  Widget _encabezadosCard(tit, sub) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Text(
+          tit ?? '',
+          style: const TextStyle(
+            fontSize: 15,
+            color: Colors.white,
+            fontWeight: FontWeight.bold
+          )
+        ),
+        SizedBox(
+          width: 200,
+          child: Text(
+            sub ?? '',
+            style: const TextStyle(
+              fontSize: 15,
+              color: Colors.white,
+            )
+          )
+        )
+      ]
+    );
+  }
 }
