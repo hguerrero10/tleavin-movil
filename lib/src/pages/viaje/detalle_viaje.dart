@@ -1,6 +1,10 @@
 import 'dart:developer';
 
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:tleavin_mobil/database/db.dart';
+import 'package:tleavin_mobil/provider/items_provider.dart';
+import 'package:tleavin_mobil/src/pages/resumen_carga/salida_viaje.dart';
 
 class DetalleDeViaje extends StatefulWidget {
   final viaje;
@@ -12,10 +16,13 @@ class DetalleDeViaje extends StatefulWidget {
 
 
 class _DetalleDeViajeState extends State<DetalleDeViaje> {
+
+  var vinsasiganadosylisos = [];
+  var versiyaesta;
+
   @override
   void initState() {
     // log(widget.viaje.toString());
-    
     super.initState();
   }
 
@@ -39,7 +46,7 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
             child: Column(
               children: [
 
-                // Expanded(child: viajes(listaViajes))
+                Expanded(child: informacionDelViaje(widget.viaje))
               ]
             )
           )
@@ -47,4 +54,335 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
       )
     );
   }
+
+  Widget informacionDelViaje(invi) {
+    return ListView.builder(
+      itemCount: invi.length,
+      itemBuilder: (context, index) {
+        final dato = invi[index]['viaje'];
+        return SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              children: [
+
+                _encabezados('Numero Eco.: ', '${dato['num_eco_unidad']}'),
+                _encabezados('Operador: ', '${dato['nombre_operador']}'),
+                _encabezados('Cliente.: ', '${dato['cliente_nombre']}'),
+                _encabezados('Origen: ', '${dato['origen']}'),
+                _encabezados('Destino: ', '${dato['destino']}'),
+                _encabezados('Tipo viaje: ', '${dato['tipo_viaje']}'),
+                _encabezados('Fecha de armado: ', '${dato['fecha_creacion']}'),
+                _encabezados('Notas: ', '${dato['notas']}'),
+                _encabezados('VINs: ', ''),
+
+                _vinsCard(dato['vins']),
+
+                const SizedBox(height: 10),
+                ElevatedButton(
+                    onPressed: () =>  Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const ResumenViaje()), (Route<dynamic> route) => false),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
+                      minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16)
+                        )
+                      )
+                    ),
+                    child: const Text(
+                      'Firmas',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.white
+                      )
+                    )
+                  )
+              ]
+            ),
+          ),
+        );
+      }
+    );
+  }
+
+  Widget _encabezados(tit, sub) {
+    return Container(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(
+            tit ?? 0,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold
+            )
+          ),
+          Text(
+            sub ?? '',
+            style: const TextStyle(
+              fontSize: 18
+            )
+          )
+        ]
+      )
+    );
+  }
+
+  Widget _vinsCard(evi) {
+    var inf ;
+    for(var di in evi){
+      inf = di;
+    }
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: inf.length,
+      itemBuilder: (context, index) {
+        return GestureDetector(
+          onTap: () => _dialogBuilder(context, inf[index]['vin']),
+          child: SizedBox(
+            height: 110,
+            child: Card(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'VIN: ',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold
+                          )
+                        ),
+                        Text(
+                          inf[index]['vin'],
+                          style: const TextStyle(
+                            fontSize: 18
+                          )
+                        )
+                      ]
+                    )
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Posicion: ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold
+                            )
+                          ),
+                          Text(
+       '',
+                            style: const TextStyle(
+                              fontSize: 18
+                            )
+                          )
+                        ]
+                      )
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Orientacion: ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold
+                            )
+                          ),
+                          Text(
+                            '',
+                            style: const TextStyle(
+                              fontSize: 18
+                            )
+                          )
+                        ]
+                      ),
+                      
+                    )
+                ]
+              )
+            )
+          ),
+        );
+      }
+    );
+  }
+
+  Future<void> _dialogBuilder(BuildContext context, vi) {
+    final _posicionTextController = TextEditingController();
+    var orientacionSeleccionada;
+
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Column(
+            children: [
+              Text(
+                'Asignar Orientacion y Posicion',
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold
+                )
+              ),
+              Divider(
+                color: Colors.black,
+                thickness: 1.0
+              )
+            ]
+          ),
+          content: SizedBox(
+            height: 210,
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'VIN: ',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold
+                      )
+                    ),
+                    Text(
+                      vi,
+                      style: const TextStyle(
+                        fontSize: 16
+                      )
+                    )
+                  ]
+                ),
+                const SizedBox(height: 10),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Posicion: ',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold
+                      )
+                    ),
+                  ],
+                ),
+                TextField(
+                  controller: _posicionTextController,
+                  keyboardType: TextInputType.number,
+                  textCapitalization: TextCapitalization.sentences,
+                  decoration: const InputDecoration(
+                    hintText: 'Escriba Posicion de VIN',
+                    hintStyle: TextStyle(
+                      color: Colors.grey
+                    )
+                  )
+                ),
+                const SizedBox(height: 10),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Orientacion: ',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold
+                      )
+                    )
+                  ]
+                ),
+                Container(
+                  height: 60,
+                  width: MediaQuery.of(context).size.width * 2,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: DropdownSearch<String>(
+                    popupProps: const PopupProps.menu(
+                      showSelectedItems: true,
+                    ),
+                    items: const ['Frente','Reversa'],
+                    dropdownDecoratorProps: const  DropDownDecoratorProps(
+                      dropdownSearchDecoration: InputDecoration(
+                        hintText: "Selecciona la Orientacion de VIN",
+                        hintStyle: TextStyle(
+                          color: Colors.grey
+                        )
+                      )
+                    ),
+                    onChanged: (oc) {
+                        setState(() {
+                        orientacionSeleccionada = oc;
+                      });
+                    },
+                  )
+                )
+              ]
+            )
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Cerrar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Guardar'),
+              onPressed: () {
+                var vinsPoOr = (
+                  vin: vi,
+                  posicion: _posicionTextController.text,
+                  orientacion: orientacionSeleccionada
+                );
+
+
+                vinsasiganadosylisos.add(vinsPoOr);
+                log(vinsasiganadosylisos.toString());
+
+                setState(() {
+                          versiyaesta = vinsasiganadosylisos.indexWhere((st) => st.vin == vi);
+                });
+                Navigator.of(context).pop();
+              }
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  actualizarPoOrVins(v, p, o) async {
+    var vinsPoOr = (
+      vin: v,
+      posicion: p,
+      orientacion: o
+    );
+
+    log(vinsPoOr.toString());
+
+    await DatabaseProvider.db.asignarPoOrVIN(vinsPoOr).then((value) {
+      log('vin asignado PoOr');
+    }).timeout(const Duration(seconds: 30), onTimeout: () {
+      itemP.addError();
+    });
+  }
+
 }

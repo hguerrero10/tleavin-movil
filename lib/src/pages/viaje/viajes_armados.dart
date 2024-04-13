@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/database/db.dart';
-import 'dart:developer';
-
 import 'package:tleavin_mobil/src/pages/viaje/detalle_viaje.dart';
 
 class ViajesArmados extends StatefulWidget {
@@ -27,8 +25,9 @@ class _ViajesArmadosState extends State<ViajesArmados> {
   obtenerViaje(infviaje) async {
     var data = await DatabaseProvider.db.obtenerInfoViaje(infviaje);
     // log(data.toString());
-
-    informacionDelViaje = data;
+    setState(() {
+      informacionDelViaje = data;
+    });
 
     Navigator.push(context, MaterialPageRoute(builder: (context) => DetalleDeViaje(viaje: informacionDelViaje)));
   }
@@ -59,7 +58,9 @@ class _ViajesArmadosState extends State<ViajesArmados> {
             hasScrollBody: true,
             child: Column(
               children: [
-                Expanded(child: viajes(listaViajes))
+                Expanded(child: viajes(listaViajes)),
+
+
               ]
             )
           )
@@ -86,7 +87,8 @@ class _ViajesArmadosState extends State<ViajesArmados> {
               borderRadius: BorderRadius.circular(20),
               image: const DecorationImage(
                 image: AssetImage(
-                  'assets/img/carddi.png'),
+                  'assets/img/carddi.png'
+                ),
                 fit: BoxFit.fill,
               ),
             ),
@@ -103,7 +105,9 @@ class _ViajesArmadosState extends State<ViajesArmados> {
                     _encabezadosCard('Numero Eco.: ', '${dato.num_eco_unidad}'),
                     _encabezadosCard('Nombre Ope.: ', '${dato.nombre_operador}'),
                     _encabezadosCard('Origen: ', '${dato.origen}'),
-                    _encabezadosCard('Destino: ', '${dato.destino}')
+                    _encabezadosCard('Destino: ', '${dato.destino}'),
+
+                    
                   ]
                 )
               )

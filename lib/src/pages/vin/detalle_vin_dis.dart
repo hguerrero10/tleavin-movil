@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:widget_zoom/widget_zoom.dart';
 
@@ -47,6 +48,8 @@ class _DetalleVinState extends State<DetalleVin> {
     return ListView.builder(
       itemCount: vi.length,
       itemBuilder: (context, index) {
+        
+        log(vi[index]['danoos'].toString());
         return SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(15),
@@ -117,6 +120,7 @@ class _DetalleVinState extends State<DetalleVin> {
   }
 
   Widget _cardDanos(da) {
+
     return ListView.builder(
       shrinkWrap: true,
       itemCount: da.length,

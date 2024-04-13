@@ -1,7 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:async';
-import 'dart:developer';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:tleavin_mobil/model/viaje.dart';
@@ -357,6 +355,12 @@ class DatabaseProvider {
     final db = await database;
     return db.update('vin', {'viaje' : vv.viaje}, where: "vin = ?", whereArgs: [vv.vin]);
   }
+  
+  asignarPoOrVIN(vv) async {
+    final db = await database;
+
+    return db.update('vin', {'posicion' : vv.posicion, 'orientacion' : vv.orientacion}, where: "vin = ?", whereArgs: [vv.vin]);
+  }
 
   // CRUD DAÑO 
 
@@ -557,76 +561,66 @@ class DatabaseProvider {
     List<Map> data = await db.rawQuery("SELECT * FROM viaje as via INNER JOIN vin as v on via.idviaje = v.viaje where via.idviaje = $idvia");
     Map<String, dynamic> viajesAgrupados = {};
     Map<String, dynamic> viajesAgrupadosfafg = {};
-    final jsonString  = jsonEncode(data);
-
     if(data.isNotEmpty) {
-
       for (var viaje in data) {
         final idViaje = viaje['idviaje'];
 
-          var obviaje = {
-            "idviaje": viaje['idviaje'],
-            "supervisor": viaje['supervisor'],
-            "folio_bitacora": viaje['folio_bitacora'],
-            "cartaporte": viaje['cartaporte'],
-            "bitacora_fecha_carga": viaje['bitacora_fecha_carga'],
-            "num_eco_unidad": viaje['num_eco_unidad'],
-            "nombre_operador": viaje['nombre_operador'],
-            "cliente_clave": viaje['cliente_clave'],
-            "cliente_nombre": viaje['cliente_nombre'],
-            "ruta_clave": viaje['ruta_clave'],
-            "ruta_nombre": viaje['ruta_nombre'],
-            "origen": viaje['origen'],
-            "destino": viaje['destino'],
-            "etiqueta": viaje['etiqueta'],
-            "status_carga": viaje['status_carga'],
-            "notas": viaje['notas'],
-            "registrada_por": viaje['registrada_por'],
-            "tipo_viaje": viaje['tipo_viaje'],
-            "semana": viaje['semana'],
-            "fecha_creacion": viaje['fecha_creacion'],
-            "fecha_sync": viaje['fecha_sync'],
-            "$idViaje": []
-          };
+        var obviaje = {
+          'idviaje': viaje['idviaje'],
+          'supervisor': viaje['supervisor'],
+          'folio_bitacora': viaje['folio_bitacora'],
+          'cartaporte': viaje['cartaporte'],
+          'bitacora_fecha_carga': viaje['bitacora_fecha_carga'],
+          'num_eco_unidad': viaje['num_eco_unidad'],
+          'nombre_operador': viaje['nombre_operador'],
+          'cliente_clave': viaje['cliente_clave'],
+          'cliente_nombre': viaje['cliente_nombre'],
+          'ruta_clave': viaje['ruta_clave'],
+          'ruta_nombre': viaje['ruta_nombre'],
+          'origen': viaje['origen'],
+          'destino': viaje['destino'],
+          'etiqueta': viaje['etiqueta'],
+          'status_carga': viaje['status_carga'],
+          'notas': viaje['notas'],
+          'registrada_por': viaje['registrada_por'],
+          'tipo_viaje': viaje['tipo_viaje'],
+          'semana': viaje['semana'],
+          'fecha_creacion': viaje['fecha_creacion'],
+          'fecha_sync': viaje['fecha_sync'],
+          'vins': []
+        };
 
-          var obvin = {
-            "idv": viaje['idv'],
-            'viaje': viaje['viaje'],
-            'cartaporte': viaje['cartaporte'],
-            'vin': viaje['vin'],
-            'distrib_clave': viaje['distrib_clave'],
-            'dest_nombre': viaje['dest_nombre'],
-            'ruta_clave': viaje['ruta_clave'],
-            'ruta_nombre': viaje['ruta_nombre'],
-            'origen': viaje['origen'],
-            'destino': viaje['destino'],
-            'modelo': viaje['modelo'],
-            'marca': viaje['marca'],
-            'posicion': viaje['posicion'],
-            'orientacion': viaje['orientacion'],
-            'compra': viaje['compra'],
-            'fecha_carga': viaje['fecha_carga'],
-            'fecha_creacion': viaje['fecha_creacion'],
-            'fecha_sync': viaje['fecha_sync']
-          };
+        var obvin = {
+          'idv': viaje['idv'],
+          'viaje': viaje['viaje'],
+          'cartaporte': viaje['cartaporte'],
+          'vin': viaje['vin'],
+          'distrib_clave': viaje['distrib_clave'],
+          'dest_nombre': viaje['dest_nombre'],
+          'ruta_clave': viaje['ruta_clave'],
+          'ruta_nombre': viaje['ruta_nombre'],
+          'origen': viaje['origen'],
+          'destino': viaje['destino'],
+          'modelo': viaje['modelo'],
+          'marca': viaje['marca'],
+          'posicion': viaje['posicion'],
+          'orientacion': viaje['orientacion'],
+          'compra': viaje['compra'],
+          'fecha_carga': viaje['fecha_carga'],
+          'fecha_creacion': viaje['fecha_creacion'],
+          'fecha_sync': viaje['fecha_sync']
+        };
 
+        viajesAgrupados[idViaje.toString()] ??= [];  
+        viajesAgrupados[idViaje.toString()]!.add(obvin);
 
-          // obviaje[idViaje.toString()] ??= [];
-          // obviaje[idViaje.toString()]!.add(obvin);
-          viajesAgrupados[idViaje.toString()] ??= [];  
-          viajesAgrupados[idViaje.toString()]!.add(obvin);
+        obviaje['vins'].add(viajesAgrupados[idViaje.toString()]);
 
-          obviaje[idViaje.toString()]!.add(viajesAgrupados);
-
-          viajesAgrupadosfafg = obviaje;
-        
+        viajesAgrupadosfafg[idViaje.toString()] = {'viaje': obviaje};
       }
-
-      log(viajesAgrupadosfafg.toString());
-      // log(viajesAgrupados.toString());
     }
       
-    return viajesAgrupados.values.toList();
+    return viajesAgrupadosfafg.values.toList();
   }
 
   Future<List> enviarViajeServer(idvia) async {
@@ -725,9 +719,9 @@ class DatabaseProvider {
           organizedData[vin] = {'viajep': obviaje, 'vinp': obvin, 'danoos': []};
         }
 
-        final String jsonString  = jsonEncode(organizedData);
+        // final String jsonString  = jsonEncode(organizedData);
 
-        log(jsonString.toString());
+        // log(jsonString.toString());
       }
     }
       
