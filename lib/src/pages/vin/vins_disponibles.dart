@@ -114,8 +114,12 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                     ]
                   )
                 ),
+                const SizedBox(height: 10),
                 Expanded(
-                  child: vinsDisponibles(todosVins),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: vinsDisponibles(todosVins),
+                  )
                 )
               ]
             )
@@ -126,47 +130,224 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
   }
           
   Widget vinsDisponibles(da) {
-    return da.isNotEmpty ? GridView.count(
-      padding: const EdgeInsets.only(left: 10, right: 10, top: 20),
-      childAspectRatio: 1.0,
-      crossAxisCount: 2,
-      crossAxisSpacing: 40,
-        children: List.generate(da.length, (index) {
-          return GestureDetector(
-            onTap: () async => await obtenerDatos('${da[index].vin}'),
-            child: Column(
-              children: <Widget>[
-                SizedBox(
-                  child: Icon(
-                    CupertinoIcons.car_detailed, 
-                    color: da[index].compra == 1 ? Colors.green : Colors.black,
-                    size: 90
-                  )
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+    return da.length != 0 ? ListView.builder(
+      shrinkWrap: true,
+      itemCount: da.length,
+      // physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (context, index) {
+        return  GestureDetector(
+          onTap: () async => await obtenerDatos('${da[index].vin}'),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: da[index].compra == 1 ? const Color.fromRGBO(25, 241, 38, 240) : const Color.fromRGBO(227, 227, 227, 1),
+                borderRadius: const BorderRadius.all(Radius.circular(15)),
+                boxShadow: null,
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Flexible(
-                        child: Text(
-                          '${da[index].vin}',
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 13,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'VIN',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey
+                            )
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: Text(
+                              '${da[index].vin}',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600
+                              )
+                            )
                           )
+                        ]
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Fecha Compra',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey
+                            )
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: Text(
+                              '${da[index].fecha_creacion}',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                              )
+                            )
+                          )
+                        ]
+                      )
+                    ]
+                  ),
+                  const Divider(
+                    color: Colors.black,
+                    height: 20,
+                    thickness: 1,
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        height: 61,
+                        width: 61,
+                        decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        color: Color.fromRGBO(242, 211, 0, 1),
+                        image: DecorationImage(
+                          image: AssetImage('assets/img/modelovin.png'),
+                          fit: BoxFit.fill,
+                        ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    '${da[index].modelo}' != 'null' ? '${da[index].modelo}' : 'Sin Identicar',
+                                    overflow: TextOverflow.fade,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700
+                                    )
+                                  )
+                                ),
+                                // Container(
+                                //   margin: const EdgeInsets.only(left: 16),
+                                //   decoration: BoxDecoration(
+                                //   color: Colors.black,
+                                //     borderRadius: const BorderRadius.all(
+                                //       Radius.circular(5))
+                                //     ),
+                                //   padding: const EdgeInsets.all(3),
+                                //   child: Text(
+                                //     '2019',
+                                //     style: TextStyle(
+                                //         color: Colors.blueAccent,
+                                //         fontSize: 10,
+                                //         fontWeight: FontWeight.w500),
+                                //   ),
+                                // ),
+                              ]
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text.rich(
+                                    softWrap: false,
+                                    overflow: TextOverflow.fade,
+                                    TextSpan(
+                                      text: 'Marca: ',
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.grey
+                                      ),
+                                      children: <InlineSpan>[
+                                        TextSpan(
+                                          text: '${da[index].marca}' != 'null' ? '${da[index].marca}' : 'Sin Identicar',
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.black
+                                          )
+                                        )
+                                      ]
+                                    )
+                                  )
+                                ),
+                                const SizedBox(width: 16),
+                                // Expanded(
+                                //   child: Text.rich(
+                                //     softWrap: false,
+                                //     overflow: TextOverflow.fade,
+                                //       TextSpan(
+                                //       text: 'Modelo: ',
+                                //       style: const TextStyle(
+                                //         fontSize: 12,
+                                //         fontWeight: FontWeight.w500,
+                                //         color: Colors.grey
+                                //       ),
+                                //       children: <InlineSpan>[
+                                //         TextSpan(
+                                //           text: '${da[index].modelo}',
+                                //           style: const TextStyle(
+                                //             fontSize: 12,
+                                //             fontWeight: FontWeight.w700,
+                                //             color: Colors.black
+                                //           )
+                                //         )
+                                //       ]
+                                //     )
+                                //   )
+                                // )
+                              ]
+                            ),
+                            const SizedBox(height: 12),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text.rich(
+                                    softWrap: false,
+                                    overflow: TextOverflow.fade,
+                                    TextSpan(
+                                      text: 'Comprado: ',
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.grey
+                                      ),
+                                      children: <InlineSpan>[
+                                        TextSpan(
+                                          text: da[index].compra == 1 ? 'Si' : 'No',
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.black
+                                          )
+                                        )
+                                      ]
+                                    )
+                                  )
+                                )
+                              ]
+                            )
+                          ]
                         )
                       )
                     ]
                   )
-                )
-              ]
-            )
-          );
-        }
-      )
+                ]
+              )
+            ),
+          ),
+        );
+      }
     ) : Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

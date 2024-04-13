@@ -60,6 +60,8 @@ class _DetalleVinState extends State<DetalleVin> {
                 _encabezados('Modelo: ', vi[index]['vinp']['modelo'] != null ? '${vi[index]['vinp']['modelo']}' : 'Sin Identificar'),
                 _encabezados('Comprado: ', vi[index]['vinp']['compra'] == 0 ? 'No' : 'Si'),
                 _encabezados('Viaje: ', vi[index]['vinp']['viaje'] != null ? ' ${vi[index]['vinp']['viaje']}' : 'Sin Asignar'),
+                _encabezados('Posicion: ', vi[index]['vinp']['posicion'] != null ? ' ${vi[index]['vinp']['posicion']}' : 'Sin Asignar'),
+                _encabezados('Orientacion: ', vi[index]['vinp']['orientacion'] != null ? ' ${vi[index]['vinp']['orientacion']}' : 'Sin Asignar'),
                 _encabezados('Fecha de registro: ', vi[index]['vinp']['fecha_creacion']),
                 const SizedBox(height: 10),
                 _cardDanos(vi[index]['danoos']),
@@ -206,10 +208,11 @@ class _DetalleVinState extends State<DetalleVin> {
     return ListView.builder(
       shrinkWrap: true,
       itemCount: evi.length,
+      physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         final dato = evi[index];
         return SizedBox(
-          height: 95, 
+          height: 95,
           width: 75, 
           child: WidgetZoom(
             heroAnimationTag: 'tag${dato['ide']}',

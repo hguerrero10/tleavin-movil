@@ -15,6 +15,9 @@ class ItemsProvider {
   bool loginInsertTimeOut = false;
   bool registroUser = false;
 
+  String? firmainspector;
+  String? firmainspectorlogistico;
+
   Usuario? usuario;
   String? ubicacion;
 
@@ -88,6 +91,26 @@ class ItemsProvider {
   void deleteRegistroUser() {
     itemP.registroUser = false;
     itemP.itemStreamController.sink.add(registroUser);
+  }
+
+  void addFirmaInspecctor(item) {
+    itemP.firmainspector = item;
+    itemP.itemStreamController.sink.add(firmainspector);
+  }
+
+  void deleteFirmaInspecctor() {
+    itemP.firmainspector = null;
+    itemP.itemStreamController.sink.add(firmainspector);
+  }
+
+  void addFirmaOperadorLogisticio(item) {
+    itemP.firmainspectorlogistico = item;
+    itemP.itemStreamController.sink.add(firmainspectorlogistico);
+  }
+
+  void deleteFirmaOperadorLogisticio() {
+    itemP.firmainspectorlogistico = null;
+    itemP.itemStreamController.sink.add(firmainspectorlogistico);
   }
 
 }

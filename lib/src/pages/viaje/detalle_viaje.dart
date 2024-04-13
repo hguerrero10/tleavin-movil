@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/pages/resumen_carga/salida_viaje.dart';
@@ -76,29 +77,31 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
                 _encabezados('Notas: ', '${dato['notas']}'),
                 _encabezados('VINs: ', ''),
 
+                const SizedBox(height: 10),
+
                 _vinsCard(dato['vins']),
 
-                const SizedBox(height: 10),
+                const SizedBox(height: 20),
                 ElevatedButton(
-                    onPressed: () =>  Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const ResumenViaje()), (Route<dynamic> route) => false),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
-                      minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16)
-                        )
-                      )
-                    ),
-                    child: const Text(
-                      'Firmas',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        color: Colors.white
+                  onPressed: () async => await actualizarPoOrVins(dato['vins'], vinsasiganadosylisos),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
+                    minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)
                       )
                     )
+                  ),
+                  child: const Text(
+                    'Firmas',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.white
+                    )
                   )
+                )
               ]
             ),
           ),
@@ -140,15 +143,18 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
       shrinkWrap: true,
       itemCount: inf.length,
       itemBuilder: (context, index) {
+
+        var posi = inf[index]['posicion'] ?? '';
+        var orie = inf[index]['orientacion'] ?? '';
         return GestureDetector(
           onTap: () => _dialogBuilder(context, inf[index]['vin']),
           child: SizedBox(
-            height: 110,
+            height: 120,
             child: Card(
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
+                    padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5, top: 5),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -171,50 +177,49 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
                   Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
                     child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Posicion: ',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold
-                            )
-                          ),
-                          Text(
-       '',
-                            style: const TextStyle(
-                              fontSize: 18
-                            )
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Posicion: ',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold
                           )
-                        ]
-                      )
+                        ),
+                        Text(
+                          posi,
+                          style: const TextStyle(
+                            fontSize: 18
+                          )
+                        )
+                      ]
+                    )
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
                     child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Orientacion: ',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold
-                            )
-                          ),
-                          Text(
-                            '',
-                            style: const TextStyle(
-                              fontSize: 18
-                            )
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Orientacion: ',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold
                           )
-                        ]
-                      ),
-                      
+                        ),
+                        Text(
+                          orie,
+                          style: const TextStyle(
+                            fontSize: 18
+                          )
+                        )
+                      ]
                     )
+                  )
                 ]
               )
             )
-          ),
+          )
         );
       }
     );
@@ -322,7 +327,7 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
                       )
                     ),
                     onChanged: (oc) {
-                        setState(() {
+                      setState(() {
                         orientacionSeleccionada = oc;
                       });
                     },
@@ -334,16 +339,14 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
           actions: <Widget>[
             TextButton(
               style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
+                textStyle: Theme.of(context).textTheme.labelLarge
               ),
               child: const Text('Cerrar'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              onPressed: () => Navigator.of(context).pop()
             ),
             TextButton(
               style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
+                textStyle: Theme.of(context).textTheme.labelLarge
               ),
               child: const Text('Guardar'),
               onPressed: () {
@@ -353,36 +356,55 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
                   orientacion: orientacionSeleccionada
                 );
 
-
                 vinsasiganadosylisos.add(vinsPoOr);
                 log(vinsasiganadosylisos.toString());
 
-                setState(() {
-                          versiyaesta = vinsasiganadosylisos.indexWhere((st) => st.vin == vi);
-                });
                 Navigator.of(context).pop();
               }
-            ),
-          ],
+            )
+          ]
         );
-      },
+      }
     );
   }
 
-  actualizarPoOrVins(v, p, o) async {
-    var vinsPoOr = (
-      vin: v,
-      posicion: p,
-      orientacion: o
-    );
+  actualizarPoOrVins(ori, lista) async {
+    var inf ;
+    for(var di in ori){
+      inf = di;
+    }
 
-    log(vinsPoOr.toString());
+    log(inf.length.toString());
+    log(lista.length.toString());
 
-    await DatabaseProvider.db.asignarPoOrVIN(vinsPoOr).then((value) {
-      log('vin asignado PoOr');
-    }).timeout(const Duration(seconds: 30), onTimeout: () {
-      itemP.addError();
-    });
+    if(inf.length == lista.length) {
+      for(var o in lista) {
+        var vinsPoOr = (
+          vin: o.vin,
+          posicion: o.posicion,
+          orientacion: o.orientacion
+        );
+
+        await DatabaseProvider.db.asignarPoOrVIN(vinsPoOr).then((value) {
+        log('vin asignado PoOr');
+        }).timeout(const Duration(seconds: 30), onTimeout: () {
+          itemP.addError();
+        });
+
+        
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const ResumenViaje()), (Route<dynamic> route) => false);
+      }
+    }
+    else {
+      Fluttertoast.showToast(
+        msg: "Pendiente de Posicion y Orientacion",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 20
+      );
+    }
   }
-
 }

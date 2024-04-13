@@ -8,14 +8,14 @@ import 'dart:ui' as ui;
 
 import 'package:tleavin_mobil/provider/items_provider.dart';
 
-class FirmaInspectorWidget extends StatefulWidget {
-  const FirmaInspectorWidget({ Key? key }) : super(key: key);
+class FirmaOpLogicoWidget extends StatefulWidget {
+  const FirmaOpLogicoWidget({ Key? key }) : super(key: key);
 
   @override
-  State<FirmaInspectorWidget> createState() => _FirmaInspectorWidgetState();
+  State<FirmaOpLogicoWidget> createState() => _FirmaOpLogicoWidgetState();
 }
 
-class _FirmaInspectorWidgetState extends State<FirmaInspectorWidget> {
+class _FirmaOpLogicoWidgetState extends State<FirmaOpLogicoWidget> {
 
   final GlobalKey<SfSignaturePadState> _signaturePadKey = GlobalKey();
 
@@ -86,6 +86,6 @@ class _FirmaInspectorWidgetState extends State<FirmaInspectorWidget> {
     ui.Image data = await _signaturePadKey.currentState!.toImage(pixelRatio: 2.0);
     final byteData = await data.toByteData(format: ui.ImageByteFormat.png);
     final Uint8List imageBytes = byteData!.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes);
-    itemP.addFirmaInspecctor(base64Encode(imageBytes));
+    itemP.addFirmaOperadorLogisticio(base64Encode(imageBytes));
   }
 }
