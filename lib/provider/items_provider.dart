@@ -16,10 +16,30 @@ class ItemsProvider {
   bool registroUser = false;
 
   String? firmainspector;
-  String? firmainspectorlogistico;
+  String? firmaOperadorLogistico;
+  String? firmaOperador;
 
   Usuario? usuario;
   String? ubicacion;
+
+
+
+
+  bool danoAreaInsert = false;
+  bool danoAreaInsertTimeOut = false;
+  bool registroAreaDano = false;
+
+  bool tipoAreaInsert = false;
+  bool tipoAreaInsertTimeOut = false;
+  bool registroTipoDano = false;
+
+  bool severidadInsert = false;
+  bool severidadInsertTimeOut = false;
+  bool registroSeveridad = false;
+
+  bool clienteInsert = false;
+  bool clienteInsertTimeOut = false;
+  bool registroCliente = false;
 
   void addUser(Usuario item) {
     if(item.toString().isNotEmpty) {
@@ -63,7 +83,7 @@ class ItemsProvider {
     itemP.itemStreamController.sink.add(error);
   }
 
-    void addLoginInsert() {
+  void addLoginInsert() {
     itemP.loginInsert = true;
     itemP.itemStreamController.sink.add(loginInsert);
   }
@@ -104,13 +124,186 @@ class ItemsProvider {
   }
 
   void addFirmaOperadorLogisticio(item) {
-    itemP.firmainspectorlogistico = item;
-    itemP.itemStreamController.sink.add(firmainspectorlogistico);
+    itemP.firmaOperadorLogistico = item;
+    itemP.itemStreamController.sink.add(firmaOperadorLogistico);
   }
 
   void deleteFirmaOperadorLogisticio() {
-    itemP.firmainspectorlogistico = null;
-    itemP.itemStreamController.sink.add(firmainspectorlogistico);
+    itemP.firmaOperadorLogistico = null;
+    itemP.itemStreamController.sink.add(firmaOperadorLogistico);
+  }
+
+  void addFirmaOperador(item) {
+    itemP.firmaOperador = item;
+    itemP.itemStreamController.sink.add(firmaOperador);
+  }
+
+  void deleteFirmaOperador() {
+    itemP.firmaOperador = null;
+    itemP.itemStreamController.sink.add(firmaOperador);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  void addDanoAreaInsert() {
+    itemP.danoAreaInsert = true;
+    itemP.itemStreamController.sink.add(danoAreaInsert);
+  }
+
+  void deleteAreaDanonsert() {
+    itemP.danoAreaInsert = false;
+    itemP.itemStreamController.sink.add(danoAreaInsert);
+  }
+
+  void addAreaDanoInsertTimeOut() {
+    itemP.danoAreaInsertTimeOut = true;
+    itemP.itemStreamController.sink.add(danoAreaInsertTimeOut);
+  }
+
+  void deleteAreaDanoInsertTimeOut() {
+    itemP.danoAreaInsertTimeOut = false;
+    itemP.itemStreamController.sink.add(danoAreaInsertTimeOut);
+  }
+
+  void addRegistroAreaDano() {
+    itemP.registroAreaDano = true;
+    itemP.itemStreamController.sink.add(registroAreaDano);
+  }
+
+  void deleteRegistroAreaDano() {
+    itemP.registroAreaDano = false;
+    itemP.itemStreamController.sink.add(registroAreaDano);
+  }
+
+
+
+
+
+
+  void addTipoDanoInsert() {
+    itemP.tipoAreaInsert = true;
+    itemP.itemStreamController.sink.add(tipoAreaInsert);
+  }
+
+  void deleteTipoDanoinsert() {
+    itemP.tipoAreaInsert = false;
+    itemP.itemStreamController.sink.add(tipoAreaInsert);
+  }
+
+  void addTipoDanoInsertTimeOut() {
+    itemP.tipoAreaInsertTimeOut = true;
+    itemP.itemStreamController.sink.add(tipoAreaInsertTimeOut);
+  }
+
+  void deleteTipoDanoInsertTimeOut() {
+    itemP.tipoAreaInsertTimeOut = false;
+    itemP.itemStreamController.sink.add(tipoAreaInsertTimeOut);
+  }
+
+  void addRegistroTipoDano() {
+    itemP.registroTipoDano = true;
+    itemP.itemStreamController.sink.add(registroTipoDano);
+  }
+
+  void deleteRegistroTipoDano() {
+    itemP.registroTipoDano = false;
+    itemP.itemStreamController.sink.add(registroTipoDano);
+  }
+
+
+
+
+
+
+
+
+  void addSeveridadInsert() {
+    itemP.severidadInsert = true;
+    itemP.itemStreamController.sink.add(severidadInsert);
+  }
+
+  void deleteSeveridadInsert() {
+    itemP.severidadInsert = false;
+    itemP.itemStreamController.sink.add(severidadInsert);
+  }
+
+  void addSeveridadInsertTimeOut() {
+    itemP.severidadInsertTimeOut = true;
+    itemP.itemStreamController.sink.add(severidadInsertTimeOut);
+  }
+
+  void deleteSeveridadInsertTimeOut() {
+    itemP.severidadInsertTimeOut = false;
+    itemP.itemStreamController.sink.add(severidadInsertTimeOut);
+  }
+
+  void addRegistroSeveridad() {
+    itemP.registroSeveridad = true;
+    itemP.itemStreamController.sink.add(registroSeveridad);
+  }
+
+  void deleteRegistroSeveridad() {
+    itemP.registroSeveridad = false;
+    itemP.itemStreamController.sink.add(registroSeveridad);
+  }
+
+
+
+
+
+  void addClienteInsert() {
+    itemP.clienteInsert = true;
+    itemP.itemStreamController.sink.add(clienteInsert);
+  }
+
+  void deleteClienteInsert() {
+    itemP.clienteInsert = false;
+    itemP.itemStreamController.sink.add(clienteInsert);
+  }
+
+  void addClienteInsertTimeOut() {
+    itemP.clienteInsertTimeOut = true;
+    itemP.itemStreamController.sink.add(clienteInsertTimeOut);
+  }
+
+  void deleteClienteInsertTimeOut() {
+    itemP.clienteInsertTimeOut = false;
+    itemP.itemStreamController.sink.add(clienteInsertTimeOut);
+  }
+
+  void addRegistroCliente() {
+    itemP.registroCliente = true;
+    itemP.itemStreamController.sink.add(registroCliente);
+  }
+
+  void deleteRegistroCliente() {
+    itemP.registroCliente = false;
+    itemP.itemStreamController.sink.add(registroCliente);
   }
 
 }

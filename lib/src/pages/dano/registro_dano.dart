@@ -391,7 +391,7 @@ class _RegistroDanoState extends State<RegistroDano> {
     try {
       await DatabaseProvider.db.obtenerAreaDano().then((value) {
         setState(() {
-          listaAreaDanos = value.map((item) => ListasA(valor: item.id.toString(), texto: '${item.id} : ${item.descripcion}')).toList();
+          listaAreaDanos = value.map((item) => ListasA(valor: item.id.toString(), texto: '${item.codigo} : ${item.descripcion}')).toList();
         });
       });
 
@@ -403,7 +403,7 @@ class _RegistroDanoState extends State<RegistroDano> {
 
       await DatabaseProvider.db.obtenerSeveridad().then((value) {
         setState(() {
-          listaSeveridad = value.map((item) => ListasS(valor: item.id.toString(), texto: '${item.id} : ${item.descripcion}')).toList();
+          listaSeveridad = value.map((item) => ListasS(valor: item.id.toString(), texto: '${item.id} : ${item.tipo}')).toList();
         });
       });
     } 

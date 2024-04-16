@@ -4,6 +4,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tleavin_mobil/database/db.dart';
+import 'package:tleavin_mobil/model/viaje.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/pages/resumen_carga/salida_viaje.dart';
 
@@ -20,6 +21,8 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
 
   var vinsasiganadosylisos = [];
   var versiyaesta;
+
+  Viaje? resumenviaje;
 
   @override
   void initState() {
@@ -61,6 +64,36 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
       itemCount: invi.length,
       itemBuilder: (context, index) {
         final dato = invi[index]['viaje'];
+
+
+
+
+        resumenviaje = Viaje(
+          idviaje: dato['idviaje'],
+          supervisor: dato['supervisor'],
+          folio_bitacora: dato['folio_bitacora'],
+          cartaporte: dato['cartaporte'],
+          bitacora_fecha_carga: dato['bitacora_fecha_carga'],
+          num_eco_unidad: dato['num_eco_unidad'],
+          nombre_operador: dato['nombre_operador'],
+          cliente_clave: dato['cliente_clave'],
+          cliente_nombre: dato['cliente_nombre'],
+          ruta_clave: dato['ruta_clave'],
+          ruta_nombre: dato['ruta_nombre'],
+          origen: dato['origen'],
+          destino: dato['destino'],
+          etiqueta: dato['etiqueta'],
+          status_carga: dato['status_carga'],
+          notas: dato['notas'],
+          registrada_por: dato['registrada_por'],
+          tipo_viaje: dato['tipo_viaje'],
+          semana: dato['semana'],
+          fecha_creacion: dato['fecha_creacion'],
+          fecha_sync: dato['fecha_sync']
+        );
+
+
+
         return SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(15),
@@ -392,7 +425,7 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
         });
 
         
-                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const ResumenViaje()), (Route<dynamic> route) => false);
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenViaje(viaje: resumenviaje)), (Route<dynamic> route) => false);
       }
     }
     else {

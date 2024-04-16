@@ -1,11 +1,13 @@
+import 'dart:io';
+import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/usuario.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/home/inicio.dart';
-// import 'package:tleavin_mobil/src/startup/register/register_screen.dart';
+import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
-import 'dart:developer';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -16,9 +18,10 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
 
-  Usuario nuevousuario = Usuario();
-
   Usuario? usuario;
+
+  String urlUsuariosAppServer = 'http://api-pruebas.tlea.online/obtenerUsuarios';
+  Usuario? usuarioInsertList;
 
   final TextEditingController _userController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -26,9 +29,105 @@ class _LoginFormState extends State<LoginForm> {
   bool pass = false;
   bool get isPopulated => _userController.text.isNotEmpty && _passwordController.text.isNotEmpty;
 
+  Future obtenerUsuariosAppServer() async {
+    var responseData;
+    try{
+      final result = await InternetAddress.lookup('api-pruebas.tlea.online');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+
+        try{
+          await http.get(Uri.parse(urlUsuariosAppServer),headers: {"Content-Type" : "application/json"}).then((value) async {
+            if(value.statusCode == 200) {
+              Fluttertoast.showToast(
+                msg: "Conexion Exitosa al Servidor",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+                fontSize: 20
+              );
+
+              responseData = json.decode(value.body);
+              await DatabaseProvider.db.borrarBDUsuarios();
+              for(var value in responseData['Usuarios']) {
+                usuarioInsertList = null;
+                usuarioInsertList = Usuario(
+                  numeroEmpleado: value['numeroEmpleado'],
+                  usuario: value['usuario'],
+                  nombre: value['nombre'],
+                  password: value['password'],
+                  isLogged: 0,
+                  cargo: value['cargo'],
+                  locacion: value['locacion'],
+                  estado: value['estado']
+                );
+                log('Usuario');
+                log(usuarioInsertList.toString());
+                await DatabaseProvider.db.insertarUsuario(usuarioInsertList!);
+              }
+
+              itemP.addLoginInsert();
+            } 
+            else {
+              itemP.addLoginInsertTimeOut();
+              itemP.addRegistroUser();
+              Fluttertoast.showToast(
+                msg: "Conexion sin Exito al Servidor",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+                fontSize: 20
+              );
+            }
+          }).timeout(const Duration(seconds: 15), onTimeout: () {
+            itemP.addLoginInsertTimeOut();
+            itemP.addRegistroUser();
+            Fluttertoast.showToast(
+              msg: "Conexion sin Exito al Servidor",
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 20
+            );
+          });
+        } 
+        catch (e) {
+          Fluttertoast.showToast(
+            msg: "Conexion sin Exito al Servidor",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 20
+          );
+          itemP.addRegistroUser();
+          itemP.addLoginInsertTimeOut();
+        }
+      }
+    } on SocketException catch (_) {
+      itemP.addLoginInsertTimeOut();
+      itemP.addRegistroUser();
+      Fluttertoast.showToast(
+        msg: "Conexion sin Exito al Servidor",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 20
+      );
+    }
+  }
+
   @override
   void initState() {
-    crearUsuario();
+    obtenerUsuariosAppServer();
 
     super.initState();
   }
@@ -43,62 +142,45 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        bottom: false,
-        top: false,
-        child: StreamBuilder(
-          stream: itemP.getStream,
-          initialData: itemP.registroUser,
-          builder:(context, snapshot) {
-          return Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                opacity: 95,
-                image: AssetImage("assets/img/fondo_login.jpg"),
-                fit: BoxFit.cover
-              ),
-            ),
-            child: SizedBox(
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Align(
-                    alignment: FractionalOffset.bottomCenter,
-                    child: Wrap(
-                      children: [
+      body: Stack(
+        children: <Widget>[
+          Container(
+            decoration: const BoxDecoration(image: DecorationImage(image: AssetImage("assets/img/fondo_register.jpg"), fit: BoxFit.cover)),
+          ),
+          SingleChildScrollView(
+            child: StreamBuilder(
+              stream: itemP.getStream,
+              initialData: itemP.registroUser,                                
+              builder:(context, snapshot) {
+                return Container(
+                  color: Colors.transparent,
+                  child: Column(
+                    children: <Widget>[
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 200),
+                          padding: const EdgeInsets.only(bottom: 220),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Image.asset('assets/img/logo_tlea.png', width: 270, height: 220),
-                            ],
-                          ),
+                              Image.asset('assets/img/logo_tlea.png', width: 270, height: 220)
+                            ]
+                          )
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 5, bottom: 5),
-                          child: _input('Usuario', 'Usuario invalido', TextInputType.text, _userController, Icons.person, false, false),
+                          child: _input('Usuario', 'Usuario invalido', TextInputType.text, _userController, Icons.person, false, false)
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 5, bottom: 5),
-                          child: _inputPassword('Contraseña', 'Contraseña invalida', TextInputType.visiblePassword, _passwordController, Icons.vpn_key_outlined),
+                          child: _inputPassword('Contraseña', 'Contraseña invalida', TextInputType.visiblePassword, _passwordController, Icons.vpn_key_outlined)
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 15, bottom: 40),
-                          child: _buttons('Iniciar Sesion', const Color.fromRGBO(242, 211, 0, 1)  , () => {
-                            // Navigator.of(context).push(
-                            //     MaterialPageRoute(builder: (context) {
-                            //       return const InicioScreen();
-                            //     }
-                            //   )
-                            // )
-          
+                          child: _buttons('Iniciar Sesion', const Color.fromRGBO(242, 211, 0, 1), () => {
                             if(_userController.text.isNotEmpty && _passwordController.text.isNotEmpty) {
-                              // animacionEnviar();  
                               login()
                             } 
                             else {
-                                Fluttertoast.showToast(
+                              Fluttertoast.showToast(
                                 msg: "Favor de llenar los campos",
                                 toastLength: Toast.LENGTH_LONG,
                                 gravity: ToastGravity.BOTTOM,
@@ -108,51 +190,16 @@ class _LoginFormState extends State<LoginForm> {
                                 fontSize: 20
                               )
                             }
-                          }),
-                        ),
-                        // Padding(
-                        //   padding: const EdgeInsets.only(left:15, right: 15),
-                        //   child: Row(
-                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //     children: <Widget>[
-                        //       TextButton(
-                        //         child: const Text(
-                        //           'Crear cuenta',
-                        //           style: TextStyle(
-                        //             color: Colors.white,
-                        //           )
-                        //         ),
-                        //         onPressed: () {
-                        //           Navigator.of(context).push(
-                        //             MaterialPageRoute(builder: (context) {
-                        //               return RegisterScreen(
-                        //                 // userRepository: _userRepository,
-                        //               );
-                        //             }
-                        //           )
-                        //         );
-                        //         },
-                        //       ),
-                        //       // TextButton(
-                        //       //   child: const Text(
-                        //       //     'Restablecer contraseña',
-                        //       //     style: TextStyle(
-                        //       //       color: Colors.white,
-                        //       //     )
-                        //       //   ),
-                        //       //   onPressed: () {},
-                        //       // ),
-                        //     ],
-                        //   ),
-                        // )
-                      ]
-                    )
+                          }
+                        )
+                      )
+                    ]
                   )
-                ]
-              )
+                );
+              }
             )
-          );
-        })
+          )
+        ]
       )
     );
   }
@@ -207,27 +254,6 @@ class _LoginFormState extends State<LoginForm> {
     ],
   );
 
-  crearUsuario() async {
-    nuevousuario = Usuario(
-      numeroEmpleado: 2044,
-      nombre: 'Hugo Guerrero',
-      usuario: 'h_guerrero', 
-      password: 'Hugo1010', 
-      isLogged: 0,
-      cargo: 'Desarrollador',
-      locacion: 'Salinas',
-      estado: 'A'
-    );
-
-    try{
-      await DatabaseProvider.db.insertarUsuario(nuevousuario);
-      log('insertado');
-    } 
-    catch (e) {
-      log('error => $e');
-    }
-  }
-
   Widget _input(String placeholder, String mensaje, TextInputType tipo, TextEditingController controller, IconData icon, [bool isPassword = false, bool isfocus = false]) {
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -251,12 +277,15 @@ class _LoginFormState extends State<LoginForm> {
                 icon: Icon(icon, color: Colors.white),
                 border: InputBorder.none,
                 hintText: placeholder,
-                hintStyle: const TextStyle(color: Colors.white, fontSize: 17),
-              ),
-            ),
-          ),
-        ],
-      ),
+                hintStyle: const TextStyle(
+                  color: Colors.white, 
+                  fontSize: 17
+                )
+              )
+            )
+          )
+        ]
+      )
     );
   }
 

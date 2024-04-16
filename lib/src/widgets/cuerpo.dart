@@ -69,8 +69,15 @@ class _CuerpoState extends State<Cuerpo> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Text(
+                    'version: 0.20.0',
+                    style:  TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[400]
+                    ),
+                  ),
                   SizedBox(
                     width:10,
                     height:10,
@@ -130,10 +137,10 @@ class _CuerpoState extends State<Cuerpo> {
                   Text(
                     itemP.usuario!.locacion!,
                     style: const TextStyle(
-                      fontSize: 19,
-                    ),
-                  ),
-                ],
+                      fontSize: 19
+                    )
+                  )
+                ]
               ),
               const Divider(
                 color: Colors.black,

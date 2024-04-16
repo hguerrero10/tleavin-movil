@@ -49,7 +49,7 @@ class DatabaseProvider {
         );
 
         await db.execute(
-          "CREATE TABLE evidencia (ide INTEGER PRIMARY KEY AUTOINCREMENT, vin VARCHAR, iddano INTEGER, nombre VARCHAR, archivo TEXT, fechahora DATE)"
+          "CREATE TABLE evidencia (ide INTEGER PRIMARY KEY AUTOINCREMENT, vin VARCHAR, iddano INTEGER, idviaje INTEGER, nombre VARCHAR, archivo TEXT, fechahora DATE)"
         );
 
 
@@ -65,7 +65,7 @@ class DatabaseProvider {
         );
 
         await db.execute(
-          "CREATE TABLE area_dano (id INTEGER PRIMARY KEY AUTOINCREMENT, area VARCHAR, descripcion VARCHAR)"
+          "CREATE TABLE area_dano (id INTEGER PRIMARY KEY AUTOINCREMENT, codigo INTEGER, area VARCHAR, descripcion VARCHAR)"
         );
 
         await db.execute(
@@ -122,6 +122,11 @@ class DatabaseProvider {
     }
 
     return listaUsuarios;
+  }
+
+  Future borrarBDUsuarios() async {
+    final db = await database;
+    return db.delete('usuario');
   }
 
   // CRUD VINS
@@ -529,6 +534,26 @@ class DatabaseProvider {
     int res = await db.insert("severidad", nuevoRegistro.toMap());
 
     return res;
+  }
+
+  Future borrarBDAreaDano() async {
+    final db = await database;
+    return db.delete('area_dano');
+  }
+
+  Future borrarBDTipoDano() async {
+    final db = await database;
+    return db.delete('tipo_dano');
+  }
+
+  Future borrarBDSeveridad() async {
+    final db = await database;
+    return db.delete('severidad');
+  }
+
+  Future borrarBDCliente() async {
+    final db = await database;
+    return db.delete('cliente');
   }
 
   // CRUD VIAJES

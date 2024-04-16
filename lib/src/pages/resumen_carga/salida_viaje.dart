@@ -1,16 +1,19 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/evidencia.dart';
+import 'package:tleavin_mobil/model/viaje.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/home/inicio.dart';
 import 'package:tleavin_mobil/src/pages/resumen_carga/widget/firma_inspector.dart';
+import 'package:tleavin_mobil/src/pages/resumen_carga/widget/firma_operador.dart';
+import 'package:tleavin_mobil/src/pages/resumen_carga/widget/firma_operadorLogico.dart';
 
 class ResumenViaje extends StatefulWidget {
-  const ResumenViaje({super.key});
+  final Viaje? viaje;
+  const ResumenViaje({super.key,  this.viaje});
 
   @override
   State<ResumenViaje> createState() => _ResumenViajeState();
@@ -29,7 +32,6 @@ class _ResumenViajeState extends State<ResumenViaje> {
     formatWH = DateFormat('yyyy/MM/dd HH:mm:ss'); 
     fechaH = formatWH.format(DateTime.now());
 
-    
     super.initState();
   }
 
@@ -66,18 +68,15 @@ class _ResumenViajeState extends State<ResumenViaje> {
                 const SizedBox(height: 30),
                 
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: ((context) => const FirmaInspectorWidget())));
-                  },
+                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: ((context) => const FirmaInspectorWidget()))),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
                     padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
-                    // minimumSize: MaterialStateProperty.all<Size>(const Size(, 50)),
                     shape: MaterialStateProperty.all(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16)
                       )
-                    ),
+                    )
                   ),
                   child: const Row(
                     children: [
@@ -101,9 +100,7 @@ class _ResumenViajeState extends State<ResumenViaje> {
                 Row(
                   children: [
                     ElevatedButton(
-                      onPressed: () {
-                        
-                      },
+                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: ((context) => const FirmaOpLogicoWidget()))),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
                         padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
@@ -118,12 +115,45 @@ class _ResumenViajeState extends State<ResumenViaje> {
                         children: [
                           Icon(
                             Icons.edit_outlined,
-                            color: Colors.white,
-                            // size: 20,
+                            color: Colors.white
                           ),
                           SizedBox(width: 10),
                           Text(
                             'Firma Operador Logistico',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white
+                            )
+                          )
+                        ]
+                      )
+                    )
+                  ]
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: ((context) => const FirmaOperadorWidget()))),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
+                        // minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16)
+                          ),
+                        ),
+                      ),
+                      child: const Row(
+                        children: [
+                          Icon(
+                            Icons.person,
+                            color: Colors.white
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            'Firma Operador',
                             style: TextStyle(
                               fontSize: 20,
                               color: Colors.white
@@ -164,13 +194,13 @@ class _ResumenViajeState extends State<ResumenViaje> {
   }
 
   guardarFirmasySalida() async {
-    var firmascolectadas = [itemP.firmainspector, itemP.firmainspectorlogistico];
+    var firmascolectadas = [itemP.firmainspector, itemP.firmaOperadorLogistico, itemP.firmaOperador];
 
     for(var ed in firmascolectadas) {
       evidencia = Evidencia(
         vin: null,
         iddano: null,
-        // idviaje: null,
+        idviaje: null, //crear campo en modelo y db solo con el id y nombre la armamos
         nombre: null,
         archivo: ed,
         fechahora: fechaH
@@ -182,7 +212,7 @@ class _ResumenViajeState extends State<ResumenViaje> {
       }).timeout(const Duration(seconds: 60), onTimeout: () {
         itemP.addError();
       });
-    }     
+    }
   }
 
   Future<void> _dialogBuilder(BuildContext context) {

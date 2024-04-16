@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/database/db.dart';
-import 'package:tleavin_mobil/model/areaDano.dart';
-import 'package:tleavin_mobil/model/cliente.dart';
-import 'package:tleavin_mobil/model/severidad.dart';
-import 'package:tleavin_mobil/model/tipo_dano.dart';
 import 'package:tleavin_mobil/model/usuario.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/pages/sincronizacion/enviar.dart';
@@ -14,7 +10,6 @@ import 'package:tleavin_mobil/src/pages/vin/vins_disponibles.dart';
 import 'package:tleavin_mobil/src/startup/login/login_form.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:flutter/cupertino.dart';
-import 'dart:developer';
 // import 'package:tleavin_mobil/src/widgets/drawer.dart';
 
 class InicioScreen extends StatefulWidget {
@@ -27,15 +22,9 @@ class InicioScreen extends StatefulWidget {
 class _InicioScreenState extends State<InicioScreen> {
 
   Usuario usuario = Usuario();
-  AreaDano areadano = AreaDano();
-  TipoDano tipodano = TipoDano();
-  Severidad severidad = Severidad();
-  Cliente cliente = Cliente();
 
   @override
   void initState() {
-
-    registrarAreaDano();
 
     super.initState();
   }
@@ -155,68 +144,6 @@ class _InicioScreenState extends State<InicioScreen> {
       builder: (context) => const LoginForm()),
       (Route<dynamic> route) => false
     );
-  }
-
-  registrarAreaDano() async {
-    areadano = AreaDano(
-      area: 'L-Izquierdo', 
-      descripcion: 'TAPA DE GASOLINA/PUERTA DE CARGA DE BATERIA'
-    );
-
-    tipodano = TipoDano(
-      descripcion: 'DOBLADO'
-    );
-
-    severidad = Severidad(
-      tipo: 'HASTA E INCLUYENDO 1" DE LARGO/DIÁMETRO',
-      descripcion: 'MENOS DE 2,5 CM',
-    );
-
-    var cliente1 = Cliente(
-      idAdvan: 10,
-      cliente: 'AMERICAN HONDA',
-    );
-
-    var cliente2 = Cliente(
-      idAdvan: 11,
-      cliente: 'AUDI',
-    );
-
-    var cliente3 = Cliente(
-      idAdvan: 12,
-      cliente: 'BMW',
-    );
-
-    var cliente4 = Cliente(
-      idAdvan: 13,
-      cliente: 'CHIREY',
-    );
-
-    try{
-      await DatabaseProvider.db.insertarAreaDano(areadano);
-      log('insertado are');
-
-      await DatabaseProvider.db.insertarTipoDano(tipodano);
-      log('insertado tipo');
-
-      await DatabaseProvider.db.insertarSeveridad(severidad);
-      log('insertado severidad');
-
-      await DatabaseProvider.db.insertarCliente(cliente1);
-      log('insertado cli');
-  
-      await DatabaseProvider.db.insertarCliente(cliente2);
-      log('insertado clie');
-
-      await DatabaseProvider.db.insertarCliente(cliente3);
-      log('insertado clie');
-
-      await DatabaseProvider.db.insertarCliente(cliente4);
-      log('insertado clie');
-    } 
-    catch (e) {
-      log('error => $e');
-    }
   }
 
   Widget _cuadricula1() {

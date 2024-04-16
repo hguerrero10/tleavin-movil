@@ -2,6 +2,7 @@ class Evidencia{
   int? ide;
   String? vin;
   int? iddano;
+  int? idviaje;
   String? nombre;
   String? archivo;
   String? fechahora;
@@ -10,6 +11,7 @@ class Evidencia{
     this.ide,
     this.vin,
     this.iddano,
+    this.idviaje,
     this.nombre,
     this.archivo,
     this.fechahora
@@ -17,13 +19,14 @@ class Evidencia{
 
   @override
   String toString() {
-    return 'Evidencia { vin: $vin, iddano: $iddano, nombre: $nombre, archivo: $archivo, fechahora: $fechahora, ide: $ide }';
+    return 'Evidencia { vin: $vin, iddano: $iddano, idviaje: $idviaje, nombre: $nombre, archivo: $archivo, fechahora: $fechahora, ide: $ide }';
   }
 
   factory Evidencia.fromMap(Map<String, dynamic> map) => Evidencia(
     ide: map['ide'],
     vin: map['vin'].toString(),
     iddano: map['iddano'],
+    idviaje: map['idviaje'],
     nombre: map['nombre'].toString(),
     archivo: map['archivo'].toString(),
     fechahora: map['fechahora'].toString()
@@ -33,6 +36,7 @@ class Evidencia{
     "ide": ide,
     "vin": vin,
     "iddano": iddano,
+    "idviaje": idviaje,
     "nombre": nombre,
     "archivo": archivo,
     "fechahora": fechahora
