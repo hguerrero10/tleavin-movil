@@ -423,6 +423,21 @@ class DatabaseProvider {
     return listaEvidencia;
   }
   
+  Future<List> verEvidenciaDeViaje(idvi) async {
+    final db = await database;
+    List eviden = [];
+    var res = await db.query("evidencia where idviaje = '$idvi'");
+
+    if (res.isNotEmpty) {
+      eviden.addAll(res);
+    }
+
+    if(eviden.isEmpty) {
+      eviden = [];
+    }
+
+    return eviden;
+  }
   // CRUD DISPOSITIVOS
   
   Future<int> insertarDispositivo(Dispositivo nuevoRegistro) async {

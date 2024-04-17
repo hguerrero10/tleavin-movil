@@ -18,6 +18,7 @@ class Viaje{
   String? registrada_por;
   String? tipo_viaje;
   int? semana;
+  String? estadoViaje;
   String? fecha_creacion;
   String? fecha_sync;
 
@@ -41,13 +42,14 @@ class Viaje{
     this.registrada_por,
     this.tipo_viaje,
     this.semana,
+    this.estadoViaje,
     this.fecha_creacion,
     this.fecha_sync
   });
 
   @override
   String toString() {
-    return 'Viaje { supervisor: $supervisor, folio_bitacora: $folio_bitacora, cartaporte: $cartaporte, bitacora_fecha_carga: $bitacora_fecha_carga, num_eco_unidad: $num_eco_unidad, nombre_operador: $nombre_operador, cliente_nombre: $cliente_nombre, cliente_clave: $cliente_clave, ruta_clave: $ruta_clave, ruta_nombre: $ruta_nombre, origen: $origen, destino: $destino, etiqueta: $etiqueta, status_carga: $status_carga, notas: $notas, registrada_por: $registrada_por, tipo_viaje: $tipo_viaje, semana: $semana, fecha_creacion: $fecha_creacion, fecha_sync: $fecha_sync, idviaje: $idviaje }';
+    return 'Viaje { supervisor: $supervisor, folio_bitacora: $folio_bitacora, cartaporte: $cartaporte, bitacora_fecha_carga: $bitacora_fecha_carga, num_eco_unidad: $num_eco_unidad, nombre_operador: $nombre_operador, cliente_nombre: $cliente_nombre, cliente_clave: $cliente_clave, ruta_clave: $ruta_clave, ruta_nombre: $ruta_nombre, origen: $origen, destino: $destino, etiqueta: $etiqueta, status_carga: $status_carga, notas: $notas, registrada_por: $registrada_por, tipo_viaje: $tipo_viaje, semana: $semana, estadoViaje: $estadoViaje, fecha_creacion: $fecha_creacion, fecha_sync: $fecha_sync, idviaje: $idviaje }';
   }
 
   factory Viaje.fromMap(Map<String, dynamic> map) => Viaje(
@@ -70,6 +72,7 @@ class Viaje{
     registrada_por: map['registrada_por'].toString(),
     tipo_viaje: map['tipo_viaje'].toString(),
     semana: map['semana'],
+    estadoViaje: map['estadoViaje'].toString(),
     fecha_creacion: map['fecha_creacion'].toString(),
     fecha_sync: map['fecha_sync'].toString()
   );
@@ -94,6 +97,7 @@ class Viaje{
     "registrada_por": registrada_por,
     "tipo_viaje": tipo_viaje,
     "semana": semana,
+    "estadoViaje": estadoViaje,
     "fecha_creacion": fecha_creacion,
     "fecha_sync": fecha_sync
   };

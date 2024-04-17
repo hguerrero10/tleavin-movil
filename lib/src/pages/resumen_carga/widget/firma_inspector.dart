@@ -44,7 +44,7 @@ class _FirmaInspectorWidgetState extends State<FirmaInspectorWidget> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Firma de conformidad'),
+        title: const Text('Firma de Inspector'),
         backgroundColor: Colors.white,
         elevation: 0,
         actions: [

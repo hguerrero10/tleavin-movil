@@ -21,10 +21,11 @@ class ResumenViaje extends StatefulWidget {
 
 class _ResumenViajeState extends State<ResumenViaje> {
 
-  var firmas = [];
   Evidencia? evidencia;
+  var firmas = [];
   var formatWH;
   var fechaH;
+  var firmascolectadas = [];
 
   @override
   void initState() {
@@ -32,14 +33,16 @@ class _ResumenViajeState extends State<ResumenViaje> {
     formatWH = DateFormat('yyyy/MM/dd HH:mm:ss'); 
     fechaH = formatWH.format(DateTime.now());
 
+    log(widget.viaje.toString());
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
+      canPop: false,
       onPopInvoked: (g) {
-
       },
       child: Scaffold(
         appBar: AppBar(
@@ -59,16 +62,19 @@ class _ResumenViajeState extends State<ResumenViaje> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 const SizedBox(height: 10),
-                const Text('Unidad: TLEA-458', style: TextStyle(fontSize: 18.0)),
-                const Text('Bitacora: 789654', style: TextStyle(fontSize: 18.0)),
-                const Text('Carta Porte: CMTY-745632', style: TextStyle(fontSize: 18.0)),
-                const Text('Cliente: Mazda', style: TextStyle(fontSize: 18.0)),
-                const Text('Origen: ', style: TextStyle(fontSize: 18.0)),
-                const Text('Destino: ', style: TextStyle(fontSize: 18.0)),
+
+                _encabezados('Unidad: ', widget.viaje!.num_eco_unidad!),
+                _encabezados('Operador: ', widget.viaje!.nombre_operador!),
+                _encabezados('Cliente: ', widget.viaje!.cliente_nombre!),
+                _encabezados('Origen: ', widget.viaje!.origen),
+                _encabezados('Destino: ', widget.viaje!.destino),
                 const SizedBox(height: 30),
                 
                 ElevatedButton(
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: ((context) => const FirmaInspectorWidget()))),
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: ((context) => const FirmaInspectorWidget())));
+                    // firmascolectadas.add({'Firma Inspector', itemP.firmainspector});
+                  },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
                     padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
@@ -79,11 +85,11 @@ class _ResumenViajeState extends State<ResumenViaje> {
                     )
                   ),
                   child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
                         Icons.edit_outlined,
-                        color: Colors.white,
-                        // size: 20,
+                        color: Colors.white
                       ),
                       SizedBox(width: 10),
                       Text(
@@ -97,76 +103,75 @@ class _ResumenViajeState extends State<ResumenViaje> {
                   )
                 ),
                 const SizedBox(height: 10),
-                Row(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: ((context) => const FirmaOpLogicoWidget()))),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
-                        // minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16)
-                          ),
-                        ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: ((context) => const FirmaOpLogicoWidget())));
+                    // firmascolectadas.add({'Firma Operador Logico', itemP.firmaOperadorLogistico});
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)
                       ),
-                      child: const Row(
-                        children: [
-                          Icon(
-                            Icons.edit_outlined,
-                            color: Colors.white
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            'Firma Operador Logistico',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white
-                            )
-                          )
-                        ]
-                      )
-                    )
-                  ]
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: ((context) => const FirmaOperadorWidget()))),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
-                        // minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16)
-                          ),
-                        ),
+                    ),
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.edit_outlined,
+                        color: Colors.white
                       ),
-                      child: const Row(
-                        children: [
-                          Icon(
-                            Icons.person,
-                            color: Colors.white
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            'Firma Operador',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white
-                            )
-                          )
-                        ]
+                      SizedBox(width: 10),
+                      Text(
+                        'Firma Operador Logistico',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white
+                        )
                       )
-                    )
-                  ]
+                    ]
+                  )
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () => _dialogBuilder(context),
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: ((context) => const FirmaOperadorWidget())));
+                    // firmascolectadas.add({'Firma Operador', itemP.firmaOperador});
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)
+                      ),
+                    ),
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.person,
+                        color: Colors.white
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        'Firma Operador',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white
+                        )
+                      )
+                    ]
+                  )
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () => guardarFirmasySalida(),
+                  // onPressed: () => _dialogBuilder(context),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(Colors.indigo),
                     padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
@@ -193,25 +198,58 @@ class _ResumenViajeState extends State<ResumenViaje> {
     );
   }
 
+  Widget _encabezados(tit, sub) {
+    return Container(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(
+            tit ?? '',
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold
+            )
+          ),
+          Text(
+            sub ?? '',
+            style: const TextStyle(
+              fontSize: 18
+            )
+          )
+        ]
+      )
+    );
+  }
+
   guardarFirmasySalida() async {
-    var firmascolectadas = [itemP.firmainspector, itemP.firmaOperadorLogistico, itemP.firmaOperador];
+
+    firmascolectadas.add({'nombre': 'Inspector', 'firma': itemP.firmainspector});
+    firmascolectadas.add({'nombre': 'Operador', 'firma': itemP.firmaOperador});
+    firmascolectadas.add({'nombre': 'Operador Logico', 'firma': itemP.firmaOperadorLogistico});
+    log(firmascolectadas.toString());
+
+
 
     for(var ed in firmascolectadas) {
       evidencia = Evidencia(
         vin: null,
         iddano: null,
-        idviaje: null, //crear campo en modelo y db solo con el id y nombre la armamos
-        nombre: null,
-        archivo: ed,
+        idviaje: widget.viaje!.idviaje!, //crear campo en modelo y db solo con el id y nombre la armamos
+        nombre: ed['nombre'],
+        archivo: ed['firma'],
         fechahora: fechaH
       );
 
       await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) {
         log('evidencia insertada');
         log('$value');
+        
       }).timeout(const Duration(seconds: 60), onTimeout: () {
         itemP.addError();
       });
+
+      _dialogBuilder(context);
     }
   }
 

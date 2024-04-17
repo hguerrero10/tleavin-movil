@@ -41,7 +41,7 @@ class _LoginFormState extends State<LoginForm> {
               Fluttertoast.showToast(
                 msg: "Conexion Exitosa al Servidor",
                 toastLength: Toast.LENGTH_LONG,
-                gravity: ToastGravity.CENTER,
+                gravity: ToastGravity.TOP,
                 timeInSecForIosWeb: 1,
                 backgroundColor: Colors.green,
                 textColor: Colors.white,
@@ -145,7 +145,13 @@ class _LoginFormState extends State<LoginForm> {
       body: Stack(
         children: <Widget>[
           Container(
-            decoration: const BoxDecoration(image: DecorationImage(image: AssetImage("assets/img/fondo_register.jpg"), fit: BoxFit.cover)),
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/img/fondo_register.jpg"), 
+                fit: BoxFit.cover,
+                opacity: 0.8
+              )
+            )
           ),
           SingleChildScrollView(
             child: StreamBuilder(
@@ -156,8 +162,9 @@ class _LoginFormState extends State<LoginForm> {
                   color: Colors.transparent,
                   child: Column(
                     children: <Widget>[
+                        const SizedBox(height: 70),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 220),
+                          padding: const EdgeInsets.only(bottom: 150),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -213,7 +220,7 @@ class _LoginFormState extends State<LoginForm> {
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.yellow,
           textColor: Colors.white,
           fontSize: 16.0
         );
@@ -361,16 +368,16 @@ class _LoginFormState extends State<LoginForm> {
                           color: Colors.white, 
                           fontWeight: FontWeight.bold,
                           fontSize: 22
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+                        )
+                      )
+                    )
+                  ]
+                )
+              )
+            )
+          )
+        ]
+      )
     );
   }
 }

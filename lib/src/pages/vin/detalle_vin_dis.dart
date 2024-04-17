@@ -33,7 +33,7 @@ class _DetalleVinState extends State<DetalleVin> {
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
         title: const Text(
-          'Detalle de Vin',
+          'Detalle de VIN',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.black

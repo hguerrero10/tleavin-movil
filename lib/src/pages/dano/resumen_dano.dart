@@ -58,15 +58,10 @@ class _ResumenDanoState extends State<ResumenDano> {
   }
 
   Widget infoVin(vi) {
-
-    log(vi.toString());
     return ListView.builder(
       itemCount: vi.length,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
-
-      //  datosVin = '${vi[index]['vinp']}';
-      log(vi[index]['danoos'].toString());
         return SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(15),
@@ -123,7 +118,7 @@ class _ResumenDanoState extends State<ResumenDano> {
                 ),
                 tabla(vi[index]['danoos']),
 
-                const SizedBox(height: 250),
+                const SizedBox(height: 150),
 
                 Padding(
                   padding: const EdgeInsets.only(left: 16, right: 16),
@@ -259,7 +254,7 @@ class _ResumenDanoState extends State<ResumenDano> {
       toastLength: Toast.LENGTH_LONG,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
-      backgroundColor: Colors.red,
+      backgroundColor: Colors.green,
       textColor: Colors.white,
       fontSize: 20
     );

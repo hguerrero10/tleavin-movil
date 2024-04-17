@@ -101,9 +101,8 @@ class _ViajesArmadosState extends State<ViajesArmados> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    _encabezadosCard('Viaje: ', '${dato.idviaje}'),
                     _encabezadosCard('Numero Eco.: ', '${dato.num_eco_unidad}'),
-                    _encabezadosCard('Nombre Ope.: ', '${dato.nombre_operador}'),
+                    _encabezadosCard('Nombre Op.: ', '${dato.nombre_operador}'),
                     _encabezadosCard('Origen: ', '${dato.origen}'),
                     _encabezadosCard('Destino: ', '${dato.destino}'),
 
@@ -155,7 +154,7 @@ class _ViajesArmadosState extends State<ViajesArmados> {
           )
         ),
         SizedBox(
-          width: 200,
+          width: 180,
           child: Text(
             sub ?? '',
             style: const TextStyle(

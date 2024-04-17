@@ -49,79 +49,92 @@ class _InicioScreenState extends State<InicioScreen> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            const Cuerpo(),
-            Container(
-              padding: const EdgeInsets.only(top: 10, left: 16),
-              child: Row(
-                children: [
-                  const Text(
-                    'Bienvenido ',
-                    style: TextStyle(
-                      fontSize: 21,
-                      fontWeight: FontWeight.bold
-                    )
-                  ),
-                  Text(
-                    itemP.usuario!.nombre!,
-                    style: const TextStyle(
-                      fontSize: 21,
-                    )
-                  )
-                ]
-              )
-            ),
-            const SizedBox(height: 40),
-            _cuadricula1(),
-            const SizedBox(height: 10),
-            _cuadricula2(),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16),
-              child: ElevatedButton(
-                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Sincronizar())),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(15)),
-                  minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)
-                    )
-                  )
-                ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.swap_vert,
-                      color: Colors.white,
-                      size: 30
-                    ),
-                    // AnimateIcon(
-                    //     onTap: () {},
-                    //     iconType: IconType.continueAnimation,
-                    //     height: 30,
-                    //     width: 30,
-                    //     color: Colors.white,
-                    //     animateIcon: AnimateIcons.cloud,
-                    // ),
-                    SizedBox(width: 10),
-                    Text(
-                      'Sincronizar',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white
-                      )
-                    )
-                  ]
-                )
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/img/splash.jpg"), 
+                fit: BoxFit.cover,
+                opacity: 0.2
               )
             )
-          ]
-        )
+          ),
+          SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                const Cuerpo(),
+                Container(
+                  padding: const EdgeInsets.only(top: 10, left: 16),
+                  child: Row(
+                    children: [
+                      const Text(
+                        'Bienvenido ',
+                        style: TextStyle(
+                          fontSize: 21,
+                          fontWeight: FontWeight.bold
+                        )
+                      ),
+                      Text(
+                        itemP.usuario!.nombre!,
+                        style: const TextStyle(
+                          fontSize: 21,
+                        )
+                      )
+                    ]
+                  )
+                ),
+                const SizedBox(height: 40),
+                _cuadricula1(),
+                const SizedBox(height: 10),
+                _cuadricula2(),
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Sincronizar())),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(15)),
+                      minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16)
+                        )
+                      )
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.swap_vert,
+                          color: Colors.white,
+                          size: 30
+                        ),
+                        // AnimateIcon(
+                        //     onTap: () {},
+                        //     iconType: IconType.continueAnimation,
+                        //     height: 30,
+                        //     width: 30,
+                        //     color: Colors.white,
+                        //     animateIcon: AnimateIcons.cloud,
+                        // ),
+                        SizedBox(width: 10),
+                        Text(
+                          'Sincronizar',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white
+                          )
+                        )
+                      ]
+                    )
+                  )
+                )
+              ]
+            )
+          ),
+        ],
       )
     );
   }

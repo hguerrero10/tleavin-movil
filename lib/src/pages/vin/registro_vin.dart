@@ -140,7 +140,7 @@ class _CompraVinState extends State<CompraVin> {
                             toastLength: Toast.LENGTH_LONG,
                             gravity: ToastGravity.BOTTOM,
                             timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.red,
+                            backgroundColor: Colors.yellow,
                             textColor: Colors.white,
                             fontSize: 20
                           );
@@ -151,7 +151,7 @@ class _CompraVinState extends State<CompraVin> {
                       } 
                       else {
                         Fluttertoast.showToast(
-                          msg: "Escanear o Escribir VIN",
+                          msg: "Escanea o Escribe el VIN",
                           toastLength: Toast.LENGTH_LONG,
                           gravity: ToastGravity.BOTTOM,
                           timeInSecForIosWeb: 1,

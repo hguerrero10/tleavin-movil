@@ -342,7 +342,7 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
                 ),
                 Container(
                   height: 60,
-                  width: MediaQuery.of(context).size.width * 2,
+                  width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                   ),
@@ -407,9 +407,6 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
       inf = di;
     }
 
-    log(inf.length.toString());
-    log(lista.length.toString());
-
     if(inf.length == lista.length) {
       for(var o in lista) {
         var vinsPoOr = (
@@ -424,13 +421,16 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
           itemP.addError();
         });
 
+        log('resumendeviake');
+        log(resumenviaje.toString());
+
         
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenViaje(viaje: resumenviaje)), (Route<dynamic> route) => false);
       }
     }
     else {
       Fluttertoast.showToast(
-        msg: "Pendiente de Posicion y Orientacion",
+        msg: "VINs Pendientes de Posicion y Orientacion",
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
