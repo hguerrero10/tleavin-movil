@@ -5,7 +5,6 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:connectivity_widget/connectivity_widget.dart';
-
 import 'package:tleavin_mobil/provider/items_provider.dart';
 
 class Cuerpo extends StatefulWidget {
@@ -72,7 +71,7 @@ class _CuerpoState extends State<Cuerpo> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'version: 0.21.0',
+                    'Version: 0.23.0',
                     style:  TextStyle(
                       fontSize: 12,
                       color: Colors.grey[400]
