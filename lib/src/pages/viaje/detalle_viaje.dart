@@ -105,9 +105,9 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
                 _encabezados('Cliente.: ', '${dato['cliente_nombre']}'),
                 _encabezados('Origen: ', '${dato['origen']}'),
                 _encabezados('Destino: ', '${dato['destino']}'),
-                _encabezados('Tipo viaje: ', '${dato['tipo_viaje']}'),
+                _encabezados('Tipo viaje: ', dato['tipo_viaje'] != null ? '${dato['tipo_viaje']}' : 'Sin Especificar'),
                 _encabezados('Fecha de armado: ', '${dato['fecha_creacion']}'),
-                _encabezados('Notas: ', '${dato['notas']}'),
+                _encabezados('Notas: ', dato['notas'] != null ? '${dato['notas']}' : 'Sin Notas'),
                 _encabezados('VINs: ', ''),
 
                 const SizedBox(height: 10),
@@ -421,7 +421,7 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
           itemP.addError();
         });
 
-        log('resumendeviake');
+        log('resumendeviaje');
         log(resumenviaje.toString());
 
         

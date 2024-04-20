@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:async';
 import 'package:path/path.dart';
@@ -77,11 +78,12 @@ class DatabaseProvider {
         );
 
         await db.execute(
-          "CREATE TABLE viaje (idviaje INTEGER PRIMARY KEY AUTOINCREMENT, supervisor VARCHAR, folio_bitacora INTEGER, cartaporte INTEGER, bitacora_fecha_carga VARCHAR, num_eco_unidad VARCHAR, nombre_operador VARCHAR, cliente_clave INTEGER, cliente_nombre VARCHAR, ruta_clave INTEGER, ruta_nombre VARCHAR, origen VARCHAR, destino VARCHAR, etiqueta VARCHAR, status_carga INTEGER, notas VARCHAR, registrada_por VARCHAR, tipo_viaje VARCHAR, semana INTEGER, fecha_creacion VARCHAR, fecha_sync VARCHAR)"
+          "CREATE TABLE viaje (idviaje INTEGER PRIMARY KEY AUTOINCREMENT, supervisor VARCHAR, folio_bitacora INTEGER, cartaporte INTEGER, bitacora_fecha_carga VARCHAR, num_eco_unidad VARCHAR, nombre_operador VARCHAR, cliente_clave INTEGER, cliente_nombre VARCHAR, ruta_clave INTEGER, ruta_nombre VARCHAR, origen VARCHAR, destino VARCHAR, etiqueta VARCHAR, status_carga INTEGER, notas VARCHAR, registrada_por VARCHAR, tipo_viaje VARCHAR, semana INTEGER, estadoViaje VARCHAR, fecha_creacion VARCHAR, fecha_sync VARCHAR)"
         );
       }
     );
   }
+
 
   // CRUD USUARIOS
 
@@ -373,7 +375,7 @@ class DatabaseProvider {
 
   asignarVinViaje(vv) async {
     final db = await database;
-    return db.update('vin', {'viaje' : vv.viaje}, where: "vin = ?", whereArgs: [vv.vin]);
+    return db.update('vin', {'viaje' : vv.viaje, 'origen' : vv.origen, 'destino' : vv.destino}, where: "vin = ?", whereArgs: [vv.vin]);
   }
   
   asignarPoOrVIN(vv) async {
@@ -613,7 +615,8 @@ class DatabaseProvider {
   Future<List> obtenerInfoViaje(idvia) async {
     Database db = await database;
 
-    List<Map> data = await db.rawQuery("SELECT * FROM viaje as via INNER JOIN vin as v on via.idviaje = v.viaje where via.idviaje = $idvia");
+    List<Map> data = await db.rawQuery("SELECT via.idviaje, via.supervisor, via.folio_bitacora, via.cartaporte, via.bitacora_fecha_carga, via.num_eco_unidad, via.nombre_operador, via.cliente_clave, via.cliente_nombre, via.ruta_clave, via.ruta_nombre, via.origen, via.destino, via.etiqueta, via.status_carga, via.notas, via.registrada_por, via.tipo_viaje, via.semana, via.estadoViaje, via.fecha_creacion, via.fecha_sync, vi.idv, vi.viaje, vi.cartaporte, vi.vin, vi.distrib_clave, vi.dest_nombre, vi.ruta_clave, vi.ruta_nombre, vi.origen, vi.destino, vi.modelo, vi.marca, vi.posicion, vi.orientacion, vi.compra, vi.fecha_carga, vi.fecha_creacion, vi.fecha_sync FROM viaje as via INNER JOIN vin as vi on vi.viaje = via.idviaje where via.idviaje = $idvia");
+    log(data.toString());
     Map<String, dynamic> viajesAgrupados = {};
     Map<String, dynamic> viajesAgrupadosfafg = {};
     if(data.isNotEmpty) {
@@ -640,6 +643,7 @@ class DatabaseProvider {
           'registrada_por': viaje['registrada_por'],
           'tipo_viaje': viaje['tipo_viaje'],
           'semana': viaje['semana'],
+          'estadoViaje': viaje['estadoViaje'],
           'fecha_creacion': viaje['fecha_creacion'],
           'fecha_sync': viaje['fecha_sync'],
           'vins': []
@@ -682,7 +686,12 @@ class DatabaseProvider {
     Database db = await database;
     Map<String, dynamic> organizedData = {};
 
-    List<Map> data = await db.rawQuery("SELECT * FROM viaje as via INNER JOIN vin as v on via.idviaje = v.viaje LEFT JOIN dano as d ON v.vin = d.vin INNER JOIN evidencia as e on e.iddano = d.idd where via.idviaje = '$idvia'");
+    List<Map> data = await db.rawQuery(
+      "SELECT * FROM viaje as via INNER JOIN vin as v on via.idviaje = v.viaje INNER JOIN dano as d ON v.vin = d.vin INNER JOIN evidencia as e on e.iddano = d.idd and e.idviaje = via.idviaje where via.idviaje = '$idvia'"
+    );
+    
+    log(data.toString());
+
 
     if(data.isNotEmpty) {
       for(var item in data) {

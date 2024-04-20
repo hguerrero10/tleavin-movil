@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -21,7 +22,7 @@ class Sincronizar extends StatefulWidget {
 
 class _SincronizarState extends State<Sincronizar> {
 
-  String urlEnvioViaje = 'http://api-pruebas.tlea.online/agregarViaje';
+  String urlEnvioViaje = 'http://tleavin.tlea.online/movil/viaje';
   String urlEnvioVIN = 'http://api-pruebas.tlea.online/agreagrVIN';
 
 
@@ -70,6 +71,16 @@ class _SincronizarState extends State<Sincronizar> {
                 log('Area Dano');
                 await DatabaseProvider.db.insertarAreaDano(areaDanoInsertList!);
               }
+
+              Fluttertoast.showToast(
+                msg: "${responseData['AreaDanos'].length} Area Daños Sincronizados",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+                fontSize: 20
+              );
 
               itemP.addDanoAreaInsert();
             } 
@@ -159,6 +170,16 @@ class _SincronizarState extends State<Sincronizar> {
                 log('Tipo Dano');
                 await DatabaseProvider.db.insertarTipoDano(tipoDanoInsertList!);
               }
+
+              Fluttertoast.showToast(
+                msg: "${responseData['TiposDano'].length} Tipo Daños Sincronizados",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+                fontSize: 20
+              );
 
               itemP.addTipoDanoInsert();
             } 
@@ -250,6 +271,16 @@ class _SincronizarState extends State<Sincronizar> {
                 await DatabaseProvider.db.insertarSeveridad(severidadInsertList!);
               }
 
+              Fluttertoast.showToast(
+                msg: "${responseData['Severidades'].length} Severidades Sincronizadas",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+                fontSize: 20
+              );
+
               itemP.addSeveridadInsert();
             } 
             else {
@@ -329,6 +360,7 @@ class _SincronizarState extends State<Sincronizar> {
 
               responseData = json.decode(value.body);
               await DatabaseProvider.db.borrarBDCliente();
+              log(responseData['Clientes'].length.toString());
               for(var value in responseData['Clientes']) {
                 clienteInsertList = null;
                 clienteInsertList = Cliente(
@@ -338,6 +370,16 @@ class _SincronizarState extends State<Sincronizar> {
                 log('Cliente');
                 await DatabaseProvider.db.insertarCliente(clienteInsertList!);
               }
+
+              Fluttertoast.showToast(
+                msg: "${responseData['Clientes'].length} Clientes Sincronizados",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+                fontSize: 20
+              );
 
               itemP.addClienteInsert();
             } 
@@ -407,39 +449,121 @@ class _SincronizarState extends State<Sincronizar> {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.black
-          ),
-        ),
+          )
+        )
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const Cuerpo(),
-            boton_sincronizar(Icons.dangerous_outlined, 'Sincronizar Area Daños', () => obtenerAreaDanoServer()),
-            boton_sincronizar(Icons.list, 'Sincronizar Tipo Daños', () => obtenerTipoDanoServer()),
-            boton_sincronizar(Icons.warning, 'Sincronizar Severidad', () => obtenerSeveridadServer()),
 
-            boton_sincronizar(Icons.people, 'Sincronizar Clientes', () => obtenerClienteServer())
+            const SizedBox(height: 10),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(30)),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)
+                      )
+                    )
+                  ),
+                  child: const Column(
+                    children: [
+                      Icon(
+                        CupertinoIcons.car_detailed,
+                        color: Colors.white,
+                        size: 40
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        'Sincronizar',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white
+                        )
+                      ),
+                      Text(
+                        'VINs',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white
+                        )
+                      )
+                    ]
+                  )
+                ),
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(const Color.fromRGBO(242, 211, 0, 1)),
+                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(30)),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)
+                      )
+                    )
+                  ),
+                  child: const Column(
+                    children: [
+                      Icon(
+                        Icons.route,
+                        color: Colors.black,
+                        size: 40
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        'Sincronizar',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black
+                        )
+                      ),
+                      Text(
+                        'Viajes',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black
+                        )
+                      )
+                    ]
+                  )
+                )
+              ]
+            ),
+
+            const SizedBox(height: 10),
+
+            botonSincronizar(Icons.dangerous_outlined, 'Sincronizar Area Daños', () => obtenerAreaDanoServer()),
+            botonSincronizar(Icons.list, 'Sincronizar Tipo Daños', () => obtenerTipoDanoServer()),
+            botonSincronizar(Icons.warning, 'Sincronizar Severidad', () => obtenerSeveridadServer()),
+
+            botonSincronizar(Icons.people, 'Sincronizar Clientes', () => obtenerClienteServer())
           ]
         )
       )
     );
   }
 
-  Widget boton_sincronizar(ico, titulo, onpress) {
+  Widget botonSincronizar(ico, titulo, onpress) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: ElevatedButton(
         onPressed: onpress,
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
-          // minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
+          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18)),
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16)
-            ),
-          ),
+            )
+          )
         ),
         child: Row(
           children: [
@@ -462,32 +586,32 @@ class _SincronizarState extends State<Sincronizar> {
   }
 
   Future enviarViaje() async {
-      var json;
-      
-      try{
-        http.Response response = await http.post(Uri.parse(urlEnvioViaje), body: json, headers: { "Content-Type" : "application/json"});
-        var res = jsonDecode(response.body);
-        if(res == 200) {
-          
-          Fluttertoast.showToast(
-            msg: "Conexion Exitosa al Server",
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.green,
-            textColor: Colors.white,
-            fontSize: 20
-          );
+    var json;
+    
+    try{
+      http.Response response = await http.post(Uri.parse(urlEnvioViaje), body: json, headers: {"Content-Type" : "application/json"});
+      var res = jsonDecode(response.body);
+      if(res == 200) {
+        Fluttertoast.showToast(
+          msg: "Conexion Exitosa al Server",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 20
+        );
 
-          await viajesparaserver();
-        } 
-        else {
-          _dialogBuilder(context, 'A ocurrido un problema, Favor de comunicarse a soporte(Error:s ${response.statusCode})');
-          itemP.addError();
-        }
-      } catch (e) {
-        log(e.toString());
+        await viajesparaserver();
+      } 
+      else {
+        _dialogBuilder(context, 'A ocurrido un problema, Favor de comunicarse a soporte(Error:s ${response.statusCode})');
+        itemP.addError();
       }
+    }
+    catch (e) {
+      log(e.toString());
+    }
   }
 
   viajesparaserver() {
@@ -529,10 +653,10 @@ class _SincronizarState extends State<Sincronizar> {
               ),
               child: const Text('Ok'),
               onPressed: () {}
-            ),
-          ],
+            )
+          ]
         );
-      },
+      }
     );
   }
 }

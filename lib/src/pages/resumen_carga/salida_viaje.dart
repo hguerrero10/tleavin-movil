@@ -1,16 +1,16 @@
 import 'dart:developer';
-import 'package:flutter/material.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/database/db.dart';
-import 'package:tleavin_mobil/model/evidencia.dart';
 import 'package:tleavin_mobil/model/viaje.dart';
-import 'package:tleavin_mobil/provider/items_provider.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:tleavin_mobil/src/home/inicio.dart';
+import 'package:tleavin_mobil/model/evidencia.dart';
+import 'package:tleavin_mobil/provider/items_provider.dart';
+import 'package:gradient_slide_to_act/gradient_slide_to_act.dart';
 import 'package:tleavin_mobil/src/pages/resumen_carga/widget/firma_inspector.dart';
 import 'package:tleavin_mobil/src/pages/resumen_carga/widget/firma_operador.dart';
 import 'package:tleavin_mobil/src/pages/resumen_carga/widget/firma_operadorLogico.dart';
-import 'package:gradient_slide_to_act/gradient_slide_to_act.dart';
 
 class ResumenViaje extends StatefulWidget {
   final Viaje? viaje;

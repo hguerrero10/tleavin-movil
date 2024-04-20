@@ -45,17 +45,9 @@ class _CuerpoState extends State<Cuerpo> {
     format = DateFormat.yMMMMd('es');
     dateString = format.format(DateTime.now());
      
-    // requestLocationPermission();    
-    
+    // requestLocationPermission();
     super.initState();
   }
-
-  // @override
-  // void dispose() {
-  //   ubi = '';
-
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +63,7 @@ class _CuerpoState extends State<Cuerpo> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Version: 0.24.0',
+                    'Version: 0.25.0',
                     style:  TextStyle(
                       fontSize: 12,
                       color: Colors.grey[400]
@@ -83,28 +75,20 @@ class _CuerpoState extends State<Cuerpo> {
                     child: ConnectivityWidget(
                       builder: (context, isOnline) => Center(
                         child: 
-                        // Text(
-                        //   isOnline ? "ON" : "OFF", 
-                        //   style: TextStyle(
-                        //     fontSize: 10, 
-                        //     fontWeight: FontWeight.bold, 
-                        //     color: isOnline ? Colors.green : Colors.red
-                        //   )
-                        // )
                         isOnline ? Image.asset(
                           'assets/img/verde.png',
                           width:10,
-                          height:10,
+                          height:10
                         ) :
                         Image.asset(
                           'assets/img/verde.png',
                           width:10,
-                          height:10,
+                          height:10
                         )
                       )
                     )
-                  ),
-                ],
+                  )
+                ]
               ),
               Row(
                 children: [
@@ -113,12 +97,12 @@ class _CuerpoState extends State<Cuerpo> {
                     style: TextStyle(
                       fontSize: 19,
                       fontWeight: FontWeight.bold
-                    ),
+                    )
                   ),
                   Text(
                     dateString,
                     style: const TextStyle(
-                      fontSize: 19,
+                      fontSize: 19
                     )
                   )
                 ]
@@ -131,7 +115,7 @@ class _CuerpoState extends State<Cuerpo> {
                     style: TextStyle(
                       fontSize: 19,
                       fontWeight: FontWeight.bold
-                    ),
+                    )
                   ),
                   Text(
                     itemP.usuario!.locacion!,

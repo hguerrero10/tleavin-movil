@@ -115,8 +115,8 @@ class _ArmarViajeState extends State<ArmarViaje> {
               Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16),
                 child: ElevatedButton(
-                  // onPressed: () => scanQR(),
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => VinsParaViaje())),
+                  onPressed: () => scanQR(),
+                  // onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => VinsParaViaje())),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
                     padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(15)),
@@ -330,6 +330,7 @@ class _ArmarViajeState extends State<ArmarViaje> {
       registrada_por: itemP.usuario!.usuario!,
       tipo_viaje: null,
       semana: null,
+      estadoViaje: 'En Proceso',
       fecha_creacion: fecha,
       fecha_sync: null,
     );
@@ -342,7 +343,9 @@ class _ArmarViajeState extends State<ArmarViaje> {
       for(var ed in listaVinsViaje) {
         var vinsviaje = (
           vin: ed,
-          viaje: value
+          viaje: value,
+          origen: _origenTextController.text,
+          destino: _destinoTextController.text,
         );
 
         await DatabaseProvider.db.asignarVinViaje(vinsviaje).then((value) {

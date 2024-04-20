@@ -72,14 +72,14 @@ class _InicioScreenState extends State<InicioScreen> {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.black
-            ),
+            )
           ),
           actions: [
             IconButton(
               icon: const Icon(Icons.logout),
               onPressed: () => logout()
             )
-          ],
+          ]
         ),
         body: Stack(
           children: [
@@ -143,14 +143,6 @@ class _InicioScreenState extends State<InicioScreen> {
                             color: Colors.white,
                             size: 30
                           ),
-                          // AnimateIcon(
-                          //     onTap: () {},
-                          //     iconType: IconType.continueAnimation,
-                          //     height: 30,
-                          //     width: 30,
-                          //     color: Colors.white,
-                          //     animateIcon: AnimateIcons.cloud,
-                          // ),
                           SizedBox(width: 10),
                           Text(
                             'Sincronizar',
