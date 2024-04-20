@@ -11,6 +11,7 @@ import 'package:tleavin_mobil/model/viaje.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/home/inicio.dart';
 import 'package:tleavin_mobil/src/pages/dano/listas.dart';
+import 'package:tleavin_mobil/src/pages/viaje/vin_para_viaje.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 
 class ArmarViaje extends StatefulWidget {
@@ -114,7 +115,8 @@ class _ArmarViajeState extends State<ArmarViaje> {
               Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16),
                 child: ElevatedButton(
-                  onPressed: () => scanQR(),
+                  // onPressed: () => scanQR(),
+                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => VinsParaViaje())),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
                     padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(15)),
@@ -342,8 +344,6 @@ class _ArmarViajeState extends State<ArmarViaje> {
           vin: ed,
           viaje: value
         );
-
-        log(vinsviaje.toString());
 
         await DatabaseProvider.db.asignarVinViaje(vinsviaje).then((value) {
           log('vin asignado');

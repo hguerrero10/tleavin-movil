@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:widget_zoom/widget_zoom.dart';
+import 'package:flutter/services.dart';
 
 class DetalleVin extends StatefulWidget {
   final inf;
@@ -48,14 +48,42 @@ class _DetalleVinState extends State<DetalleVin> {
     return ListView.builder(
       itemCount: vi.length,
       itemBuilder: (context, index) {
-        
-        log(vi[index]['danoos'].toString());
         return SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(15),
             child: Column(
               children: [
-                _encabezados('VIN: ', vi[index]['vinp']['vin']),
+                Container(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'VIN: ',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold
+                        )
+                      ),
+                      Text(
+                        vi[index]['vinp']['vin'],
+                        style: const TextStyle(
+                          fontSize: 20
+                        )
+                      ),
+                      const SizedBox(width: 30),
+                      GestureDetector(
+                        onTap: () async {
+                           await Clipboard.setData(ClipboardData(text: vi[index]['vinp']['vin']));
+                        },
+                        child: const Icon(
+                          Icons.copy,
+                          size: 23,
+                        ),
+                      )
+                    ]
+                  )
+                ),
                 _encabezados('Marca: ', vi[index]['vinp']['marca'] != null ? '${vi[index]['vinp']['marca']}' : 'Sin Identificar'),
                 _encabezados('Modelo: ', vi[index]['vinp']['modelo'] != null ? '${vi[index]['vinp']['modelo']}' : 'Sin Identificar'),
                 _encabezados('Comprado: ', vi[index]['vinp']['compra'] == 0 ? 'No' : 'Si'),
@@ -190,7 +218,7 @@ class _DetalleVinState extends State<DetalleVin> {
              
                     dato['severidad'] == null ? _encabezados('Estado: ', '${dato['registroTipo']}') : const SizedBox(),
 
-                    dato['area'] == null ? const SizedBox() : _encabezados('Codificacion: ', '${dato['area']}${dato['tipo']}-${dato['severidad']}'),
+                    dato['area'] == null ? const SizedBox() : _encabezados('Codificacion: ', '${dato['area']}-${dato['tipo']}-${dato['severidad']}'),
                     _encabezadosCard('Notas: ', '${dato['nota']}'),
                     _encabezados('Evidencias: ', ''),
      

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/usuario.dart';
+import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/pages/sincronizacion/enviar.dart';
 import 'package:tleavin_mobil/src/pages/viaje/armar_viaje.dart';
@@ -8,8 +10,6 @@ import 'package:tleavin_mobil/src/pages/viaje/viajes_armados.dart';
 import 'package:tleavin_mobil/src/pages/vin/registro_vin.dart';
 import 'package:tleavin_mobil/src/pages/vin/vins_disponibles.dart';
 import 'package:tleavin_mobil/src/startup/login/login_form.dart';
-import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
-import 'package:flutter/cupertino.dart';
 // import 'package:tleavin_mobil/src/widgets/drawer.dart';
 
 class InicioScreen extends StatefulWidget {
@@ -31,111 +31,144 @@ class _InicioScreenState extends State<InicioScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // drawer: MenuDrawer(),
-      appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
-        title: const Text(
-          'Inicio',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () => logout()
-          )
-        ],
-      ),
-      body: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/img/splash.jpg"), 
-                fit: BoxFit.cover,
-                opacity: 0.2
-              )
-            )
-          ),
-          SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                const Cuerpo(),
-                Container(
-                  padding: const EdgeInsets.only(top: 10, left: 16),
-                  child: Row(
-                    children: [
-                      const Text(
-                        'Bienvenido ',
-                        style: TextStyle(
-                          fontSize: 21,
-                          fontWeight: FontWeight.bold
-                        )
-                      ),
-                      Text(
-                        itemP.usuario!.nombre!,
-                        style: const TextStyle(
-                          fontSize: 21,
-                        )
-                      )
-                    ]
-                  )
+    return WillPopScope(
+      onWillPop: () async {
+          // Aquí puedes colocar la lógica que deseas ejecutar
+          // antes de que la pantalla sea popada.
+          // Por ejemplo, mostrar un diálogo de confirmación.
+          bool confirmExit = await showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('¿Quieres salir de la aplicación?'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false); // No salir
+                  },
+                  child: Text('No'),
                 ),
-                const SizedBox(height: 40),
-                _cuadricula1(),
-                const SizedBox(height: 10),
-                _cuadricula2(),
-                const SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16),
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Sincronizar())),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(15)),
-                      minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16)
-                        )
-                      )
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true); // Salir
+                  },
+                  child: Text('Sí'),
+                ),
+              ],
+            ),
+          );
+
+          // Devuelve true si el usuario confirma salir,
+          // false si el usuario decide quedarse en la pantalla.
+          return confirmExit ?? false;
+        },
+
+
+      child: Scaffold(
+        // drawer: MenuDrawer(),
+        appBar: AppBar(
+          backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
+          title: const Text(
+            'Inicio',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black
+            ),
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () => logout()
+            )
+          ],
+        ),
+        body: Stack(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/img/splash.jpg"), 
+                  fit: BoxFit.cover,
+                  opacity: 0.2
+                )
+              )
+            ),
+            SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  const Cuerpo(),
+                  Container(
+                    padding: const EdgeInsets.only(top: 10, left: 16),
+                    child: Row(
                       children: [
-                        Icon(
-                          Icons.swap_vert,
-                          color: Colors.white,
-                          size: 30
-                        ),
-                        // AnimateIcon(
-                        //     onTap: () {},
-                        //     iconType: IconType.continueAnimation,
-                        //     height: 30,
-                        //     width: 30,
-                        //     color: Colors.white,
-                        //     animateIcon: AnimateIcons.cloud,
-                        // ),
-                        SizedBox(width: 10),
-                        Text(
-                          'Sincronizar',
+                        const Text(
+                          'Bienvenido ',
                           style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white
+                            fontSize: 21,
+                            fontWeight: FontWeight.bold
+                          )
+                        ),
+                        Text(
+                          itemP.usuario!.nombre!,
+                          style: const TextStyle(
+                            fontSize: 21,
                           )
                         )
                       ]
                     )
+                  ),
+                  const SizedBox(height: 40),
+                  _cuadricula1(),
+                  const SizedBox(height: 10),
+                  _cuadricula2(),
+                  const SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Sincronizar())),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(15)),
+                        minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16)
+                          )
+                        )
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.swap_vert,
+                            color: Colors.white,
+                            size: 30
+                          ),
+                          // AnimateIcon(
+                          //     onTap: () {},
+                          //     iconType: IconType.continueAnimation,
+                          //     height: 30,
+                          //     width: 30,
+                          //     color: Colors.white,
+                          //     animateIcon: AnimateIcons.cloud,
+                          // ),
+                          SizedBox(width: 10),
+                          Text(
+                            'Sincronizar',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white
+                            )
+                          )
+                        ]
+                      )
+                    )
                   )
-                )
-              ]
-            )
-          ),
-        ],
-      )
+                ]
+              )
+            ),
+          ],
+        )
+      ),
     );
   }
 

@@ -62,7 +62,7 @@ class _LoginFormState extends State<LoginForm> {
                   locacion: value['locacion'],
                   estado: value['estado']
                 );
-                log('Usuario');
+                
                 log(usuarioInsertList.toString());
                 await DatabaseProvider.db.insertarUsuario(usuarioInsertList!);
               }

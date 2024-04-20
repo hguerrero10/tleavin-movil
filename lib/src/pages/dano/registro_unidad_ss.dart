@@ -95,7 +95,6 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
     }
   }
 
-
   var resumen;
 
   obtenerResumen(v) async {
@@ -149,7 +148,7 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold
-                    ),
+                    )
                   ),
                   const SizedBox(height: 10),
                   Row(
@@ -159,22 +158,22 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
                         style: TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.bold
-                        ),
+                        )
                       ),
                       Text(
                         widget.vin,
                         style: const TextStyle(
                           fontSize: 17
-                        ),
+                        )
                       )
-                    ],
+                    ]
                   ),
                   const SizedBox(height: 20),
                   const Text(
                     'Adjunte 4 fotografía por cada lado de la unidad.',
                     style: TextStyle(
-                      fontSize: 15,
-                    ),
+                      fontSize: 15
+                    )
                   ),
                   const SizedBox(height: 20),
                   Center(
@@ -186,98 +185,113 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
                           children: [
                             GestureDetector(
                               onTap: () => getCamara(1),
-                              child: Column(
-                                children: [
-                                  Image.asset(
-                                    'assets/img/camara.png',
-                                    width: 40,
-                                    height: 40,
+                              child: Stack(
+                                children: <Widget>[
+                                  Column(
+                                    children: [
+                                      Image.asset(
+                                        'assets/img/camara.png',
+                                        width: 40,
+                                        height: 40
+                                      ),
+                                      const Text(
+                                        'Lejos',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold
+                                        )
+                                      )
+                                    ]
                                   ),
-                                  const Text(
-                                    'Lejos',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold
-                                    ),
-                                  )
-                                ]
+                                  base64Foto1 != null ? const Icon(
+                                    Icons.check_circle_rounded,
+                                    color: Colors.green,
+                                    size: 60
+                                  ) : const SizedBox()
+                                ],
                               )
                             ),
                             GestureDetector(
                               onTap: () => getCamara(2),
-                              child: Column(
-                                children: [
-                                  Image.asset(
-                                    'assets/img/camara.png',
-                                    width: 40,
-                                    height: 40
+                              child: Stack(
+                                children: <Widget> [
+                                  Column(
+                                    children: [
+                                      Image.asset(
+                                        'assets/img/camara.png',
+                                        width: 40,
+                                        height: 40
+                                      ),
+                                      const Text(
+                                        'Angulo 1',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold
+                                        )
+                                      )
+                                    ]
                                   ),
-                                  const Text(
-                                    'Angulo 1',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold
-                                    )
-                                  ),
-                                ],
-                              ),
+                                  base64Foto2 != null ? const Icon(
+                                    Icons.check_circle_rounded,
+                                    color: Colors.green,
+                                    size: 60
+                                  ) : const SizedBox()
+                                ]
+                              )
                             ),
                             GestureDetector(
                               onTap: () => getCamara(3),
-                              child: Column(
-                                children: [
-                                  Image.asset(
-                                    'assets/img/camara.png',
-                                    width: 40,
-                                    height: 40,
+                              child: Stack(
+                                children: <Widget> [
+                                  Column(
+                                    children: [
+                                      Image.asset(
+                                        'assets/img/camara.png',
+                                        width: 40,
+                                        height: 40
+                                      ),
+                                      const Text(
+                                        'Angulo 2',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold
+                                        )
+                                      )
+                                    ]
                                   ),
-                                  const Text(
-                                    'Angulo 2',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold
-                                    ),
-                                  ),
+                                  base64Foto3 != null ? const Icon(
+                                    Icons.check_circle_rounded,
+                                    color: Colors.green,
+                                    size: 60
+                                  ) : const SizedBox()
                                 ],
-                              ),
+                              )
                             ),
                             GestureDetector(
                               onTap: () => getCamara(4),
-                              child: Column(
-                                children: [
-                                  Image.asset(
-                                    'assets/img/camara.png',
-                                    width: 40,
-                                    height: 40,
+                              child: Stack(
+                                children: <Widget>[
+                                  Column(
+                                    children: [
+                                      Image.asset(
+                                        'assets/img/camara.png',
+                                        width: 40,
+                                        height: 40,
+                                      ),
+                                      const Text(
+                                        'Angulo 3',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold
+                                        )
+                                      )
+                                    ]
                                   ),
-                                  const Text(
-                                    'Angulo 3',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold
-                                    ),
-                                  ),
-                                  // Container(
-                                  //   height: 200,
-                                  //   width: 200,
-                                  //   child: ListView.builder(
-                                  //     key: UniqueKey(),
-                                  //     itemBuilder: (BuildContext context, int index) {
-                                  //       return Semantics(
-                                  //         label: 'image_picker_example_picked_image',
-                                  //         child: Image.file(
-                                  //         File(_mediaFileList![index].path),
-                                  //         errorBuilder: (BuildContext context, Object error,
-                                  //             StackTrace? stackTrace) {
-                                  //           return const Center(
-                                  //               child:
-                                  //                   Text('This image type is not supported'));
-                                  //         },
-                                  //       )                             
-                                  //       );
-                                  //     },
-                                  //   ),
-                                  // )
+                                  base64Foto4 != null ? const Icon(
+                                    Icons.check_circle_rounded,
+                                    color: Colors.green,
+                                    size: 60
+                                  ) : const SizedBox()
                                 ],
-                              ),
-                            ),
-                          ],
+                              )
+                            )
+                          ]
                         ),
                         const SizedBox(height: 20),
                         TextField(
@@ -338,7 +352,6 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
     );
 
     await DatabaseProvider.db.insertarDano(dano!).then((value) async {
-      log(value.toString());
       log('dano insertado');
       itemP.addBoton();
       itemP.deleteBoton();

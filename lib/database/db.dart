@@ -158,6 +158,21 @@ class DatabaseProvider {
     return listaVins;
   }
 
+  Future<List<Vin>> obtenerListaVinsComprados() async {
+    final db = await database;
+    List<Vin> listaVins;
+    var res = await db.query("vin where compra = 1");
+
+    if(res.isNotEmpty) {
+      listaVins =  res.map((v) => Vin.fromMap(v)).toList();
+    } 
+    else {
+      listaVins = [];
+    }
+
+    return listaVins;
+  }
+
   Future<List> obtenerInfoVin(vin) async {
     Database db = await database;
     List<Map> dataD = await db.rawQuery("SELECT * FROM dano where vin = '$vin'");
@@ -760,8 +775,6 @@ class DatabaseProvider {
         }
 
         // final String jsonString  = jsonEncode(organizedData);
-
-        // log(jsonString.toString());
       }
     }
       

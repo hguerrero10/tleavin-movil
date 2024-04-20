@@ -68,7 +68,6 @@ class _SincronizarState extends State<Sincronizar> {
                   descripcion: value['descripcion']
                 );
                 log('Area Dano');
-                log(areaDanoInsertList.toString());
                 await DatabaseProvider.db.insertarAreaDano(areaDanoInsertList!);
               }
 
@@ -158,7 +157,6 @@ class _SincronizarState extends State<Sincronizar> {
                   descripcion: value['descripcion']
                 );
                 log('Tipo Dano');
-                log(tipoDanoInsertList.toString());
                 await DatabaseProvider.db.insertarTipoDano(tipoDanoInsertList!);
               }
 
@@ -249,7 +247,6 @@ class _SincronizarState extends State<Sincronizar> {
                   descripcion: value['descripcion']
                 );
                 log('Severidad');
-                log(severidadInsertList.toString());
                 await DatabaseProvider.db.insertarSeveridad(severidadInsertList!);
               }
 
@@ -339,7 +336,6 @@ class _SincronizarState extends State<Sincronizar> {
                   cliente: value['cliente']
                 );
                 log('Cliente');
-                log(clienteInsertList.toString());
                 await DatabaseProvider.db.insertarCliente(clienteInsertList!);
               }
 

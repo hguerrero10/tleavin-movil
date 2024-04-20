@@ -52,8 +52,9 @@ dependencies:
   device_info_plus: ^9.1.2
   fluttertoast: ^8.0.7
   widget_zoom: ^0.0.4
-  flutter_native_splash: ^2.3.10
   animated_icon: ^0.0.6
+  searchable_listview: ^2.11.2
+  gradient_slide_to_act: ^0.0.2
 
 dev_dependencies:
   flutter_test:
@@ -68,13 +69,6 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
-flutter_native_splash:
-  android: true
-  ios: true
-  web: false
-  color: "#000000"
-  image: "assets/splash.jpg"
 
 # The following section is specific to Flutter packages.
 flutter:

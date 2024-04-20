@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/database/db.dart';
@@ -30,7 +28,6 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
     var datos = await DatabaseProvider.db.obtenerInfoVin(v);
     setState(() {
       infoydatos = datos;
-      log(infoydatos.toString());
     });
 
     Navigator.push(context, MaterialPageRoute(builder: (context) => DetalleVin(inf: infoydatos)));
@@ -56,7 +53,7 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
         title: const Text(
-          'Vins Disponibles',
+          'VINs Disponibles',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.black
