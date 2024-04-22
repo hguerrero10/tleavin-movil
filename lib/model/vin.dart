@@ -2,7 +2,7 @@ import 'package:tleavin_mobil/model/dano.dart';
 
 class Vin{
   int? idv;
-  int? viaje;
+  int? idviaje;
   int? cartaporte;
   String? vin;
   String? distrib_clave;
@@ -23,7 +23,7 @@ class Vin{
 
   Vin({
     this.idv,
-    this.viaje,
+    this.idviaje,
     this.cartaporte,
     this.vin,
     this.distrib_clave,
@@ -45,12 +45,12 @@ class Vin{
 
   @override
   String toString() {
-    return 'Vin { viaje: $viaje, cartaporte: $cartaporte, vin: $vin, distrib_clave: $distrib_clave, dest_nombre: $dest_nombre, ruta_clave: $ruta_clave, ruta_nombre: $ruta_nombre, origen: $origen, destino: $destino, modelo: $modelo, marca: $marca, posicion: $posicion, orientacion: $orientacion, compra: $compra, fecha_carga: $fecha_carga, fecha_creacion: $fecha_creacion, fecha_sync: $fecha_sync, danos: $danos, idv: $idv }';
+    return 'Vin { idviaje: $idviaje, cartaporte: $cartaporte, vin: $vin, distrib_clave: $distrib_clave, dest_nombre: $dest_nombre, ruta_clave: $ruta_clave, ruta_nombre: $ruta_nombre, origen: $origen, destino: $destino, modelo: $modelo, marca: $marca, posicion: $posicion, orientacion: $orientacion, compra: $compra, fecha_carga: $fecha_carga, fecha_creacion: $fecha_creacion, fecha_sync: $fecha_sync, danos: $danos, idv: $idv }';
   }
 
   factory Vin.fromMap(Map<String, dynamic> map) => Vin(
     idv: map['idv'],
-    viaje: map['viaje'],
+    idviaje: map['idviaje'],
     cartaporte: map['cartaporte'],
     vin: map['vin'].toString(),
     distrib_clave: map['distrib_clave'].toString(),
@@ -72,7 +72,7 @@ class Vin{
 
   Map<String, dynamic> toMap() => {
     "idv": idv,
-    "viaje": viaje,
+    "idviaje": idviaje,
     "cartaporte": cartaporte,
     "vin": vin,
     "distrib_clave": distrib_clave,
@@ -95,7 +95,7 @@ class Vin{
     var key;
     switch (key) {
       case 'idv': return idv;
-      case 'viaje': return viaje;
+      case 'idviaje': return idviaje;
       case 'cartaporte': return cartaporte;
       case 'vin': return vin;
       case 'distrib_clave': return distrib_clave;

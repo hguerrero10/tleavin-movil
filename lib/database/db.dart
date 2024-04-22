@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:async';
@@ -42,7 +43,7 @@ class DatabaseProvider {
 
 
         await db.execute(
-          "CREATE TABLE vin (idv INTEGER PRIMARY KEY AUTOINCREMENT, viaje INTEGER, cartaporte INTEGER, vin VARCHAR UNIQUE, distrib_clave VARCHAR, dest_nombre VARCHAR, ruta_clave INTEGER, ruta_nombre VARCHAR, origen VARCHAR, destino VARCHAR, modelo VARCHAR, marca VARCHAR, posicion VARCHAR, orientacion VARCHAR, compra INTEGER, fecha_carga DATE, fecha_creacion DATE, fecha_sync DATE)"
+          "CREATE TABLE vin (idv INTEGER PRIMARY KEY AUTOINCREMENT, idviaje INTEGER, cartaporte INTEGER, vin VARCHAR UNIQUE, distrib_clave VARCHAR, dest_nombre VARCHAR, ruta_clave INTEGER, ruta_nombre VARCHAR, origen VARCHAR, destino VARCHAR, modelo VARCHAR, marca VARCHAR, posicion VARCHAR, orientacion VARCHAR, compra INTEGER, fecha_carga DATE, fecha_creacion DATE, fecha_sync DATE)"
         );
 
         await db.execute(
@@ -223,7 +224,7 @@ class DatabaseProvider {
           else {
             var obvin = {
               "idv": item['idv'],
-              'viaje': item['viaje'],
+              'idviaje': item['idviaje'],
               'cartaporte': item['cartaporte'],
               'vin': vin,
               'distrib_clave': item['distrib_clave'],
@@ -294,7 +295,7 @@ class DatabaseProvider {
           else {
             var obvin = {
               "idv": item['idv'],
-              'viaje': item['viaje'],
+              'idviaje': item['idviaje'],
               'cartaporte': item['cartaporte'],
               'vin': vin,
               'distrib_clave': item['distrib_clave'],
@@ -375,7 +376,7 @@ class DatabaseProvider {
 
   asignarVinViaje(vv) async {
     final db = await database;
-    return db.update('vin', {'viaje' : vv.viaje, 'origen' : vv.origen, 'destino' : vv.destino}, where: "vin = ?", whereArgs: [vv.vin]);
+    return db.update('vin', {'idviaje' : vv.idviaje, 'origen' : vv.origen, 'destino' : vv.destino}, where: "vin = ?", whereArgs: [vv.vin]);
   }
   
   asignarPoOrVIN(vv) async {
@@ -615,7 +616,7 @@ class DatabaseProvider {
   Future<List> obtenerInfoViaje(idvia) async {
     Database db = await database;
 
-    List<Map> data = await db.rawQuery("SELECT via.idviaje, via.supervisor, via.folio_bitacora, via.cartaporte, via.bitacora_fecha_carga, via.num_eco_unidad, via.nombre_operador, via.cliente_clave, via.cliente_nombre, via.ruta_clave, via.ruta_nombre, via.origen, via.destino, via.etiqueta, via.status_carga, via.notas, via.registrada_por, via.tipo_viaje, via.semana, via.estadoViaje, via.fecha_creacion, via.fecha_sync, vi.idv, vi.viaje, vi.cartaporte, vi.vin, vi.distrib_clave, vi.dest_nombre, vi.ruta_clave, vi.ruta_nombre, vi.origen, vi.destino, vi.modelo, vi.marca, vi.posicion, vi.orientacion, vi.compra, vi.fecha_carga, vi.fecha_creacion, vi.fecha_sync FROM viaje as via INNER JOIN vin as vi on vi.viaje = via.idviaje where via.idviaje = $idvia");
+    List<Map> data = await db.rawQuery("SELECT via.idviaje, via.supervisor, via.folio_bitacora, via.cartaporte, via.bitacora_fecha_carga, via.num_eco_unidad, via.nombre_operador, via.cliente_clave, via.cliente_nombre, via.ruta_clave, via.ruta_nombre, via.origen, via.destino, via.etiqueta, via.status_carga, via.notas, via.registrada_por, via.tipo_viaje, via.semana, via.estadoViaje, via.fecha_creacion, via.fecha_sync, vi.idv, vi.idviaje, vi.cartaporte, vi.vin, vi.distrib_clave, vi.dest_nombre, vi.ruta_clave, vi.ruta_nombre, vi.origen, vi.destino, vi.modelo, vi.marca, vi.posicion, vi.orientacion, vi.compra, vi.fecha_carga, vi.fecha_creacion, vi.fecha_sync FROM viaje as via INNER JOIN vin as vi on vi.idviaje = via.idviaje where via.idviaje = $idvia");
     log(data.toString());
     Map<String, dynamic> viajesAgrupados = {};
     Map<String, dynamic> viajesAgrupadosfafg = {};
@@ -651,7 +652,7 @@ class DatabaseProvider {
 
         var obvin = {
           'idv': viaje['idv'],
-          'viaje': viaje['viaje'],
+          'idviaje': viaje['idviaje'],
           'cartaporte': viaje['cartaporte'],
           'vin': viaje['vin'],
           'distrib_clave': viaje['distrib_clave'],
@@ -682,22 +683,22 @@ class DatabaseProvider {
     return viajesAgrupadosfafg.values.toList();
   }
 
-  Future<List> enviarViajeServer(idvia) async {
+  Future enviarViajeServer() async {
     Database db = await database;
     Map<String, dynamic> organizedData = {};
+    String jsonString;
 
     List<Map> data = await db.rawQuery(
-      "SELECT * FROM viaje as via INNER JOIN vin as v on via.idviaje = v.viaje INNER JOIN dano as d ON v.vin = d.vin INNER JOIN evidencia as e on e.iddano = d.idd and e.idviaje = via.idviaje where via.idviaje = '$idvia'"
+      // "SELECT * FROM viaje as via INNER JOIN vin as v on via.idviaje = v.idviaje INNER JOIN dano as d ON v.vin = d.vin INNER JOIN evidencia as e on e.iddano = d.idd and e.idviaje = via.idviaje where via.idviaje = '$idvia'"
+      "SELECT * FROM viaje as via INNER JOIN vin as v on via.idviaje = v.idviaje INNER JOIN dano as d ON v.vin = d.vin WHERE estadoViaje = 'Completo'"
     );
-    
-    log(data.toString());
-
 
     if(data.isNotEmpty) {
       for(var item in data) {
         String vin = item['vin'] ?? '';
         int iddano = item['iddano'] ?? 0;
         int ide = item['ide'] ?? 0;
+        int idvia = item['idviaje'] ?? 0;
 
         var evidence = {
           'ide': ide,
@@ -705,7 +706,7 @@ class DatabaseProvider {
           'archivo': item['archivo']
         };
 
-        if(organizedData.containsKey(vin)) {
+        if(organizedData.containsKey(idvia)) {
           bool found = false;
           for(var dano in organizedData[vin]!['danoos']) {
             if(dano['iddano'] == iddano) {
@@ -758,7 +759,7 @@ class DatabaseProvider {
 
           var obvin = {
             "idv": item['idv'],
-            'viaje': item['viaje'],
+            'idviaje': item['idviaje'],
             'cartaporte': item['cartaporte'],
             'vin': vin,
             'distrib_clave': item['distrib_clave'],
@@ -780,14 +781,21 @@ class DatabaseProvider {
             ]
           };
 
-          organizedData[vin] = {'viajep': obviaje, 'vinp': obvin, 'danoos': []};
+          organizedData[vin] = {'viajep': obviaje, 'vinp': obvin};
         }
 
-        // final String jsonString  = jsonEncode(organizedData);
+      
       }
     }
+    jsonString  = jsonEncode(organizedData);
       
-    return organizedData.values.toList();
+    return jsonString;
+  }
+
+  actualizarEstadoViaje(idviaje) async {
+    final db = await database;
+
+    return db.update('viaje', {'estadoViaje': 'Completo'}, where: "idviaje = ?", whereArgs: [idviaje]);
   }
 
   Future borrarViaje(idviaje) async {

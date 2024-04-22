@@ -202,7 +202,7 @@ class _CompraVinState extends State<CompraVin> {
 
   registrarVin(valorvin) async {
     vin = Vin(
-      viaje: null,
+      idviaje: null,
       cartaporte: null,
       vin: valorvin,
       distrib_clave: null,

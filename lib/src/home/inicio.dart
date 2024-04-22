@@ -59,7 +59,7 @@ class _InicioScreenState extends State<InicioScreen> {
 
           // Devuelve true si el usuario confirma salir,
           // false si el usuario decide quedarse en la pantalla.
-          return confirmExit ?? false;
+          return confirmExit;
         },
 
 

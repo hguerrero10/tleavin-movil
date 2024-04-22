@@ -34,6 +34,7 @@ class _ResumenViajeState extends State<ResumenViaje> {
     formatWH = DateFormat('yyyy/MM/dd HH:mm:ss'); 
     fechaH = formatWH.format(DateTime.now());
 
+
     super.initState();
   }
 
@@ -80,20 +81,34 @@ class _ResumenViajeState extends State<ResumenViaje> {
                       )
                     )
                   ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.edit_outlined,
                         color: Colors.white
                       ),
-                      SizedBox(width: 10),
-                      Text(
-                        'Firma Inspector',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white
-                        )
+                      const SizedBox(width: 10),
+                      Stack(
+                        children: [
+                          Row(
+                            children: [
+                              const Text(
+                                'Firma Inspector',
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  color: Colors.white
+                                )
+                              ),
+                              const SizedBox(width: 10),
+                              itemP.firmainspector != null ? const Icon(
+                              Icons.check,
+                                size: 30,
+                                color: Colors.green
+                              ) : const SizedBox()
+                            ]
+                          )
+                        ]
                       )
                     ]
                   )
@@ -110,20 +125,34 @@ class _ResumenViajeState extends State<ResumenViaje> {
                       )
                     )
                   ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.edit_outlined,
                         color: Colors.white
                       ),
-                      SizedBox(width: 10),
-                      Text(
-                        'Firma Operador Logistico',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white
-                        )
+                      const SizedBox(width: 10),
+                      Stack(
+                        children: [
+                          Row(
+                            children: [
+                              const Text(
+                                'Firma Operador Logistico',
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  color: Colors.white
+                                )
+                              ),
+                              const SizedBox(width: 10),
+                              itemP.firmaOperadorLogistico != null ? const Icon(
+                              Icons.check,
+                                size: 30,
+                                color: Colors.green
+                              ) : const SizedBox()
+                            ]
+                          )
+                        ]
                       )
                     ]
                   )
@@ -140,20 +169,34 @@ class _ResumenViajeState extends State<ResumenViaje> {
                       )
                     )
                   ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.person,
                         color: Colors.white
                       ),
-                      SizedBox(width: 10),
-                      Text(
-                        'Firma Operador',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white
-                        )
+                     const SizedBox(width: 10),
+                      Stack(
+                        children: [
+                          Row(
+                            children: [
+                              const Text(
+                                'Firma Operador',
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  color: Colors.white
+                                )
+                              ),
+                              const SizedBox(width: 10),
+                              itemP.firmaOperador != null ? const Icon(
+                              Icons.check,
+                                size: 30,
+                                color: Colors.green
+                              ) : const SizedBox()
+                            ]
+                          )
+                        ]
                       )
                     ]
                   )
@@ -201,11 +244,14 @@ class _ResumenViajeState extends State<ResumenViaje> {
               fontWeight: FontWeight.bold
             )
           ),
-          Text(
-            sub ?? '',
-            style: const TextStyle(
-              fontSize: 18
-            )
+          SizedBox(
+            width: 210,
+            child: Text(
+              sub ?? '',
+              style: const TextStyle(
+                fontSize: 18
+              )
+            ),
           )
         ]
       )
@@ -232,6 +278,12 @@ class _ResumenViajeState extends State<ResumenViaje> {
         log('evidencia insertada');
         log('$value');
         
+      }).timeout(const Duration(seconds: 60), onTimeout: () {
+        itemP.addError();
+      });
+
+      await DatabaseProvider.db.actualizarEstadoViaje(widget.viaje!.idviaje!).then((result) {
+
       }).timeout(const Duration(seconds: 60), onTimeout: () {
         itemP.addError();
       });

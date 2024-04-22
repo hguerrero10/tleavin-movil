@@ -87,7 +87,7 @@ class _DetalleVinState extends State<DetalleVin> {
                 _encabezados('Marca: ', vi[index]['vinp']['marca'] != null ? '${vi[index]['vinp']['marca']}' : 'Sin Identificar'),
                 _encabezados('Modelo: ', vi[index]['vinp']['modelo'] != null ? '${vi[index]['vinp']['modelo']}' : 'Sin Identificar'),
                 _encabezados('Comprado: ', vi[index]['vinp']['compra'] == 0 ? 'No' : 'Si'),
-                _encabezados('Viaje: ', vi[index]['vinp']['viaje'] != null ? ' ${vi[index]['vinp']['viaje']}' : 'Sin Asignar'),
+                _encabezados('Viaje: ', vi[index]['vinp']['idviaje'] != null ? ' ${vi[index]['vinp']['idviaje']}' : 'Sin Asignar'),
                 _encabezados('Posicion: ', vi[index]['vinp']['posicion'] != null ? ' ${vi[index]['vinp']['posicion']}' : 'Sin Asignar'),
                 _encabezados('Orientacion: ', vi[index]['vinp']['orientacion'] != null ? ' ${vi[index]['vinp']['orientacion']}' : 'Sin Asignar'),
                 _encabezados('Fecha de registro: ', vi[index]['vinp']['fecha_creacion']),

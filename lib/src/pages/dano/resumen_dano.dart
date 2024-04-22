@@ -226,7 +226,7 @@ class _ResumenDanoState extends State<ResumenDano> {
   realizarCompra(da) async {
     vin = Vin(
       idv: da['idv'],
-      viaje: da['viaje'],
+      idviaje: da['idviaje'],
       cartaporte: da['cartaporte'],
       vin: da['vin'],
       distrib_clave: da['distrib_clave'], 

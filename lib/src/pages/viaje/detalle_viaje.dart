@@ -65,9 +65,6 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
       itemBuilder: (context, index) {
         final dato = invi[index]['viaje'];
 
-
-
-
         resumenviaje = Viaje(
           idviaje: dato['idviaje'],
           supervisor: dato['supervisor'],
@@ -91,8 +88,6 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
           fecha_creacion: dato['fecha_creacion'],
           fecha_sync: dato['fecha_sync']
         );
-
-
 
         return SingleChildScrollView(
           child: Container(
@@ -156,11 +151,14 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
               fontWeight: FontWeight.bold
             )
           ),
-          Text(
-            sub ?? '',
-            style: const TextStyle(
-              fontSize: 18
-            )
+          SizedBox(
+            width: 180,
+            child: Text(
+              sub ?? '',
+              style: const TextStyle(
+                fontSize: 18
+              )
+            ),
           )
         ]
       )

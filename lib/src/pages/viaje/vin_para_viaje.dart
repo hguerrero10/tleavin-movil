@@ -49,7 +49,7 @@ class VinsParaViajeState extends State<VinsParaViaje> {
     for(var d in data) {
       var vi = (
         idv: d.idv,
-        viaje: d.viaje ?? 0,
+        idviaje: d.idviaje ?? 0,
         cartaporte: d.cartaporte ?? '',
         vin: d.vin,
         distrib_clave: d.distrib_clave ?? '',

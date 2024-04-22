@@ -23,7 +23,7 @@ class Sincronizar extends StatefulWidget {
 class _SincronizarState extends State<Sincronizar> {
 
   String urlEnvioViaje = 'http://tleavin.tlea.online/movil/viaje';
-  String urlEnvioVIN = 'http://api-pruebas.tlea.online/agreagrVIN';
+  // String urlEnvioVIN = 'http://api-pruebas.tlea.online/agreagrVIN';
 
 
   String urlAreaDanoServer = 'http://api-pruebas.tlea.online/obtenerAreaDano';
@@ -37,6 +37,8 @@ class _SincronizarState extends State<Sincronizar> {
   
   String urlClienteServer = 'http://api-pruebas.tlea.online/obtenerCliente';
   Cliente? clienteInsertList;
+
+  var viajesCompletos = [];
 
 
   obtenerAreaDanoServer() async {
@@ -500,7 +502,7 @@ class _SincronizarState extends State<Sincronizar> {
                   )
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => enviarViaje(),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(const Color.fromRGBO(242, 211, 0, 1)),
                     padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(30)),
@@ -586,14 +588,18 @@ class _SincronizarState extends State<Sincronizar> {
   }
 
   Future enviarViaje() async {
-    var json;
+    String token = "83c44c8cf9264486e94906844090e30b89a21715";
+    var datos = await DatabaseProvider.db.enviarViajeServer();
     
     try{
-      http.Response response = await http.post(Uri.parse(urlEnvioViaje), body: json, headers: {"Content-Type" : "application/json"});
-      var res = jsonDecode(response.body);
-      if(res == 200) {
+      http.Response response = await http.post(Uri.parse(urlEnvioViaje), body: datos, headers: {
+        "Content-Type" : "application/json",
+        "Authorization":  "Bearer $token"
+      });
+      
+      if(response.statusCode == 200) {
         Fluttertoast.showToast(
-          msg: "Conexion Exitosa al Server",
+          msg: "Conexion Exitosa al Servidor",
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
@@ -602,10 +608,18 @@ class _SincronizarState extends State<Sincronizar> {
           fontSize: 20
         );
 
-        await viajesparaserver();
+        Fluttertoast.showToast(
+          msg: "Viajes Sincronizados al Servidor",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 20
+        );
       } 
       else {
-        _dialogBuilder(context, 'A ocurrido un problema, Favor de comunicarse a soporte(Error:s ${response.statusCode})');
+        _dialogBuilder(context, 'A ocurrido un problema, Favor de comunicarse a soporte (Error: ${response.statusCode}) $response');
         itemP.addError();
       }
     }
@@ -614,11 +628,7 @@ class _SincronizarState extends State<Sincronizar> {
     }
   }
 
-  viajesparaserver() {
-
-  }
-
-  Future<void> _dialogBuilder(BuildContext context, er) {
+  Future<void> _dialogBuilder(context, er) {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -652,7 +662,7 @@ class _SincronizarState extends State<Sincronizar> {
                 textStyle: Theme.of(context).textTheme.labelLarge,
               ),
               child: const Text('Ok'),
-              onPressed: () {}
+              onPressed: () => Navigator.pop(context)
             )
           ]
         );

@@ -11,7 +11,6 @@ import 'package:tleavin_mobil/model/viaje.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/home/inicio.dart';
 import 'package:tleavin_mobil/src/pages/dano/listas.dart';
-import 'package:tleavin_mobil/src/pages/viaje/vin_para_viaje.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 
 class ArmarViaje extends StatefulWidget {
@@ -238,7 +237,7 @@ class _ArmarViajeState extends State<ArmarViaje> {
       child: TextField(
         controller: control,
         keyboardType: tipo,
-        textCapitalization: TextCapitalization.sentences,
+        textCapitalization: TextCapitalization.words,
         decoration: InputDecoration(
           hintText: place,
           hintStyle: const TextStyle(
@@ -326,7 +325,7 @@ class _ArmarViajeState extends State<ArmarViaje> {
       destino: _destinoTextController.text,
       etiqueta: null,
       status_carga: 0,
-      notas: null,
+      notas: _notaTextController.text,
       registrada_por: itemP.usuario!.usuario!,
       tipo_viaje: null,
       semana: null,
@@ -343,7 +342,7 @@ class _ArmarViajeState extends State<ArmarViaje> {
       for(var ed in listaVinsViaje) {
         var vinsviaje = (
           vin: ed,
-          viaje: value,
+          idviaje: value,
           origen: _origenTextController.text,
           destino: _destinoTextController.text,
         );
