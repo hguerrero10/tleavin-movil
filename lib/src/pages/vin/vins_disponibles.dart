@@ -35,6 +35,7 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
 
   obtenerlistaCompletaVins() async {
     var datos = await DatabaseProvider.db.obtenerListaVins();
+    
     setState(() {
       todosVins = datos;
     });
@@ -42,9 +43,9 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
 
   @override
   void initState() {
-    obtenerlistaCompletaVins();
-    
     super.initState();
+    
+    obtenerlistaCompletaVins();
   }
 
   @override

@@ -244,7 +244,7 @@ class _ArmarViajeState extends State<ArmarViaje> {
             color: Colors.grey
           )
         )
-      ),
+      )
     );
   }
 
@@ -331,7 +331,7 @@ class _ArmarViajeState extends State<ArmarViaje> {
       semana: null,
       estadoViaje: 'En Proceso',
       fecha_creacion: fecha,
-      fecha_sync: null,
+      fecha_sync: null
     );
 
     log(viaje.toString());
@@ -354,7 +354,7 @@ class _ArmarViajeState extends State<ArmarViaje> {
         });
       }
 
-      Fluttertoast.showToast(
+      Fluttertoast.showToast( 
         msg: "Viaje armado con Exito!",
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,

@@ -1,5 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:tleavin_mobil/database/db.dart';
+import 'package:tleavin_mobil/provider/items_provider.dart';
+import 'package:tleavin_mobil/src/home/inicio.dart';
+import 'package:tleavin_mobil/src/pages/vin/inspeccion_vin.dart';
 import 'package:widget_zoom/widget_zoom.dart';
 import 'package:flutter/services.dart';
 
@@ -13,12 +18,33 @@ class DetalleVin extends StatefulWidget {
 
 class _DetalleVinState extends State<DetalleVin> {
 
+  String? vinSeleccionado;
+
   Image imageFromBase64String(base64) {
     return Image.memory(
       base64Decode(base64),
       fit: BoxFit.cover,
       width: 75,
     );
+  }
+
+  comprarVin(v) async{
+    await DatabaseProvider.db.compraVINRegistrado(v).then((value) {
+      Fluttertoast.showToast(
+        msg: "VIN: $v Comprado con Exito!",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 20
+      );
+
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const InicioScreen()), (Route<dynamic> route) => false);
+
+    }).timeout(const Duration(seconds: 30), onTimeout: () {
+      itemP.addError();
+    });
   }
 
   @override
@@ -40,6 +66,12 @@ class _DetalleVinState extends State<DetalleVin> {
           )
         )
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => InspeccionVin(vin: vinSeleccionado)), (route) => false),
+        foregroundColor: Colors.black,
+        backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
+        child: const Icon(Icons.note_add_rounded)
+      ),
       body: infoDeVin(widget.inf)
     );
   }
@@ -48,6 +80,9 @@ class _DetalleVinState extends State<DetalleVin> {
     return ListView.builder(
       itemCount: vi.length,
       itemBuilder: (context, index) {
+     
+      vinSeleccionado = vi[index]['vinp']['vin'];
+      
         return SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(15),
@@ -78,8 +113,8 @@ class _DetalleVinState extends State<DetalleVin> {
                         },
                         child: const Icon(
                           Icons.copy,
-                          size: 23,
-                        ),
+                          size: 23
+                        )
                       )
                     ]
                   )
@@ -92,10 +127,34 @@ class _DetalleVinState extends State<DetalleVin> {
                 _encabezados('Orientacion: ', vi[index]['vinp']['orientacion'] != null ? ' ${vi[index]['vinp']['orientacion']}' : 'Sin Asignar'),
                 _encabezados('Fecha de registro: ', vi[index]['vinp']['fecha_creacion']),
                 const SizedBox(height: 10),
+                vi[index]['vinp']['compra'] == 0 ? Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: ElevatedButton(
+                    onPressed: () =>comprarVin(vi[index]['vinp']['vin']),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(15)),
+                      minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 40)),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16)
+                        )
+                      )
+                    ),
+                    child: const Text(
+                      'Realizar Compra',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white
+                      )
+                    )
+                  )
+                ) : const SizedBox(),
+                const SizedBox(height: 10),
                 _cardDanos(vi[index]['danoos']),
               ]
-            ),
-          ),
+            )
+          )
         );
       }
     );
@@ -162,75 +221,75 @@ class _DetalleVinState extends State<DetalleVin> {
           shadowColor: Colors.black,
           surfaceTintColor: const Color.fromRGBO(242, 211, 0, 1),
           child: SizedBox(
-              height: 690,
-              width: MediaQuery.of(context).size.width,
-              child: Container(
-                padding: const EdgeInsets.only(left:16, right: 16),
-                child: Column(
-                  children: <Widget>[
-                    ListTile(
-                      leading: const Icon(
-                        Icons.dangerous,
-                        size: 30
-                      ),
-                      title: Row(
-                        children: [
-                          const Text(
-                            'Daño: ',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold
-                            ),
-                          ),
-                          Text(
-                            '$totalda',
-                            style: const TextStyle(
-                              fontSize: 18
-                            )
-                          )
-                        ],
-                      ),
-                      subtitle: Row(
-                        children: [
-                          Text(
-                            'Panel: ',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black.withOpacity(0.6)
-                            ),
-                          ),
-                          Text(
-                            dato['panel'] ?? 'General',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.black.withOpacity(0.6)
-                            )
-                          )
-                        ],
-                      )
+            height: 690,
+            width: MediaQuery.of(context).size.width,
+            child: Container(
+              padding: const EdgeInsets.only(left:16, right: 16),
+              child: Column(
+                children: <Widget>[
+                  ListTile(
+                    leading: const Icon(
+                      Icons.dangerous,
+                      size: 30
                     ),
-                    const Divider(
-                      color: Colors.black,
-                      thickness: 1.0,
-                      height: 20
+                    title: Row(
+                      children: [
+                        const Text(
+                          'Daño: ',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold
+                          )
+                        ),
+                        Text(
+                          '$totalda',
+                          style: const TextStyle(
+                            fontSize: 18
+                          )
+                        )
+                      ]
                     ),
+                    subtitle: Row(
+                      children: [
+                        Text(
+                          'Panel: ',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black.withOpacity(0.6)
+                          ),
+                        ),
+                        Text(
+                          dato['panel'] ?? 'General',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black.withOpacity(0.6)
+                          )
+                        )
+                      ],
+                    )
+                  ),
+                  const Divider(
+                    color: Colors.black,
+                    thickness: 1.0,
+                    height: 20
+                  ),
 
-                    dato['area'] == null ? const SizedBox() : _encabezados('Area: ', '${dato['area']}'),
-                    dato['tipo'] == null ? const SizedBox() : _encabezados('Tipo: ', '${dato['tipo']}'),
-                    dato['severidad'] == null ? const SizedBox() : _encabezados('Severidad: ', '${dato['severidad']}'),
-             
-                    dato['severidad'] == null ? _encabezados('Estado: ', '${dato['registroTipo']}') : const SizedBox(),
+                  dato['area'] == null ? const SizedBox() : _encabezados('Area: ', '${dato['area']}'),
+                  dato['tipo'] == null ? const SizedBox() : _encabezados('Tipo: ', '${dato['tipo']}'),
+                  dato['severidad'] == null ? const SizedBox() : _encabezados('Severidad: ', '${dato['severidad']}'),
+            
+                  dato['severidad'] == null ? _encabezados('Estado: ', '${dato['registroTipo']}') : const SizedBox(),
 
-                    dato['area'] == null ? const SizedBox() : _encabezados('Codificacion: ', '${dato['area']}-${dato['tipo']}-${dato['severidad']}'),
-                    _encabezadosCard('Notas: ', dato['nota'] != '' ?  '${dato['nota']}' : 'Sin notas'),
-                    _encabezados('Evidencias: ', ''),
-     
-                    _evidenciasDano(dato['evidencias'])
-                  ],
-                )
+                  dato['area'] == null ? const SizedBox() : _encabezados('Codificacion: ', '${dato['area']}-${dato['tipo']}-${dato['severidad']}'),
+                  _encabezadosCard('Notas: ', dato['nota'] != '' ?  '${dato['nota']}' : 'Sin notas'),
+                  _encabezados('Evidencias: ', ''),
+    
+                  _evidenciasDano(dato['evidencias'])
+                ]
               )
             )
+          )
         );
       }
     );

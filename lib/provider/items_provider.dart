@@ -22,9 +22,6 @@ class ItemsProvider {
   Usuario? usuario;
   String? ubicacion;
 
-
-
-
   bool danoAreaInsert = false;
   bool danoAreaInsertTimeOut = false;
   bool registroAreaDano = false;

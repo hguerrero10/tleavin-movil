@@ -1,3 +1,5 @@
+import 'package:tleavin_mobil/model/vin.dart';
+
 class Viaje{
   int? idviaje;
   String? supervisor;
@@ -21,6 +23,7 @@ class Viaje{
   String? estadoViaje;
   String? fecha_creacion;
   String? fecha_sync;
+  List<String>? vines;
 
   Viaje({
     this.idviaje,
@@ -44,12 +47,13 @@ class Viaje{
     this.semana,
     this.estadoViaje,
     this.fecha_creacion,
-    this.fecha_sync
+    this.fecha_sync,
+    this.vines
   });
 
   @override
   String toString() {
-    return 'Viaje { supervisor: $supervisor, folio_bitacora: $folio_bitacora, cartaporte: $cartaporte, bitacora_fecha_carga: $bitacora_fecha_carga, num_eco_unidad: $num_eco_unidad, nombre_operador: $nombre_operador, cliente_nombre: $cliente_nombre, cliente_clave: $cliente_clave, ruta_clave: $ruta_clave, ruta_nombre: $ruta_nombre, origen: $origen, destino: $destino, etiqueta: $etiqueta, status_carga: $status_carga, notas: $notas, registrada_por: $registrada_por, tipo_viaje: $tipo_viaje, semana: $semana, estadoViaje: $estadoViaje, fecha_creacion: $fecha_creacion, fecha_sync: $fecha_sync, idviaje: $idviaje }';
+    return 'Viaje { idviaje: $idviaje, supervisor: $supervisor, folio_bitacora: $folio_bitacora, cartaporte: $cartaporte, bitacora_fecha_carga: $bitacora_fecha_carga, num_eco_unidad: $num_eco_unidad, nombre_operador: $nombre_operador, cliente_nombre: $cliente_nombre, cliente_clave: $cliente_clave, ruta_clave: $ruta_clave, ruta_nombre: $ruta_nombre, origen: $origen, destino: $destino, etiqueta: $etiqueta, status_carga: $status_carga, notas: $notas, registrada_por: $registrada_por, tipo_viaje: $tipo_viaje, semana: $semana, estadoViaje: $estadoViaje, fecha_creacion: $fecha_creacion, fecha_sync: $fecha_sync, vines: $vines }';
   }
 
   factory Viaje.fromMap(Map<String, dynamic> map) => Viaje(

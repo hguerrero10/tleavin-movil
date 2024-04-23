@@ -31,7 +31,7 @@ class _ResumenDanoState extends State<ResumenDano> {
         bool confirmExit = await showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('¿Quieres salir de la aplicación?'),
+            title: const Text('¿Quieres salir de la Compra?'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {

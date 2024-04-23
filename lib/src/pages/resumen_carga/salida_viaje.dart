@@ -1,7 +1,12 @@
+import 'dart:convert';
+import 'dart:core';
 import 'dart:developer';
+import 'dart:io';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/database/db.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tleavin_mobil/model/viaje.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:tleavin_mobil/src/home/inicio.dart';
@@ -27,6 +32,37 @@ class _ResumenViajeState extends State<ResumenViaje> {
   var formatWH;
   var fechaH;
   var firmascolectadas = [];
+  final ImagePicker picker = ImagePicker();
+
+
+  String? fotoIdentificacion;
+
+  Future<void> getCamara() async {
+    final List<XFile> pickedFileList = <XFile>[];
+    final photo = await picker.pickImage(
+      source: ImageSource.camera,
+      imageQuality: 100,
+      maxHeight: 720,
+      maxWidth: 1280
+    );
+
+    if(photo != null) {
+      await GallerySaver.saveImage(photo.path, albumName: 'TLEAVIN');
+      setState(() {
+        pickedFileList.add(XFile(photo.path));
+        convertirBase64(photo.path);
+      });
+    }
+  }
+
+  convertirBase64(value) async {
+    if(value != null) {
+      final imageData = await File(value).readAsBytes();
+      
+      fotoIdentificacion = null;
+      fotoIdentificacion = base64Encode(imageData);
+    }
+  }
 
   @override
   void initState() {
@@ -57,10 +93,10 @@ class _ResumenViajeState extends State<ResumenViaje> {
                 onPressed: () {
                   Navigator.of(context).pop(true);
                 },
-                child: const Text('Sí'),
-              ),
-            ],
-          ),
+                child: const Text('Sí')
+              )
+            ]
+          )
         );
         
         return confirmExit;
@@ -134,7 +170,7 @@ class _ResumenViajeState extends State<ResumenViaje> {
                     ]
                   )
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () => Navigator.push(context, MaterialPageRoute(builder: ((context) => const FirmaOpLogicoWidget()))),
                   style: ButtonStyle(
@@ -222,7 +258,40 @@ class _ResumenViajeState extends State<ResumenViaje> {
                     ]
                   )
                 ),
-                const SizedBox(height: 90),
+                const SizedBox(height: 20),
+                
+                Center(
+                  child: GestureDetector(
+                    onTap: () => getCamara(),
+                    child: Stack(
+                      children: <Widget>[
+                        Column(
+                          children: [
+                            Image.asset(
+                              'assets/img/camara.png',
+                              width: 70,
+                              height: 70,
+                            ),
+                            const Text(
+                              'ID Operador Logistico',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold
+                              )
+                            )
+                          ]
+                        ),
+                        fotoIdentificacion != null ? const Icon(
+                          Icons.check_circle_rounded,
+                          color: Colors.green,
+                          size: 60
+                        ) : const SizedBox()
+                      ]
+                    )
+                  ),
+                ),
+                
+                const SizedBox(height: 40),
+                
                 Center(
                   child: GradientSlideToAct(
                     width: 320,
@@ -280,9 +349,10 @@ class _ResumenViajeState extends State<ResumenViaje> {
   }
 
   guardarFirmasySalida() async {
-    firmascolectadas.add({'nombre': 'Inspector', 'firma': itemP.firmainspector});
-    firmascolectadas.add({'nombre': 'Operador', 'firma': itemP.firmaOperador});
-    firmascolectadas.add({'nombre': 'Operador Logico', 'firma': itemP.firmaOperadorLogistico});
+    firmascolectadas.add({'nombre': 'Inspector', 'b64': itemP.firmainspector});
+    firmascolectadas.add({'nombre': 'Operador', 'b64': itemP.firmaOperador});
+    firmascolectadas.add({'nombre': 'Operador Logico', 'b64': itemP.firmaOperadorLogistico});
+    firmascolectadas.add({'nombre': 'ID Operador Logico', 'b64': fotoIdentificacion});
     log(firmascolectadas.toString());
 
     for(var ed in firmascolectadas) {
@@ -291,7 +361,7 @@ class _ResumenViajeState extends State<ResumenViaje> {
         iddano: null,
         idviaje: widget.viaje!.idviaje!,
         nombre: ed['nombre'],
-        archivo: ed['firma'],
+        archivo: ed['b64'],
         fechahora: fechaH
       );
 

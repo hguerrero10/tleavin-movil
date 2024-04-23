@@ -12,7 +12,6 @@ import 'package:tleavin_mobil/model/evidencia.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/pages/dano/listas.dart';
 import 'package:tleavin_mobil/src/pages/dano/resumen_dano.dart';
-import 'package:tleavin_mobil/src/pages/vin/registro_vin.dart';
 import 'package:tleavin_mobil/src/pages/vin/inspeccion_vin.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:image_picker/image_picker.dart';
@@ -140,263 +139,289 @@ class _RegistroDanoState extends State<RegistroDano> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
-        title: const Text(
-          'Registrar Daño',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black
+    return WillPopScope(
+      onWillPop: () async {
+        bool confirmExit = await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('¿Quieres salir del Registro Daño?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false); 
+                },
+                child: const Text('No'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: const Text('Sí')
+              )
+            ]
           )
+        );
+        
+        return confirmExit;
+      },
+      child: Scaffold(
+          appBar: AppBar(
+          backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
+          title: const Text(
+            'Registrar Daño',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black
+            )
+          ),
+          // leading: IconButton(
+          //   icon: const Icon(Icons.arrow_back_sharp),
+          //   onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const CompraVin()), (Route<dynamic> route) => false)
+          // )
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_sharp),
-          onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const CompraVin()), (Route<dynamic> route) => false)
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const Cuerpo(),
+              const SizedBox(height: 10),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: [
+                        const Text(
+                          'VIN: ',
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        Text(
+                          widget.vin,
+                          style: const TextStyle(
+                            fontSize: 17
+                          ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Text(
+                          'Panel Seleccionado: ',
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        Text(
+                          widget.panel,
+                          style: const TextStyle(
+                            fontSize: 17
+                          ),
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    _titulo('Area:'),
+                    _dropDownArea(),
+                    const SizedBox(height: 10),
+                    _titulo('Tipo:'),
+                    _dropDownTipo(),
+                    const SizedBox(height: 10),
+                    _titulo('Severidad:'),
+                    _dropDownSeveridad(),
+                    const SizedBox(height: 30),
+                    Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              GestureDetector(
+                                onTap: () => getCamara(1),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Column(
+                                      children: [
+                                        Image.asset(
+                                          'assets/img/camara.png',
+                                          width: 40,
+                                          height: 40,
+                                        ),
+                                        const Text(
+                                          'Lejos',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold
+                                          )
+                                        )
+                                      ]
+                                    ),
+                                    base64Foto1 != null ? const Icon(
+                                      Icons.check_circle_rounded,
+                                      color: Colors.green,
+                                      size: 60
+                                    ) : const SizedBox()
+                                  ]
+                                )
+                              ),
+                              GestureDetector(
+                                onTap: () => getCamara(2),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Column(
+                                      children: [
+                                        Image.asset(
+                                          'assets/img/camara.png',
+                                          width: 40,
+                                          height: 40
+                                        ),
+                                        const Text(
+                                          'Angulo 1',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold
+                                          )
+                                        )
+                                      ]
+                                    ),
+                                    base64Foto2 != null ? const Icon(
+                                      Icons.check_circle_rounded,
+                                      color: Colors.green,
+                                      size: 60
+                                    ) : const SizedBox()
+                                  ]
+                                )
+                              ),
+                              GestureDetector(
+                                onTap: () => getCamara(3),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Column(
+                                      children: [
+                                        Image.asset(
+                                          'assets/img/camara.png',
+                                          width: 40,
+                                          height: 40,
+                                        ),
+                                        const Text(
+                                          'Angulo 2',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold
+                                          )
+                                        )
+                                      ]
+                                    ),
+                                    base64Foto3 != null ? const Icon(
+                                      Icons.check_circle_rounded,
+                                      color: Colors.green,
+                                      size: 60
+                                    ) : const SizedBox()
+                                  ]
+                                )
+                              ),
+                              GestureDetector(
+                                onTap: () => getCamara(4),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Column(
+                                      children: [
+                                        Image.asset(
+                                          'assets/img/camara.png',
+                                          width: 40,
+                                          height: 40
+                                        ),
+                                        const Text(
+                                          'Angulo 3',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold
+                                          )
+                                        )
+                                      ]
+                                    ),
+                                    base64Foto4 != null ? const Icon(
+                                      Icons.check_circle_rounded,
+                                      color: Colors.green,
+                                      size: 60
+                                    ) : const SizedBox()
+                                  ]
+                                )
+                              )
+                            ]
+                          ),
+                          const SizedBox(height: 20),
+                          TextField(
+                            controller: _notasTextController,
+                            keyboardType: TextInputType.text,
+                            textCapitalization: TextCapitalization.sentences,
+                            decoration: const InputDecoration(
+                              hintText: 'Notas',
+                              hintStyle: TextStyle(
+                                color: Colors.grey
+                              )
+                            )
+                          ),
+                          const SizedBox(height: 20),
+                          ElevatedButton(
+                            onPressed: () async  {
+                              await guardarDano();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => InspeccionVin(vin: widget.vin))
+                              );
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
+                              minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16)
+                                )
+                              )
+                            ),
+                            child: const Text(
+                              'Registrar Otro Daño',
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.white
+                              )
+                            )
+                          ),
+                          const SizedBox(height: 10),
+                          ElevatedButton(
+                            onPressed: () async => obtenerResumen(widget.vin),
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
+                              minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16)
+                                )
+                              ),
+                            ),
+                            child: const Text(
+                              'Finalizar',
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.white
+                              )
+                            )
+                          )
+                        ]
+                      )
+                    )
+                  ]
+                )
+              ),
+              const SizedBox(height: 20)
+            ]
+          )
         )
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const Cuerpo(),
-            const SizedBox(height: 10),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    children: [
-                      const Text(
-                        'VIN: ',
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold
-                        ),
-                      ),
-                      Text(
-                        widget.vin,
-                        style: const TextStyle(
-                          fontSize: 17
-                        ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const Text(
-                        'Panel Seleccionado: ',
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold
-                        ),
-                      ),
-                      Text(
-                        widget.panel,
-                        style: const TextStyle(
-                          fontSize: 17
-                        ),
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  _titulo('Area:'),
-                  _dropDownArea(),
-                  const SizedBox(height: 10),
-                  _titulo('Tipo:'),
-                  _dropDownTipo(),
-                  const SizedBox(height: 10),
-                  _titulo('Severidad:'),
-                  _dropDownSeveridad(),
-                  const SizedBox(height: 30),
-                  Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            GestureDetector(
-                              onTap: () => getCamara(1),
-                              child: Stack(
-                                children: <Widget>[
-                                  Column(
-                                    children: [
-                                      Image.asset(
-                                        'assets/img/camara.png',
-                                        width: 40,
-                                        height: 40,
-                                      ),
-                                      const Text(
-                                        'Lejos',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold
-                                        ),
-                                      )
-                                    ]
-                                  ),
-                                  base64Foto1 != null ? const Icon(
-                                    Icons.check_circle_rounded,
-                                    color: Colors.green,
-                                    size: 60
-                                  ) : const SizedBox()
-                                ]
-                              )
-                            ),
-                            GestureDetector(
-                              onTap: () => getCamara(2),
-                              child: Stack(
-                                children: <Widget>[
-                                  Column(
-                                    children: [
-                                      Image.asset(
-                                        'assets/img/camara.png',
-                                        width: 40,
-                                        height: 40
-                                      ),
-                                      const Text(
-                                        'Angulo 1',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold
-                                        )
-                                      )
-                                    ]
-                                  ),
-                                  base64Foto2 != null ? const Icon(
-                                    Icons.check_circle_rounded,
-                                    color: Colors.green,
-                                    size: 60
-                                  ) : const SizedBox()
-                                ]
-                              )
-                            ),
-                            GestureDetector(
-                              onTap: () => getCamara(3),
-                              child: Stack(
-                                children: <Widget>[
-                                  Column(
-                                    children: [
-                                      Image.asset(
-                                        'assets/img/camara.png',
-                                        width: 40,
-                                        height: 40,
-                                      ),
-                                      const Text(
-                                        'Angulo 2',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold
-                                        )
-                                      )
-                                    ]
-                                  ),
-                                  base64Foto3 != null ? const Icon(
-                                    Icons.check_circle_rounded,
-                                    color: Colors.green,
-                                    size: 60
-                                  ) : const SizedBox()
-                                ]
-                              )
-                            ),
-                            GestureDetector(
-                              onTap: () => getCamara(4),
-                              child: Stack(
-                                children: <Widget>[
-                                  Column(
-                                    children: [
-                                      Image.asset(
-                                        'assets/img/camara.png',
-                                        width: 40,
-                                        height: 40
-                                      ),
-                                      const Text(
-                                        'Angulo 3',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold
-                                        )
-                                      )
-                                    ]
-                                  ),
-                                  base64Foto4 != null ? const Icon(
-                                    Icons.check_circle_rounded,
-                                    color: Colors.green,
-                                    size: 60
-                                  ) : const SizedBox()
-                                ]
-                              )
-                            )
-                          ]
-                        ),
-                        const SizedBox(height: 20),
-                        TextField(
-                          controller: _notasTextController,
-                          keyboardType: TextInputType.text,
-                          textCapitalization: TextCapitalization.sentences,
-                          decoration: const InputDecoration(
-                            hintText: 'Notas',
-                            hintStyle: TextStyle(
-                              color: Colors.grey
-                            )
-                          )
-                        ),
-                        const SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: () async  {
-                            await guardarDano();
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => InspeccionVin(vin: widget.vin))
-                            );
-                          },
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
-                            minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16)
-                              )
-                            )
-                          ),
-                          child: const Text(
-                            'Registrar Otro Daño',
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              color: Colors.white
-                            )
-                          )
-                        ),
-                        const SizedBox(height: 10),
-                        ElevatedButton(
-                          onPressed: () async => obtenerResumen(widget.vin),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
-                            minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16)
-                              )
-                            ),
-                          ),
-                          child: const Text(
-                            'Finalizar',
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              color: Colors.white
-                            )
-                          )
-                        )
-                      ]
-                    )
-                  )
-                ]
-              )
-            ),
-            const SizedBox(height: 20)
-          ]
-        )
-      )
     );
   }
 
@@ -554,7 +579,6 @@ class _RegistroDanoState extends State<RegistroDano> {
 
         await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) {
           log('evidencia insertado');
-          log('$value');
         }).timeout(const Duration(seconds: 60), onTimeout: () {
           itemP.addError();
         });

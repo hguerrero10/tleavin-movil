@@ -128,9 +128,9 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   void initState() {
-    obtenerUsuariosAppServer();
-
     super.initState();
+
+    obtenerUsuariosAppServer();
   }
 
   @override
@@ -242,8 +242,8 @@ class _LoginFormState extends State<LoginForm> {
         });
         
         log(value.toString());
-        DatabaseProvider.db.actualizarUsuario(usuario!);
         itemP.addUser(value);
+        DatabaseProvider.db.actualizarUsuario(usuario!);
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const InicioScreen()), (Route<dynamic> route) => false);
       }
       itemP.deleteBoton();
@@ -299,11 +299,11 @@ class _LoginFormState extends State<LoginForm> {
 
   Widget _inputPassword(String placeholder, String mensaje, TextInputType tipo, TextEditingController controller, IconData icon) {
     return Container(
+      margin: const EdgeInsets.only(left: 15, right: 15),
+      padding: const EdgeInsets.only(left: 10),
+      decoration: kBoxDecorationStyle,
       width: MediaQuery.of(context).size.width,
       height: 60,
-      margin: const EdgeInsets.only(left: 15, right: 15),
-      decoration: kBoxDecorationStyle,
-      padding: const EdgeInsets.only(left: 10),
       child: Row(
         children: [
           Expanded(

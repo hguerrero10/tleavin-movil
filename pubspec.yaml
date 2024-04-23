@@ -55,6 +55,7 @@ dependencies:
   animated_icon: ^0.0.6
   searchable_listview: ^2.11.2
   gradient_slide_to_act: ^0.0.2
+  orm: 4.1.0
 
 dev_dependencies:
   flutter_test:

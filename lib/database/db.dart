@@ -406,6 +406,11 @@ class DatabaseProvider {
     return db.update('vin', {'posicion' : vv.posicion, 'orientacion' : vv.orientacion}, where: "vin = ?", whereArgs: [vv.vin]);
   }
 
+  compraVINRegistrado(vin) async { // para comprar el vin en detalle vin
+    final db = await database;
+    return db.update('vin', {'compra' : 1}, where: "vin = ?", whereArgs: [vin]);
+  }
+
   // CRUD DAÑO 
 
   Future<int> insertarDano(Dano nuevoRegistro) async {
@@ -477,6 +482,7 @@ class DatabaseProvider {
 
     return eviden;
   }
+  
   // CRUD DISPOSITIVOS
   
   Future<int> insertarDispositivo(Dispositivo nuevoRegistro) async {
@@ -530,7 +536,7 @@ class DatabaseProvider {
   Future<List<AreaDano>> obtenerAreaDano() async {
     final db = await database;
     List<AreaDano> lista;
-    var res = await db.query("area_dano");
+    var res = await db.rawQuery("SELECT * FROM area_dano ORDER BY codigo ASC");
 
     if (res.isNotEmpty) {
       lista =  res.map((u) => AreaDano.fromMap(u)).toList();
@@ -702,15 +708,27 @@ class DatabaseProvider {
       
     return viajesAgrupadosfafg.values.toList();
   }
+  
+  actualizarEstadoViaje(idviaje) async {
+    final db = await database;
 
+    return db.update('viaje', {'estadoViaje': 'Completo'}, where: "idviaje = ?", whereArgs: [idviaje]);
+  }
+
+  Future borrarViaje(idviaje) async {
+    final db = await database;
+
+    return db.delete("viaje", where: "idviaje = ?", whereArgs: [idviaje]);
+  }
+  
   Future enviarViajeServer() async {
     Database db = await database;
     Map<String, dynamic> organizedData = {};
     String jsonString;
 
     List<Map> data = await db.rawQuery(
-      // "SELECT * FROM viaje as via INNER JOIN vin as v on via.idviaje = v.idviaje INNER JOIN dano as d ON v.vin = d.vin INNER JOIN evidencia as e on e.iddano = d.idd and e.idviaje = via.idviaje where via.idviaje = '$idvia'"
-      "SELECT * FROM viaje as via INNER JOIN vin as v on via.idviaje = v.idviaje INNER JOIN dano as d ON v.vin = d.vin WHERE estadoViaje = 'Completo'"
+      "SELECT * FROM viaje as via INNER JOIN vin as v on via.idviaje = v.idviaje INNER JOIN dano as d ON v.vin = d.vin INNER JOIN evidencia as e on e.iddano = d.idd and e.idviaje = via.idviaje WHERE via.estadoViaje = 'Completo';"
+      // "SELECT * FROM viaje as via INNER JOIN vin as v on via.idviaje = v.idviaje INNER JOIN dano as d ON v.vin = d.vin WHERE estadoViaje = 'Completo'"
     );
 
     if(data.isNotEmpty) {
@@ -814,15 +832,45 @@ class DatabaseProvider {
     return jsonString;
   }
 
-  actualizarEstadoViaje(idviaje) async {
-    final db = await database;
 
-    return db.update('viaje', {'estadoViaje': 'Completo'}, where: "idviaje = ?", whereArgs: [idviaje]);
+
+
+
+  Future<List<String>> fetchVIN(idviaje) async {
+    Database db = await database;
+    List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM vin WHERE idviaje = $idviaje");
+
+    List<String> vins = [];
+    // for (var row in result) {
+    //   vins.add("das": row['vin']);
+    // }
+
+    vins.add(result.toString());
+    
+
+    return vins;
   }
 
-  Future borrarViaje(idviaje) async {
-    final db = await database;
+  // Future<List<String>> fetchDanos(iddano) async {
+  //   Database db = await database;
+  //   List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM dano WHERE idd = $iddano");
 
-    return db.delete("viaje", where: "idviaje = ?", whereArgs: [idviaje]);
+  //   List<String> danos = [];
+  //   // for (var row in result) {
+  //     danos.add(result.toString());
+  //   // }
+
+  //   return danos;
+  // }
+
+  Future<Viaje> envioViajeCompleto(idviaje) async {    
+    Database db = await database;
+    List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM viaje WHERE idviaje = $idviaje");
+
+    Viaje viaje = Viaje.fromMap(result[0]);
+    viaje.vines = await fetchVIN(viaje.idviaje);
+
+    return viaje;
   }
+
 }
