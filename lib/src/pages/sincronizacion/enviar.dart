@@ -50,18 +50,9 @@ class _SincronizarState extends State<Sincronizar> {
         try{
           await http.get(Uri.parse(urlAreaDanoServer),headers: {"Content-Type" : "application/json"}).then((value) async {
             if(value.statusCode == 200) {
-              Fluttertoast.showToast(
-                msg: "Conexion Exitosa al Servidor",
-                toastLength: Toast.LENGTH_LONG,
-                gravity: ToastGravity.CENTER,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.green,
-                textColor: Colors.white,
-                fontSize: 20
-              );
-
               responseData = json.decode(value.body);
               await DatabaseProvider.db.borrarBDAreaDano();
+
               for(var value in responseData['AreaDanos']) {
                 areaDanoInsertList = null;
                 areaDanoInsertList = AreaDano(
@@ -70,12 +61,12 @@ class _SincronizarState extends State<Sincronizar> {
                   area: value['area'], 
                   descripcion: value['descripcion']
                 );
-                log('Area Dano');
+                
                 await DatabaseProvider.db.insertarAreaDano(areaDanoInsertList!);
               }
 
               Fluttertoast.showToast(
-                msg: "${responseData['AreaDanos'].length} Area Daños Sincronizados",
+                msg: "${responseData['AreaDanos'].length} Areas Daños Sincronizados",
                 toastLength: Toast.LENGTH_LONG,
                 gravity: ToastGravity.CENTER,
                 timeInSecForIosWeb: 1,
@@ -151,30 +142,22 @@ class _SincronizarState extends State<Sincronizar> {
         try{
           await http.get(Uri.parse(urlTipoDanoServer),headers: {"Content-Type" : "application/json"}).then((value) async {
             if(value.statusCode == 200) {
-              Fluttertoast.showToast(
-                msg: "Conexion Exitosa al Servidor",
-                toastLength: Toast.LENGTH_LONG,
-                gravity: ToastGravity.CENTER,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.green,
-                textColor: Colors.white,
-                fontSize: 20
-              );
 
               responseData = json.decode(value.body);
               await DatabaseProvider.db.borrarBDTipoDano();
+
               for(var value in responseData['TiposDano']) {
                 tipoDanoInsertList = null;
                 tipoDanoInsertList = TipoDano(
                   id: value['id'], 
                   descripcion: value['descripcion']
                 );
-                log('Tipo Dano');
+                
                 await DatabaseProvider.db.insertarTipoDano(tipoDanoInsertList!);
               }
 
               Fluttertoast.showToast(
-                msg: "${responseData['TiposDano'].length} Tipo Daños Sincronizados",
+                msg: "${responseData['TiposDano'].length} Tipos Daños Sincronizados",
                 toastLength: Toast.LENGTH_LONG,
                 gravity: ToastGravity.CENTER,
                 timeInSecForIosWeb: 1,
@@ -250,18 +233,9 @@ class _SincronizarState extends State<Sincronizar> {
         try{
           await http.get(Uri.parse(urlSeveridadServer),headers: {"Content-Type" : "application/json"}).then((value) async {
             if(value.statusCode == 200) {
-              Fluttertoast.showToast(
-                msg: "Conexion Exitosa al Servidor",
-                toastLength: Toast.LENGTH_LONG,
-                gravity: ToastGravity.CENTER,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.green,
-                textColor: Colors.white,
-                fontSize: 20
-              );
-
               responseData = json.decode(value.body);
               await DatabaseProvider.db.borrarBDSeveridad();
+
               for(var value in responseData['Severidades']) {
                 severidadInsertList = null;
                 severidadInsertList = Severidad(
@@ -269,7 +243,7 @@ class _SincronizarState extends State<Sincronizar> {
                   tipo: value['tipo'],
                   descripcion: value['descripcion']
                 );
-                log('Severidad');
+
                 await DatabaseProvider.db.insertarSeveridad(severidadInsertList!);
               }
 
@@ -350,26 +324,16 @@ class _SincronizarState extends State<Sincronizar> {
         try{
           await http.get(Uri.parse(urlClienteServer),headers: {"Content-Type" : "application/json"}).then((value) async {
             if(value.statusCode == 200) {
-              Fluttertoast.showToast(
-                msg: "Conexion Exitosa al Servidor",
-                toastLength: Toast.LENGTH_LONG,
-                gravity: ToastGravity.CENTER,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.green,
-                textColor: Colors.white,
-                fontSize: 20
-              );
-
               responseData = json.decode(value.body);
               await DatabaseProvider.db.borrarBDCliente();
-              log(responseData['Clientes'].length.toString());
+
               for(var value in responseData['Clientes']) {
                 clienteInsertList = null;
                 clienteInsertList = Cliente(
                   idAdvan: value['idAdvan'],
                   cliente: value['cliente']
                 );
-                log('Cliente');
+
                 await DatabaseProvider.db.insertarCliente(clienteInsertList!);
               }
 
@@ -459,9 +423,7 @@ class _SincronizarState extends State<Sincronizar> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const Cuerpo(),
-
             const SizedBox(height: 10),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -492,7 +454,7 @@ class _SincronizarState extends State<Sincronizar> {
                         )
                       ),
                       Text(
-                        'VINs',
+                        'VINES',
                         style: TextStyle(
                           fontSize: 20,
                           color: Colors.white
@@ -539,7 +501,6 @@ class _SincronizarState extends State<Sincronizar> {
                 )
               ]
             ),
-
             const SizedBox(height: 10),
 
             botonSincronizar(Icons.dangerous_outlined, 'Sincronizar Area Daños', () => obtenerAreaDanoServer()),
@@ -588,26 +549,13 @@ class _SincronizarState extends State<Sincronizar> {
   }
 
   Future enviarViaje() async {
-    String token = "83c44c8cf9264486e94906844090e30b89a21715";
     var datos = await DatabaseProvider.db.enviarViajeServer();
+    String token = "83c44c8cf9264486e94906844090e30b89a21715";
     
     try{
-      http.Response response = await http.post(Uri.parse(urlEnvioViaje), body: datos, headers: {
-        "Content-Type" : "application/json",
-        "Authorization":  "Bearer $token"
-      });
-      
-      if(response.statusCode == 200) {
-        Fluttertoast.showToast(
-          msg: "Conexion Exitosa al Servidor",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 20
-        );
+      http.Response response = await http.post(Uri.parse(urlEnvioViaje), body: datos, headers: {"Content-Type": "application/json","Authorization":  "Bearer $token"});
 
+      if(response.statusCode == 200) {
         Fluttertoast.showToast(
           msg: "Viajes Sincronizados al Servidor",
           toastLength: Toast.LENGTH_LONG,
@@ -659,7 +607,7 @@ class _SincronizarState extends State<Sincronizar> {
           actions: <Widget>[
             TextButton(
               style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
+                textStyle: Theme.of(context).textTheme.labelLarge
               ),
               child: const Text('Ok'),
               onPressed: () => Navigator.pop(context)

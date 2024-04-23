@@ -38,18 +38,9 @@ class _LoginFormState extends State<LoginForm> {
         try{
           await http.get(Uri.parse(urlUsuariosAppServer),headers: {"Content-Type" : "application/json"}).then((value) async {
             if(value.statusCode == 200) {
-              Fluttertoast.showToast(
-                msg: "Conexion Exitosa al Servidor",
-                toastLength: Toast.LENGTH_LONG,
-                gravity: ToastGravity.TOP,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.green,
-                textColor: Colors.white,
-                fontSize: 20
-              );
-
               responseData = json.decode(value.body);
               await DatabaseProvider.db.borrarBDUsuarios();
+
               for(var value in responseData['Usuarios']) {
                 usuarioInsertList = null;
                 usuarioInsertList = Usuario(
@@ -66,6 +57,16 @@ class _LoginFormState extends State<LoginForm> {
                 log(usuarioInsertList.toString());
                 await DatabaseProvider.db.insertarUsuario(usuarioInsertList!);
               }
+              
+              Fluttertoast.showToast(
+                msg: "Usuarios Sincronizados",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.TOP,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+                fontSize: 20
+              );
 
               itemP.addLoginInsert();
             } 

@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:tleavin_mobil/database/db.dart';
@@ -33,36 +36,29 @@ class _InicioScreenState extends State<InicioScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-          // Aquí puedes colocar la lógica que deseas ejecutar
-          // antes de que la pantalla sea popada.
-          // Por ejemplo, mostrar un diálogo de confirmación.
-          bool confirmExit = await showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Text('¿Quieres salir de la aplicación?'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(false); // No salir
-                  },
-                  child: Text('No'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(true); // Salir
-                  },
-                  child: Text('Sí'),
-                ),
-              ],
-            ),
-          );
-
-          // Devuelve true si el usuario confirma salir,
-          // false si el usuario decide quedarse en la pantalla.
-          return confirmExit;
-        },
-
-
+        bool confirmExit = await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('¿Quieres salir de la aplicación?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false); 
+                },
+                child: const Text('No'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: const Text('Sí'),
+              ),
+            ],
+          ),
+        );
+        
+        return confirmExit;
+      },
       child: Scaffold(
         // drawer: MenuDrawer(),
         appBar: AppBar(
@@ -154,14 +150,54 @@ class _InicioScreenState extends State<InicioScreen> {
                         ]
                       )
                     )
+                  ),
+                  const SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    child: ElevatedButton(
+                      onPressed: () => paProbar(),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(15)),
+                        minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16)
+                          )
+                        )
+                      ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.swap_vert,
+                            color: Colors.white,
+                            size: 30
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            'Pushale',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white
+                            )
+                          )
+                        ]
+                      )
+                    )
                   )
                 ]
               )
-            ),
-          ],
+            )
+          ]
         )
-      ),
+      )
     );
+  }
+
+  paProbar() async {
+    // var datos = await  DatabaseProvider.db.paraPruebas();
+    var datos = await  DatabaseProvider.db.vinesTotales();
   }
 
   logout() async {

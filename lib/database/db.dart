@@ -85,6 +85,17 @@ class DatabaseProvider {
     );
   }
 
+  // PREUBAS
+  Future paraPruebas() async {
+    Database db = await database;
+    List<Map> dataD = await db.rawQuery("SELECT * FROM evidencia where idviaje = 1");
+  
+    var jsonString  = jsonEncode(dataD);
+    log(jsonString);
+      
+    return jsonString;
+  }
+
 
   // CRUD USUARIOS
 
@@ -252,7 +263,7 @@ class DatabaseProvider {
       }
     }
     else {
-      List<Map> data = await db.rawQuery("SELECT * FROM vin as v LEFT JOIN dano as d ON v.vin = d.vin INNER JOIN evidencia as e on e.iddano = d.idd where v.vin = '$vin'");
+      List<Map> data = await db.rawQuery("SELECT * FROM vin as v INNER JOIN dano as d ON v.vin = d.vin INNER JOIN evidencia as e on e.iddano = d.idd where v.vin = '$vin'");
 
       if(data.isNotEmpty) {
         for(var item in data) {
@@ -372,6 +383,16 @@ class DatabaseProvider {
     }
 
     return vins;
+  }
+
+  Future vinesTotales() async {
+    Database db = await database;
+    List<Map> dataD = await db.rawQuery("SELECT compra, COUNT(*) as Total FROM vin GROUP BY compra");
+  
+    var jsonString  = jsonEncode(dataD);
+    log(jsonString);
+      
+    return jsonString;
   }
 
   asignarVinViaje(vv) async {
@@ -617,7 +638,6 @@ class DatabaseProvider {
     Database db = await database;
 
     List<Map> data = await db.rawQuery("SELECT via.idviaje, via.supervisor, via.folio_bitacora, via.cartaporte, via.bitacora_fecha_carga, via.num_eco_unidad, via.nombre_operador, via.cliente_clave, via.cliente_nombre, via.ruta_clave, via.ruta_nombre, via.origen, via.destino, via.etiqueta, via.status_carga, via.notas, via.registrada_por, via.tipo_viaje, via.semana, via.estadoViaje, via.fecha_creacion, via.fecha_sync, vi.idv, vi.idviaje, vi.cartaporte, vi.vin, vi.distrib_clave, vi.dest_nombre, vi.ruta_clave, vi.ruta_nombre, vi.origen, vi.destino, vi.modelo, vi.marca, vi.posicion, vi.orientacion, vi.compra, vi.fecha_carga, vi.fecha_creacion, vi.fecha_sync FROM viaje as via INNER JOIN vin as vi on vi.idviaje = via.idviaje where via.idviaje = $idvia");
-    log(data.toString());
     Map<String, dynamic> viajesAgrupados = {};
     Map<String, dynamic> viajesAgrupadosfafg = {};
     if(data.isNotEmpty) {
@@ -787,7 +807,9 @@ class DatabaseProvider {
       
       }
     }
+
     jsonString  = jsonEncode(organizedData);
+    log(jsonString);
       
     return jsonString;
   }

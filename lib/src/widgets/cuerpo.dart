@@ -63,7 +63,7 @@ class _CuerpoState extends State<Cuerpo> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Version: 0.26.0',
+                    'Version: 0.27.0',
                     style:  TextStyle(
                       fontSize: 12,
                       color: Colors.grey[400]

@@ -131,8 +131,8 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
                   )
                 )
               ]
-            ),
-          ),
+            )
+          )
         );
       }
     );
@@ -158,7 +158,7 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
               style: const TextStyle(
                 fontSize: 18
               )
-            ),
+            )
           )
         ]
       )

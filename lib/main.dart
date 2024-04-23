@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/home/inicio.dart';
+import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/startup/login/login_screen.dart';
 
 void main() {
@@ -24,11 +24,11 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         colorSchemeSeed: const Color.fromRGBO(242, 211, 0, 1),
       ),
-      home: home()
+      home: inicio()
     );
   }
 
-  Widget home() {
+  Widget inicio() {
     Widget page;
     if(itemP.usuario?.numeroEmpleado != null) {
       page = const InicioScreen();

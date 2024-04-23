@@ -40,9 +40,30 @@ class _ResumenViajeState extends State<ResumenViaje> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (g) {
+    return WillPopScope(
+      onWillPop: () async {
+        bool confirmExit = await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('¿Quieres salir de la aplicación?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false); 
+                },
+                child: const Text('No'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: const Text('Sí'),
+              ),
+            ],
+          ),
+        );
+        
+        return confirmExit;
       },
       child: Scaffold(
         appBar: AppBar(

@@ -150,7 +150,6 @@ class _DetalleVinState extends State<DetalleVin> {
   }
 
   Widget _cardDanos(da) {
-
     return ListView.builder(
       shrinkWrap: true,
       itemCount: da.length,
@@ -211,6 +210,11 @@ class _DetalleVinState extends State<DetalleVin> {
                         ],
                       )
                     ),
+                    const Divider(
+                      color: Colors.black,
+                      thickness: 1.0,
+                      height: 20
+                    ),
 
                     dato['area'] == null ? const SizedBox() : _encabezados('Area: ', '${dato['area']}'),
                     dato['tipo'] == null ? const SizedBox() : _encabezados('Tipo: ', '${dato['tipo']}'),
@@ -219,7 +223,7 @@ class _DetalleVinState extends State<DetalleVin> {
                     dato['severidad'] == null ? _encabezados('Estado: ', '${dato['registroTipo']}') : const SizedBox(),
 
                     dato['area'] == null ? const SizedBox() : _encabezados('Codificacion: ', '${dato['area']}-${dato['tipo']}-${dato['severidad']}'),
-                    _encabezadosCard('Notas: ', '${dato['nota']}'),
+                    _encabezadosCard('Notas: ', dato['nota'] != '' ?  '${dato['nota']}' : 'Sin notas'),
                     _encabezados('Evidencias: ', ''),
      
                     _evidenciasDano(dato['evidencias'])

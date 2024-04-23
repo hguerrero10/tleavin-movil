@@ -26,34 +26,60 @@ class _ResumenDanoState extends State<ResumenDano> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
-        title: const Text(
-          'Resumen VIN',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.black
+    return WillPopScope(
+      onWillPop: () async {
+        bool confirmExit = await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('¿Quieres salir de la aplicación?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false); 
+                },
+                child: const Text('No'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: const Text('Sí'),
+              )
+            ]
           )
-        )
-      ),
-      body: CustomScrollView(
-        slivers: [
-          SliverFillRemaining(
-            hasScrollBody: true,
-            child: Column(
-              children: [
-                const Cuerpo(),
-                Expanded(
-                  child: infoVin(widget.resu)
-                ),
-              
-                // const SizedBox(height: 40)
-              ]
+        );
+        
+        return confirmExit;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
+          title: const Text(
+            'Resumen VIN',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.black
             )
           )
-        ]
-      )
+        ),
+        body: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: true,
+              child: Column(
+                children: [
+                  const Cuerpo(),
+                  Expanded(
+                    child: infoVin(widget.resu)
+                  ),
+                
+                  // const SizedBox(height: 40)
+                ]
+              )
+            )
+          ]
+        )
+      ),
     );
   }
 
