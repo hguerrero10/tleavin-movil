@@ -95,7 +95,7 @@ class _InicioScreenState extends State<InicioScreen> {
                     child: Row(
                       children: [
                         const Text(
-                          'Bienvenido ',
+                          'Buen dia ',
                           style: TextStyle(
                             fontSize: 21,
                             fontWeight: FontWeight.bold
@@ -194,8 +194,8 @@ class _InicioScreenState extends State<InicioScreen> {
   }
 
   paProbar() async {
-    // var datos = await  DatabaseProvider.db.paraPruebas();
-    var datos = await  DatabaseProvider.db.envioViajeCompleto(1);
+    var datos = await  DatabaseProvider.db.paraPruebas();
+    // var datos = await  DatabaseProvider.db.envioViajeCompleto(1);
     log(datos.toString());
   }
 

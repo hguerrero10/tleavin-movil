@@ -88,6 +88,7 @@ class _ResumenDanoState extends State<ResumenDano> {
       itemCount: vi.length,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
+        log(vi[index]['danoos'].toString());
         return SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(15),

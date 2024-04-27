@@ -85,10 +85,10 @@ class DatabaseProvider {
     );
   }
 
-  // PREUBAS
+  // PRUEBAS
   Future paraPruebas() async {
     Database db = await database;
-    List<Map> dataD = await db.rawQuery("SELECT * FROM evidencia where idviaje = 1");
+    List<Map> dataD = await db.rawQuery("SELECT * FROM dano WHERE vin = 'UUIUT67IKUUILNVXZ'");
   
     var jsonString  = jsonEncode(dataD);
     log(jsonString);
@@ -102,7 +102,7 @@ class DatabaseProvider {
   Future<Usuario> login(String user, String password) async {
     final db = await database;
     late Usuario usuario = Usuario();
-    var res = await db.rawQuery("SELECT * FROM usuario WHERE usuario = '$user' and password = '$password' and estado = 'A'");
+    var res = await db.rawQuery("SELECT * FROM usuario WHERE usuario = '$user' AND password = '$password' AND estado = 'A'");
 
     if(res.isNotEmpty) {
       usuario = Usuario.fromMap(res.first);
@@ -175,7 +175,7 @@ class DatabaseProvider {
   Future<List<Vin>> obtenerListaVinsComprados() async {
     final db = await database;
     List<Vin> listaVins;
-    var res = await db.query("vin where compra = 1");
+    var res = await db.rawQuery("SELECT * FROM vin WHERE compra = 1 AND idviaje ISNULL");
 
     if(res.isNotEmpty) {
       listaVins =  res.map((v) => Vin.fromMap(v)).toList();
@@ -184,16 +184,18 @@ class DatabaseProvider {
       listaVins = [];
     }
 
+    log(listaVins.toString());
+
     return listaVins;
   }
 
   Future<List> obtenerInfoVin(vin) async {
     Database db = await database;
-    List<Map> dataD = await db.rawQuery("SELECT * FROM dano where vin = '$vin'");
+    List<Map> dataD = await db.rawQuery("SELECT * FROM dano WHERE vin = '$vin'");
     Map<String, dynamic> organizedData = {};
 
     if(dataD.isEmpty) {
-      List<Map> data = await db.rawQuery("SELECT * FROM vin where vin = '$vin'");
+      List<Map> data = await db.rawQuery("SELECT * FROM vin WHERE vin = '$vin'");
         if(data.isNotEmpty) {
         for(var item in data) {
           String vin = item['vin'] ?? '';
@@ -263,7 +265,7 @@ class DatabaseProvider {
       }
     }
     else {
-      List<Map> data = await db.rawQuery("SELECT * FROM vin as v INNER JOIN dano as d ON v.vin = d.vin INNER JOIN evidencia as e on e.iddano = d.idd where v.vin = '$vin'");
+      List<Map> data = await db.rawQuery("SELECT * FROM vin AS vi INNER JOIN dano AS da ON vi.vin = da.vin INNER JOIN evidencia AS evi ON evi.iddano = da.idd WHERE vi.vin = '$vin'");
 
       if(data.isNotEmpty) {
         for(var item in data) {
@@ -643,7 +645,7 @@ class DatabaseProvider {
   Future<List> obtenerInfoViaje(idvia) async {
     Database db = await database;
 
-    List<Map> data = await db.rawQuery("SELECT via.idviaje, via.supervisor, via.folio_bitacora, via.cartaporte, via.bitacora_fecha_carga, via.num_eco_unidad, via.nombre_operador, via.cliente_clave, via.cliente_nombre, via.ruta_clave, via.ruta_nombre, via.origen, via.destino, via.etiqueta, via.status_carga, via.notas, via.registrada_por, via.tipo_viaje, via.semana, via.estadoViaje, via.fecha_creacion, via.fecha_sync, vi.idv, vi.idviaje, vi.cartaporte, vi.vin, vi.distrib_clave, vi.dest_nombre, vi.ruta_clave, vi.ruta_nombre, vi.origen, vi.destino, vi.modelo, vi.marca, vi.posicion, vi.orientacion, vi.compra, vi.fecha_carga, vi.fecha_creacion, vi.fecha_sync FROM viaje as via INNER JOIN vin as vi on vi.idviaje = via.idviaje where via.idviaje = $idvia");
+    List<Map> data = await db.rawQuery("SELECT via.idviaje, via.supervisor, via.folio_bitacora, via.cartaporte, via.bitacora_fecha_carga, via.num_eco_unidad, via.nombre_operador, via.cliente_clave, via.cliente_nombre, via.ruta_clave, via.ruta_nombre, via.origen, via.destino, via.etiqueta, via.status_carga, via.notas, via.registrada_por, via.tipo_viaje, via.semana, via.estadoViaje, via.fecha_creacion, via.fecha_sync, vi.idv, vi.idviaje, vi.cartaporte, vi.vin, vi.distrib_clave, vi.dest_nombre, vi.ruta_clave, vi.ruta_nombre, vi.origen, vi.destino, vi.modelo, vi.marca, vi.posicion, vi.orientacion, vi.compra, vi.fecha_carga, vi.fecha_creacion, vi.fecha_sync FROM viaje AS via INNER JOIN vin AS vi on vi.idviaje = via.idviaje WHERE via.idviaje = $idvia");
     Map<String, dynamic> viajesAgrupados = {};
     Map<String, dynamic> viajesAgrupadosfafg = {};
     if(data.isNotEmpty) {
@@ -832,10 +834,6 @@ class DatabaseProvider {
     return jsonString;
   }
 
-
-
-
-
   Future<List<String>> fetchVIN(idviaje) async {
     Database db = await database;
     List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM vin WHERE idviaje = $idviaje");
@@ -872,5 +870,4 @@ class DatabaseProvider {
 
     return viaje;
   }
-
 }

@@ -54,7 +54,7 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
         title: const Text(
-          'VINs Disponibles',
+          'VINES Disponibles',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.black

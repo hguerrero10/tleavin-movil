@@ -11,10 +11,12 @@ import 'package:tleavin_mobil/model/viaje.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/home/inicio.dart';
 import 'package:tleavin_mobil/src/pages/dano/listas.dart';
+import 'package:tleavin_mobil/src/pages/viaje/vin_para_viaje.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 
 class ArmarViaje extends StatefulWidget {
-  const ArmarViaje({super.key});
+  final vinesqueseleccionaron;
+  const ArmarViaje({super.key, this.vinesqueseleccionaron});
 
   @override
   State<ArmarViaje> createState() => _ArmarViajeState();
@@ -114,8 +116,8 @@ class _ArmarViajeState extends State<ArmarViaje> {
               Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16),
                 child: ElevatedButton(
-                  onPressed: () => scanQR(),
-                  // onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => VinsParaViaje())),
+                  // onPressed: () => scanQR(),
+                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VinsParaViaje())),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
                     padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(15)),
@@ -127,7 +129,7 @@ class _ArmarViajeState extends State<ArmarViaje> {
                     )
                   ),
                   child: const Text(
-                    'Seleccionar Vin',
+                    'Seleccionar VINES',
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.white
@@ -136,7 +138,9 @@ class _ArmarViajeState extends State<ArmarViaje> {
                 )
               ),
               const SizedBox(height: 30),
-              Expanded(child: SizedBox( height: 200, child: vinsSeleccionados(listaVinsViaje))),
+
+              Expanded(child: itemP.vinesSeleccionadosParaViaje.isNotEmpty ? SizedBox( height: 200, child: vinsSeleccionados(itemP.vinesSeleccionadosParaViaje)) : const SizedBox()),
+              
               const SizedBox(height: 30),
 
               _inputs(_notaTextController, 'Nota', TextInputType.text),
@@ -339,6 +343,8 @@ class _ArmarViajeState extends State<ArmarViaje> {
     await DatabaseProvider.db.insertarViaje(viaje!).then((value) async {
       log('viaje insertado');
 
+      listaVinsViaje = itemP.vinesSeleccionadosParaViaje;
+
       for(var ed in listaVinsViaje) {
         var vinsviaje = (
           vin: ed,
@@ -363,6 +369,8 @@ class _ArmarViajeState extends State<ArmarViaje> {
         textColor: Colors.white,
         fontSize: 20
       );
+
+      itemP.deleteVSPV();
 
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const InicioScreen()), (Route<dynamic> route) => false);
     }).timeout(const Duration(seconds: 30), onTimeout: () {

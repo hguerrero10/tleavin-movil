@@ -99,7 +99,6 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
 
   obtenerResumen(v) async {
     await guardarDano();
-
     
     var datos = await DatabaseProvider.db.obtenerInfoVin(v);
     setState(() {
@@ -315,8 +314,8 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
                             shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16)
-                              ),
-                            ),
+                              )
+                            )
                           ),
                           child: const Text(
                             'Finalizar',

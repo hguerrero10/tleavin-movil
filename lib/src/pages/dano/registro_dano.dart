@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:core';
 import 'dart:convert';
 import 'dart:developer';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +35,10 @@ class _RegistroDanoState extends State<RegistroDano> {
   var fechaH;
 
   final _notasTextController = TextEditingController();
+
+  final _areaTextController = TextEditingController();
+  final _tipoTextController = TextEditingController();
+  final _severidadTextController = TextEditingController();
 
   final ImagePicker picker = ImagePicker();
 
@@ -113,16 +118,16 @@ class _RegistroDanoState extends State<RegistroDano> {
 
   var resumen;
 
-  obtenerResumen(v) async {
-    await guardarDano();
+  // obtenerResumen(v) async {
+  //   await guardarDano();
     
-    var datos = await DatabaseProvider.db.obtenerInfoVin(v);
-    setState(() {
-      resumen = datos;
-    });
+  //   var datos = await DatabaseProvider.db.obtenerInfoVin(v);
+  //   setState(() {
+  //     resumen = datos;
+  //   });
 
-    Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenDano(resu: resumen)), (Route<dynamic> route) => false);
-  }
+  //   Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenDano(resu: resumen)), (Route<dynamic> route) => false);
+  // }
 
   @override
   void initState() {
@@ -173,7 +178,7 @@ class _RegistroDanoState extends State<RegistroDano> {
               fontWeight: FontWeight.bold,
               color: Colors.black
             )
-          ),
+          )
           // leading: IconButton(
           //   icon: const Icon(Icons.arrow_back_sharp),
           //   onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const CompraVin()), (Route<dynamic> route) => false)
@@ -197,15 +202,15 @@ class _RegistroDanoState extends State<RegistroDano> {
                           style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.bold
-                          ),
+                          )
                         ),
                         Text(
                           widget.vin,
                           style: const TextStyle(
                             fontSize: 17
-                          ),
+                          )
                         )
-                      ],
+                      ]
                     ),
                     Row(
                       children: [
@@ -214,25 +219,55 @@ class _RegistroDanoState extends State<RegistroDano> {
                           style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.bold
-                          ),
+                          )
                         ),
                         Text(
                           widget.panel,
                           style: const TextStyle(
                             fontSize: 17
-                          ),
+                          )
                         )
-                      ],
+                      ]
                     ),
                     const SizedBox(height: 10),
-                    _titulo('Area:'),
-                    _dropDownArea(),
+                    _titulo('* Area:'),
+                    // _dropDownArea(),
+                    TextField(
+                      controller: _areaTextController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        hintText: 'Escriba el Area',
+                        hintStyle: TextStyle(
+                          color: Colors.grey
+                        )
+                      )
+                    ),
                     const SizedBox(height: 10),
-                    _titulo('Tipo:'),
-                    _dropDownTipo(),
+                    _titulo('* Tipo:'),
+                    // _dropDownTipo(),
+                    TextField(
+                      controller: _tipoTextController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        hintText: 'Escriba el Tipo',
+                        hintStyle: TextStyle(
+                          color: Colors.grey
+                        )
+                      )
+                    ),
                     const SizedBox(height: 10),
-                    _titulo('Severidad:'),
-                    _dropDownSeveridad(),
+                    _titulo('* Severidad:'),
+                    // _dropDownSeveridad(),
+                    TextField(
+                      controller: _severidadTextController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        hintText: 'Escriba la Severidad',
+                        hintStyle: TextStyle(
+                          color: Colors.grey
+                        )
+                      )
+                    ),
                     const SizedBox(height: 30),
                     Center(
                       child: Column(
@@ -365,13 +400,7 @@ class _RegistroDanoState extends State<RegistroDano> {
                           ),
                           const SizedBox(height: 20),
                           ElevatedButton(
-                            onPressed: () async  {
-                              await guardarDano();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => InspeccionVin(vin: widget.vin))
-                              );
-                            },
+                            onPressed: () async => await guardarDano('OtroDano'),
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
                               padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
@@ -392,7 +421,7 @@ class _RegistroDanoState extends State<RegistroDano> {
                           ),
                           const SizedBox(height: 10),
                           ElevatedButton(
-                            onPressed: () async => obtenerResumen(widget.vin),
+                            onPressed: () async => guardarDano('Finalizar'),
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
                               padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18.0)),
@@ -419,7 +448,7 @@ class _RegistroDanoState extends State<RegistroDano> {
               ),
               const SizedBox(height: 20)
             ]
-          )
+          ) 
         )
       ),
     );
@@ -551,40 +580,75 @@ class _RegistroDanoState extends State<RegistroDano> {
     );
   }
 
-  guardarDano() async {
-    dano = Dano(
-      vin: widget.vin,
-      panel: widget.panel,
-      registroTipo: 'Regular',
-      area: int.parse(selectArea.toString()),
-      tipo: int.parse(selectTipo.toString()),
-      severidad: int.parse(selectSeve.toString()),
-      nota: _notasTextController.text,
-      fecha_creacion: fecha
-    );
+  guardarDano(tipo) async {
+    if(_areaTextController.text != '' && _tipoTextController.text != '' && _severidadTextController.text != '') {
+      dano = Dano(
+        vin: widget.vin,
+        panel: widget.panel,
+        registroTipo: 'Regular',
+        // area: int.parse(selectArea.toString()),
+        // tipo: int.parse(selectTipo.toString()),
+        // severidad: int.parse(selectSeve.toString()),
+        area: int.parse(_areaTextController.text.trim()),
+        tipo: int.parse(_tipoTextController.text.trim()),
+        severidad: int.parse(_severidadTextController.text.trim()),
+        nota: _notasTextController.text,
+        fecha_creacion: fecha
+      );
 
-    await DatabaseProvider.db.insertarDano(dano!).then((value) async {
-      log('dano insertado');
-      itemP.addBoton();
-      itemP.deleteBoton();
+      await DatabaseProvider.db.insertarDano(dano!).then((value) async {
+        log('dano insertado');
+        itemP.addBoton();
+        itemP.deleteBoton();
 
-      for(var ed in evidenciasDano) {
-        evidencia = Evidencia(
-          vin: widget.vin,
-          iddano: value,
-          nombre: null,
-          archivo: ed,
-          fechahora: fechaH
+        log(evidenciasDano.toString());
+
+        for(var ed in evidenciasDano) {
+          evidencia = Evidencia(
+            vin: widget.vin,
+            iddano: value,
+            nombre: null,
+            archivo: ed,
+            fechahora: fechaH
+          );
+
+          await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) {
+            log('evidencia insertado');
+          }).timeout(const Duration(seconds: 60), onTimeout: () {
+            itemP.addError();
+          });
+        }                          
+      }).timeout(const Duration(seconds: 60), onTimeout: () {
+        itemP.addError();
+      });
+
+      if(tipo == 'OtroDano') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => InspeccionVin(vin: widget.vin))
         );
-
-        await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) {
-          log('evidencia insertado');
-        }).timeout(const Duration(seconds: 60), onTimeout: () {
-          itemP.addError();
+      }
+      else {
+        var datos = await DatabaseProvider.db.obtenerInfoVin(widget.vin);
+        setState(() {
+          resumen = datos;
         });
-      }                          
-    }).timeout(const Duration(seconds: 60), onTimeout: () {
-      itemP.addError();
-    });
+
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenDano(resu: resumen)), (Route<dynamic> route) => false);
+      }
+
+
+    }
+    else {
+      Fluttertoast.showToast(
+        msg: "Seleccione codificacion de Daño",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 20
+      );
+    }
   }
 }

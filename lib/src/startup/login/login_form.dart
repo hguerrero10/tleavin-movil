@@ -44,7 +44,7 @@ class _LoginFormState extends State<LoginForm> {
               for(var value in responseData['Usuarios']) {
                 usuarioInsertList = null;
                 usuarioInsertList = Usuario(
-                  numeroEmpleado: value['numeroEmpleado'],
+                  numeroEmpleado: value['numero_empleado'],
                   usuario: value['usuario'],
                   nombre: value['nombre'],
                   password: value['password'],

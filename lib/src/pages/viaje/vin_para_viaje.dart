@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:tleavin_mobil/database/db.dart';
+import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/widgets/search.dart';
 
 class VinsParaViaje extends StatefulWidget {
@@ -13,9 +14,8 @@ class VinsParaViaje extends StatefulWidget {
 
 class VinsParaViajeState extends State<VinsParaViaje> {
   final _qrTextController = TextEditingController();
-  var vins =[];
-  var vinsComprados = [];
   String query = '';
+  var vins =[];
 
   var vinesseleccionados = [];
 
@@ -44,30 +44,11 @@ class VinsParaViajeState extends State<VinsParaViaje> {
   }
 
   obtenerListaVINSComprados() async {
-    var data = await DatabaseProvider.db.obtenerListaVins();
+    var data = await DatabaseProvider.db.obtenerListaVinsComprados();
+    var vinsComprados = [];
 
     for(var d in data) {
-      var vi = (
-        idv: d.idv,
-        idviaje: d.idviaje ?? 0,
-        cartaporte: d.cartaporte ?? '',
-        vin: d.vin,
-        distrib_clave: d.distrib_clave ?? '',
-        dest_nombre: d.dest_nombre ?? '',
-        ruta_clave: d.ruta_clave ?? '',
-        ruta_nombre: d.ruta_nombre ?? '',
-        origen: d.origen ?? '',
-        destino: d.destino ?? '',
-        modelo: d.modelo ?? '',
-        marca: d.marca ?? '',
-        posicion: d.posicion ?? '',
-        orientacion: d.orientacion ?? '',
-        compra: d.compra ?? '',
-        fecha_carga: d.fecha_carga ?? '',
-        fecha_creacion: d.fecha_creacion ?? '',
-        fecha_sync: d.fecha_sync ?? '',
-        seleccionado: false
-      );
+      var vi = d.vin;
 
       vinsComprados.add(vi);
     }
@@ -83,7 +64,7 @@ class VinsParaViajeState extends State<VinsParaViaje> {
     appBar: AppBar(
       backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
       title: const Text(
-        'Lista de VINs',
+        'Lista de VINES',
         style: TextStyle(
           fontWeight: FontWeight.bold,
           color: Colors.black
@@ -127,46 +108,80 @@ class VinsParaViajeState extends State<VinsParaViaje> {
           )
         ),
         buildSearch(),
+        vinesseleccionados.isNotEmpty ? Expanded(
+          child: ListView.builder(
+            itemCount: vinesseleccionados.length,
+            itemBuilder: (context, index) {
+              return CheckboxListTile(
+                title: Text("VIN: ${vinesseleccionados[index]} index: $index"),
+                value: true,
+                onChanged: (value) {
+                  setState(() {
+                    vins.add(vins[index]);
+                    vinesseleccionados.remove(vinesseleccionados[index]);
+                  });
+                }
+              );
+            }
+          )
+        ) : const SizedBox(),
         Expanded(
           child: ListView.builder(
             itemCount: vins.length,
             itemBuilder: (context, index) {
-              final vi = vins[index];
-              return Card(
-                child: ListTile(
-                  title: Row(
-                    children: [
-                      const Text(
-                        'VIN: ',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold
-                        )
-                      ),
-                      Text('${vi.vin}')
-                    ]
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('${vi.fecha_creacion}'),
-                      Text('${vi.seleccionado}')
-                    ]
-                  ),
-                  trailing: vi.seleccionado == true ? const Icon(Icons.check_box, color: Colors.green) : const Icon(Icons.add_box, color: Colors.grey),
-                  onTap: () {
-                      final tile = vins.firstWhere((item) => item.vin == vi.vin);
-
-                      log(tile.toString());
-                      log(tile.seleccionado.toString());
-                      setState(() {
-                          tile.seleccionado = true;
-                      });
-                  }
-                )
+              return CheckboxListTile(
+                title: Text("VIN: ${vins[index].toString()}"),
+                value: false,
+                onChanged: (value) {
+                  setState(() {
+                    vinesseleccionados.add(vins[index]);
+                    vins.remove(vins[index]);
+                  });
+                }
               );
             }
           )
-        )
+        ),
+
+
+        ElevatedButton(
+          // onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ArmarViaje(vinesqueseleccionaron: vinesseleccionados))),
+          onPressed: () {
+            itemP.addVSPV(vinesseleccionados);
+            Navigator.pop(context);
+          },
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(10)),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16)
+              )
+            )
+          ),
+          child: const SizedBox(
+            width: 200,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.add,
+                  color: Colors.white,
+                  size: 30
+                ),
+                SizedBox(width: 10),
+                Text(
+                  'Agregar al Viaje',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    color: Colors.white
+                  )
+                )
+              ]
+            )
+          )
+        ),
+          const SizedBox(height: 40)
       ]
     )
   );
@@ -178,8 +193,8 @@ class VinsParaViajeState extends State<VinsParaViaje> {
   );
 
   searchVIN(String query) {
-    final vins = vinsComprados.where((v) {
-      final titleLower = v.vin.toLowerCase();
+    final vinsf = vins.where((v) {
+      final titleLower = v.toLowerCase();
 
       if(_qrTextController.text != '') {
         final searchLower = _qrTextController.text.toLowerCase();
@@ -193,7 +208,7 @@ class VinsParaViajeState extends State<VinsParaViaje> {
 
     setState(() {
       this.query = query;
-      this.vins = vins;
+      vins = vinsf;
     });
   }
 }

@@ -19,6 +19,8 @@ class ItemsProvider {
   String? firmaOperadorLogistico;
   String? firmaOperador;
 
+  String? clienteSeleccionado;
+
   Usuario? usuario;
   String? ubicacion;
 
@@ -37,6 +39,8 @@ class ItemsProvider {
   bool clienteInsert = false;
   bool clienteInsertTimeOut = false;
   bool registroCliente = false;
+
+  var vinesSeleccionadosParaViaje = [];
 
   void addUser(Usuario item) {
     if(item.toString().isNotEmpty) {
@@ -301,6 +305,68 @@ class ItemsProvider {
   void deleteRegistroCliente() {
     itemP.registroCliente = false;
     itemP.itemStreamController.sink.add(registroCliente);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  void addVSPV(values) {
+    itemP.vinesSeleccionadosParaViaje = [];
+    itemP.vinesSeleccionadosParaViaje = values;
+    itemP.itemStreamController.sink.add(vinesSeleccionadosParaViaje);
+  }
+
+  void deleteVSPV() {
+    itemP.vinesSeleccionadosParaViaje = [];
+    itemP.itemStreamController.sink.add(vinesSeleccionadosParaViaje);
+  }
+
+
+  void addClienteSeleccionado(item) {
+    itemP.clienteSeleccionado = item;
+    itemP.itemStreamController.sink.add(clienteSeleccionado);
+  }
+
+  void deleteClienteSeleccionado() {
+    itemP.clienteSeleccionado = null;
+    itemP.itemStreamController.sink.add(clienteSeleccionado);
   }
 
 }

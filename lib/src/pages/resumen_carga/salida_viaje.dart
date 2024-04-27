@@ -287,7 +287,7 @@ class _ResumenViajeState extends State<ResumenViaje> {
                         ) : const SizedBox()
                       ]
                     )
-                  ),
+                  )
                 ),
                 
                 const SizedBox(height: 40),
@@ -307,7 +307,7 @@ class _ResumenViajeState extends State<ResumenViaje> {
                     gradient: const LinearGradient(
                       begin: Alignment.centerLeft,
                       colors: [
-                        Color.fromRGBO(242, 211, 0, 1),
+                        Color.fromRGBO(29, 26, 7, 1),
                         Color.fromRGBO(242, 211, 0, 1)
                       ]
                     )
@@ -341,7 +341,7 @@ class _ResumenViajeState extends State<ResumenViaje> {
               style: const TextStyle(
                 fontSize: 18
               )
-            ),
+            )
           )
         ]
       )

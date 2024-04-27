@@ -58,9 +58,7 @@ class _ViajesArmadosState extends State<ViajesArmados> {
             hasScrollBody: true,
             child: Column(
               children: [
-                Expanded(child: viajes(listaViajes)),
-
-
+                Expanded(child: viajes(listaViajes))
               ]
             )
           )
@@ -105,9 +103,7 @@ class _ViajesArmadosState extends State<ViajesArmados> {
                     _encabezadosCard('Nombre Op.: ', '${dato.nombre_operador}'),
                     _encabezadosCard('Origen: ', '${dato.origen}'),
                     _encabezadosCard('Destino: ', '${dato.destino}'),
-                    _encabezadosCard('Estado: ', '${dato.estadoViaje}'),
-
-                    
+                    _encabezadosCard('Estado: ', '${dato.estadoViaje}')
                   ]
                 )
               )

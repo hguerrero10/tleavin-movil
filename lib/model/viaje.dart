@@ -1,5 +1,3 @@
-import 'package:tleavin_mobil/model/vin.dart';
-
 class Viaje{
   int? idviaje;
   String? supervisor;

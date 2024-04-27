@@ -549,7 +549,7 @@ class _SincronizarState extends State<Sincronizar> {
   }
 
   Future enviarViaje() async {
-    var datos = await DatabaseProvider.db.enviarViajeServer();
+    var datos = await DatabaseProvider.db.envioViajeCompleto(1);
     String token = "83c44c8cf9264486e94906844090e30b89a21715";
     
     try{

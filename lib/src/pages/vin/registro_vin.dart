@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -9,7 +10,6 @@ import 'package:tleavin_mobil/src/home/inicio.dart';
 import 'package:tleavin_mobil/src/pages/vin/inspeccion_vin.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-
 import 'dart:developer';
 
 class CompraVin extends StatefulWidget {
@@ -77,6 +77,22 @@ class _CompraVinState extends State<CompraVin> {
               child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  _dropDownCliente(),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: _qrTextController,
+                    maxLength: 17,
+                    keyboardType: TextInputType.text,
+                    textAlign: TextAlign.center,
+                    textCapitalization: TextCapitalization.characters,
+                    decoration: const InputDecoration(
+                      hintText: 'VIN',
+                      hintStyle: TextStyle(
+                        color: Colors.grey
+                      )
+                    )
+                  ),
+                  const SizedBox(height: 10),
                   Center(
                     child: ElevatedButton(
                       onPressed: () => scanQR(),
@@ -86,12 +102,12 @@ class _CompraVinState extends State<CompraVin> {
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16)
-                          ),
-                        ),
+                          )
+                        )
                       ),
-                      child: Container(
+                      child: const SizedBox(
                         width: 200,
-                        child: const Row(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
@@ -105,53 +121,52 @@ class _CompraVinState extends State<CompraVin> {
                               style: TextStyle(
                                 fontSize: 18.0,
                                 color: Colors.white
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  TextField(
-                    controller: _qrTextController,
-                    maxLength: 17,
-                    keyboardType: TextInputType.text,
-                    textAlign: TextAlign.center,
-                    textCapitalization: TextCapitalization.characters,
-                    decoration: const InputDecoration(
-                      hintText: 'VIN',
-                      hintStyle: TextStyle(
-                        color: Colors.grey
-                      ),
-                    ),
+                              )
+                            )
+                          ]
+                        )
+                      )
+                    )
                   ),
                   const SizedBox(height: 50),
                   ElevatedButton(
                     onPressed: () async {
                       qrbar = _qrTextController.text;
 
-                      if(_qrTextController.text.isNotEmpty && (_qrTextController.text.length >= 17)) {
-                        await checarVinExistente(qrbar);
+                      if(itemP.clienteSeleccionado != null){
+                        if(_qrTextController.text.isNotEmpty && (_qrTextController.text.length >= 17)) {
+                          await checarVinExistente(qrbar);
 
-                        if(vinExistente != 0) {
+                          if(vinExistente != 0) {
+                            Fluttertoast.showToast(
+                              msg: "El VIN se Encuentra Registrado",
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.yellow,
+                              textColor: Colors.white,
+                              fontSize: 20
+                            );
+                          }
+                          else {
+                            registrarVin(qrbar);
+                          }
+                        } 
+                        else {
                           Fluttertoast.showToast(
-                            msg: "El VIN se Encuentra Registrado",
+                            msg: "Escanea o Escribe el VIN",
                             toastLength: Toast.LENGTH_LONG,
                             gravity: ToastGravity.BOTTOM,
                             timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.yellow,
+                            backgroundColor: Colors.red,
                             textColor: Colors.white,
                             fontSize: 20
                           );
                         }
-                        else {
-                          registrarVin(qrbar);
-                        }
-                      } 
+                      }
                       else {
                         Fluttertoast.showToast(
-                          msg: "Escanea o Escribe el VIN",
+                          msg: "Seleccione el Cliente",
                           toastLength: Toast.LENGTH_LONG,
                           gravity: ToastGravity.BOTTOM,
                           timeInSecForIosWeb: 1,
@@ -170,12 +185,22 @@ class _CompraVinState extends State<CompraVin> {
                         )
                       )
                     ),
-                    child: const Text(
-                      'Realizar Inspeccion',
-                      style: TextStyle(
-                        fontSize: 18.0,
-                        color: Colors.white
-                      )
+                    child: const Row(
+                      children: [
+                        Icon(
+                          Icons.checklist,
+                          size: 30,
+                          color: Colors.white
+                        ),
+                        SizedBox(width: 20),
+                        Text(
+                          'Realizar Inspeccion',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            color: Colors.white
+                          )
+                        ),
+                      ],
                     )
                   )
                 ]
@@ -183,6 +208,35 @@ class _CompraVinState extends State<CompraVin> {
             )
           ]
         )
+      )
+    );
+  }
+
+  Widget _dropDownCliente() {
+    return Container(
+      height: 60,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: DropdownSearch<String>(
+        popupProps: const PopupProps.menu(
+          showSelectedItems: true
+        ),
+        items: const ['GM','Multimarcas'],
+        dropdownDecoratorProps: const  DropDownDecoratorProps(
+          dropdownSearchDecoration: InputDecoration(
+            hintText: "* Selecciona Cliente",
+            hintStyle: TextStyle(
+              color: Colors.grey
+            )
+          )
+        ),
+        onChanged: (cl) {
+          setState(() {
+            itemP.addClienteSeleccionado(cl);
+          });
+        }
       )
     );
   }
