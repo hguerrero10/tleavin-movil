@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:connectivity_widget/connectivity_widget.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
+import 'package:tleavin_mobil/src/widgets/info.dart';
 
 class Cuerpo extends StatefulWidget {
   const Cuerpo({super.key});
@@ -62,11 +63,14 @@ class _CuerpoState extends State<Cuerpo> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Version: 0.30.0',
-                    style:  TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[400]
+                  GestureDetector(
+                    onDoubleTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const InfoApp())),
+                    child: Text(
+                      'Version: 0.30.0',
+                      style:  TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey[400]
+                      ),
                     ),
                   ),
                   SizedBox(

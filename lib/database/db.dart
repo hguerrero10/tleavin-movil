@@ -1,7 +1,7 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:async';
+import 'dart:convert';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:tleavin_mobil/model/viaje.dart';
@@ -86,15 +86,35 @@ class DatabaseProvider {
   }
 
   // PRUEBAS
+  
   Future paraPruebas() async {
     Database db = await database;
-    List<Map> dataD = await db.rawQuery("SELECT * FROM dano WHERE vin = 'UUIUT67IKUUILNVXZ'");
-  
-    var jsonString  = jsonEncode(dataD);
-    log(jsonString);
-      
-    return jsonString;
+    List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM evidencia WHERE ide = 1");
+
+
+
+    for(var i in result) {
+      Evidencia vi = Evidencia.fromMap(i);
+
+      var arc = vi.archivo?.trim();
+      var edn = arc?.replaceAll("\\s{2,}", "");
+       
+    // log(vi.archivo.toString());
+    log(edn.toString());
+    }
+    return result;
   }
+
+  // Future paraPruebas() async {
+  //   Database db = await database;
+  //   List<Map> dataD = await db.rawQuery("SELECT * FROM evidencia WHERE iddano = 1");
+  
+  //        var arc = ed.tiem();
+  //       var edn = arc.replaceAll("\\s{2,}", "");
+  //   var jsonString  = jsonEncode(dataD);
+      
+  //   return jsonString;
+  // }
 
 
   // CRUD USUARIOS
@@ -183,8 +203,6 @@ class DatabaseProvider {
     else {
       listaVins = [];
     }
-
-    log(listaVins.toString());
 
     return listaVins;
   }
@@ -392,7 +410,6 @@ class DatabaseProvider {
     List<Map> dataD = await db.rawQuery("SELECT compra, COUNT(*) as Total FROM vin GROUP BY compra");
   
     var jsonString  = jsonEncode(dataD);
-    log(jsonString);
       
     return jsonString;
   }
@@ -723,151 +740,73 @@ class DatabaseProvider {
     return db.delete("viaje", where: "idviaje = ?", whereArgs: [idviaje]);
   }
   
-  Future enviarViajeServer() async {
-    Database db = await database;
-    Map<String, dynamic> organizedData = {};
-    String jsonString;
 
-    List<Map> data = await db.rawQuery(
-      "SELECT * FROM viaje as via INNER JOIN vin as v on via.idviaje = v.idviaje INNER JOIN dano as d ON v.vin = d.vin INNER JOIN evidencia as e on e.iddano = d.idd and e.idviaje = via.idviaje WHERE via.estadoViaje = 'Completo';"
-      // "SELECT * FROM viaje as via INNER JOIN vin as v on via.idviaje = v.idviaje INNER JOIN dano as d ON v.vin = d.vin WHERE estadoViaje = 'Completo'"
-    );
 
-    if(data.isNotEmpty) {
-      for(var item in data) {
-        String vin = item['vin'] ?? '';
-        int iddano = item['iddano'] ?? 0;
-        int ide = item['ide'] ?? 0;
-        int idvia = item['idviaje'] ?? 0;
 
-        var evidence = {
-          'ide': ide,
-          'fechahora': item['fechahora'],
-          'archivo': item['archivo']
-        };
-
-        if(organizedData.containsKey(idvia)) {
-          bool found = false;
-          for(var dano in organizedData[vin]!['danoos']) {
-            if(dano['iddano'] == iddano) {
-              dano['evidencias'].add(evidence);
-              found = true;
-              break;
-            }
-          }
-
-          if(!found) {
-            var newDano = {
-              'iddano': iddano,
-              'panel': item['panel'],
-              'registroTipo': item['registroTipo'],
-              'area': item['area'],
-              'tipo': item['tipo'],
-              'severidad': item['severidad'],
-              'nota': item['nota'],
-              'fecha_creacion': item['fecha_creacion'],
-              'evidencias': [evidence]
-            };
-
-            organizedData[vin]!['danoos'].add(newDano); 
-          }
-        } 
-        else {
-          var obviaje = {
-            "idviaje": item['idviaje'],
-            "supervisor": item['supervisor'],
-            "folio_bitacora": item['folio_bitacora'],
-            "cartaporte": item['cartaporte'],
-            "bitacora_fecha_carga": item['bitacora_fecha_carga'],
-            "num_eco_unidad": item['num_eco_unidad'],
-            "nombre_operador": item['nombre_operador'],
-            "cliente_clave": item['cliente_clave'],
-            "cliente_nombre": item['cliente_nombre'],
-            "ruta_clave": item['ruta_clave'],
-            "ruta_nombre": item['ruta_nombre'],
-            "origen": item['origen'],
-            "destino": item['destino'],
-            "etiqueta": item['etiqueta'],
-            "status_carga": item['status_carga'],
-            "notas": item['notas'],
-            "registrada_por": item['registrada_por'],
-            "tipo_viaje": item['tipo_viaje'],
-            "semana": item['semana'],
-            "fecha_creacion": item['fecha_creacion'],
-            "fecha_sync": item['fecha_sync']
-          };
-
-          var obvin = {
-            "idv": item['idv'],
-            'idviaje': item['idviaje'],
-            'cartaporte': item['cartaporte'],
-            'vin': vin,
-            'distrib_clave': item['distrib_clave'],
-            'dest_nombre': item['dest_nombre'],
-            'ruta_clave': item['ruta_clave'],
-            'ruta_nombre': item['ruta_nombre'],
-            'origen': item['origen'],
-            'destino': item['destino'],
-            'modelo': item['modelo'],
-            'marca': item['marca'],
-            'posicion': item['posicion'],
-            'orientacion': item['orientacion'],
-            'compra': item['compra'],
-            'fecha_carga': item['fecha_carga'],
-            'fecha_creacion': item['fecha_creacion'],
-            'fecha_sync': item['fecha_sync'],
-            'danoos': [
-
-            ]
-          };
-
-          organizedData[vin] = {'viajep': obviaje, 'vinp': obvin};
-        }
-
-      
-      }
-    }
-
-    jsonString  = jsonEncode(organizedData);
-    log(jsonString);
-      
-    return jsonString;
-  }
-
-  Future<List<String>> fetchVIN(idviaje) async {
-    Database db = await database;
-    List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM vin WHERE idviaje = $idviaje");
-
-    List<String> vins = [];
-    // for (var row in result) {
-    //   vins.add("das": row['vin']);
-    // }
-
-    vins.add(result.toString());
-    
-
-    return vins;
-  }
-
-  // Future<List<String>> fetchDanos(iddano) async {
-  //   Database db = await database;
-  //   List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM dano WHERE idd = $iddano");
-
-  //   List<String> danos = [];
-  //   // for (var row in result) {
-  //     danos.add(result.toString());
-  //   // }
-
-  //   return danos;
-  // }
 
   Future<Viaje> envioViajeCompleto(idviaje) async {    
     Database db = await database;
     List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM viaje WHERE idviaje = $idviaje");
 
     Viaje viaje = Viaje.fromMap(result[0]);
-    viaje.vines = await fetchVIN(viaje.idviaje);
-
+    List<Vin> vins = [];
+    vins = await fetchVIN(viaje.idviaje);
+    viaje.vines = vins;
+    
     return viaje;
+  }
+
+
+  Future<List<Vin>> fetchVIN(idviaje) async {
+    Database db = await database;
+    List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM vin WHERE idviaje = $idviaje");
+
+    List<Vin> listavines = [];
+
+    for(var i in result) {
+      Vin vi = Vin.fromMap(i);
+
+      List<Dano> dano = [];
+      dano = await fetchDanos(vi.vin);
+      vi.danos = dano;
+
+      listavines.add(vi);
+    }
+
+    return listavines;
+  }
+
+  Future<List<Dano>> fetchDanos(vin) async {
+    Database db = await database;
+    List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM dano WHERE vin = '$vin'");
+
+    List<Dano> listaDanos = [];
+
+    for(var i in result) {
+      Dano dano = Dano.fromMap(i);
+
+      List<Evidencia> evidencia = [];
+      evidencia = await fetchEvidecias(dano.idd);
+      dano.evidencias = evidencia;
+
+      listaDanos.add(dano);
+    }
+
+    return listaDanos;
+  }
+
+  Future<List<Evidencia>> fetchEvidecias(idd) async {
+    Database db = await database;
+    List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM evidencia WHERE iddano = $idd");
+
+    List<Evidencia> evidencia = [];
+ 
+    for(var i in result){
+      Evidencia evidencias = Evidencia.fromMap(i);
+
+      evidencia.add(evidencias);
+    }
+
+    return evidencia;
   }
 }

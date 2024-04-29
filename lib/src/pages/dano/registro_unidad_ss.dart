@@ -356,11 +356,15 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
       itemP.deleteBoton();
 
       for(var ed in evidenciasDano) {
+
+        var arc = ed.tiem();
+        var edn = arc.replaceAll("\\s{2,}", "");
+
         evidencia = Evidencia(
           vin: widget.vin,
           iddano: value,
           nombre: null,
-          archivo: ed,
+          archivo: edn,
           fechahora: fechaH
         );
 

@@ -549,15 +549,17 @@ class _SincronizarState extends State<Sincronizar> {
   }
 
   Future enviarViaje() async {
-    var datos = await DatabaseProvider.db.envioViajeCompleto(1);
+    var datos = await DatabaseProvider.db.envioViajeCompleto(2);
     String token = "83c44c8cf9264486e94906844090e30b89a21715";
     
     try{
-      http.Response response = await http.post(Uri.parse(urlEnvioViaje), body: datos, headers: {"Content-Type": "application/json","Authorization":  "Bearer $token"});
+      http.Response response = await http.post(Uri.parse(urlEnvioViaje), body: datos, headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"});
 
       if(response.statusCode == 200) {
+        log(response.statusCode.toString());
+        
         Fluttertoast.showToast(
-          msg: "Viajes Sincronizados al Servidor",
+          msg: "Viaje Sincronizado al Servidor",
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
@@ -579,7 +581,7 @@ class _SincronizarState extends State<Sincronizar> {
   Future<void> _dialogBuilder(context, er) {
     return showDialog<void>(
       context: context,
-      builder: (BuildContext context) {
+      builder: (dynamic context) {
         return AlertDialog(
           title: const Column(
             children: [

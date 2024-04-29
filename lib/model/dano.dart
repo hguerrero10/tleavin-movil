@@ -27,7 +27,7 @@ class Dano{
 
   @override
   String toString() {
-    return 'Dano { vin: $vin, panel: $panel, registroTipo: $registroTipo, area: $area, tipo: $tipo, severidad: $severidad, nota: $nota, fecha_creacion: $fecha_creacion, idd: $idd }';
+    return '{ idd: $idd, vin: $vin, panel: $panel, registroTipo: $registroTipo, area: $area, tipo: $tipo, severidad: $severidad, nota: $nota, fecha_creacion: $fecha_creacion, evidencias: $evidencias }';
   }
 
   factory Dano.fromMap(Map<String, dynamic> map) => Dano(

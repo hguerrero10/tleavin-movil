@@ -196,7 +196,7 @@ class _InicioScreenState extends State<InicioScreen> {
   paProbar() async {
     var datos = await  DatabaseProvider.db.paraPruebas();
     // var datos = await  DatabaseProvider.db.envioViajeCompleto(1);
-    log(datos.toString());
+    // log(datos.toString());
   }
 
   logout() async {

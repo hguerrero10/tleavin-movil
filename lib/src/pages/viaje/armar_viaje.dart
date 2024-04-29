@@ -30,6 +30,8 @@ class _ArmarViajeState extends State<ArmarViaje> {
   final _destinoTextController = TextEditingController();
   final _notaTextController = TextEditingController();
 
+  String? tipoEco;
+
   var listaVinsViaje = [];
   String? vinEscaneado;
   Viaje? viaje;
@@ -94,7 +96,54 @@ class _ArmarViajeState extends State<ArmarViaje> {
               const Cuerpo(),
 
               _titulo('Numero Eco.'),
-              _inputs(_ecoTextController, 'Escriba Numero Economico', TextInputType.number),
+              Container(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                          width: 100,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: DropdownSearch<String>(
+                            popupProps: const PopupProps.menu(
+                              showSelectedItems: true
+                            ),
+                            items: const ['TLE', 'TLEA', 'C', 'OTRO'],
+                            dropdownDecoratorProps: const  DropDownDecoratorProps(
+                              dropdownSearchDecoration: InputDecoration(
+                                hintText: "Tipo",
+                                hintStyle: TextStyle(
+                                  color: Colors.grey
+                                )
+                              )
+                            ),
+                            onChanged: (cl) {
+                              setState(() {
+                                tipoEco = cl;
+                              });
+                            }
+                          )
+                        ),
+                        SizedBox(
+                          width: 220,
+                          child: TextField(
+                            controller: _ecoTextController,
+                            keyboardType: TextInputType.number,
+                            textCapitalization: TextCapitalization.words,
+                            decoration: const InputDecoration(
+                              hintText: 'Numero Economico',
+                              hintStyle: TextStyle(
+                                color: Colors.grey
+                              )
+                            )
+                          )
+                        )
+                    ]
+                  ),
+              ),
+              
               const SizedBox(height: 10),
 
               _titulo('Nombre Operador'),
@@ -319,7 +368,7 @@ class _ArmarViajeState extends State<ArmarViaje> {
       folio_bitacora: null ,
       cartaporte: null,
       bitacora_fecha_carga: null,
-      num_eco_unidad: _ecoTextController.text,
+      num_eco_unidad: tipoEco != 'OTRO' ? '$tipoEco-${_ecoTextController.text}' : _ecoTextController.text,
       nombre_operador: _nombreOpTextController.text,
       cliente_clave: int.parse(selectClie.toString()),
       cliente_nombre: selectClieText,

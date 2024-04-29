@@ -19,7 +19,7 @@ class Evidencia{
 
   @override
   String toString() {
-    return 'Evidencia { vin: $vin, iddano: $iddano, idviaje: $idviaje, nombre: $nombre, archivo: $archivo, fechahora: $fechahora, ide: $ide }';
+    return '{ ide: $ide, vin: $vin, iddano: $iddano, idviaje: $idviaje, nombre: $nombre, archivo: $archivo, fechahora: $fechahora }';
   }
 
   factory Evidencia.fromMap(Map<String, dynamic> map) => Evidencia(
