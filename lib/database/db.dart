@@ -652,6 +652,22 @@ class DatabaseProvider {
     return lista;
   }
 
+  Future<List<Viaje>> obtenerViajesParaSincronizar() async {
+    List<Viaje> lista;
+    final db = await database;
+    // var res = await db.rawQuery("SELECT * FROM viaje WHERE estadoviaje = 'Completo'");
+    var res = await db.rawQuery("SELECT * FROM viaje");
+
+    if(res.isNotEmpty) {
+      lista = res.map((u) => Viaje.fromMap(u)).toList();
+    } 
+    else {
+      lista = [];
+    }
+
+    return lista;
+  }
+
   Future<int> insertarViaje(Viaje nuevoRegistro) async {
     var db = await database;
     int res = await db.insert("viaje", nuevoRegistro.toMap());
@@ -734,6 +750,12 @@ class DatabaseProvider {
     return db.update('viaje', {'estadoViaje': 'Completo'}, where: "idviaje = ?", whereArgs: [idviaje]);
   }
 
+  actualizarEstadoViajeSincronizado(idviaje) async {
+    final db = await database;
+
+    return db.update('viaje', {'estadoViaje': 'Sincronizado'}, where: "idviaje = ?", whereArgs: [idviaje]);
+  }
+
   Future borrarViaje(idviaje) async {
     final db = await database;
 
@@ -744,7 +766,7 @@ class DatabaseProvider {
 
 
 
-  Future<Viaje> envioViajeCompleto(idviaje) async {    
+  Future<Viaje> envioViajeCompleto(idviaje) async {
     Database db = await database;
     List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM viaje WHERE idviaje = $idviaje");
 

@@ -49,7 +49,6 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
             hasScrollBody: true,
             child: Column(
               children: [
-
                 Expanded(child: informacionDelViaje(widget.viaje))
               ]
             )
@@ -64,7 +63,6 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
       itemCount: invi.length,
       itemBuilder: (context, index) {
         final dato = invi[index]['viaje'];
-
         resumenviaje = Viaje(
           idviaje: dato['idviaje'],
           supervisor: dato['supervisor'],
@@ -94,16 +92,15 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
             padding: const EdgeInsets.all(15),
             child: Column(
               children: [
-
                 _encabezados('Numero Eco.: ', '${dato['num_eco_unidad']}'),
                 _encabezados('Operador: ', '${dato['nombre_operador']}'),
-                _encabezados('Cliente.: ', '${dato['cliente_nombre']}'),
+                _encabezados('Cliente: ', '${dato['cliente_nombre']}'),
                 _encabezados('Origen: ', '${dato['origen']}'),
                 _encabezados('Destino: ', '${dato['destino']}'),
                 _encabezados('Tipo viaje: ', dato['tipo_viaje'] != null ? '${dato['tipo_viaje']}' : 'Sin Especificar'),
-                _encabezados('Fecha de armado: ', '${dato['fecha_creacion']}'),
+                _encabezados('Armado: ', '${dato['fecha_creacion']}'),
                 _encabezados('Notas: ', dato['notas'] != null ? '${dato['notas']}' : 'Sin Notas'),
-                _encabezados('VINs: ', ''),
+                _encabezados('VINES: ', ''),
 
                 const SizedBox(height: 10),
 
@@ -167,14 +164,13 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
 
   Widget _vinsCard(evi) {
     var inf ;
-    for(var di in evi){
+    for(var di in evi) {
       inf = di;
     }
     return ListView.builder(
       shrinkWrap: true,
       itemCount: inf.length,
       itemBuilder: (context, index) {
-
         var posi = inf[index]['posicion'] ?? '';
         var orie = inf[index]['orientacion'] ?? '';
         return GestureDetector(
@@ -211,14 +207,14 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         const Text(
-                          'Posicion: ',
+                          'Orientacion: ',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold
                           )
                         ),
                         Text(
-                          posi,
+                          orie,
                           style: const TextStyle(
                             fontSize: 18
                           )
@@ -232,14 +228,14 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         const Text(
-                          'Orientacion: ',
+                          'Posicion: ',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold
                           )
                         ),
                         Text(
-                          orie,
+                          posi,
                           style: const TextStyle(
                             fontSize: 18
                           )
@@ -361,7 +357,7 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
                       setState(() {
                         orientacionSeleccionada = oc;
                       });
-                    },
+                    }
                   )
                 )
               ]
@@ -388,7 +384,6 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
                 );
 
                 vinsasiganadosylisos.add(vinsPoOr);
-                log(vinsasiganadosylisos.toString());
 
                 Navigator.of(context).pop();
               }
@@ -428,7 +423,7 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
     }
     else {
       Fluttertoast.showToast(
-        msg: "VINs Pendientes de Posicion y Orientacion",
+        msg: "VINES Pendientes de Posicion y Orientacion",
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,

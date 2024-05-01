@@ -357,7 +357,7 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
 
       for(var ed in evidenciasDano) {
 
-        var arc = ed.tiem();
+        var arc = ed.trim();
         var edn = arc.replaceAll("\\s{2,}", "");
 
         evidencia = Evidencia(

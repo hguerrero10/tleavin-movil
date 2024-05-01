@@ -15,7 +15,7 @@ class VinsParaViaje extends StatefulWidget {
 class VinsParaViajeState extends State<VinsParaViaje> {
   final _qrTextController = TextEditingController();
   String query = '';
-  var vins =[];
+  var vins = [];
 
   var vinesseleccionados = [];
 
@@ -113,7 +113,7 @@ class VinsParaViajeState extends State<VinsParaViaje> {
             itemCount: vinesseleccionados.length,
             itemBuilder: (context, index) {
               return CheckboxListTile(
-                title: Text("VIN: ${vinesseleccionados[index]} index: $index"),
+                title: Text("VIN: ${vinesseleccionados[index]}"),
                 value: true,
                 onChanged: (value) {
                   setState(() {
@@ -142,8 +142,6 @@ class VinsParaViajeState extends State<VinsParaViaje> {
             }
           )
         ),
-
-
         ElevatedButton(
           // onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ArmarViaje(vinesqueseleccionaron: vinesseleccionados))),
           onPressed: () {
@@ -181,7 +179,7 @@ class VinsParaViajeState extends State<VinsParaViaje> {
             )
           )
         ),
-          const SizedBox(height: 40)
+        const SizedBox(height: 40)
       ]
     )
   );

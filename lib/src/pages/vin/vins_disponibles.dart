@@ -116,7 +116,7 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(8),
-                    child: vinsDisponibles(todosVins),
+                    child: vinsDisponibles(todosVins)
                   )
                 )
               ]
@@ -189,7 +189,7 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                               '${da[index].fecha_creacion}',
                               style: const TextStyle(
                                 fontSize: 13,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w600
                               )
                             )
                           )
@@ -200,7 +200,7 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                   const Divider(
                     color: Colors.black,
                     height: 20,
-                    thickness: 1,
+                    thickness: 1
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.min,
@@ -209,13 +209,13 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                         height: 61,
                         width: 61,
                         decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        color: Color.fromRGBO(242, 211, 0, 1),
-                        image: DecorationImage(
-                          image: AssetImage('assets/img/modelovin.png'),
-                          fit: BoxFit.fill,
-                        ),
-                        ),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          color: Color.fromRGBO(242, 211, 0, 1),
+                          image: DecorationImage(
+                            image: AssetImage('assets/img/modelovin.png'),
+                            fit: BoxFit.fill
+                          )
+                        )
                       ),
                       const SizedBox(width: 12),
                       Expanded(
@@ -342,8 +342,8 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                   )
                 ]
               )
-            ),
-          ),
+            )
+          )
         );
       }
     ) : Center(
@@ -360,7 +360,7 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
           SizedBox(
             width: 250,
             child: Text(
-              'No hay VINs disponibles',
+              'No hay VINES disponibles',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.grey[300],

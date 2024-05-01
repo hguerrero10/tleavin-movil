@@ -1,8 +1,6 @@
 import 'dart:core';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:connectivity_widget/connectivity_widget.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
@@ -20,33 +18,12 @@ class _CuerpoState extends State<Cuerpo> {
   var dateString;
   var ubi = '';
 
-  void requestLocationPermission() async {
-    LocationPermission permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.deniedForever) {
-      return;
-    } 
-
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      // if (permission == LocationPermission.whileInUse) {}
-    }
-    else {
-      if(itemP.ubicacion != '') {
-        ubi = itemP.ubicacion.toString();
-      }
-      else {
-        obtenerUbicacion();
-      }
-    }
-  }
-
   @override
   void initState() {
     initializeDateFormatting();
     format = DateFormat.yMMMMd('es');
     dateString = format.format(DateTime.now());
-     
-    // requestLocationPermission();
+
     super.initState();
   }
 
@@ -66,7 +43,7 @@ class _CuerpoState extends State<Cuerpo> {
                   GestureDetector(
                     onDoubleTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const InfoApp())),
                     child: Text(
-                      'Version: 0.30.0',
+                      'Version: 0.32.0',
                       style:  TextStyle(
                         fontSize: 12,
                         color: Colors.grey[400]
@@ -139,22 +116,5 @@ class _CuerpoState extends State<Cuerpo> {
         )
       ]
     );
-  }
-
-  obtenerUbicacion() async {
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
-    Placemark place = placemarks[0];
-    setState(() {
-      itemP.addUbi('${place.administrativeArea}, ${place.country}');
-      ubi = '${place.administrativeArea}, ${place.country}';
-
-      if(itemP.ubicacion != '') {
-        ubi = itemP.ubicacion.toString();
-      }
-      else {
-        ubi = '${place.administrativeArea}, ${place.country}';
-      }
-    });
   }
 }

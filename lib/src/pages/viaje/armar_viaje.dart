@@ -127,10 +127,10 @@ class _ArmarViajeState extends State<ArmarViaje> {
                           )
                         ),
                         SizedBox(
-                          width: 220,
+                          width: 250,
                           child: TextField(
                             controller: _ecoTextController,
-                            keyboardType: TextInputType.number,
+                            keyboardType: tipoEco != 'OTRO' ? TextInputType.number : TextInputType.text,
                             textCapitalization: TextCapitalization.words,
                             decoration: const InputDecoration(
                               hintText: 'Numero Economico',
@@ -369,13 +369,13 @@ class _ArmarViajeState extends State<ArmarViaje> {
       cartaporte: null,
       bitacora_fecha_carga: null,
       num_eco_unidad: tipoEco != 'OTRO' ? '$tipoEco-${_ecoTextController.text}' : _ecoTextController.text,
-      nombre_operador: _nombreOpTextController.text,
+      nombre_operador: _nombreOpTextController.text.toUpperCase(),
       cliente_clave: int.parse(selectClie.toString()),
       cliente_nombre: selectClieText,
       ruta_clave: null,
       ruta_nombre: null,
-      origen: _origenTextController.text,
-      destino: _destinoTextController.text,
+      origen: _origenTextController.text.toUpperCase(),
+      destino: _destinoTextController.text.toUpperCase(),
       etiqueta: null,
       status_carga: 0,
       notas: _notaTextController.text,

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +10,7 @@ import 'package:tleavin_mobil/model/cliente.dart';
 import 'package:tleavin_mobil/model/severidad.dart';
 import 'package:tleavin_mobil/model/tipo_dano.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
+import 'package:tleavin_mobil/src/pages/sincronizacion/enviar_viaje.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 
 class Sincronizar extends StatefulWidget {
@@ -21,10 +21,6 @@ class Sincronizar extends StatefulWidget {
 }
 
 class _SincronizarState extends State<Sincronizar> {
-
-  String urlEnvioViaje = 'http://tleavin.tlea.online/movil/viaje';
-  // String urlEnvioVIN = 'http://api-pruebas.tlea.online/agreagrVIN';
-
 
   String urlAreaDanoServer = 'http://api-pruebas.tlea.online/obtenerAreaDano';
   AreaDano? areaDanoInsertList;
@@ -423,91 +419,85 @@ class _SincronizarState extends State<Sincronizar> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const Cuerpo(),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () {},
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(30)),
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16)
-                      )
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //   children: [
+            //     ElevatedButton(
+            //       onPressed: () {},
+            //       style: ButtonStyle(
+            //         backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+            //         padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(30)),
+            //         shape: MaterialStateProperty.all(
+            //           RoundedRectangleBorder(
+            //             borderRadius: BorderRadius.circular(16)
+            //           )
+            //         )
+            //       ),
+            //       child: const Column(
+            //         children: [
+            //           Icon(
+            //             CupertinoIcons.car_detailed,
+            //             color: Colors.white,
+            //             size: 40
+            //           ),
+            //           SizedBox(width: 10),
+            //           Text(
+            //             'Sincronizar',
+            //             style: TextStyle(
+            //               fontSize: 20,
+            //               color: Colors.white
+            //             )
+            //           ),
+            //           Text(
+            //             'VINES',
+            //             style: TextStyle(
+            //               fontSize: 20,
+            //               color: Colors.white
+            //             )
+            //           )
+            //         ]
+            //       )
+            //     ),
+                
+            //   ]
+            // ),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: ElevatedButton(
+                onPressed: () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => const ViajesParaEnviar())),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(const Color.fromRGBO(242, 211, 0, 1)),
+                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(30)),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)
                     )
-                  ),
-                  child: const Column(
-                    children: [
-                      Icon(
-                        CupertinoIcons.car_detailed,
-                        color: Colors.white,
-                        size: 40
-                      ),
-                      SizedBox(width: 10),
-                      Text(
-                        'Sincronizar',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white
-                        )
-                      ),
-                      Text(
-                        'VINES',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white
-                        )
-                      )
-                    ]
                   )
                 ),
-                ElevatedButton(
-                  onPressed: () => enviarViaje(),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(const Color.fromRGBO(242, 211, 0, 1)),
-                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(30)),
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16)
+                child: const Row(
+                  children: [
+                    Icon(
+                      Icons.route,
+                      color: Colors.black,
+                      size: 40
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      'Sincronizar Viajes',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black
                       )
                     )
-                  ),
-                  child: const Column(
-                    children: [
-                      Icon(
-                        Icons.route,
-                        color: Colors.black,
-                        size: 40
-                      ),
-                      SizedBox(width: 10),
-                      Text(
-                        'Sincronizar',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black
-                        )
-                      ),
-                      Text(
-                        'Viajes',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black
-                        )
-                      )
-                    ]
-                  )
+                  ]
                 )
-              ]
+              )
             ),
-            const SizedBox(height: 10),
+            botonSincronizar(Icons.people, 'Sincronizar Clientes', () => obtenerClienteServer()),
 
             botonSincronizar(Icons.dangerous_outlined, 'Sincronizar Area Daños', () => obtenerAreaDanoServer()),
             botonSincronizar(Icons.list, 'Sincronizar Tipo Daños', () => obtenerTipoDanoServer()),
-            botonSincronizar(Icons.warning, 'Sincronizar Severidad', () => obtenerSeveridadServer()),
-
-            botonSincronizar(Icons.people, 'Sincronizar Clientes', () => obtenerClienteServer())
+            botonSincronizar(Icons.warning, 'Sincronizar Severidad', () => obtenerSeveridadServer())
           ]
         )
       )
@@ -545,78 +535,6 @@ class _SincronizarState extends State<Sincronizar> {
           ]
         )
       )
-    );
-  }
-
-  Future enviarViaje() async {
-    var datos = await DatabaseProvider.db.envioViajeCompleto(2);
-    String token = "83c44c8cf9264486e94906844090e30b89a21715";
-    
-    try{
-      http.Response response = await http.post(Uri.parse(urlEnvioViaje), body: datos, headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"});
-
-      if(response.statusCode == 200) {
-        log(response.statusCode.toString());
-        
-        Fluttertoast.showToast(
-          msg: "Viaje Sincronizado al Servidor",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 20
-        );
-      } 
-      else {
-        _dialogBuilder(context, 'A ocurrido un problema, Favor de comunicarse a soporte (Error: ${response.statusCode}) $response');
-        itemP.addError();
-      }
-    }
-    catch (e) {
-      log(e.toString());
-    }
-  }
-
-  Future<void> _dialogBuilder(context, er) {
-    return showDialog<void>(
-      context: context,
-      builder: (dynamic context) {
-        return AlertDialog(
-          title: const Column(
-            children: [
-              Text(
-                'Error',
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold
-                )
-              ),
-              Divider(
-                color: Colors.black,
-                thickness: 1.0
-              )
-            ]
-          ),
-          content: SizedBox(
-            height: 210,
-            child: Column(
-              children: [
-               Text(er)
-              ]
-            )
-          ),
-          actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge
-              ),
-              child: const Text('Ok'),
-              onPressed: () => Navigator.pop(context)
-            )
-          ]
-        );
-      }
     );
   }
 }

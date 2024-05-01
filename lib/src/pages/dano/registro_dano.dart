@@ -17,6 +17,7 @@ import 'package:tleavin_mobil/src/pages/vin/inspeccion_vin.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:tleavin_mobil/src/widgets/search_ATS.dart';
 
 class RegistroDano extends StatefulWidget {
   final vin;
@@ -60,6 +61,10 @@ class _RegistroDanoState extends State<RegistroDano> {
 
   Dano? dano;
   Evidencia? evidencia;
+
+  String queryA = '';
+  var queryT;
+  var queryS;
 
   Future<void> getCamara(foto) async {
     final List<XFile> pickedFileList = <XFile>[];
@@ -170,7 +175,7 @@ class _RegistroDanoState extends State<RegistroDano> {
         return confirmExit;
       },
       child: Scaffold(
-          appBar: AppBar(
+        appBar: AppBar(
           backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
           title: const Text(
             'Registrar Daño',
@@ -231,6 +236,20 @@ class _RegistroDanoState extends State<RegistroDano> {
                     ),
                     const SizedBox(height: 10),
                     _titulo('* Area:'),
+                    // Autocomplete<String>(
+                    //   optionsBuilder: (TextEditingValue textEditingValue) {
+                    //     if (textEditingValue.text == '') {
+                    //       return const Iterable<String>.empty();
+                    //     }
+                        
+                    //     return listaAreaDanos.where(( option) {
+                    //       return option.contains(textEditingValue.text.toLowerCase());
+                    //     });
+                    //   },
+                    //   onSelected: (String selection) {
+                    //     debugPrint('You just selected $selection');
+                    //   },
+                    // ),
                     // _dropDownArea(),
                     TextField(
                       controller: _areaTextController,
@@ -461,6 +480,7 @@ class _RegistroDanoState extends State<RegistroDano> {
       await DatabaseProvider.db.obtenerAreaDano().then((value) {
         setState(() {
           listaAreaDanos = value.map((item) => ListasA(valor: item.codigo.toString(), texto: '${item.codigo} : ${item.descripcion}')).toList();
+          // listaAreaDanos = value.map((item) => ListasA(valor: item.codigo.toString(), texto: '${item.codigo} : ${item.descripcion}')).toList();
         });
       });
 
@@ -513,7 +533,7 @@ class _RegistroDanoState extends State<RegistroDano> {
           dropdownDecoratorProps: const DropDownDecoratorProps(
           dropdownSearchDecoration: InputDecoration(
             hintText: "Selecciona"
-          ),
+          )
         ),
         onChanged: (ListasA? item) {
           setState(() {
@@ -522,7 +542,6 @@ class _RegistroDanoState extends State<RegistroDano> {
         },
         itemAsString: (ListasA item) => item.texto,
       )
-
     );
   }
 
