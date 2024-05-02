@@ -506,12 +506,12 @@ class _SincronizarState extends State<Sincronizar> {
 
   Widget botonSincronizar(ico, titulo, onpress) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
       child: ElevatedButton(
         onPressed: onpress,
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(18)),
+          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16)),
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16)

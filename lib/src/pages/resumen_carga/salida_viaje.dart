@@ -119,14 +119,12 @@ class _ResumenViajeState extends State<ResumenViaje> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 const SizedBox(height: 10),
-
                 _encabezados('Unidad: ', widget.viaje!.num_eco_unidad!),
                 _encabezados('Operador: ', widget.viaje!.nombre_operador!),
                 _encabezados('Cliente: ', widget.viaje!.cliente_nombre!),
                 _encabezados('Origen: ', widget.viaje!.origen),
                 _encabezados('Destino: ', widget.viaje!.destino),
                 const SizedBox(height: 30),
-                
                 ElevatedButton(
                   onPressed: () => Navigator.push(context, MaterialPageRoute(builder: ((context) => const FirmaInspectorWidget()))),
                   style: ButtonStyle(
@@ -259,7 +257,6 @@ class _ResumenViajeState extends State<ResumenViaje> {
                   )
                 ),
                 const SizedBox(height: 20),
-                
                 Center(
                   child: GestureDetector(
                     onTap: () => getCamara(),
@@ -312,7 +309,8 @@ class _ResumenViajeState extends State<ResumenViaje> {
                       ]
                     )
                   )
-                )
+                ),
+                const SizedBox(height: 20)
               ]
             )
           )

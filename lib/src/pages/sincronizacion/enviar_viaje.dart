@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -98,11 +97,14 @@ class _ViajesParaEnviarState extends State<ViajesParaEnviar> {
                                         fontWeight: FontWeight.bold
                                       )
                                     ),
-                                    Text(
-                                      '${dato.nombre_operador}',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.grey[800]
+                                    SizedBox(
+                                      width: 250,
+                                      child: Text(
+                                        '${dato.nombre_operador}',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey[800]
+                                        )
                                       )
                                     )
                                   ]
@@ -202,7 +204,7 @@ class _ViajesParaEnviarState extends State<ViajesParaEnviar> {
                           Container(height: 5)
                         ]
                       )
-                    ),
+                    )
                   )
                 );
               }
@@ -211,7 +213,7 @@ class _ViajesParaEnviarState extends State<ViajesParaEnviar> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Icon(Icons.route_rounded, color: Colors.grey[300], size: 100,),
+                Icon(Icons.route_rounded, color: Colors.grey[300], size: 100),
                 const SizedBox(height: 10),
                 Text(
                   'Sin Viajes',
@@ -236,23 +238,52 @@ class _ViajesParaEnviarState extends State<ViajesParaEnviar> {
     var datos = await DatabaseProvider.db.envioViajeCompleto(idviaje);
     String token = "83c44c8cf9264486e94906844090e30b89a21715";
 
+    var limpio = datos.toString().replaceAll('"{', "{").replaceAll('}"', "}");
+
     try{
-      http.Response response = await http.post(Uri.parse(urlEnvioViaje), body: datos, headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"});
+      http.Response response = await http.post(Uri.parse(urlEnvioViaje), body: limpio, headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"});
 
       if(response.statusCode == 200) {
-        log(response.statusCode.toString());
 
         await DatabaseProvider.db.actualizarEstadoViajeSincronizado(idviaje);
         
-        Fluttertoast.showToast(
-          msg: "Viaje Sincronizado al Servidor",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 20
-        );
+        // Fluttertoast.showToast(
+        //   msg: "Viaje Sincronizado al Servidor",
+        //   toastLength: Toast.LENGTH_LONG,
+        //   gravity: ToastGravity.BOTTOM,
+        //   timeInSecForIosWeb: 1,
+        //   backgroundColor: Colors.green,
+        //   textColor: Colors.white,
+        //   fontSize: 20
+        // );
+            final snackBar = SnackBar(
+              showCloseIcon: true,
+              backgroundColor: Colors.green,
+              content: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10)
+                ),
+                child: const Row(
+                  children: [
+                  Icon(
+                    Icons.check_circle,
+                    color: Colors.white,
+                    size: 20
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    'Viaje Sincronizado al Servidor', 
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold, 
+                      fontSize: 20
+                    )
+                  )
+                ]
+              )
+            )
+          );
+
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
       } 
       else {
         Fluttertoast.showToast(

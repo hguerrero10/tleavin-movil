@@ -17,7 +17,6 @@ import 'package:tleavin_mobil/src/pages/vin/inspeccion_vin.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:tleavin_mobil/src/widgets/search_ATS.dart';
 
 class RegistroDano extends StatefulWidget {
   final vin;

@@ -1,5 +1,7 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/usuario.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
@@ -23,10 +25,22 @@ class _InicioScreenState extends State<InicioScreen> {
 
   Usuario usuario = Usuario();
 
+  var ad = [];
+  var cl = [];
+
+  comprobarInfoBD() async {
+    ad = await  DatabaseProvider.db.obtenerAreaDano();
+    cl = await  DatabaseProvider.db.obtenerCliente();
+
+    log(ad.toString());
+    log(cl.toString());
+  }
+
   @override
   void initState() {
-
     super.initState();
+
+    comprobarInfoBD();
   }
 
   @override
@@ -193,11 +207,11 @@ class _InicioScreenState extends State<InicioScreen> {
   }
 
   paProbar() async {
-    var datos = await  DatabaseProvider.db.paraPruebas();
+    // var datos = await  DatabaseProvider.db.paraPruebas();
     // var datos = await  DatabaseProvider.db.envioViajeCompleto(1);
     // log(datos.toString());
   }
-
+  
   logout() async {
     usuario = Usuario(
       numeroEmpleado: itemP.usuario!.numeroEmpleado,
@@ -224,8 +238,9 @@ class _InicioScreenState extends State<InicioScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _panel(CupertinoIcons.car_detailed, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CompraVin())), 'Comprar vin'),
-          _panel(CupertinoIcons.list_bullet_below_rectangle, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VinsDisponibles())), 'Vins Disponibles')
+          _panel(CupertinoIcons.car_detailed, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CompraVin())), 'Comprar VIN'),
+          
+          _panel(CupertinoIcons.list_bullet_below_rectangle, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VinsDisponibles())), 'VINES Disponibles')
         ]
       )
     );

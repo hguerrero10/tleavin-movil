@@ -103,7 +103,7 @@ class _InfoAppState extends State<InfoApp> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Versión: 0.32.0',
+                'Versión: 0.33.0',
                 style: TextStyle(
                   color: Color(0xfbb5bac9)
                 )

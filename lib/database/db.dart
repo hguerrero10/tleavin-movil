@@ -655,8 +655,8 @@ class DatabaseProvider {
   Future<List<Viaje>> obtenerViajesParaSincronizar() async {
     List<Viaje> lista;
     final db = await database;
-    // var res = await db.rawQuery("SELECT * FROM viaje WHERE estadoviaje = 'Completo'");
-    var res = await db.rawQuery("SELECT * FROM viaje");
+    var res = await db.rawQuery("SELECT * FROM viaje WHERE estadoviaje = 'Completo'");
+    // var res = await db.rawQuery("SELECT * FROM viaje");
 
     if(res.isNotEmpty) {
       lista = res.map((u) => Viaje.fromMap(u)).toList();
@@ -831,4 +831,4 @@ class DatabaseProvider {
 
     return evidencia;
   }
-}
+} 

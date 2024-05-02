@@ -23,6 +23,8 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
   var versiyaesta;
 
   Viaje? resumenviaje;
+  var posi = 'Sin Asignar';
+  var orie = 'Sin Asignar';
 
   @override
   void initState() {
@@ -89,7 +91,7 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
 
         return SingleChildScrollView(
           child: Container(
-            padding: const EdgeInsets.all(15),
+            padding: const EdgeInsets.all(10),
             child: Column(
               children: [
                 _encabezados('Numero Eco.: ', '${dato['num_eco_unidad']}'),
@@ -99,7 +101,7 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
                 _encabezados('Destino: ', '${dato['destino']}'),
                 _encabezados('Tipo viaje: ', dato['tipo_viaje'] != null ? '${dato['tipo_viaje']}' : 'Sin Especificar'),
                 _encabezados('Armado: ', '${dato['fecha_creacion']}'),
-                _encabezados('Notas: ', dato['notas'] != null ? '${dato['notas']}' : 'Sin Notas'),
+                _encabezados('Notas: ', dato['notas'] != '' ? '${dato['notas']}' : 'Sin Notas'),
                 _encabezados('VINES: ', ''),
 
                 const SizedBox(height: 10),
@@ -149,11 +151,11 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
             )
           ),
           SizedBox(
-            width: 180,
+            width: 240,
             child: Text(
               sub ?? '',
               style: const TextStyle(
-                fontSize: 18
+                fontSize: 17
               )
             )
           )
@@ -171,8 +173,8 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
       shrinkWrap: true,
       itemCount: inf.length,
       itemBuilder: (context, index) {
-        var posi = inf[index]['posicion'] ?? '';
-        var orie = inf[index]['orientacion'] ?? '';
+        var posi = inf[index]['posicion'] ?? 'Sin Asignar';
+        var orie = inf[index]['orientacion'] ?? 'Sin Asignar';
         return GestureDetector(
           onTap: () => _dialogBuilder(context, inf[index]['vin']),
           child: SizedBox(
@@ -396,7 +398,7 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
 
   actualizarPoOrVins(ori, lista) async {
     var inf ;
-    for(var di in ori){
+    for(var di in ori) {
       inf = di;
     }
 
@@ -409,14 +411,13 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
         );
 
         await DatabaseProvider.db.asignarPoOrVIN(vinsPoOr).then((value) {
-        log('vin asignado PoOr');
+          log('vin asignado PoOr');
         }).timeout(const Duration(seconds: 30), onTimeout: () {
           itemP.addError();
         });
 
         log('resumendeviaje');
         log(resumenviaje.toString());
-
         
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenViaje(viaje: resumenviaje)), (Route<dynamic> route) => false);
       }
