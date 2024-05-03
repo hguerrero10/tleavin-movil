@@ -10,6 +10,7 @@ class Dano{
   int? severidad;
   String? nota;
   String? fecha_creacion;
+  String? estado;
   List<Evidencia>? evidencias;
 
   Dano({
@@ -21,13 +22,14 @@ class Dano{
     this.tipo,
     this.severidad,
     this.nota,
+    this.estado,
     this.fecha_creacion,
     this.evidencias = const [],
   });
 
   @override
   String toString() {
-    return '{"idd": $idd, "vin": "$vin", "panel": "$panel", "registroTipo": "$registroTipo", "area": $area, "tipo": $tipo, "severidad": $severidad, "nota": "$nota", "fecha_creacion": "$fecha_creacion", "evidencias": $evidencias}';
+    return '{"idd": $idd, "vin": "$vin", "panel": "$panel", "registroTipo": "$registroTipo", "area": $area, "tipo": $tipo, "severidad": $severidad, "nota": "$nota", "estado": "$estado", "fecha_creacion": "$fecha_creacion", "evidencias": $evidencias}';
   }
 
   factory Dano.fromMap(Map<String, dynamic> map) => Dano(
@@ -39,6 +41,7 @@ class Dano{
     tipo: map['tipo'],
     severidad: map['severidad'],
     nota: map['nota'].toString(),
+    estado: map['estado'].toString(),
     fecha_creacion: map['fecha_creacion'].toString(),
     evidencias: map['evidencias']
   );
@@ -52,6 +55,7 @@ class Dano{
     "tipo": tipo,
     "severidad": severidad,
     "nota": nota,
+    "estado": estado,
     "fecha_creacion": fecha_creacion
   };
 }

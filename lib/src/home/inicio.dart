@@ -118,15 +118,11 @@ class _InicioScreenState extends State<InicioScreen> {
                     padding: const EdgeInsets.only(left: 16, right: 16),
                     child: ElevatedButton(
                       onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const Sincronizar())),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(15)),
-                        minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16)
-                          )
-                        )
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        padding: const EdgeInsets.all(16),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        elevation: 5,
                       ),
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -134,13 +130,13 @@ class _InicioScreenState extends State<InicioScreen> {
                           Icon(
                             Icons.swap_vert,
                             color: Colors.white,
-                            size: 30
+                            size: 33
                           ),
                           SizedBox(width: 10),
                           Text(
                             'Sincronizar',
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 23,
                               color: Colors.white
                             )
                           )

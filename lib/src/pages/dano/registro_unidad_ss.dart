@@ -347,6 +347,7 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
       tipo: null,
       severidad: null,
       nota: _notasTextController.text,
+      estado: 'A',
       fecha_creacion: fecha
     );
 

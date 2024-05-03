@@ -280,7 +280,7 @@ class _CompraVinState extends State<CompraVin> {
       itemP.addBoton();
       itemP.deleteBoton();
       
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => InspeccionVin(vin: valorvin)), (route) => false);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => InspeccionVin(vin: valorvin)));
     }).timeout(const Duration(seconds: 30), onTimeout: () {
       itemP.addError();
     });

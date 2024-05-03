@@ -47,7 +47,7 @@ class DatabaseProvider {
         );
 
         await db.execute(
-          "CREATE TABLE dano (idd INTEGER PRIMARY KEY AUTOINCREMENT, vin VARCHAR, panel VARCHAR, registroTipo VARCHAR, area INTERGER, tipo INTERGER, severidad INTERGER, nota VARCHAR, fecha_creacion DATE)"
+          "CREATE TABLE dano (idd INTEGER PRIMARY KEY AUTOINCREMENT, vin VARCHAR, panel VARCHAR, registroTipo VARCHAR, area INTERGER, tipo INTERGER, severidad INTERGER, nota VARCHAR, estado VARCHAR, fecha_creacion DATE)"
         );
 
         await db.execute(
@@ -222,19 +222,25 @@ class DatabaseProvider {
             }
 
             if(!found) {
-              var newDano = {
-                'iddano': iddano,
-                'panel': item['panel'],
-                'registroTipo': item['registroTipo'],
-                'area': item['area'],
-                'tipo': item['tipo'],
-                'severidad': item['severidad'],
-                'nota': item['nota'],
-                'fecha_creacion': item['fecha_creacion'],
-                'evidencias': [evidence]
-              };
 
-              organizedData[vin]!['danoos'].add(newDano); 
+              if(item['estado'] == 'A'){
+                var newDano = {
+                  'iddano': iddano,
+                  'vin': vin,
+                  'panel': item['panel'],
+                  'registroTipo': item['registroTipo'],
+                  'area': item['area'],
+                  'tipo': item['tipo'],
+                  'severidad': item['severidad'],
+                  'nota': item['nota'],
+                  'estado': item['estado'],
+                  'fecha_creacion': item['fecha_creacion'],
+                  'evidencias': [evidence]
+                };
+
+                organizedData[vin]!['danoos'].add(newDano); 
+              }
+
             }
           } 
           else {
@@ -293,19 +299,24 @@ class DatabaseProvider {
             }
 
             if(!found) {
-              var newDano = {
-                'iddano': iddano,
-                'panel': item['panel'],
-                'registroTipo': item['registroTipo'],
-                'area': item['area'],
-                'tipo': item['tipo'],
-                'severidad': item['severidad'],
-                'nota': item['nota'],
-                'fecha_creacion': item['fecha_creacion'],
-                'evidencias': [evidence]
-              };
+                if(item['estado'] == 'A'){
+                var newDano = {
+                  'iddano': iddano,
+                  'vin': vin,
+                  'panel': item['panel'],
+                  'registroTipo': item['registroTipo'],
+                  'area': item['area'],
+                  'tipo': item['tipo'],
+                  'severidad': item['severidad'],
+                  'nota': item['nota'],
+                  'estado': item['estado'],
+                  'fecha_creacion': item['fecha_creacion'],
+                  'evidencias': [evidence]
+                };
 
-              organizedData[vin]!['danoos'].add(newDano); 
+                organizedData[vin]!['danoos'].add(newDano); 
+              }
+
             }
           } 
           else {
@@ -443,6 +454,11 @@ class DatabaseProvider {
     return listaDanos;
   }
 
+  quitarDanoVIN(idd) async {
+    final db = await database;
+
+    return db.update('dano', {'estado': 'I'}, where: "idd = ?", whereArgs: [idd]);
+  }
   // CRUD EVIDENCIA
 
   Future<int> insertarEvidencia(Evidencia nuevoRegistro) async {

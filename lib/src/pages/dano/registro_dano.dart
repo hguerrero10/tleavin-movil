@@ -608,6 +608,7 @@ class _RegistroDanoState extends State<RegistroDano> {
         tipo: int.parse(_tipoTextController.text.trim()),
         severidad: int.parse(_severidadTextController.text.trim()),
         nota: _notasTextController.text,
+        estado: 'A',
         fecha_creacion: fecha
       );
 

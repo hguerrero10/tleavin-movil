@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tleavin_mobil/database/db.dart';
@@ -47,6 +48,25 @@ class _DetalleVinState extends State<DetalleVin> {
     });
   }
 
+  quitarDano(idd) async {
+    await DatabaseProvider.db.quitarDanoVIN(idd).then((value) {
+      Fluttertoast.showToast(
+        msg: "Daño: $idd fue quitado con Exito!",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 20
+      );
+
+            Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const InicioScreen()), (Route<dynamic> route) => false);
+
+    }).timeout(const Duration(seconds: 30), onTimeout: () {
+      itemP.addError();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -67,7 +87,7 @@ class _DetalleVinState extends State<DetalleVin> {
         )
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => InspeccionVin(vin: vinSeleccionado)), (route) => false),
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => InspeccionVin(vin: vinSeleccionado))),
         foregroundColor: Colors.black,
         backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
         child: const Icon(Icons.note_add_rounded)
@@ -228,9 +248,13 @@ class _DetalleVinState extends State<DetalleVin> {
               child: Column(
                 children: <Widget>[
                   ListTile(
-                    leading: const Icon(
-                      Icons.dangerous,
-                      size: 30
+                    leading: GestureDetector(
+                      onTap: () => dato['area'] == null ? _dialogBuilder(context, '${dato['vin']}', '${dato['iddano']}', '${dato['registroTipo']}', () => quitarDano('${dato['iddano']}')): 
+                      _dialogBuilder(context, '${dato['vin']}', '${dato['iddano']}', '${dato['area']}-${dato['tipo']}-${dato['severidad']}', () => quitarDano('${dato['iddano']}')),
+                      child: const Icon(
+                        Icons.dangerous,
+                        size: 30
+                      ),
                     ),
                     title: Row(
                       children: [
@@ -274,12 +298,12 @@ class _DetalleVinState extends State<DetalleVin> {
                     thickness: 1.0,
                     height: 20
                   ),
-
+                  
                   dato['area'] == null ? const SizedBox() : _encabezados('Area: ', '${dato['area']}'),
                   dato['tipo'] == null ? const SizedBox() : _encabezados('Tipo: ', '${dato['tipo']}'),
                   dato['severidad'] == null ? const SizedBox() : _encabezados('Severidad: ', '${dato['severidad']}'),
             
-                  dato['severidad'] == null ? _encabezados('Estado: ', '${dato['registroTipo']}') : const SizedBox(),
+                  dato['area'] == null ? _encabezados('Estado: ', '${dato['registroTipo']}') : const SizedBox(),
 
                   dato['area'] == null ? const SizedBox() : _encabezados('Codificacion: ', '${dato['area']}-${dato['tipo']}-${dato['severidad']}'),
                   _encabezadosCard('Notas: ', dato['nota'] != '' ?  '${dato['nota']}' : 'Sin notas'),
@@ -313,4 +337,112 @@ class _DetalleVinState extends State<DetalleVin> {
       }
     );
   }
+
+  Future<void> _dialogBuilder(BuildContext context, vi, idd, da, onpress) {
+    final _posicionTextController = TextEditingController();
+    var orientacionSeleccionada;
+
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Column(
+            children: [
+              Text(
+                'Quitar Daño',
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold
+                )
+              ),
+              Divider(
+                color: Colors.black,
+                thickness: 1.0
+              )
+            ]
+          ),
+          content: SizedBox(
+            height: 110,
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'VIN: ',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold
+                      )
+                    ),
+                    Text(
+                      vi,
+                      style: const TextStyle(
+                        fontSize: 16
+                      )
+                    )
+                  ]
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'ID Daño: ',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold
+                      )
+                    ),
+                    Text(
+                      idd,
+                      style: const TextStyle(
+                        fontSize: 16
+                      )
+                    )
+                  ]
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Codificacion: ',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold
+                      )
+                    ),
+                    Text(
+                      da,
+                      style: const TextStyle(
+                        fontSize: 16
+                      )
+                    )
+                  ]
+                )
+              ]
+            )
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge
+              ),
+              child: const Text('Cerrar'),
+              onPressed: () => Navigator.of(context).pop()
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge
+              ),
+              child: const Text('Confirmar'),
+              onPressed: onpress
+            )
+          ]
+        );
+      }
+    );
+  }
+
 }

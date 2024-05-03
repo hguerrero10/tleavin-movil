@@ -20,7 +20,7 @@ class _InfoAppState extends State<InfoApp> {
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
         title: const Text(
-          'Info App',
+          'Informacion de App',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.black
@@ -35,23 +35,12 @@ class _InfoAppState extends State<InfoApp> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Row(
-                children: [
-                  SizedBox(
-                    height: 130,
-                    width: 130,
-                    child: Image.asset(
-                      'assets/img/logo_tlea.png'
-                    )
-                  ),
-                  const Text(
-                    '',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold
-                    )
-                  )
-                ]
+              SizedBox(
+                height: 100,
+                width: 100,
+                child: Image.asset(
+                  'assets/img/logo_tlea.png'
+                )
               ),
               const SizedBox(
                 height: 80,
@@ -62,8 +51,8 @@ class _InfoAppState extends State<InfoApp> {
                 )
               ),
               SizedBox(
-                height: 100,
-                width: 100,
+                height: 75,
+                width: 75,
                 child: Image.asset(
                   'assets/img/logopp.png'
                 )
@@ -90,22 +79,11 @@ class _InfoAppState extends State<InfoApp> {
                       Text(
                         'H_Guerrero',
                         style: TextStyle(
-                          color: Color.fromARGB(249, 75, 32, 230)
+                          color: Color.fromRGBO(242, 211, 0, 1),
                         )
                       )
                     ]
                   )
-                )
-              )
-            ]
-          ),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Versión: 0.35.0',
-                style: TextStyle(
-                  color: Color(0xfbb5bac9)
                 )
               )
             ]
@@ -116,10 +94,21 @@ class _InfoAppState extends State<InfoApp> {
               Container(
                 padding: const EdgeInsets.only(top: 3),
                 child: const Text(
-                  'Compilación: 19101001',
+                  'Flutter: 3.16.9',
                   style: TextStyle(
                     color: Color(0xfbb5bac9)
                   )
+                )
+              )
+            ]
+          ),
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Versión: 0.36.0',
+                style: TextStyle(
+                  color: Color(0xfbb5bac9)
                 )
               )
             ]

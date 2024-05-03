@@ -34,10 +34,11 @@ class _InspeccionVinState extends State<InspeccionVin> {
                 onPressed: () {
                   Navigator.of(context).pop(false); 
                 },
-                child: const Text('No')
+                child: const Text('No'),
               ),
               TextButton(
                 onPressed: () {
+                  Navigator.of(context).pop(true);
                   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const InicioScreen()), (Route<dynamic> route) => false);
                 },
                 child: const Text('Sí')

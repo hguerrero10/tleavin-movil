@@ -465,14 +465,20 @@ class _SincronizarState extends State<Sincronizar> {
               padding: const EdgeInsets.all(16),
               child: ElevatedButton(
                 onPressed: () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => const ViajesParaEnviar())),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(const Color.fromRGBO(242, 211, 0, 1)),
-                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(30)),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)
-                    )
-                  )
+                // style: ButtonStyle(
+                //   backgroundColor: MaterialStateProperty.all<Color>(const Color.fromRGBO(242, 211, 0, 1)),
+                //   padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(30)),
+                //   shape: MaterialStateProperty.all(
+                //     RoundedRectangleBorder(
+                //       borderRadius: BorderRadius.circular(16)
+                //     )
+                //   )
+                // ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
+                  padding: const EdgeInsets.all(30),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  elevation: 5,
                 ),
                 child: const Row(
                   children: [
@@ -510,14 +516,11 @@ class _SincronizarState extends State<Sincronizar> {
       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
       child: ElevatedButton(
         onPressed: onpress,
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(16)),
-          shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16)
-            )
-          )
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.black,
+          padding: const EdgeInsets.all(16),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          elevation: 5,
         ),
         child: Row(
           children: [
