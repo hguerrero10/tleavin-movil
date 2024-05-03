@@ -28,7 +28,6 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
 
   @override
   void initState() {
-    // log(widget.viaje.toString());
     super.initState();
   }
 
@@ -416,9 +415,6 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
           itemP.addError();
         });
 
-        log('resumendeviaje');
-        log(resumenviaje.toString());
-        
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenViaje(viaje: resumenviaje)), (Route<dynamic> route) => false);
       }
     }

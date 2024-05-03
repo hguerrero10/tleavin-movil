@@ -24,7 +24,6 @@ class _ViajesArmadosState extends State<ViajesArmados> {
 
   obtenerViaje(infviaje) async {
     var data = await DatabaseProvider.db.obtenerInfoViaje(infviaje);
-    // log(data.toString());
     setState(() {
       informacionDelViaje = data;
     });

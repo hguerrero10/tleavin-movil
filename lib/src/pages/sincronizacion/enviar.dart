@@ -493,6 +493,7 @@ class _SincronizarState extends State<Sincronizar> {
                 )
               )
             ),
+            const SizedBox(height: 40),
             botonSincronizar(Icons.people, 'Sincronizar Clientes', () => obtenerClienteServer()),
 
             botonSincronizar(Icons.dangerous_outlined, 'Sincronizar Area Daños', () => obtenerAreaDanoServer()),

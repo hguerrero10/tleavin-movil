@@ -387,8 +387,6 @@ class _ArmarViajeState extends State<ArmarViaje> {
       fecha_sync: null
     );
 
-    log(viaje.toString());
-
     await DatabaseProvider.db.insertarViaje(viaje!).then((value) async {
       log('viaje insertado');
 

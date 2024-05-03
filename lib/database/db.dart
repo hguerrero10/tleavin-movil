@@ -91,31 +91,16 @@ class DatabaseProvider {
     Database db = await database;
     List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM evidencia WHERE ide = 1");
 
-
-
     for(var i in result) {
       Evidencia vi = Evidencia.fromMap(i);
 
       var arc = vi.archivo?.trim();
       var edn = arc?.replaceAll("\\s{2,}", "");
        
-    // log(vi.archivo.toString());
-    log(edn.toString());
+      log(edn.toString());
     }
     return result;
   }
-
-  // Future paraPruebas() async {
-  //   Database db = await database;
-  //   List<Map> dataD = await db.rawQuery("SELECT * FROM evidencia WHERE iddano = 1");
-  
-  //        var arc = ed.tiem();
-  //       var edn = arc.replaceAll("\\s{2,}", "");
-  //   var jsonString  = jsonEncode(dataD);
-      
-  //   return jsonString;
-  // }
-
 
   // CRUD USUARIOS
 

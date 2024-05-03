@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/usuario.dart';
@@ -54,19 +53,47 @@ class _LoginFormState extends State<LoginForm> {
                   estado: value['estado']
                 );
                 
-                log(usuarioInsertList.toString());
                 await DatabaseProvider.db.insertarUsuario(usuarioInsertList!);
               }
               
-              Fluttertoast.showToast(
-                msg: "Usuarios Sincronizados",
-                toastLength: Toast.LENGTH_LONG,
-                gravity: ToastGravity.TOP,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.green,
-                textColor: Colors.white,
-                fontSize: 20
-              );
+              // Fluttertoast.showToast(
+              //   msg: "",
+              //   toastLength: Toast.LENGTH_LONG,
+              //   gravity: ToastGravity.CENTER,
+              //   timeInSecForIosWeb: 1,
+              //   backgroundColor: Colors.green,
+              //   textColor: Colors.white,
+              //   fontSize: 25
+              // );
+
+            final snackBar = SnackBar(
+              showCloseIcon: true,
+              backgroundColor: Colors.green,
+              content: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10)
+                ),
+                child: const Row(
+                  children: [
+                  Icon(
+                    Icons.check_circle,
+                    color: Colors.white,
+                    size: 20
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    'Usuarios Sincronizados', 
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold, 
+                      fontSize: 20
+                    )
+                  )
+                ]
+              )
+            )
+          );
+
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
               itemP.addLoginInsert();
             } 
@@ -150,7 +177,7 @@ class _LoginFormState extends State<LoginForm> {
               image: DecorationImage(
                 image: AssetImage("assets/img/fondo_register.jpg"), 
                 fit: BoxFit.cover,
-                opacity: 0.8
+                opacity: 0.7
               )
             )
           ),
@@ -163,13 +190,13 @@ class _LoginFormState extends State<LoginForm> {
                   color: Colors.transparent,
                   child: Column(
                     children: <Widget>[
-                        const SizedBox(height: 70),
+                        const SizedBox(height: 160),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 150),
+                          padding: const EdgeInsets.only(bottom: 160),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Image.asset('assets/img/logo_tlea.png', width: 270, height: 220)
+                              Image.asset('assets/img/logo_tlea.png', width: 290, height: 210)
                             ]
                           )
                         ),
@@ -216,6 +243,7 @@ class _LoginFormState extends State<LoginForm> {
     DatabaseProvider.db.login(_userController.text.trim(), _passwordController.text.trim()).then((value)  {
       if(value.numeroEmpleado == null) {
         itemP.addError();
+
         Fluttertoast.showToast(
           msg: "Contraseña y/o Usuario incorrectos",
           toastLength: Toast.LENGTH_SHORT,
@@ -241,7 +269,6 @@ class _LoginFormState extends State<LoginForm> {
           );
         });
         
-        log(value.toString());
         itemP.addUser(value);
         DatabaseProvider.db.actualizarUsuario(usuario!);
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const InicioScreen()), (Route<dynamic> route) => false);
@@ -348,7 +375,7 @@ class _LoginFormState extends State<LoginForm> {
       child: Row(
         children: <Widget>[
           Expanded(
-            child:  ElevatedButton(
+            child: ElevatedButton(
               onPressed: onPressed,
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(color),
@@ -366,7 +393,7 @@ class _LoginFormState extends State<LoginForm> {
                         nombre,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
-                          color: Colors.white, 
+                          color: Colors.black, 
                           fontWeight: FontWeight.bold,
                           fontSize: 22
                         )

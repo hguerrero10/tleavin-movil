@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tleavin_mobil/database/db.dart';
@@ -88,7 +87,6 @@ class _ResumenDanoState extends State<ResumenDano> {
       itemCount: vi.length,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
-        log(vi[index]['danoos'].toString());
         return SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(15),
@@ -271,8 +269,6 @@ class _ResumenDanoState extends State<ResumenDano> {
       fecha_creacion: da['fecha_creacion'],
       fecha_sync: da['fecha_sync']
     );
-
-    log(vin.toString());
 
     await DatabaseProvider.db.actualizarVin(vin!);
 

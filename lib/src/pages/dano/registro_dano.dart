@@ -114,10 +114,7 @@ class _RegistroDanoState extends State<RegistroDano> {
         // log(base64Foto4.toString());
         evidenciasDano.add(base64Foto4);
       }
-      
     }
-
-    log(evidenciasDano.length.toString());
   }
 
   var resumen;
@@ -618,9 +615,7 @@ class _RegistroDanoState extends State<RegistroDano> {
         log('dano insertado');
         itemP.addBoton();
         itemP.deleteBoton();
-
-        log(evidenciasDano.toString());
-
+        
         for(var ed in evidenciasDano) {
           evidencia = Evidencia(
             vin: widget.vin,

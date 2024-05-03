@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,6 +16,14 @@ class ViajesParaEnviar extends StatefulWidget {
 
 class _ViajesParaEnviarState extends State<ViajesParaEnviar> {
   String urlEnvioViaje = 'http://tleavin.tlea.online/movil/viaje';
+  var _stream;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _stream = DatabaseProvider.db.obtenerViajesParaSincronizar().asStream();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +44,7 @@ class _ViajesParaEnviarState extends State<ViajesParaEnviar> {
 
   Widget lista() {
     return StreamBuilder<List<Viaje>>(
-      stream: DatabaseProvider.db.obtenerViajesParaSincronizar().asStream(),
+      stream: _stream,
       builder: (context, AsyncSnapshot<List<Viaje>>snapshot) {
         if(snapshot.hasData) {
           return snapshot.data!.isNotEmpty ? ListView.builder(
@@ -284,6 +293,10 @@ class _ViajesParaEnviarState extends State<ViajesParaEnviar> {
           );
 
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+          setState(() {
+            _stream = DatabaseProvider.db.obtenerViajesParaSincronizar().asStream();
+          });
       } 
       else {
         Fluttertoast.showToast(

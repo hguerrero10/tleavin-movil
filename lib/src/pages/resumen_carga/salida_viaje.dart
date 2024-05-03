@@ -351,7 +351,6 @@ class _ResumenViajeState extends State<ResumenViaje> {
     firmascolectadas.add({'nombre': 'Operador', 'b64': itemP.firmaOperador});
     firmascolectadas.add({'nombre': 'Operador Logico', 'b64': itemP.firmaOperadorLogistico});
     firmascolectadas.add({'nombre': 'ID Operador Logico', 'b64': fotoIdentificacion});
-    log(firmascolectadas.toString());
 
     for(var ed in firmascolectadas) {
       evidencia = Evidencia(
@@ -365,7 +364,6 @@ class _ResumenViajeState extends State<ResumenViaje> {
 
       await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) {
         log('evidencia insertada');
-        log('$value');
         
       }).timeout(const Duration(seconds: 60), onTimeout: () {
         itemP.addError();
