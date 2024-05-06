@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/dano.dart';
 import 'package:tleavin_mobil/model/evidencia.dart';
@@ -22,15 +23,14 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
   Dano? dano;
   Evidencia? evidencia;
 
-  final _vinTextController = TextEditingController();
-
   var infoydatos = [];
   var todosVins = [];
-   String query = '';
-  var vins = [];
+  var listadevines = [];
+  String query = '';
 
   obtenerDatos(v) async {
     var datos = await DatabaseProvider.db.obtenerInfoVin(v);
+
     setState(() {
       infoydatos = datos;
     });
@@ -43,7 +43,22 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
     
     setState(() {
       todosVins = datos;
+      listadevines = todosVins;
     });
+  }
+  
+  Future<void> scanQR() async {
+    String codeQrBar;
+    try {
+      codeQrBar = await FlutterBarcodeScanner.scanBarcode("#ff6666", "Cancelar", true, ScanMode.QR);
+      setState(() {
+        query = codeQrBar;
+        searchVIN(query);
+      });
+    } 
+    catch (e) {
+      log('Error al escanear: $e');
+    }
   }
 
   @override
@@ -69,22 +84,55 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
       body: Column(
         children: [
           buildSearch(),
+          ElevatedButton(
+            onPressed: () => scanQR(),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(10)),
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)
+                )
+              )
+            ),
+            child: const SizedBox(
+              width: 200,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.qr_code_2_outlined,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    'Escanear VIN',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      color: Colors.white
+                    )
+                  )
+                ]
+              )
+            )
+          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8),
-              child: todosVins.isNotEmpty ? ListView.builder(
+              child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: todosVins.length,
+                itemCount: listadevines.length,
                 // physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return  GestureDetector(
-                    onTap: () async => await obtenerDatos('${todosVins[index].vin}'),
+                    onTap: () async => await obtenerDatos('${listadevines[index].vin}'),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: todosVins[index].compra == 1 ? const Color.fromRGBO(25, 241, 38, 240) : const Color.fromRGBO(227, 227, 227, 1),
+                          color: listadevines[index].compra == 1 ? const Color.fromRGBO(25, 241, 38, 240) : const Color.fromRGBO(227, 227, 227, 1),
                           borderRadius: const BorderRadius.all(Radius.circular(15)),
                           boxShadow: null,
                         ),
@@ -107,7 +155,7 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 4.0),
                                       child: Text(
-                                        '${todosVins[index].vin}',
+                                        '${listadevines[index].vin}',
                                         style: const TextStyle(
                                           fontSize: 13,
                                           fontWeight: FontWeight.w600
@@ -130,7 +178,7 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                                     Padding(
                                       padding: const EdgeInsets.only(top: 4.0),
                                       child: Text(
-                                        '${todosVins[index].fecha_creacion}',
+                                        '${listadevines[index].fecha_creacion}',
                                         style: const TextStyle(
                                           fontSize: 13,
                                           fontWeight: FontWeight.w600
@@ -171,7 +219,7 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                                         children: [
                                           Expanded(
                                             child: Text(
-                                              '${todosVins[index].modelo}' != 'null' ? '${todosVins[index].modelo}' : 'Sin Identicar',
+                                              '${listadevines[index].modelo}' != 'null' ? '${listadevines[index].modelo}' : 'Sin Identicar',
                                               overflow: TextOverflow.fade,
                                               style: const TextStyle(
                                                 fontSize: 16,
@@ -196,7 +244,7 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                                                 ),
                                                 children: <InlineSpan>[
                                                   TextSpan(
-                                                    text: '${todosVins[index].marca}' != 'null' ? '${todosVins[index].marca}' : 'Sin Identicar',
+                                                    text: '${listadevines[index].marca}' != 'null' ? '${listadevines[index].marca}' : 'Sin Identicar',
                                                     style: const TextStyle(
                                                       fontSize: 12,
                                                       fontWeight: FontWeight.w700,
@@ -226,7 +274,7 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                                                 ),
                                                 children: <InlineSpan>[
                                                   TextSpan(
-                                                    text: todosVins[index].compra == 1 ? 'Si' : 'No',
+                                                    text: listadevines[index].compra == 1 ? 'Si' : 'No',
                                                     style: const TextStyle(
                                                       fontSize: 12,
                                                       fontWeight: FontWeight.w700,
@@ -250,30 +298,6 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                     )
                   );
                 }
-              ) : Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      CupertinoIcons.car_detailed , 
-                      color: Colors.grey[300], 
-                      size: 60
-                    ),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      width: 250,
-                      child: Text(
-                        'No hay VINES disponibles',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.grey[300],
-                          fontSize: 19
-                        )
-                      )
-                    )
-                  ]
-                )
               )
             )
           )
@@ -282,33 +306,26 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
     );
   }
 
- Widget buildSearch() => SearchWidget(
+  Widget buildSearch() => SearchWidget(
     text: query,
     hintText: 'Escriba el VIN',
     onChanged: searchVIN
   );
 
-  searchVIN(String query) {
-
-    log(query.toString());
-    final vinsf = todosVins.where((v) {
+  void searchVIN(String query) {
+    final vines = todosVins.where((v) {
       final titleLower = v.vin.toLowerCase();
+      final searchLower = query.toLowerCase();
 
-      if(query != '') {
-        final searchLower = query.toLowerCase();
-        return titleLower.contains(searchLower);
-      }
-      else {
-        final searchLower = query.toLowerCase();
-        return titleLower.contains(searchLower);
-      }
+      return titleLower.contains(searchLower);
     }).toList();
 
     setState(() {
       this.query = query;
-      vins = vinsf;
+      listadevines = vines;
     });
   }
+
           
   Widget vinsDisponibles(da) {
     return da.length != 0 ? ListView.builder(

@@ -17,6 +17,7 @@ class ViajesParaEnviar extends StatefulWidget {
 class _ViajesParaEnviarState extends State<ViajesParaEnviar> {
   String urlEnvioViaje = 'http://tleavin.tlea.online/movil/viaje';
   var _stream;
+  var enviando = false;
 
   @override
   void initState() {
@@ -53,171 +54,203 @@ class _ViajesParaEnviarState extends State<ViajesParaEnviar> {
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               final dato = snapshot.data![index];
-              return GestureDetector(
-                  onTap: () => enviarViaje(dato.idviaje),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                      elevation: 6,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Image.asset(
-                            'assets/img/card uno.png',
-                            height: 100,
-                            width: double.infinity,
-                            fit: BoxFit.cover
-                          ),
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Numero Eco.: ",
-                                      style: TextStyle(
-                                        fontSize: 17,
-                                        color: Colors.grey[800],
-                                        fontWeight: FontWeight.bold
-                                      )
-                                    ),
-                                    Text(
-                                      '${dato.num_eco_unidad}',
-                                      style: TextStyle(
-                                        fontSize: 17,
-                                        color: Colors.grey[800]
-                                      )
-                                    )
-                                  ]
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Operador: ",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.grey[800],
-                                        fontWeight: FontWeight.bold
-                                      )
-                                    ),
-                                    SizedBox(
-                                      width: 250,
-                                      child: Text(
-                                        '${dato.nombre_operador}',
+              return Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        enviando = true;
+                      });
+                      enviarViaje(dato.idviaje);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        elevation: 6,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Image.asset(
+                              'assets/img/card uno.png',
+                              height: 100,
+                              width: double.infinity,
+                              fit: BoxFit.cover
+                            ),
+                            Container(
+                              padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Numero Eco.: ",
                                         style: TextStyle(
-                                          fontSize: 16,
+                                          fontSize: 17,
+                                          color: Colors.grey[800],
+                                          fontWeight: FontWeight.bold
+                                        )
+                                      ),
+                                      Text(
+                                        '${dato.num_eco_unidad}',
+                                        style: TextStyle(
+                                          fontSize: 17,
                                           color: Colors.grey[800]
                                         )
                                       )
-                                    )
-                                  ]
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Cliente: ",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.grey[800],
-                                        fontWeight: FontWeight.bold
-                                      )
-                                    ),
-                                    SizedBox(
-                                      width: 260,
-                                      child: Text(
-                                        '${dato.cliente_nombre}',
+                                    ]
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Operador: ",
                                         style: TextStyle(
                                           fontSize: 16,
-                                          color: Colors.grey[800]
+                                          color: Colors.grey[800],
+                                          fontWeight: FontWeight.bold
+                                        )
+                                      ),
+                                      SizedBox(
+                                        width: 250,
+                                        child: Text(
+                                          '${dato.nombre_operador}',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.grey[800]
+                                          )
                                         )
                                       )
-                                    )
-                                  ]
-                                ),
-                                Row(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Origen: ',
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.grey[700],
-                                            fontWeight: FontWeight.bold
-                                          )
-                                        ),
-                                        Text(
-                                          '${dato.origen}',
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.grey[700]
-                                          )
-                                        )
-                                      ]
-                                    ),
-                                    const SizedBox(width: 20),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Destino: ',
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.grey[700],
-                                            fontWeight: FontWeight.bold
-                                          )
-                                        ),
-                                        Text(
-                                          '${dato.destino}',
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.grey[700]
-                                          )
-                                        )
-                                      ]
-                                    )
-                                  ]
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    const Spacer(),
-                                    TextButton(
-                                      style: TextButton.styleFrom(
-                                        foregroundColor: Colors.transparent
-                                      ),
-                                      child: Container(
-                                        width: 100,
-                                        height: 25,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10.0),
-                                          color: Colors.black
-                                        ),
-                                        child: const Text(
-                                          "Sincronizar",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(color: Color.fromRGBO(242, 211, 0, 1))
+                                    ]
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Cliente: ",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey[800],
+                                          fontWeight: FontWeight.bold
                                         )
                                       ),
-                                      onPressed: () => enviarViaje(dato.idviaje)
-                                    )
-                                  ]
-                                )
-                              ]
-                            )
-                          ),
-                          Container(height: 5)
-                        ]
+                                      SizedBox(
+                                        width: 260,
+                                        child: Text(
+                                          '${dato.cliente_nombre}',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.grey[800]
+                                          )
+                                        )
+                                      )
+                                    ]
+                                  ),
+                                  Row(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'Origen: ',
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.grey[700],
+                                              fontWeight: FontWeight.bold
+                                            )
+                                          ),
+                                          Text(
+                                            '${dato.origen}',
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.grey[700]
+                                            )
+                                          )
+                                        ]
+                                      ),
+                                      const SizedBox(width: 20),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            'Destino: ',
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.grey[700],
+                                              fontWeight: FontWeight.bold
+                                            )
+                                          ),
+                                          Text(
+                                            '${dato.destino}',
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.grey[700]
+                                            )
+                                          )
+                                        ]
+                                      )
+                                    ]
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      const Spacer(),
+                                      TextButton(
+                                        style: TextButton.styleFrom(
+                                          foregroundColor: Colors.transparent
+                                        ),
+                                        child: Container(
+                                          width: 100,
+                                          height: 25,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10.0),
+                                            color: Colors.black
+                                          ),
+                                          child: const Text(
+                                            "Sincronizar",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(color: Color.fromRGBO(242, 211, 0, 1))
+                                          )
+                                        ),
+                                        onPressed: () => enviarViaje(dato.idviaje)
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            ),
+                            const SizedBox(height: 5)
+                          ]
+                        )
                       )
                     )
-                  )
-                );
-              }
-            ) : Center(
+                  ),
+                  enviando != false ? Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 285,
+                      width: 370,
+                      decoration: BoxDecoration(
+                        color: Colors.white54,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: const SizedBox(
+                        height: 120,
+                        width: 120,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            backgroundColor: Colors.black,
+                            valueColor: AlwaysStoppedAnimation<Color>(Color.fromRGBO(242, 211, 0, 1)),
+                            strokeWidth: 5
+                          )
+                        )
+                      )
+                    ),
+                  ) : const SizedBox()
+                ]
+              );
+            }
+          ) : Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -255,16 +288,7 @@ class _ViajesParaEnviarState extends State<ViajesParaEnviar> {
       if(response.statusCode == 200) {
 
         await DatabaseProvider.db.actualizarEstadoViajeSincronizado(idviaje);
-        
-        // Fluttertoast.showToast(
-        //   msg: "Viaje Sincronizado al Servidor",
-        //   toastLength: Toast.LENGTH_LONG,
-        //   gravity: ToastGravity.BOTTOM,
-        //   timeInSecForIosWeb: 1,
-        //   backgroundColor: Colors.green,
-        //   textColor: Colors.white,
-        //   fontSize: 20
-        // );
+
             final snackBar = SnackBar(
               showCloseIcon: true,
               backgroundColor: Colors.green,
@@ -293,6 +317,10 @@ class _ViajesParaEnviarState extends State<ViajesParaEnviar> {
           );
 
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+          setState(() {
+            enviando = false;
+          });
 
           setState(() {
             _stream = DatabaseProvider.db.obtenerViajesParaSincronizar().asStream();

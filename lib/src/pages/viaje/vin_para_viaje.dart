@@ -13,11 +13,11 @@ class VinsParaViaje extends StatefulWidget {
 }
 
 class VinsParaViajeState extends State<VinsParaViaje> {
-  final _qrTextController = TextEditingController();
-  String query = '';
-  var vins = [];
 
-  var vinesseleccionados = [];
+  String query = '';
+  var vinesseleccionados = [];   
+  var vins = [];
+  var vinsComprados = [];
 
   var isChecked = false;
 
@@ -26,9 +26,8 @@ class VinsParaViajeState extends State<VinsParaViaje> {
     try {
       codeQrBar = await FlutterBarcodeScanner.scanBarcode("#ff6666", "Cancelar", true, ScanMode.QR);
       setState(() {
-        _qrTextController.text = codeQrBar;
-
-        searchVIN;
+        query = codeQrBar;
+        searchVIN(query);
       });
     } 
     catch (e) {
@@ -45,17 +44,19 @@ class VinsParaViajeState extends State<VinsParaViaje> {
 
   obtenerListaVINSComprados() async {
     var data = await DatabaseProvider.db.obtenerListaVinsComprados();
-    var vinsComprados = [];
+    var vc = [];
 
     for(var d in data) {
       var vi = d.vin;
 
-      vinsComprados.add(vi);
+      vc.add(vi);
     }
 
     setState(() {
-      // vinsComprados = data;
+      vinsComprados = vc;
       vins = vinsComprados;
+
+      log(vc.toString());
     });
   }
 
@@ -117,8 +118,10 @@ class VinsParaViajeState extends State<VinsParaViaje> {
                 value: true,
                 onChanged: (value) {
                   setState(() {
-                    vins.add(vins[index]);
-                    vinesseleccionados.remove(vinesseleccionados[index]);
+                    var vi = vinesseleccionados[index];
+
+                    vins.add(vi);
+                    vinesseleccionados.remove(vi);
                   });
                 }
               );
@@ -134,8 +137,10 @@ class VinsParaViajeState extends State<VinsParaViaje> {
                 value: false,
                 onChanged: (value) {
                   setState(() {
-                    vinesseleccionados.add(vins[index]);
-                    vins.remove(vins[index]);
+                    var vi = vins[index];
+                    
+                    vinesseleccionados.add(vi);
+                    vins.remove(vi);
                   });
                 }
               );
@@ -143,7 +148,6 @@ class VinsParaViajeState extends State<VinsParaViaje> {
           )
         ),
         ElevatedButton(
-          // onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ArmarViaje(vinesqueseleccionaron: vinesseleccionados))),
           onPressed: () {
             itemP.addVSPV(vinesseleccionados);
             Navigator.pop(context);
@@ -191,17 +195,12 @@ class VinsParaViajeState extends State<VinsParaViaje> {
   );
 
   searchVIN(String query) {
-    final vinsf = vins.where((v) {
+    final vinsf = vinsComprados.where((v) {
       final titleLower = v.toLowerCase();
 
-      if(_qrTextController.text != '') {
-        final searchLower = _qrTextController.text.toLowerCase();
-        return titleLower.contains(searchLower);
-      }
-      else {
-        final searchLower = query.toLowerCase();
-        return titleLower.contains(searchLower);
-      }
+      final searchLower = query.toLowerCase();
+      return titleLower.contains(searchLower);
+      
     }).toList();
 
     setState(() {
