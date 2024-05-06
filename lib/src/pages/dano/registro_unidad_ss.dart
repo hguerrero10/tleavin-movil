@@ -358,14 +358,11 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
 
       for(var ed in evidenciasDano) {
 
-        var arc = ed.trim();
-        var edn = arc.replaceAll("\\s{2,}", "");
-
         evidencia = Evidencia(
           vin: widget.vin,
           iddano: value,
           nombre: null,
-          archivo: edn,
+          archivo: ed,
           fechahora: fechaH
         );
 

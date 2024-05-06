@@ -86,8 +86,8 @@ class _ViajesArmadosState extends State<ViajesArmados> {
                 image: AssetImage(
                   'assets/img/carddi.png'
                 ),
-                fit: BoxFit.fill,
-              ),
+                fit: BoxFit.fill
+              )
             ),
             child: Card(
               color: const Color.fromARGB(0, 0, 0, 1),

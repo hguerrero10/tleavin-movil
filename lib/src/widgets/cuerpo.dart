@@ -47,8 +47,8 @@ class _CuerpoState extends State<Cuerpo> {
                       style:  TextStyle(
                         fontSize: 12,
                         color: Colors.grey[400]
-                      ),
-                    ),
+                      )
+                    )
                   ),
                   SizedBox(
                     width:10,

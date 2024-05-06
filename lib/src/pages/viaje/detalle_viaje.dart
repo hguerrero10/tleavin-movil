@@ -415,7 +415,8 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
           itemP.addError();
         });
 
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenViaje(viaje: resumenviaje)), (Route<dynamic> route) => false);
+        // Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenViaje(viaje: resumenviaje)), (Route<dynamic> route) => false);
+        Navigator.push(context, MaterialPageRoute( builder: (context) => ResumenViaje(viaje: resumenviaje)));
       }
     }
     else {

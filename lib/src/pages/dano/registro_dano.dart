@@ -650,8 +650,6 @@ class _RegistroDanoState extends State<RegistroDano> {
 
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenDano(resu: resumen)), (Route<dynamic> route) => false);
       }
-
-
     }
     else {
       Fluttertoast.showToast(

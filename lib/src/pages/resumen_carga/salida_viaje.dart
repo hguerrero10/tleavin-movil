@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:core';
 import 'dart:developer';
 import 'dart:io';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ import 'package:gradient_slide_to_act/gradient_slide_to_act.dart';
 import 'package:tleavin_mobil/src/pages/resumen_carga/widget/firma_inspector.dart';
 import 'package:tleavin_mobil/src/pages/resumen_carga/widget/firma_operador.dart';
 import 'package:tleavin_mobil/src/pages/resumen_carga/widget/firma_operadorLogico.dart';
+import 'package:tleavin_mobil/src/pages/viaje/detalle_viaje.dart';
 
 class ResumenViaje extends StatefulWidget {
   final Viaje? viaje;
@@ -91,7 +93,6 @@ class _ResumenViajeState extends State<ResumenViaje> {
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop(true);
                 },
                 child: const Text('Sí')
               )
@@ -300,7 +301,10 @@ class _ResumenViajeState extends State<ResumenViaje> {
                       fontSize: 16
                     ),
                     backgroundColor: Colors.black,
-                    onSubmit: () => guardarFirmasySalida(),
+                    onSubmit: () {
+                          log(firmascolectadas.length.toString());
+                      // guardarFirmasySalida();
+                    },
                     gradient: const LinearGradient(
                       begin: Alignment.centerLeft,
                       colors: [
@@ -352,32 +356,40 @@ class _ResumenViajeState extends State<ResumenViaje> {
     firmascolectadas.add({'nombre': 'Operador Logico', 'b64': itemP.firmaOperadorLogistico});
     firmascolectadas.add({'nombre': 'ID Operador Logico', 'b64': fotoIdentificacion});
 
-    for(var ed in firmascolectadas) {
-      evidencia = Evidencia(
-        vin: null,
-        iddano: null,
-        idviaje: widget.viaje!.idviaje!,
-        nombre: ed['nombre'],
-        archivo: ed['b64'],
-        fechahora: fechaH
-      );
+      for(var ed in firmascolectadas) {
+        evidencia = Evidencia(
+          vin: null,
+          iddano: null,
+          idviaje: widget.viaje!.idviaje!,
+          nombre: ed['nombre'],
+          archivo: ed['b64'],
+          fechahora: fechaH
+        );
 
-      await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) {
-        log('evidencia insertada');
-        
-      }).timeout(const Duration(seconds: 60), onTimeout: () {
-        itemP.addError();
-      });
+        await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) {
+          log('evidencia insertada');
+        }).timeout(const Duration(seconds: 60), onTimeout: () {
+          itemP.addError();
+        });
 
-      await DatabaseProvider.db.actualizarEstadoViaje(widget.viaje!.idviaje!).then((result) {
+        await DatabaseProvider.db.actualizarEstadoViaje(widget.viaje!.idviaje!).then((result) {
 
-      }).timeout(const Duration(seconds: 60), onTimeout: () {
-        itemP.addError();
-      });
+        }).timeout(const Duration(seconds: 60), onTimeout: () {
+          itemP.addError();
+        });
 
-      _dialogBuilder(context);
+        Fluttertoast.showToast(
+          msg: "Embarque realizado con Exito!!",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 20
+        );
+      }
     }
-  }
+  
 
   Future<void> _dialogBuilder(BuildContext context) {
     return showDialog<void>(

@@ -1,3 +1,4 @@
+import 'package:tleavin_mobil/model/evidencia.dart';
 import 'package:tleavin_mobil/model/vin.dart';
 
 class Viaje{
@@ -24,6 +25,7 @@ class Viaje{
   String? fecha_creacion;
   String? fecha_sync;
   List<Vin>? vines;
+  List<Evidencia>? firmas;
 
   Viaje({
     this.idviaje,
@@ -48,12 +50,13 @@ class Viaje{
     this.estadoViaje,
     this.fecha_creacion,
     this.fecha_sync,
-    this.vines
+    this.vines,
+    this.firmas
   });
 
   @override
   String toString() {
-    return '{"idviaje": $idviaje, "supervisor": "$supervisor", "folio_bitacora": $folio_bitacora, "cartaporte": $cartaporte, "bitacora_fecha_carga": $bitacora_fecha_carga, "num_eco_unidad": "$num_eco_unidad", "nombre_operador": "$nombre_operador", "cliente_nombre": "$cliente_nombre", "cliente_clave": $cliente_clave, "ruta_clave": $ruta_clave, "ruta_nombre": $ruta_nombre, "origen": "$origen", "destino": "$destino", "etiqueta": $etiqueta, "status_carga": $status_carga, "notas": "$notas", "registrada_por": "$registrada_por", "tipo_viaje": $tipo_viaje, "semana": $semana, "estadoViaje": "$estadoViaje", "fecha_creacion": "$fecha_creacion", "fecha_sync": $fecha_sync, "vines": $vines}';
+    return '{"idviaje": $idviaje, "supervisor": "$supervisor", "folio_bitacora": $folio_bitacora, "cartaporte": $cartaporte, "bitacora_fecha_carga": $bitacora_fecha_carga, "num_eco_unidad": "$num_eco_unidad", "nombre_operador": "$nombre_operador", "cliente_nombre": "$cliente_nombre", "cliente_clave": $cliente_clave, "ruta_clave": $ruta_clave, "ruta_nombre": $ruta_nombre, "origen": "$origen", "destino": "$destino", "etiqueta": $etiqueta, "status_carga": $status_carga, "notas": "$notas", "registrada_por": "$registrada_por", "tipo_viaje": $tipo_viaje, "semana": $semana, "estadoViaje": "$estadoViaje", "fecha_creacion": "$fecha_creacion", "fecha_sync": $fecha_sync, "vines": $vines, "firmas": $firmas}';
   }
 
   factory Viaje.fromMap(Map<String, dynamic> map) => Viaje(
@@ -79,7 +82,8 @@ class Viaje{
     estadoViaje: map['estadoViaje'].toString(),
     fecha_creacion: map['fecha_creacion'].toString(),
     fecha_sync: map['fecha_sync'].toString(),
-    vines: map['vines']
+    vines: map['vines'],
+    firmas: map['firmas']
   );
 
   Map<String, dynamic> toMap() => {

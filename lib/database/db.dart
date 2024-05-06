@@ -641,7 +641,8 @@ class DatabaseProvider {
   Future<List<Viaje>> obtenerViajes() async {
     List<Viaje> lista;
     final db = await database;
-    var res = await db.query("viaje");
+    // var res = await db.rawQuery("SELECT * FROM viaje WHERE estadoviaje = 'En Proceso'");
+    var res = await db.rawQuery("SELECT * FROM viaje");
 
     if(res.isNotEmpty) {
       lista = res.map((u) => Viaje.fromMap(u)).toList();
@@ -762,10 +763,6 @@ class DatabaseProvider {
 
     return db.delete("viaje", where: "idviaje = ?", whereArgs: [idviaje]);
   }
-  
-
-
-
 
   Future<Viaje> envioViajeCompleto(idviaje) async {
     Database db = await database;
@@ -773,12 +770,16 @@ class DatabaseProvider {
 
     Viaje viaje = Viaje.fromMap(result[0]);
     List<Vin> vins = [];
+    List<Evidencia> firmasf = [];
+
     vins = await fetchVIN(viaje.idviaje);
     viaje.vines = vins;
+
+    firmasf = await fetchEvideciasViaje(viaje.idviaje);
+    viaje.firmas = firmasf;
     
     return viaje;
   }
-
 
   Future<List<Vin>> fetchVIN(idviaje) async {
     Database db = await database;
@@ -821,6 +822,21 @@ class DatabaseProvider {
   Future<List<Evidencia>> fetchEvidecias(idd) async {
     Database db = await database;
     List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM evidencia WHERE iddano = $idd");
+
+    List<Evidencia> evidencia = [];
+ 
+    for(var i in result){
+      Evidencia evidencias = Evidencia.fromMap(i);
+
+      evidencia.add(evidencias);
+    }
+
+    return evidencia;
+  }
+
+  Future<List<Evidencia>> fetchEvideciasViaje(idviaje) async {
+    Database db = await database;
+    List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM evidencia WHERE idviaje = $idviaje");
 
     List<Evidencia> evidencia = [];
  
