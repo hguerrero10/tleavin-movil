@@ -338,8 +338,8 @@ class _DetalleVinState extends State<DetalleVin> {
   }
 
   Future<void> _dialogBuilder(BuildContext context, vi, idd, da, onpress) {
-    final _posicionTextController = TextEditingController();
-    var orientacionSeleccionada;
+    // final _posicionTextController = TextEditingController();
+    // var orientacionSeleccionada;
 
     return showDialog<void>(
       context: context,

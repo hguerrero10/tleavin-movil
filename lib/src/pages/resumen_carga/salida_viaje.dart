@@ -2,22 +2,21 @@ import 'dart:convert';
 import 'dart:core';
 import 'dart:developer';
 import 'dart:io';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:gallery_saver/gallery_saver.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tleavin_mobil/model/viaje.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:tleavin_mobil/src/home/inicio.dart';
 import 'package:tleavin_mobil/model/evidencia.dart';
+import 'package:slide_to_act/slide_to_act.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
-import 'package:gradient_slide_to_act/gradient_slide_to_act.dart';
 import 'package:tleavin_mobil/src/pages/resumen_carga/widget/firma_inspector.dart';
 import 'package:tleavin_mobil/src/pages/resumen_carga/widget/firma_operador.dart';
 import 'package:tleavin_mobil/src/pages/resumen_carga/widget/firma_operadorLogico.dart';
-import 'package:tleavin_mobil/src/pages/viaje/detalle_viaje.dart';
 
 class ResumenViaje extends StatefulWidget {
   final Viaje? viaje;
@@ -28,6 +27,8 @@ class ResumenViaje extends StatefulWidget {
 }
 
 class _ResumenViajeState extends State<ResumenViaje> {
+
+  final slideActionKey = GlobalKey<SlideActionState>();
 
   Evidencia? evidencia;
   var firmas = [];
@@ -93,13 +94,14 @@ class _ResumenViajeState extends State<ResumenViaje> {
               ),
               TextButton(
                 onPressed: () {
+                     Navigator.of(context).pop(true); 
+                     log('dfasfasdasd');
                 },
                 child: const Text('Sí')
               )
             ]
           )
         );
-        
         return confirmExit;
       },
       child: Scaffold(
@@ -280,7 +282,7 @@ class _ResumenViajeState extends State<ResumenViaje> {
                         ),
                         fotoIdentificacion != null ? const Icon(
                           Icons.check_circle_rounded,
-                          color: Colors.green,
+                          color: Color.fromARGB(255, 35, 63, 36),
                           size: 60
                         ) : const SizedBox()
                       ]
@@ -291,27 +293,24 @@ class _ResumenViajeState extends State<ResumenViaje> {
                 const SizedBox(height: 40),
                 
                 Center(
-                  child: GradientSlideToAct(
-                    width: 320,
-                    height: 65,
-                    dragableIcon: Icons.arrow_forward,
-                    text: 'Desliza para Confirmar',
+                  child: SlideAction(
+                    height: 70,
+                    sliderRotate: false,
+                    outerColor: const Color.fromRGBO(242, 211, 0, 1),
+                    alignment: Alignment.centerRight,
+                    innerColor: Colors.black,
+                    elevation: 1,
+                    text: 'Deslizar para Confirmar',
                     textStyle: const TextStyle(
-                      color: Colors.white, 
-                      fontSize: 16
+                      fontSize: 20,
+                      color: Colors.black,
                     ),
-                    backgroundColor: Colors.black,
                     onSubmit: () {
-                          log(firmascolectadas.length.toString());
-                      // guardarFirmasySalida();
-                    },
-                    gradient: const LinearGradient(
-                      begin: Alignment.centerLeft,
-                      colors: [
-                        Color.fromRGBO(242, 211, 0, 1),
-                        Color.fromRGBO(242, 211, 0, 1)
-                      ]
-                    )
+
+                      //HG891042!
+                  
+                       return guardarFirmasySalida();
+                    }
                   )
                 ),
                 const SizedBox(height: 20)
@@ -351,10 +350,13 @@ class _ResumenViajeState extends State<ResumenViaje> {
   }
 
   guardarFirmasySalida() async {
-    firmascolectadas.add({'nombre': 'Inspector', 'b64': itemP.firmainspector});
-    firmascolectadas.add({'nombre': 'Operador', 'b64': itemP.firmaOperador});
-    firmascolectadas.add({'nombre': 'Operador Logico', 'b64': itemP.firmaOperadorLogistico});
-    firmascolectadas.add({'nombre': 'ID Operador Logico', 'b64': fotoIdentificacion});
+    if(itemP.firmainspector != null && itemP.firmaOperador != null && itemP.firmaOperadorLogistico != null && fotoIdentificacion != null) {
+      firmascolectadas.add({'nombre': 'Inspector', 'b64': itemP.firmainspector});
+      firmascolectadas.add({'nombre': 'Operador', 'b64': itemP.firmaOperador});
+      firmascolectadas.add({'nombre': 'Operador Logico', 'b64': itemP.firmaOperadorLogistico});
+      firmascolectadas.add({'nombre': 'ID Operador Logico', 'b64': fotoIdentificacion});
+
+      log(firmascolectadas.length.toString());
 
       for(var ed in firmascolectadas) {
         evidencia = Evidencia(
@@ -372,82 +374,37 @@ class _ResumenViajeState extends State<ResumenViaje> {
           itemP.addError();
         });
 
-        await DatabaseProvider.db.actualizarEstadoViaje(widget.viaje!.idviaje!).then((result) {
-
-        }).timeout(const Duration(seconds: 60), onTimeout: () {
+        await DatabaseProvider.db.actualizarEstadoViaje(widget.viaje!.idviaje!).then((result) {}).timeout(const Duration(seconds: 60), onTimeout: () {
           itemP.addError();
         });
-
-        Fluttertoast.showToast(
-          msg: "Embarque realizado con Exito!!",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 20
-        );
       }
+
+      Fluttertoast.showToast(
+        msg: "Embarque realizado con Exito!!",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 20
+      );
+
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const InicioScreen()), (Route<dynamic> route) => false);
     }
-  
+    else {
+      Fluttertoast.showToast(
+        msg: "Firmas y/o Fotografia faltante",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 20
+      );
 
-  Future<void> _dialogBuilder(BuildContext context) {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Column(
-            children: [
-              Text(
-                'Embarque con Exito!',
-                style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold
-                )
-              ),
-              Divider(
-                color: Colors.black,
-                thickness: 1.0,
-                height: 20
-              )
-            ]
-          ),
-          content: Container(
-            height: 300,
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Column(
-              children: [
-                Center(
-                  child: Image.asset(
-                    'assets/img/logistica.png',
-                    width: 230,
-                    height: 230
-                  )
-                ),
-                const Text(
-                  'Viaje en Curso',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold
-                  )
-                )
-              ]
-            )
-          ),
-          actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge
-              ),
-              child: const Text('Ok'),
-              onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const InicioScreen()), (Route<dynamic> route) => false)
-            )
-          ]
-        );
-      }
-    );
+      setState(() {
+        slideActionKey.currentState?.reset();
+      });
+    }
   }
 }

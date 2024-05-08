@@ -29,6 +29,8 @@ class _ArmarViajeState extends State<ArmarViaje> {
   final _destinoTextController = TextEditingController();
   final _notaTextController = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
+
   String? tipoEco;
 
   var listaVinsViaje = [];
@@ -88,28 +90,42 @@ class _ArmarViajeState extends State<ArmarViaje> {
       body: CustomScrollView(
         slivers: [
          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-              const Cuerpo(),
+          hasScrollBody: false,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+            const Cuerpo(),
 
-              _titulo('Numero Eco.'),
-              Container(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
+     
+
+            Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _titulo('Numero Eco.'),
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
                           width: 100,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
+                            borderRadius: BorderRadius.circular(5)
                           ),
                           child: DropdownSearch<String>(
                             popupProps: const PopupProps.menu(
                               showSelectedItems: true
                             ),
                             items: const ['TLE', 'TLEA', 'C', 'OTRO'],
+                            validator: (value) {
+                              if(value == null || value.isEmpty) {
+                                return 'Seleccionar el Tipo';
+                              }
+                              return null;
+                            },
                             dropdownDecoratorProps: const  DropDownDecoratorProps(
                               dropdownSearchDecoration: InputDecoration(
                                 hintText: "Tipo",
@@ -127,10 +143,16 @@ class _ArmarViajeState extends State<ArmarViaje> {
                         ),
                         SizedBox(
                           width: 250,
-                          child: TextField(
+                          child: TextFormField(
                             controller: _ecoTextController,
                             keyboardType: tipoEco != 'OTRO' ? TextInputType.number : TextInputType.text,
                             textCapitalization: TextCapitalization.words,
+                            validator: (value) {
+                              if(value == null || value.isEmpty) {
+                                return 'Llenar Numero Economico';
+                              }
+                              return null;
+                            },
                             decoration: const InputDecoration(
                               hintText: 'Numero Economico',
                               hintStyle: TextStyle(
@@ -139,85 +161,126 @@ class _ArmarViajeState extends State<ArmarViaje> {
                             )
                           )
                         )
-                    ]
-                  ),
-              ),
-              
-              const SizedBox(height: 10),
-
-              _titulo('Nombre Operador'),
-              _inputs(_nombreOpTextController, 'Escriba Nombre del Operador', TextInputType.text),
-              const SizedBox(height: 10),
-
-              _titulo('Cliente'),
-              _dropDownCliente(),
-              const SizedBox(height: 10),
-
-              _titulo('Origen'),
-              _inputs(_origenTextController, 'Escriba el Origen del Viaje', TextInputType.text),
-              const SizedBox(height: 10),
-
-              _titulo('Destino '),
-              _inputs(_destinoTextController, 'Escriba el Destino del Viaje', TextInputType.text),
-              const SizedBox(height: 30),
-
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: ElevatedButton(
-                  // onPressed: () => scanQR(),
-                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VinsParaViaje())),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(15)),
-                    minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16)
-                      )
+                      ]
                     )
                   ),
-                  child: const Text(
-                    'Seleccionar VINES',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white
+              
+                  const SizedBox(height: 10),
+                  _titulo('Nombre Operador'),
+                  _inputs(_nombreOpTextController, 'Escriba Nombre del Operador', TextInputType.text, 'Llenar el Nombre Operador'),
+                  const SizedBox(height: 10),
+
+                  _titulo('Cliente'),
+                  Container(
+                    height: 60,
+                    width: MediaQuery.of(context).size.width * 2,
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5)
+                    ),
+                    child: DropdownSearch<ListasA>(
+                        items: listaCliente,
+                        dropdownDecoratorProps: const DropDownDecoratorProps(
+                        dropdownSearchDecoration: InputDecoration(
+                          hintText: "Selecciona"
+                        )
+                      ),
+                      validator: (value) {
+                        if(value == null) {
+                          return 'Selecciona el Cliente';
+                        }
+                        return null;
+                      },
+                      onChanged: (ListasA? item) {
+                        setState(() {
+                          selectClie = (item?.valor);
+                          selectClieText = (item?.texto);
+                        });
+                      },
+                      itemAsString: (ListasA item) => item.texto,
+                    )
+                  ),
+                  const SizedBox(height: 10),
+                  _titulo('Origen'),
+                  _inputs(_origenTextController, 'Escriba el Origen del Viaje', TextInputType.text, 'Llenar el Origen'),
+                  const SizedBox(height: 10),
+                  _titulo('Destino '),
+                  _inputs(_destinoTextController, 'Escriba el Destino del Viaje', TextInputType.text, 'Llenar el Destino'),
+                ]
+              )
+            ),
+            const SizedBox(height: 30),
+
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              child: ElevatedButton(
+                // onPressed: () => scanQR(),
+                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VinsParaViaje())),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(15)),
+                  minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 50)),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)
                     )
                   )
-                )
-              ),
-              const SizedBox(height: 30),
-
-              Expanded(child: itemP.vinesSeleccionadosParaViaje.isNotEmpty ? SizedBox( height: 200, child: vinsSeleccionados(itemP.vinesSeleccionadosParaViaje)) : const SizedBox()),
-              
-              const SizedBox(height: 30),
-
-              _inputs(_notaTextController, 'Nota', TextInputType.text),
-              
-              const SizedBox(height: 30),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: ElevatedButton(
-                  onPressed: () => crearViaje(),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(15)),
-                    minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 40)),
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16)
-                      )
-                    )
-                  ),
-                  child: const Text(
-                    'Registrar viaje',
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white
-                    )
+                ),
+                child: const Text(
+                  'Seleccionar VINES',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white
                   )
                 )
-              ),
-              const SizedBox(height: 30)
+              )
+            ),
+            const SizedBox(height: 30),
+
+            Expanded(child: itemP.vinesSeleccionadosParaViaje.isNotEmpty ? SizedBox( height: 200, child: vinsSeleccionados(itemP.vinesSeleccionadosParaViaje)) : const SizedBox()),
+            
+            const SizedBox(height: 30),
+
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              child: TextFormField(
+                controller: _notaTextController,
+                keyboardType: TextInputType.text,
+                textCapitalization: TextCapitalization.words,
+                decoration: const InputDecoration(
+                  hintText: 'Notas',
+                  hintStyle: TextStyle(
+                    color: Colors.grey
+                  )
+                )
+              )
+            ),
+            
+            const SizedBox(height: 30),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              child: ElevatedButton(
+                onPressed: () => crearViaje(),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(15)),
+                  minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 40)),
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)
+                    )
+                  )
+                ),
+                child: const Text(
+                  'Registrar viaje',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white
+                  )
+                )
+              )
+            ),
+            const SizedBox(height: 30)
             ]
           )
          )
@@ -283,45 +346,25 @@ class _ArmarViajeState extends State<ArmarViaje> {
     }
   }
 
-  Widget _inputs(control, place, tipo) {
+  Widget _inputs(control, place, tipo, vali) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
-      child: TextField(
+      child: TextFormField(
         controller: control,
         keyboardType: tipo,
         textCapitalization: TextCapitalization.words,
+        validator: (value) {
+          if(value == null || value.isEmpty) {
+            return vali;
+          }
+          return null;
+        },
         decoration: InputDecoration(
           hintText: place,
           hintStyle: const TextStyle(
             color: Colors.grey
           )
         )
-      )
-    );
-  }
-
-  Widget _dropDownCliente() {
-    return Container(
-      height: 60,
-      width: MediaQuery.of(context).size.width * 2,
-      padding: const EdgeInsets.only(left: 16, right: 16,),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5)
-      ),
-      child: DropdownSearch<ListasA>(
-          items: listaCliente,
-          dropdownDecoratorProps: const DropDownDecoratorProps(
-          dropdownSearchDecoration: InputDecoration(
-            hintText: "Selecciona"
-          ),
-        ),
-        onChanged: (ListasA? item) {
-          setState(() {
-            selectClie = (item?.valor);
-            selectClieText = (item?.texto);
-          });
-        },
-        itemAsString: (ListasA item) => item.texto,
       )
     );
   }
@@ -362,66 +405,80 @@ class _ArmarViajeState extends State<ArmarViaje> {
   }
 
   crearViaje() async {
-    viaje = Viaje(
-      supervisor: itemP.usuario!.nombre!,
-      folio_bitacora: null ,
-      cartaporte: null,
-      bitacora_fecha_carga: null,
-      num_eco_unidad: tipoEco != 'OTRO' ? '$tipoEco-${_ecoTextController.text.trim().toUpperCase()}' : _ecoTextController.text.trim().toUpperCase(),
-      nombre_operador: _nombreOpTextController.text.trim().toUpperCase(),
-      cliente_clave: int.parse(selectClie.toString()),
-      cliente_nombre: selectClieText,
-      ruta_clave: null,
-      ruta_nombre: null,
-      origen: _origenTextController.text.trim().toUpperCase(),
-      destino: _destinoTextController.text.trim().toUpperCase(),
-      etiqueta: null,
-      status_carga: 0,
-      notas: _notaTextController.text,
-      registrada_por: itemP.usuario!.usuario!,
-      tipo_viaje: null,
-      semana: null,
-      estadoViaje: 'En Proceso',
-      fecha_creacion: fecha,
-      fecha_sync: null
-    );
-
-    await DatabaseProvider.db.insertarViaje(viaje!).then((value) async {
-      log('viaje insertado');
-
-      listaVinsViaje = itemP.vinesSeleccionadosParaViaje;
-
-      for(var ed in listaVinsViaje) {
-        var vinsviaje = (
-          vin: ed,
-          idviaje: value,
-          origen: _origenTextController.text,
-          destino: _destinoTextController.text,
+    if(_formKey.currentState!.validate()) {
+      if(itemP.vinesSeleccionadosParaViaje.isNotEmpty) {
+        viaje = Viaje(
+          supervisor: itemP.usuario!.nombre!,
+          folio_bitacora: null ,
+          cartaporte: null,
+          bitacora_fecha_carga: null,
+          num_eco_unidad: tipoEco != 'OTRO' ? '$tipoEco-${_ecoTextController.text.trim().toUpperCase()}' : _ecoTextController.text.trim().toUpperCase(),
+          nombre_operador: _nombreOpTextController.text.trim().toUpperCase(),
+          cliente_clave: int.parse(selectClie.toString()),
+          cliente_nombre: selectClieText,
+          ruta_clave: null,
+          ruta_nombre: null,
+          origen: _origenTextController.text.trim().toUpperCase(),
+          destino: _destinoTextController.text.trim().toUpperCase(),
+          etiqueta: null,
+          status_carga: 0,
+          notas: _notaTextController.text,
+          registrada_por: itemP.usuario!.usuario!,
+          tipo_viaje: null,
+          semana: null,
+          estadoViaje: 'En Proceso',
+          fecha_creacion: fecha,
+          fecha_sync: null
         );
 
-        await DatabaseProvider.db.asignarVinViaje(vinsviaje).then((value) {
-          log('vin asignado');
+        await DatabaseProvider.db.insertarViaje(viaje!).then((value) async {
+          log('viaje insertado');
+
+          listaVinsViaje = itemP.vinesSeleccionadosParaViaje;
+
+          for(var ed in listaVinsViaje) {
+            var vinsviaje = (
+              vin: ed,
+              idviaje: value,
+              origen: _origenTextController.text,
+              destino: _destinoTextController.text,
+            );
+
+            await DatabaseProvider.db.asignarVinViaje(vinsviaje).then((value) {
+              log('vin asignado');
+            }).timeout(const Duration(seconds: 30), onTimeout: () {
+              itemP.addError();
+            });
+          }
+
+          Fluttertoast.showToast( 
+            msg: "Viaje armado con Exito!",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 20
+          );
+
+          itemP.deleteVSPV();
+
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const InicioScreen()), (Route<dynamic> route) => false);
         }).timeout(const Duration(seconds: 30), onTimeout: () {
           itemP.addError();
         });
       }
-
-      Fluttertoast.showToast( 
-        msg: "Viaje armado con Exito!",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 20
-      );
-
-      itemP.deleteVSPV();
-
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const InicioScreen()), (Route<dynamic> route) => false);
-    }).timeout(const Duration(seconds: 30), onTimeout: () {
-      itemP.addError();
-    });
-
+      else {
+        Fluttertoast.showToast(
+          msg: "Seleccione VINES",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 20
+        );
+      }
+    }
   }
 }

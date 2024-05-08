@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/database/db.dart';
+import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/pages/viaje/detalle_viaje.dart';
 
 class ViajesArmados extends StatefulWidget {
@@ -34,6 +35,10 @@ class _ViajesArmadosState extends State<ViajesArmados> {
   @override
   void initState() {
     obtenerViajes();
+
+    itemP.deleteFirmaInspecctor();
+    itemP.deleteFirmaOperador();
+    itemP.deleteFirmaOperadorLogisticio();
     
     super.initState();
   }

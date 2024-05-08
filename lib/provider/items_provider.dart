@@ -114,6 +114,8 @@ class ItemsProvider {
     itemP.itemStreamController.sink.add(registroUser);
   }
 
+
+
   void addFirmaInspecctor(item) {
     itemP.firmainspector = item;
     itemP.itemStreamController.sink.add(firmainspector);

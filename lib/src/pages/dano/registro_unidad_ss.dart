@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -98,14 +99,27 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
   var resumen;
 
   obtenerResumen(v) async {
-    await guardarDano();
-    
-    var datos = await DatabaseProvider.db.obtenerInfoVin(v);
-    setState(() {
-      resumen = datos;
-    });
+    if(evidenciasDano.length >= 4) {
+      await guardarDano();
+      
+      var datos = await DatabaseProvider.db.obtenerInfoVin(v);
+      setState(() {
+        resumen = datos;
+      });
 
-    Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenDano(resu: resumen)), (Route<dynamic> route) => false);
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenDano(resu: resumen)), (Route<dynamic> route) => false);
+    }
+    else {
+      Fluttertoast.showToast(
+        msg: "Tome las 4 fotografia",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 20
+      );
+    }
   }
 
   @override

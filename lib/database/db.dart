@@ -641,8 +641,8 @@ class DatabaseProvider {
   Future<List<Viaje>> obtenerViajes() async {
     List<Viaje> lista;
     final db = await database;
-    // var res = await db.rawQuery("SELECT * FROM viaje WHERE estadoviaje = 'En Proceso'");
-    var res = await db.rawQuery("SELECT * FROM viaje");
+    var res = await db.rawQuery("SELECT * FROM viaje WHERE estadoviaje = 'En Proceso'");
+    // var res = await db.rawQuery("SELECT * FROM viaje");
 
     if(res.isNotEmpty) {
       lista = res.map((u) => Viaje.fromMap(u)).toList();
@@ -848,4 +848,26 @@ class DatabaseProvider {
 
     return evidencia;
   }
+
+  Future borrarBDViaje() async {
+    final db = await database;
+    return db.delete('viaje');
+  }
+
+  Future borrarBDVINES() async {
+    final db = await database;
+    return db.delete('vin');
+  }
+
+  Future borrarBDDanos() async {
+    final db = await database;
+    return db.delete('dano');
+  }
+
+  Future borrarBDEvidencia() async {
+    final db = await database;
+    return db.delete('evidencia');
+  }
+
+
 } 

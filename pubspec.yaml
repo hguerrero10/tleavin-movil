@@ -50,7 +50,7 @@ dependencies:
   fluttertoast: ^8.0.7
   widget_zoom: ^0.0.4
   searchable_listview: ^2.11.2
-  gradient_slide_to_act: ^0.0.2
+  slide_to_act: ^2.0.2
 
 dev_dependencies:
   flutter_test:

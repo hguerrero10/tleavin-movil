@@ -66,74 +66,131 @@ class _LoginFormState extends State<LoginForm> {
               //   fontSize: 25
               // );
 
-            final snackBar = SnackBar(
-              showCloseIcon: true,
-              backgroundColor: Colors.green,
-              content: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10)
-                ),
-                child: const Row(
-                  children: [
-                  Icon(
-                    Icons.check_circle,
-                    color: Colors.white,
-                    size: 20
-                  ),
-                  SizedBox(width: 10),
-                  Text(
-                    'Usuarios Sincronizados', 
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold, 
-                      fontSize: 20
-                    )
+                final snackBar = SnackBar(
+                  showCloseIcon: true,
+                  backgroundColor: Colors.green,
+                  content: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10)
+                    ),
+                    child: const Row(
+                      children: [
+                      Icon(
+                        Icons.check_circle,
+                        color: Colors.white,
+                        size: 20
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        'Usuarios Sincronizados', 
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold, 
+                          fontSize: 20
+                        )
+                      )
+                    ]
                   )
-                ]
-              )
-            )
-          );
+                )
+              );
 
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
               itemP.addLoginInsert();
             } 
             else {
               itemP.addLoginInsertTimeOut();
               itemP.addRegistroUser();
-              Fluttertoast.showToast(
-                msg: "Conexion sin Exito al Servidor",
-                toastLength: Toast.LENGTH_LONG,
-                gravity: ToastGravity.BOTTOM,
-                timeInSecForIosWeb: 1,
+                         final snackBar = SnackBar(
+                showCloseIcon: true,
                 backgroundColor: Colors.red,
-                textColor: Colors.white,
-                fontSize: 20
-              );
+                content: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10)
+                  ),
+                  child: const Row(
+                    children: [
+                    Icon(
+                      Icons.cancel,
+                      color: Colors.white,
+                      size: 20
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      'Sin conexion al servidor', 
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold, 
+                        fontSize: 20
+                      )
+                    )
+                  ]
+                )
+              )
+            );
+
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
             }
           }).timeout(const Duration(seconds: 15), onTimeout: () {
             itemP.addLoginInsertTimeOut();
             itemP.addRegistroUser();
-            Fluttertoast.showToast(
-              msg: "Conexion sin Exito al Servidor",
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 20
+                final snackBar = SnackBar(
+                showCloseIcon: true,
+                backgroundColor: Colors.red,
+                content: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10)
+                  ),
+                  child: const Row(
+                    children: [
+                    Icon(
+                      Icons.cancel,
+                      color: Colors.white,
+                      size: 20
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      'Sin conexion al servidor', 
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold, 
+                        fontSize: 20
+                      )
+                    )
+                  ]
+                )
+              )
             );
+
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
           });
         } 
         catch (e) {
-          Fluttertoast.showToast(
-            msg: "Conexion sin Exito al Servidor",
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 20
-          );
+              final snackBar = SnackBar(
+                showCloseIcon: true,
+                backgroundColor: Colors.red,
+                content: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10)
+                  ),
+                  child: const Row(
+                    children: [
+                    Icon(
+                      Icons.cancel,
+                      color: Colors.white,
+                      size: 20
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      'Sin conexion al servidor', 
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold, 
+                        fontSize: 20
+                      )
+                    )
+                  ]
+                )
+              )
+            );
+
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
           itemP.addRegistroUser();
           itemP.addLoginInsertTimeOut();
         }
@@ -141,15 +198,34 @@ class _LoginFormState extends State<LoginForm> {
     } on SocketException catch (_) {
       itemP.addLoginInsertTimeOut();
       itemP.addRegistroUser();
-      Fluttertoast.showToast(
-        msg: "Conexion sin Exito al Servidor",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 20
-      );
+              final snackBar = SnackBar(
+                showCloseIcon: true,
+                backgroundColor: Colors.red,
+                content: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10)
+                  ),
+                  child: const Row(
+                    children: [
+                    Icon(
+                      Icons.cancel,
+                      color: Colors.white,
+                      size: 20
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      'Sin conexion al servidor', 
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold, 
+                        fontSize: 20
+                      )
+                    )
+                  ]
+                )
+              )
+            );
+
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 

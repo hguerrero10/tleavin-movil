@@ -2,21 +2,21 @@ import 'dart:io';
 import 'dart:core';
 import 'dart:convert';
 import 'dart:developer';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:gallery_saver/gallery_saver.dart';
-import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/dano.dart';
+import 'package:tleavin_mobil/database/db.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:tleavin_mobil/model/evidencia.dart';
-import 'package:tleavin_mobil/provider/items_provider.dart';
+import 'package:dropdown_search/dropdown_search.dart';
+import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:tleavin_mobil/src/pages/dano/listas.dart';
+import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/pages/dano/resumen_dano.dart';
 import 'package:tleavin_mobil/src/pages/vin/inspeccion_vin.dart';
-import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 
 class RegistroDano extends StatefulWidget {
   final vin;
@@ -29,6 +29,9 @@ class RegistroDano extends StatefulWidget {
 }
 
 class _RegistroDanoState extends State<RegistroDano> {
+
+  final _formKey = GlobalKey<FormState>();
+
   var formato;
   var formatWH;
   var fecha;
@@ -231,56 +234,78 @@ class _RegistroDanoState extends State<RegistroDano> {
                       ]
                     ),
                     const SizedBox(height: 10),
-                    _titulo('* Area:'),
-                    // Autocomplete<String>(
-                    //   optionsBuilder: (TextEditingValue textEditingValue) {
-                    //     if (textEditingValue.text == '') {
-                    //       return const Iterable<String>.empty();
-                    //     }
-                        
-                    //     return listaAreaDanos.where(( option) {
-                    //       return option.contains(textEditingValue.text.toLowerCase());
-                    //     });
-                    //   },
-                    //   onSelected: (String selection) {
-                    //     debugPrint('You just selected $selection');
-                    //   },
-                    // ),
-                    // _dropDownArea(),
-                    TextField(
-                      controller: _areaTextController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        hintText: 'Escriba el Area',
-                        hintStyle: TextStyle(
-                          color: Colors.grey
-                        )
-                      )
-                    ),
-                    const SizedBox(height: 10),
-                    _titulo('* Tipo:'),
-                    // _dropDownTipo(),
-                    TextField(
-                      controller: _tipoTextController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        hintText: 'Escriba el Tipo',
-                        hintStyle: TextStyle(
-                          color: Colors.grey
-                        )
-                      )
-                    ),
-                    const SizedBox(height: 10),
-                    _titulo('* Severidad:'),
-                    // _dropDownSeveridad(),
-                    TextField(
-                      controller: _severidadTextController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        hintText: 'Escriba la Severidad',
-                        hintStyle: TextStyle(
-                          color: Colors.grey
-                        )
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          _titulo('* Area:'),
+                          // Autocomplete<String>(
+                          //   optionsBuilder: (TextEditingValue textEditingValue) {
+                          //     if (textEditingValue.text == '') {
+                          //       return const Iterable<String>.empty();
+                          //     }
+                          //     return listaAreaDanos.where(( option) {
+                          //       return option.contains(textEditingValue.text.toLowerCase());
+                          //     });
+                          //   },
+                          //   onSelected: (String selection) {
+                          //     debugPrint('You just selected $selection');
+                          //   },
+                          // ),
+                          // _dropDownArea(),
+                          TextFormField(
+                            controller: _areaTextController,
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if(value == null || value.isEmpty) {
+                                return 'Favor de llenar el Area';
+                              }
+                              return null;
+                            },
+                            decoration: const InputDecoration(
+                              hintText: 'Escriba el Area',
+                              hintStyle: TextStyle(
+                                color: Colors.grey
+                              )
+                            )
+                          ),
+                          const SizedBox(height: 10),
+                          _titulo('* Tipo:'),
+                          TextFormField(
+                            controller: _tipoTextController,
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if(value == null || value.isEmpty) {
+                                return 'Favor de llenar el Tipo';
+                              }
+                              return null;
+                            },
+                            decoration: const InputDecoration(
+                              hintText: 'Escriba el Tipo',
+                              hintStyle: TextStyle(
+                                color: Colors.grey
+                              )
+                            )
+                          ),
+                          const SizedBox(height: 10),
+                          _titulo('* Severidad:'),
+                          TextFormField(
+                            controller: _severidadTextController,
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if(value == null || value.isEmpty) {
+                                return 'Favor de llenar la Severidad';
+                              }
+                              return null;
+                            },
+                            decoration: const InputDecoration(
+                              hintText: 'Escriba la Severidad',
+                              hintStyle: TextStyle(
+                                color: Colors.grey
+                              )
+                            )
+                          )
+                        ]
                       )
                     ),
                     const SizedBox(height: 30),
@@ -465,7 +490,7 @@ class _RegistroDanoState extends State<RegistroDano> {
             ]
           ) 
         )
-      ),
+      )
     );
   }
 
@@ -476,7 +501,6 @@ class _RegistroDanoState extends State<RegistroDano> {
       await DatabaseProvider.db.obtenerAreaDano().then((value) {
         setState(() {
           listaAreaDanos = value.map((item) => ListasA(valor: item.codigo.toString(), texto: '${item.codigo} : ${item.descripcion}')).toList();
-          // listaAreaDanos = value.map((item) => ListasA(valor: item.codigo.toString(), texto: '${item.codigo} : ${item.descripcion}')).toList();
         });
       });
 
@@ -596,71 +620,84 @@ class _RegistroDanoState extends State<RegistroDano> {
   }
 
   guardarDano(tipo) async {
-    if(_areaTextController.text != '' && _tipoTextController.text != '' && _severidadTextController.text != '') {
-      dano = Dano(
-        vin: widget.vin,
-        panel: widget.panel,
-        registroTipo: 'Regular',
-        // area: int.parse(selectArea.toString()),
-        // tipo: int.parse(selectTipo.toString()),
-        // severidad: int.parse(selectSeve.toString()),
-        area: int.parse(_areaTextController.text.trim()),
-        tipo: int.parse(_tipoTextController.text.trim()),
-        severidad: int.parse(_severidadTextController.text.trim()),
-        nota: _notasTextController.text,
-        estado: 'A',
-        fecha_creacion: fecha
-      );
-
-      await DatabaseProvider.db.insertarDano(dano!).then((value) async {
-        log('dano insertado');
-        itemP.addBoton();
-        itemP.deleteBoton();
-        
-        for(var ed in evidenciasDano) {
-          evidencia = Evidencia(
-            vin: widget.vin,
-            iddano: value,
-            nombre: null,
-            archivo: ed,
-            fechahora: fechaH
-          );
-
-          await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) {
-            log('evidencia insertado');
-          }).timeout(const Duration(seconds: 60), onTimeout: () {
-            itemP.addError();
-          });
-        }                          
-      }).timeout(const Duration(seconds: 60), onTimeout: () {
-        itemP.addError();
-      });
-
-      if(tipo == 'OtroDano') {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => InspeccionVin(vin: widget.vin))
+      if(_formKey.currentState!.validate()) {
+        if(evidenciasDano.length >= 4) {
+        dano = Dano(
+          vin: widget.vin,
+          panel: widget.panel,
+          registroTipo: 'Regular',
+          // area: int.parse(selectArea.toString()),
+          // tipo: int.parse(selectTipo.toString()),
+          // severidad: int.parse(selectSeve.toString()),
+          area: int.parse(_areaTextController.text.trim()),
+          tipo: int.parse(_tipoTextController.text.trim()),
+          severidad: int.parse(_severidadTextController.text.trim()),
+          nota: _notasTextController.text,
+          estado: 'A',
+          fecha_creacion: fecha
         );
-      }
-      else {
-        var datos = await DatabaseProvider.db.obtenerInfoVin(widget.vin);
-        setState(() {
-          resumen = datos;
+
+        await DatabaseProvider.db.insertarDano(dano!).then((value) async {
+          log('dano insertado');
+          itemP.addBoton();
+          itemP.deleteBoton();
+          
+          for(var ed in evidenciasDano) {
+            evidencia = Evidencia(
+              vin: widget.vin,
+              iddano: value,
+              nombre: null,
+              archivo: ed,
+              fechahora: fechaH
+            );
+
+            await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) {
+              log('evidencia insertado');
+            }).timeout(const Duration(seconds: 60), onTimeout: () {
+              itemP.addError();
+            });
+          }                          
+        }).timeout(const Duration(seconds: 60), onTimeout: () {
+          itemP.addError();
         });
 
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenDano(resu: resumen)), (Route<dynamic> route) => false);
+        if(tipo == 'OtroDano') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => InspeccionVin(vin: widget.vin))
+          );
+        }
+        else {
+          var datos = await DatabaseProvider.db.obtenerInfoVin(widget.vin);
+          setState(() {
+            resumen = datos;
+          });
+
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenDano(resu: resumen)), (Route<dynamic> route) => false);
+        }
+        }
+        else {
+          Fluttertoast.showToast(
+            msg: "Tome las 4 fotografia",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 20
+          );
+        }
+      }
+      else {
+        Fluttertoast.showToast(
+          msg: "Seleccione codificacion de Daño",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 20
+        );
       }
     }
-    else {
-      Fluttertoast.showToast(
-        msg: "Seleccione codificacion de Daño",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 20
-      );
-    }
   }
-}

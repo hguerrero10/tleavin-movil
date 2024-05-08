@@ -34,9 +34,6 @@ class _SincronizarState extends State<Sincronizar> {
   String urlClienteServer = 'http://api-pruebas.tlea.online/obtenerCliente';
   Cliente? clienteInsertList;
 
-  var viajesCompletos = [];
-
-
   obtenerAreaDanoServer() async {
     var responseData;
     try{
@@ -401,6 +398,28 @@ class _SincronizarState extends State<Sincronizar> {
     }
   }
 
+  borrarTodaBD() async {
+    var datos = await  DatabaseProvider.db.obtenerViajesParaSincronizar();
+
+    if(datos.isEmpty) {
+      await DatabaseProvider.db.borrarBDViaje();
+      await DatabaseProvider.db.borrarBDVINES();
+      await DatabaseProvider.db.borrarBDDanos();
+      await DatabaseProvider.db.borrarBDEvidencia();
+    }
+    else {
+      Fluttertoast.showToast(
+        msg: "Existen Viajes Sin Sincronizar",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 20
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -419,61 +438,10 @@ class _SincronizarState extends State<Sincronizar> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const Cuerpo(),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //   children: [
-            //     ElevatedButton(
-            //       onPressed: () {},
-            //       style: ButtonStyle(
-            //         backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-            //         padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(30)),
-            //         shape: MaterialStateProperty.all(
-            //           RoundedRectangleBorder(
-            //             borderRadius: BorderRadius.circular(16)
-            //           )
-            //         )
-            //       ),
-            //       child: const Column(
-            //         children: [
-            //           Icon(
-            //             CupertinoIcons.car_detailed,
-            //             color: Colors.white,
-            //             size: 40
-            //           ),
-            //           SizedBox(width: 10),
-            //           Text(
-            //             'Sincronizar',
-            //             style: TextStyle(
-            //               fontSize: 20,
-            //               color: Colors.white
-            //             )
-            //           ),
-            //           Text(
-            //             'VINES',
-            //             style: TextStyle(
-            //               fontSize: 20,
-            //               color: Colors.white
-            //             )
-            //           )
-            //         ]
-            //       )
-            //     ),
-                
-            //   ]
-            // ),
             Padding(
               padding: const EdgeInsets.all(16),
               child: ElevatedButton(
                 onPressed: () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => const ViajesParaEnviar())),
-                // style: ButtonStyle(
-                //   backgroundColor: MaterialStateProperty.all<Color>(const Color.fromRGBO(242, 211, 0, 1)),
-                //   padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(30)),
-                //   shape: MaterialStateProperty.all(
-                //     RoundedRectangleBorder(
-                //       borderRadius: BorderRadius.circular(16)
-                //     )
-                //   )
-                // ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
                   padding: const EdgeInsets.all(30),
@@ -499,12 +467,43 @@ class _SincronizarState extends State<Sincronizar> {
                 )
               )
             ),
-            const SizedBox(height: 40),
-            botonSincronizar(Icons.people, 'Sincronizar Clientes', () => obtenerClienteServer()),
 
+            const SizedBox(height: 40),
+
+            botonSincronizar(Icons.people, 'Sincronizar Clientes', () => obtenerClienteServer()),
             botonSincronizar(Icons.dangerous_outlined, 'Sincronizar Area Daños', () => obtenerAreaDanoServer()),
             botonSincronizar(Icons.list, 'Sincronizar Tipo Daños', () => obtenerTipoDanoServer()),
-            botonSincronizar(Icons.warning, 'Sincronizar Severidad', () => obtenerSeveridadServer())
+            botonSincronizar(Icons.warning, 'Sincronizar Severidad', () => obtenerSeveridadServer()),
+
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: ElevatedButton(
+                onPressed: () => _dialogBuilder(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  padding: const EdgeInsets.all(30),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  elevation: 5,
+                ),
+                child: const Row(
+                  children: [
+                    Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                      size: 40
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      'Borrar Base de Datos',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white
+                      )
+                    )
+                  ]
+                )
+              )
+            )
           ]
         )
       )
@@ -539,6 +538,67 @@ class _SincronizarState extends State<Sincronizar> {
           ]
         )
       )
+    );
+  }
+
+
+  Future<void> _dialogBuilder(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Column(
+            children: [
+              Text(
+                '¿Seguro que quieres borrar todo?',
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold
+                )
+              ),
+              Divider(
+                color: Colors.black,
+                thickness: 1.0,
+                height: 20
+              )
+            ]
+          ),
+          content: Container(
+            height: 100,
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Column(
+              children: [
+                Text(
+                  'Se borrara toda la informacion de la Base de Datos de este Dispositivo',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold
+                  )
+                )
+              ]
+            )
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge
+              ),
+              child: const Text('No'),
+              onPressed: () => Navigator.pop(context)
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge
+              ),
+              child: const Text('Si borrar todo'),
+              onPressed: () => borrarTodaBD()
+            )
+          ]
+        );
+      }
     );
   }
 }
