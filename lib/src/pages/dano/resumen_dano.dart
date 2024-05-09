@@ -70,22 +70,20 @@ class _ResumenDanoState extends State<ResumenDano> {
                   const Cuerpo(),
                   Expanded(
                     child: infoVin(widget.resu)
-                  ),
-                
-                  // const SizedBox(height: 40)
+                  )
                 ]
               )
             )
           ]
         )
-      ),
+      )
     );
   }
 
   Widget infoVin(vi) {
     return ListView.builder(
       itemCount: vi.length,
-      physics: const NeverScrollableScrollPhysics(),
+      // physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         return SingleChildScrollView(
           child: Container(
@@ -143,7 +141,7 @@ class _ResumenDanoState extends State<ResumenDano> {
                 ),
                 tabla(vi[index]['danoos']),
 
-                const SizedBox(height: 150),
+                const SizedBox(height: 50),
 
                 Padding(
                   padding: const EdgeInsets.only(left: 16, right: 16),

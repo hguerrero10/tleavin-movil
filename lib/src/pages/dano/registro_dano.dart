@@ -122,17 +122,6 @@ class _RegistroDanoState extends State<RegistroDano> {
 
   var resumen;
 
-  // obtenerResumen(v) async {
-  //   await guardarDano();
-    
-  //   var datos = await DatabaseProvider.db.obtenerInfoVin(v);
-  //   setState(() {
-  //     resumen = datos;
-  //   });
-
-  //   Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenDano(resu: resumen)), (Route<dynamic> route) => false);
-  // }
-
   @override
   void initState() {
     initializeDateFormatting();
@@ -620,77 +609,65 @@ class _RegistroDanoState extends State<RegistroDano> {
   }
 
   guardarDano(tipo) async {
-      if(_formKey.currentState!.validate()) {
-        if(evidenciasDano.length >= 4) {
-        dano = Dano(
-          vin: widget.vin,
-          panel: widget.panel,
-          registroTipo: 'Regular',
-          // area: int.parse(selectArea.toString()),
-          // tipo: int.parse(selectTipo.toString()),
-          // severidad: int.parse(selectSeve.toString()),
-          area: int.parse(_areaTextController.text.trim()),
-          tipo: int.parse(_tipoTextController.text.trim()),
-          severidad: int.parse(_severidadTextController.text.trim()),
-          nota: _notasTextController.text,
-          estado: 'A',
-          fecha_creacion: fecha
+    if(_formKey.currentState!.validate()) {
+      if(evidenciasDano.length >= 4) {
+      dano = Dano(
+        vin: widget.vin,
+        panel: widget.panel,
+        registroTipo: 'Regular',
+        // area: int.parse(selectArea.toString()),
+        // tipo: int.parse(selectTipo.toString()),
+        // severidad: selectSeve.toString(),
+        area: int.parse(_areaTextController.text.trim()),
+        tipo: int.parse(_tipoTextController.text.trim()),
+        severidad: _severidadTextController.text.trim(),
+        nota: _notasTextController.text,
+        estado: 'A',
+        fecha_creacion: fecha
+      );
+
+      await DatabaseProvider.db.insertarDano(dano!).then((value) async {
+        log('dano insertado');
+        itemP.addBoton();
+        itemP.deleteBoton();
+        
+        for(var ed in evidenciasDano) {
+          evidencia = Evidencia(
+            vin: widget.vin,
+            iddano: value,
+            nombre: null,
+            archivo: ed,
+            fechahora: fechaH
+          );
+
+          await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) {
+            log('evidencia insertado');
+          }).timeout(const Duration(seconds: 60), onTimeout: () {
+            itemP.addError();
+          });
+        }                          
+      }).timeout(const Duration(seconds: 60), onTimeout: () {
+        itemP.addError();
+      });
+
+      if(tipo == 'OtroDano') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => InspeccionVin(vin: widget.vin))
         );
-
-        await DatabaseProvider.db.insertarDano(dano!).then((value) async {
-          log('dano insertado');
-          itemP.addBoton();
-          itemP.deleteBoton();
-          
-          for(var ed in evidenciasDano) {
-            evidencia = Evidencia(
-              vin: widget.vin,
-              iddano: value,
-              nombre: null,
-              archivo: ed,
-              fechahora: fechaH
-            );
-
-            await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) {
-              log('evidencia insertado');
-            }).timeout(const Duration(seconds: 60), onTimeout: () {
-              itemP.addError();
-            });
-          }                          
-        }).timeout(const Duration(seconds: 60), onTimeout: () {
-          itemP.addError();
+      }
+      else {
+        var datos = await DatabaseProvider.db.obtenerInfoVin(widget.vin);
+        setState(() {
+          resumen = datos;
         });
 
-        if(tipo == 'OtroDano') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => InspeccionVin(vin: widget.vin))
-          );
-        }
-        else {
-          var datos = await DatabaseProvider.db.obtenerInfoVin(widget.vin);
-          setState(() {
-            resumen = datos;
-          });
-
-          Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenDano(resu: resumen)), (Route<dynamic> route) => false);
-        }
-        }
-        else {
-          Fluttertoast.showToast(
-            msg: "Tome las 4 fotografia",
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 20
-          );
-        }
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenDano(resu: resumen)), (Route<dynamic> route) => false);
+      }
       }
       else {
         Fluttertoast.showToast(
-          msg: "Seleccione codificacion de Daño",
+          msg: "Tome las 4 fotografia",
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
@@ -700,4 +677,16 @@ class _RegistroDanoState extends State<RegistroDano> {
         );
       }
     }
+    else {
+      Fluttertoast.showToast(
+        msg: "Seleccione codificacion de Daño",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 20
+      );
+    }
   }
+}

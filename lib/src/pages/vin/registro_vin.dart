@@ -199,8 +199,8 @@ class _CompraVinState extends State<CompraVin> {
                             fontSize: 18.0,
                             color: Colors.white
                           )
-                        ),
-                      ],
+                        )
+                      ]
                     )
                   )
                 ]

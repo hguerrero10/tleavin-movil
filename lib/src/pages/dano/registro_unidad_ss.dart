@@ -31,7 +31,10 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
   var fecha;
   var fechaH;
 
+  final _formKey = GlobalKey<FormState>();
+
   final _notasTextController = TextEditingController();
+  final _severidadTextController = TextEditingController();
   final ImagePicker picker = ImagePicker();
   
   String? base64Foto1;
@@ -99,26 +102,64 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
   var resumen;
 
   obtenerResumen(v) async {
-    if(evidenciasDano.length >= 4) {
-      await guardarDano();
-      
-      var datos = await DatabaseProvider.db.obtenerInfoVin(v);
-      setState(() {
-        resumen = datos;
-      });
+    if(itemP.clienteSeleccionado != "GM") {
+      if(evidenciasDano.length >= 4) {
+        await guardarDano();
+        
+        var datos = await DatabaseProvider.db.obtenerInfoVin(v);
+        setState(() {
+          resumen = datos;
+        });
 
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenDano(resu: resumen)), (Route<dynamic> route) => false);
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenDano(resu: resumen)), (Route<dynamic> route) => false);
+      }
+      else {
+        Fluttertoast.showToast(
+          msg: "Tome las 4 fotografia",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 20
+        );
+      }
     }
     else {
-      Fluttertoast.showToast(
-        msg: "Tome las 4 fotografia",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 20
-      );
+      if(_formKey.currentState!.validate()) {
+        if(evidenciasDano.length >= 4) {
+          await guardarDano();
+          
+          var datos = await DatabaseProvider.db.obtenerInfoVin(v);
+          setState(() {
+            resumen = datos;
+          });
+
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenDano(resu: resumen)), (Route<dynamic> route) => false);
+        }
+        else {
+          Fluttertoast.showToast(
+            msg: "Tome las 4 fotografia",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 20
+          );
+        }
+      }
+      else {
+        Fluttertoast.showToast(
+          msg: "Seleccione Severidad",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 20
+        );
+      }
     }
   }
 
@@ -143,8 +184,8 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.black
-          ),
-        ),
+          )
+        )
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -181,6 +222,40 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
                       )
                     ]
                   ),
+                  const SizedBox(height: 20),
+                  itemP.clienteSeleccionado == 'GM' ?const Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          "* Severidad",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            fontSize: 17
+                          )
+                        )
+                      )
+                    ]
+                  ) : const SizedBox(),
+                  itemP.clienteSeleccionado == 'GM' ? Form(
+                    key: _formKey,
+                    child: TextFormField(
+                      controller: _severidadTextController,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if(value == null || value.isEmpty) {
+                          return 'Favor de llenar la Severidad';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        hintText: 'Escriba la Severidad',
+                        hintStyle: TextStyle(
+                          color: Colors.grey
+                        )
+                      )
+                    )
+                  ) : const SizedBox(),
                   const SizedBox(height: 20),
                   const Text(
                     'Adjunte 4 fotografía por cada lado de la unidad.',
@@ -359,7 +434,7 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
       registroTipo: widget.tipo,
       area: null,
       tipo: null,
-      severidad: null,
+      severidad: itemP.clienteSeleccionado == 'GM' ? _severidadTextController.text : null,
       nota: _notasTextController.text,
       estado: 'A',
       fecha_creacion: fecha
@@ -371,7 +446,6 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
       itemP.deleteBoton();
 
       for(var ed in evidenciasDano) {
-
         evidencia = Evidencia(
           vin: widget.vin,
           iddano: value,

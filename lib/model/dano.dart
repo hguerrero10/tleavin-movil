@@ -7,7 +7,7 @@ class Dano{
   String? registroTipo;
   int? area;
   int? tipo;
-  int? severidad;
+  String? severidad;
   String? nota;
   String? fecha_creacion;
   String? estado;
@@ -39,7 +39,7 @@ class Dano{
     registroTipo: map['registroTipo'].toString(),
     area: map['area'],
     tipo: map['tipo'],
-    severidad: map['severidad'],
+    severidad: map['severidad'].toString(),
     nota: map['nota'].toString(),
     estado: map['estado'].toString(),
     fecha_creacion: map['fecha_creacion'].toString(),

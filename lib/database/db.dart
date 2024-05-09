@@ -47,7 +47,7 @@ class DatabaseProvider {
         );
 
         await db.execute(
-          "CREATE TABLE dano (idd INTEGER PRIMARY KEY AUTOINCREMENT, vin VARCHAR, panel VARCHAR, registroTipo VARCHAR, area INTERGER, tipo INTERGER, severidad INTERGER, nota VARCHAR, estado VARCHAR, fecha_creacion DATE)"
+          "CREATE TABLE dano (idd INTEGER PRIMARY KEY AUTOINCREMENT, vin VARCHAR, panel VARCHAR, registroTipo VARCHAR, area INTERGER, tipo INTERGER, severidad VARCHAR, nota VARCHAR, estado VARCHAR, fecha_creacion DATE)"
         );
 
         await db.execute(
