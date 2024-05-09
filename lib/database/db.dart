@@ -1,19 +1,19 @@
-import 'dart:developer';
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:tleavin_mobil/model/viaje.dart';
 import 'package:tleavin_mobil/model/vin.dart';
 import 'package:tleavin_mobil/model/dano.dart';
+import 'package:tleavin_mobil/model/viaje.dart';
 import 'package:tleavin_mobil/model/usuario.dart';
 import 'package:tleavin_mobil/model/cliente.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:tleavin_mobil/model/evidencia.dart';
 import 'package:tleavin_mobil/model/areaDano.dart';
 import 'package:tleavin_mobil/model/severidad.dart';
 import 'package:tleavin_mobil/model/tipo_dano.dart';
+import 'package:tleavin_mobil/model/evidencia.dart';
 import 'package:tleavin_mobil/model/dispositivo.dart';
 
 class DatabaseProvider {
@@ -240,7 +240,6 @@ class DatabaseProvider {
 
                 organizedData[vin]!['danoos'].add(newDano); 
               }
-
             }
           } 
           else {
@@ -316,7 +315,6 @@ class DatabaseProvider {
 
                 organizedData[vin]!['danoos'].add(newDano); 
               }
-
             }
           } 
           else {
