@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/usuario.dart';
@@ -18,6 +19,8 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
 
   Usuario? usuario;
+  
+  Usuario nuevousuario = Usuario();
 
   String urlUsuariosAppServer = 'http://api-pruebas.tlea.online/obtenerUsuarios';
   Usuario? usuarioInsertList;
@@ -55,18 +58,10 @@ class _LoginFormState extends State<LoginForm> {
                 
                 await DatabaseProvider.db.insertarUsuario(usuarioInsertList!);
               }
-              
-              // Fluttertoast.showToast(
-              //   msg: "",
-              //   toastLength: Toast.LENGTH_LONG,
-              //   gravity: ToastGravity.CENTER,
-              //   timeInSecForIosWeb: 1,
-              //   backgroundColor: Colors.green,
-              //   textColor: Colors.white,
-              //   fontSize: 25
-              // );
+                      var d = await DatabaseProvider.db.obtenerUsuarios();
+                      log(d.toString());
 
-                final snackBar = SnackBar(
+              final snackBar = SnackBar(
                   showCloseIcon: true,
                   backgroundColor: Colors.green,
                   content: Container(
@@ -163,34 +158,34 @@ class _LoginFormState extends State<LoginForm> {
           });
         } 
         catch (e) {
-              final snackBar = SnackBar(
-                showCloseIcon: true,
-                backgroundColor: Colors.red,
-                content: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10)
+          final snackBar = SnackBar(
+              showCloseIcon: true,
+              backgroundColor: Colors.red,
+              content: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10)
+                ),
+                child: const Row(
+                  children: [
+                  Icon(
+                    Icons.cancel,
+                    color: Colors.white,
+                    size: 20
                   ),
-                  child: const Row(
-                    children: [
-                    Icon(
-                      Icons.cancel,
-                      color: Colors.white,
-                      size: 20
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      'Sin conexion al servidor', 
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold, 
-                        fontSize: 20
-                      )
+                  SizedBox(width: 10),
+                  Text(
+                    'Sin conexion al servidor', 
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold, 
+                      fontSize: 20
                     )
-                  ]
-                )
+                  )
+                ]
               )
-            );
+            )
+          );
 
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
           itemP.addRegistroUser();
           itemP.addLoginInsertTimeOut();
         }
@@ -198,42 +193,63 @@ class _LoginFormState extends State<LoginForm> {
     } on SocketException catch (_) {
       itemP.addLoginInsertTimeOut();
       itemP.addRegistroUser();
-              final snackBar = SnackBar(
-                showCloseIcon: true,
-                backgroundColor: Colors.red,
-                content: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10)
-                  ),
-                  child: const Row(
-                    children: [
-                    Icon(
-                      Icons.cancel,
-                      color: Colors.white,
-                      size: 20
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      'Sin conexion al servidor', 
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold, 
-                        fontSize: 20
-                      )
-                    )
-                  ]
+      final snackBar = SnackBar(
+          showCloseIcon: true,
+          backgroundColor: Colors.red,
+          content: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10)
+            ),
+            child: const Row(
+              children: [
+              Icon(
+                Icons.cancel,
+                color: Colors.white,
+                size: 20
+              ),
+              SizedBox(width: 10),
+              Text(
+                'Sin conexion al servidor', 
+                style: TextStyle(
+                  fontWeight: FontWeight.bold, 
+                  fontSize: 20
                 )
               )
-            );
+            ]
+          )
+        )
+      );
 
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
+  crearUsuario() async {
+    nuevousuario = Usuario(
+      numeroEmpleado: 2045,
+      nombre: 'Hugo Guerrero',
+      usuario: 'h_guerrero', 
+      password: 'Hugo1010', 
+      isLogged: 0,
+      cargo: 'Desarrollador',
+      locacion: 'SALINAS',
+      estado: 'A'
+    );
+
+    try{
+      await DatabaseProvider.db.insertarUsuario(nuevousuario);
+
+      log('creado');
+    } 
+    catch (e) {
+    }
+  }
+  
   @override
   void initState() {
     super.initState();
-
-    obtenerUsuariosAppServer();
+    crearUsuario();
+    // obtenerUsuariosAppServer();
   }
 
   @override
@@ -317,6 +333,8 @@ class _LoginFormState extends State<LoginForm> {
 
   login() async {
     DatabaseProvider.db.login(_userController.text.trim(), _passwordController.text.trim()).then((value)  {
+
+      log(value.toString());
       if(value.numeroEmpleado == null) {
         itemP.addError();
 

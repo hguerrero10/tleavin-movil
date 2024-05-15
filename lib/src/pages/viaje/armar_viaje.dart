@@ -64,7 +64,7 @@ class _ArmarViajeState extends State<ArmarViaje> {
   @override
   void initState() {
     initializeDateFormatting();
-    formato = DateFormat('yyyy/MM/dd'); 
+    formato = DateFormat('yyyy-MM-dd hh:mm:ss'); 
     fecha = formato.format(DateTime.now());
 
     _origenTextController.text = itemP.usuario!.locacion!;
@@ -235,9 +235,9 @@ class _ArmarViajeState extends State<ArmarViaje> {
                 )
               )
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
 
-            Expanded(child: itemP.vinesSeleccionadosParaViaje.isNotEmpty ? SizedBox( height: 200, child: vinsSeleccionados(itemP.vinesSeleccionadosParaViaje)) : const SizedBox()),
+            Expanded(child: itemP.vinesSeleccionadosParaViaje.isNotEmpty ? SizedBox(height: 200, child: vinsSeleccionados(itemP.vinesSeleccionadosParaViaje)) : const SizedBox()),
             
             const SizedBox(height: 30),
 
@@ -386,7 +386,7 @@ class _ArmarViajeState extends State<ArmarViaje> {
     return listav != null ? ListView.builder(
       itemCount: listav.length,
       shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+      // physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.only(left: 16, right: 16),

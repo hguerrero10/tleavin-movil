@@ -125,8 +125,9 @@ class _RegistroDanoState extends State<RegistroDano> {
   @override
   void initState() {
     initializeDateFormatting();
-    formato = DateFormat('yyyy/MM/dd'); 
-    formatWH = DateFormat('yyyy/MM/dd HH:mm:ss'); 
+
+    formato = DateFormat('yyyy-MM-dd hh:mm:ss'); 
+    formatWH = DateFormat('yyyy-MM-dd hh:mm:ss'); 
     fecha = formato.format(DateTime.now());
     fechaH = formatWH.format(DateTime.now());
 

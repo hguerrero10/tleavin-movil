@@ -42,7 +42,7 @@ class _CompraVinState extends State<CompraVin> {
   @override
   void initState() {
     initializeDateFormatting();
-    formato = DateFormat('yyyy/MM/dd'); 
+    formato = DateFormat('yyyy-MM-dd hh:mm:ss'); 
     fecha = formato.format(DateTime.now());
 
     super.initState();

@@ -79,7 +79,7 @@ class DatabaseProvider {
         );
 
         await db.execute(
-          "CREATE TABLE viaje (idviaje INTEGER PRIMARY KEY AUTOINCREMENT, supervisor VARCHAR, folio_bitacora INTEGER, cartaporte INTEGER, bitacora_fecha_carga VARCHAR, num_eco_unidad VARCHAR, nombre_operador VARCHAR, cliente_clave INTEGER, cliente_nombre VARCHAR, ruta_clave INTEGER, ruta_nombre VARCHAR, origen VARCHAR, destino VARCHAR, etiqueta VARCHAR, status_carga INTEGER, notas VARCHAR, registrada_por VARCHAR, tipo_viaje VARCHAR, semana INTEGER, estadoViaje VARCHAR, fecha_creacion VARCHAR, fecha_sync VARCHAR)"
+          "CREATE TABLE viaje (idviaje INTEGER PRIMARY KEY AUTOINCREMENT, supervisor VARCHAR, folio_bitacora INTEGER, cartaporte INTEGER, bitacora_fecha_carga DATE, num_eco_unidad VARCHAR, nombre_operador VARCHAR, cliente_clave INTEGER, cliente_nombre VARCHAR, ruta_clave INTEGER, ruta_nombre VARCHAR, origen VARCHAR, destino VARCHAR, etiqueta VARCHAR, status_carga INTEGER, notas VARCHAR, registrada_por VARCHAR, tipo_viaje VARCHAR, semana INTEGER, estadoViaje VARCHAR, fecha_creacion DATE, fecha_sync DATE)"
         );
       }
     );
@@ -424,6 +424,16 @@ class DatabaseProvider {
     return db.update('vin', {'compra' : 1}, where: "vin = ?", whereArgs: [vin]);
   }
 
+
+  Future<Vin> obtenerVIN(v) async {
+    Database db = await database;
+    List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM vin WHERE vin = '$v'");
+
+    Vin vine = Vin.fromMap(result[0]);
+    
+    return vine;
+  }
+
   // CRUD DAÑO 
 
   Future<int> insertarDano(Dano nuevoRegistro) async {
@@ -467,15 +477,15 @@ class DatabaseProvider {
   }
 
   actualizarEvidencia(Evidencia evidencia) async {
-  final db = await database;
-  return db.update('evidencia',  evidencia.toMap() , where: "ide = ?" , whereArgs: [evidencia.ide], );
-}
+    final db = await database;
+    return db.update('evidencia',  evidencia.toMap() , where: "ide = ?" , whereArgs: [evidencia.ide], );
+  }
 
   Future<List<Evidencia>> obtenerEvidencia() async {
     final db = await database;
     List<Evidencia> listaEvidencia;
     var res = await db.query("evidencia");
-
+ 
     if (res.isNotEmpty) {
       listaEvidencia =  res.map((c) => Evidencia.fromMap(c)).toList();
     } 
@@ -490,7 +500,7 @@ class DatabaseProvider {
     List eviden = [];
     var res = await db.query("evidencia where idviaje = '$idvi'");
 
-    if (res.isNotEmpty) {
+    if(res.isNotEmpty) {
       eviden.addAll(res);
     }
 
@@ -499,6 +509,22 @@ class DatabaseProvider {
     }
 
     return eviden;
+  }
+
+  Future<List> vinesXviaje(idvi) async {
+    final db = await database;
+    List vines = [];
+    var res = await db.query("vin where idviaje = '$idvi'");
+
+    if(res.isNotEmpty) {
+      vines.addAll(res);
+    }
+
+    if(vines.isEmpty) {
+      vines = [];
+    }
+
+    return vines;
   }
   
   // CRUD DISPOSITIVOS
@@ -840,7 +866,6 @@ class DatabaseProvider {
  
     for(var i in result){
       Evidencia evidencias = Evidencia.fromMap(i);
-
       evidencia.add(evidencias);
     }
 
@@ -866,6 +891,4 @@ class DatabaseProvider {
     final db = await database;
     return db.delete('evidencia');
   }
-
-
 } 

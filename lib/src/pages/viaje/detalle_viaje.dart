@@ -171,6 +171,7 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
     return ListView.builder(
       shrinkWrap: true,
       itemCount: inf.length,
+      physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         var posi = inf[index]['posicion'] ?? 'Sin Asignar';
         var orie = inf[index]['orientacion'] ?? 'Sin Asignar';

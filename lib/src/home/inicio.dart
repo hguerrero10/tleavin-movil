@@ -23,7 +23,6 @@ class _InicioScreenState extends State<InicioScreen> {
 
   Usuario usuario = Usuario();
 
-
   @override
   void initState() {
     super.initState();
@@ -188,12 +187,6 @@ class _InicioScreenState extends State<InicioScreen> {
     );
   }
 
-  paProbar() async {
-    // var datos = await  DatabaseProvider.db.paraPruebas();
-    // var datos = await  DatabaseProvider.db.envioViajeCompleto(1);
-    // log(datos.toString());
-  }
-  
   logout() async {
     usuario = Usuario(
       numeroEmpleado: itemP.usuario!.numeroEmpleado,
@@ -299,4 +292,5 @@ class _InicioScreenState extends State<InicioScreen> {
       )
     );
   }
+
 }

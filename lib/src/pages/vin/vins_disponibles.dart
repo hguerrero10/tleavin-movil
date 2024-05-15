@@ -536,7 +536,7 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
           SizedBox(
             width: 250,
             child: Text(
-              'No hay VINES disponibles',
+              'No hay VINES Disponibles',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.grey[300],
