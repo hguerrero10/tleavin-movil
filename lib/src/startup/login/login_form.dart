@@ -224,32 +224,10 @@ class _LoginFormState extends State<LoginForm> {
     }
   }
 
-  crearUsuario() async {
-    nuevousuario = Usuario(
-      numeroEmpleado: 2045,
-      nombre: 'Hugo Guerrero',
-      usuario: 'h_guerrero', 
-      password: 'Hugo1010', 
-      isLogged: 0,
-      cargo: 'Desarrollador',
-      locacion: 'SALINAS',
-      estado: 'A'
-    );
-
-    try{
-      await DatabaseProvider.db.insertarUsuario(nuevousuario);
-
-      log('creado');
-    } 
-    catch (e) {
-    }
-  }
-  
   @override
   void initState() {
     super.initState();
-    crearUsuario();
-    // obtenerUsuariosAppServer();
+    obtenerUsuariosAppServer();
   }
 
   @override

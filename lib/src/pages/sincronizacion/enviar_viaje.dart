@@ -62,6 +62,7 @@ class _ViajesParaEnviarState extends State<ViajesParaEnviar> {
                       setState(() {
                         enviando = true;
                       });
+
                       enviarViaje(dato.idviaje);
                     },
                     child: Padding(
@@ -327,6 +328,9 @@ class _ViajesParaEnviarState extends State<ViajesParaEnviar> {
           });
       } 
       else {
+          setState(() {
+            enviando = false;
+          });
         Fluttertoast.showToast(
           msg: "Favor de comunicarse a soporte (Error: ${response.statusCode}) $response'",
           toastLength: Toast.LENGTH_LONG,

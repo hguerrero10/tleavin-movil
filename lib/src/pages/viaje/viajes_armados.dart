@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
@@ -20,6 +21,9 @@ class _ViajesArmadosState extends State<ViajesArmados> {
 
     setState(() {
       listaViajes = data;
+
+      log(listaViajes.toString());
+      log(listaViajes.length.toString());
     });
   }
 
@@ -62,7 +66,7 @@ class _ViajesArmadosState extends State<ViajesArmados> {
             hasScrollBody: true,
             child: Column(
               children: [
-                Expanded(child: viajes(listaViajes))
+                Expanded(child: viajes())
               ]
             )
           )
@@ -71,19 +75,20 @@ class _ViajesArmadosState extends State<ViajesArmados> {
     );
   }
 
-  Widget viajes(via) {
-    return via.length != 0 ? ListView.builder(
+  Widget viajes() {
+    return listaViajes.isNotEmpty ? ListView.builder(
       shrinkWrap: true,
-      itemCount: via.length,
+      itemCount: listaViajes.length,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
-        final dato = via[index];
+        final dato = listaViajes[index];
+
         return GestureDetector(
           onTap: () async => await obtenerViaje('${dato.idviaje}'),
           child: Container(
             height: 190,
-            width: double.maxFinite,
-            margin: const EdgeInsets.only(left: 16, right:16, top: 16, bottom: 16),
+            width: 300,
+            margin: const EdgeInsets.only(left: 19, right:19, top: 19, bottom: 10),
             decoration: BoxDecoration(
               shape: BoxShape.rectangle,
               borderRadius: BorderRadius.circular(20),
@@ -91,12 +96,12 @@ class _ViajesArmadosState extends State<ViajesArmados> {
                 image: AssetImage(
                   'assets/img/carddi.png'
                 ),
-                fit: BoxFit.fill
+                fit: BoxFit.cover
               )
             ),
             child: Card(
-              color: const Color.fromARGB(0, 0, 0, 1),
-              elevation: 2,
+              color: const Color.fromARGB(0, 43, 43, 43),
+              elevation: 6,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               child: Padding(
                 padding: const EdgeInsets.all(16),

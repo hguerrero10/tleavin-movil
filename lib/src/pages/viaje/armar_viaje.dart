@@ -44,6 +44,8 @@ class _ArmarViajeState extends State<ArmarViaje> {
   String? selectClie;
   String? selectClieText;
 
+  var enviando = false;
+
   Future<List<ListasA>> getListas() async {
     List<ListasA> resultados = [];
 
@@ -95,9 +97,6 @@ class _ArmarViajeState extends State<ArmarViaje> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
             const Cuerpo(),
-
-     
-
             Form(
               key: _formKey,
               child: Column(
@@ -259,25 +258,54 @@ class _ArmarViajeState extends State<ArmarViaje> {
             const SizedBox(height: 30),
             Padding(
               padding: const EdgeInsets.only(left: 16, right: 16),
-              child: ElevatedButton(
-                onPressed: () => crearViaje(),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(15)),
-                  minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 40)),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)
+              child: Stack(
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        enviando = true;
+                      });
+                  
+                      crearViaje();
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(15)),
+                      minimumSize: MaterialStateProperty.all<Size>(const Size(double.infinity, 40)),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16)
+                        )
+                      )
+                    ),
+                    child: const Text(
+                      'Registrar viaje',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white
+                      )
                     )
-                  )
-                ),
-                child: const Text(
-                  'Registrar viaje',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white
-                  )
-                )
+                  ),
+                  enviando != false ? Container(
+                    height: 60,
+                    width: 370,
+                    decoration: BoxDecoration(
+                      color: Colors.white54,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const SizedBox(
+                      height: 120,
+                      width: 120,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          backgroundColor: Colors.black,
+                          valueColor: AlwaysStoppedAnimation<Color>(Color.fromRGBO(242, 211, 0, 1)),
+                          strokeWidth: 5
+                        )
+                      )
+                    )
+                  ) : const SizedBox()
+                ]
               )
             ),
             const SizedBox(height: 30)
@@ -469,6 +497,10 @@ class _ArmarViajeState extends State<ArmarViaje> {
         });
       }
       else {
+        setState(() {
+          enviando = true;
+        });
+
         Fluttertoast.showToast(
           msg: "Seleccione VINES",
           toastLength: Toast.LENGTH_LONG,
@@ -479,6 +511,11 @@ class _ArmarViajeState extends State<ArmarViaje> {
           fontSize: 20
         );
       }
+    }
+    else {
+      setState(() {
+        enviando = false;
+      });
     }
   }
 }

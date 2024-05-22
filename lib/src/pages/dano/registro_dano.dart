@@ -68,6 +68,9 @@ class _RegistroDanoState extends State<RegistroDano> {
   var queryT;
   var queryS;
 
+  var enviando = true;
+  var otroenviando = true;
+    
   Future<void> getCamara(foto) async {
     final List<XFile> pickedFileList = <XFile>[];
     final photo = await picker.pickImage(
@@ -93,28 +96,24 @@ class _RegistroDanoState extends State<RegistroDano> {
       if(foto == 1) {
         base64Foto1 = null;
         base64Foto1 = base64Encode(imageData);
-        // log(base64Foto1.toString());
         evidenciasDano.add(base64Foto1);
       }
 
       if(foto == 2) {
         base64Foto2 = null;
         base64Foto2 = base64Encode(imageData);
-        // log(base64Foto2.toString());
         evidenciasDano.add(base64Foto2);
       }
 
       if(foto == 3) {
         base64Foto3 = null;
         base64Foto3 = base64Encode(imageData);
-        // log(base64Foto3.toString());
         evidenciasDano.add(base64Foto3);
       }
 
       if(foto == 4) {
         base64Foto4 = null;
         base64Foto4 = base64Encode(imageData);
-        // log(base64Foto4.toString());
         evidenciasDano.add(base64Foto4);
       }
     }
@@ -173,10 +172,6 @@ class _RegistroDanoState extends State<RegistroDano> {
               color: Colors.black
             )
           )
-          // leading: IconButton(
-          //   icon: const Icon(Icons.arrow_back_sharp),
-          //   onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const CompraVin()), (Route<dynamic> route) => false)
-          // )
         ),
         body: SingleChildScrollView(
           child: Column(

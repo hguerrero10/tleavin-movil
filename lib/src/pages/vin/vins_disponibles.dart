@@ -83,7 +83,7 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
       ),
       body: Column(
         children: [
-          buildSearch(),
+          const SizedBox(height: 10),
           ElevatedButton(
             onPressed: () => scanQR(),
             style: ButtonStyle(
@@ -117,13 +117,13 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
               )
             )
           ),
-          Expanded(
-            child: Padding(
+          buildSearch(),
+          listadevines.isNotEmpty ? Expanded(
+            child: listadevines.isNotEmpty ? Padding(
               padding: const EdgeInsets.all(8),
               child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: listadevines.length,
-                // physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return  GestureDetector(
                     onTap: () async => await obtenerDatos('${listadevines[index].vin}'),
@@ -299,6 +299,35 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                   );
                 }
               )
+            ) : const Center(
+              child: CircularProgressIndicator(
+                color: Color.fromRGBO(242, 211, 0, 1)
+              )
+            )
+          ) : Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 200),
+                Icon(
+                  CupertinoIcons.car_detailed , 
+                  color: Colors.grey[300], 
+                  size: 60
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: 250,
+                  child: Text(
+                    'No hay VINES Disponibles',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.grey[300],
+                      fontSize: 19
+                    )
+                  )
+                )
+              ]
             )
           )
         ]
@@ -326,12 +355,10 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
     });
   }
 
-          
   Widget vinsDisponibles(da) {
     return da.length != 0 ? ListView.builder(
       shrinkWrap: true,
       itemCount: da.length,
-      // physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         return  GestureDetector(
           onTap: () async => await obtenerDatos('${da[index].vin}'),
