@@ -229,7 +229,7 @@ class _ViajesParaEnviarState extends State<ViajesParaEnviar> {
                   enviando != false ? Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
-                      height: 285,
+                      height: 315,
                       width: 370,
                       decoration: BoxDecoration(
                         color: Colors.white54,
@@ -283,14 +283,15 @@ class _ViajesParaEnviarState extends State<ViajesParaEnviar> {
 
     var limpio = datos.toString().replaceAll('"{', "{").replaceAll('}"', "}");
 
+    log(limpio.toString());
+
     try{
       http.Response response = await http.post(Uri.parse(urlEnvioViaje), body: limpio, headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"});
 
       if(response.statusCode == 200) {
-
         await DatabaseProvider.db.actualizarEstadoViajeSincronizado(idviaje);
 
-            final snackBar = SnackBar(
+          final snackBar = SnackBar(
               showCloseIcon: true,
               backgroundColor: Colors.green,
               content: Container(

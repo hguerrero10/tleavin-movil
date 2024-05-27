@@ -47,7 +47,7 @@ class DatabaseProvider {
         );
 
         await db.execute(
-          "CREATE TABLE dano (idd INTEGER PRIMARY KEY AUTOINCREMENT, vin VARCHAR, panel VARCHAR, registroTipo VARCHAR, area INTERGER, tipo INTERGER, severidad VARCHAR, nota VARCHAR, estado VARCHAR, fecha_creacion DATE)"
+          "CREATE TABLE dano (idd INTEGER PRIMARY KEY AUTOINCREMENT, vin VARCHAR, panel VARCHAR, registroTipo VARCHAR, area INTERGER, tipo INTERGER, severidad VARCHAR, notas VARCHAR, estado VARCHAR, fecha_creacion DATE)"
         );
 
         await db.execute(
@@ -232,7 +232,7 @@ class DatabaseProvider {
                   'area': item['area'],
                   'tipo': item['tipo'],
                   'severidad': item['severidad'],
-                  'nota': item['nota'],
+                  'notas': item['notas'],
                   'estado': item['estado'],
                   'fecha_creacion': item['fecha_creacion'],
                   'evidencias': [evidence]
@@ -307,7 +307,7 @@ class DatabaseProvider {
                   'area': item['area'],
                   'tipo': item['tipo'],
                   'severidad': item['severidad'],
-                  'nota': item['nota'],
+                  'notas': item['notas'],
                   'estado': item['estado'],
                   'fecha_creacion': item['fecha_creacion'],
                   'evidencias': [evidence]
@@ -410,7 +410,7 @@ class DatabaseProvider {
 
   asignarVinViaje(vv) async {
     final db = await database;
-    return db.update('vin', {'idviaje' : vv.idviaje, 'origen' : vv.origen, 'destino' : vv.destino}, where: "vin = ?", whereArgs: [vv.vin]);
+    return db.update('vin', {'idviaje' : vv.idviaje, 'origen' : vv.origen, 'destino' : vv.destino, 'fecha_carga': vv.fecha_carga}, where: "vin = ?", whereArgs: [vv.vin]);
   }
   
   asignarPoOrVIN(vv) async {

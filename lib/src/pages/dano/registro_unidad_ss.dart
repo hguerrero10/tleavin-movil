@@ -435,7 +435,7 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
       area: null,
       tipo: null,
       severidad: itemP.clienteSeleccionado == 'GM' ? _severidadTextController.text : null,
-      nota: _notasTextController.text,
+      notas: _notasTextController.text,
       estado: 'A',
       fecha_creacion: fecha
     );

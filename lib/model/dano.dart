@@ -8,7 +8,7 @@ class Dano{
   int? area;
   int? tipo;
   String? severidad;
-  String? nota;
+  String? notas;
   String? fecha_creacion;
   String? estado;
   List<Evidencia>? evidencias;
@@ -21,7 +21,7 @@ class Dano{
     this.area,
     this.tipo,
     this.severidad,
-    this.nota,
+    this.notas,
     this.estado,
     this.fecha_creacion,
     this.evidencias = const [],
@@ -29,7 +29,7 @@ class Dano{
 
   @override
   String toString() {
-    return '{"idd": $idd, "vin": "$vin", "panel": "$panel", "registroTipo": "$registroTipo", "area": $area, "tipo": $tipo, "severidad": $severidad, "nota": "$nota", "estado": "$estado", "fecha_creacion": "$fecha_creacion", "evidencias": $evidencias}';
+    return '{"idd": $idd, "vin": "$vin", "panel": "$panel", "registroTipo": "$registroTipo", "area": $area, "tipo": $tipo, "severidad": $severidad, "notas": "$notas", "estado": "$estado", "fecha_creacion": "$fecha_creacion", "evidencias": $evidencias}';
   }
 
   factory Dano.fromMap(Map<String, dynamic> map) => Dano(
@@ -40,7 +40,7 @@ class Dano{
     area: map['area'],
     tipo: map['tipo'],
     severidad: map['severidad'].toString(),
-    nota: map['nota'].toString(),
+    notas: map['notas'].toString(),
     estado: map['estado'].toString(),
     fecha_creacion: map['fecha_creacion'].toString(),
     evidencias: map['evidencias']
@@ -54,7 +54,7 @@ class Dano{
     "area": area,
     "tipo": tipo,
     "severidad": severidad,
-    "nota": nota,
+    "notas": notas,
     "estado": estado,
     "fecha_creacion": fecha_creacion
   };

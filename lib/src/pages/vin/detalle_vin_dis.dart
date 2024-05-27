@@ -142,6 +142,7 @@ class _DetalleVinState extends State<DetalleVin> {
                 _encabezados('Modelo: ', vi[index]['vinp']['modelo'] != null ? '${vi[index]['vinp']['modelo']}' : 'Sin Identificar'),
                 _encabezados('Comprado: ', vi[index]['vinp']['compra'] == 0 ? 'No' : 'Si'),
                 _encabezados('Viaje: ', vi[index]['vinp']['idviaje'] != null ? ' ${vi[index]['vinp']['idviaje']}' : 'Sin Asignar'),
+                _encabezados('Fecha Carga: ', vi[index]['vinp']['fecha_carga'] != null ? ' ${vi[index]['vinp']['fecha_carga']}' : 'Sin Cargar'),
                 _encabezados('Posicion: ', vi[index]['vinp']['posicion'] != null ? ' ${vi[index]['vinp']['posicion']}' : 'Sin Asignar'),
                 _encabezados('Orientacion: ', vi[index]['vinp']['orientacion'] != null ? ' ${vi[index]['vinp']['orientacion']}' : 'Sin Asignar'),
                 _encabezados('Fecha de registro: ', vi[index]['vinp']['fecha_creacion']),
@@ -305,7 +306,7 @@ class _DetalleVinState extends State<DetalleVin> {
                   dato['area'] == null ? _encabezados('Estado: ', '${dato['registroTipo']}') : const SizedBox(),
 
                   dato['area'] == null ? const SizedBox() : _encabezados('Codificacion: ', '${dato['area']}-${dato['tipo']}-${dato['severidad']}'),
-                  _encabezadosCard('Notas: ', dato['nota'] != '' ?  '${dato['nota']}' : 'Sin notas'),
+                  _encabezadosCard('Notas: ', dato['notas'] != '' ?  '${dato['nota']}' : 'Sin notas'),
                   _encabezados('Evidencias: ', ''),
     
                   _evidenciasDano(dato['evidencias'])

@@ -45,7 +45,7 @@ class Vin{
 
   @override
   String toString() {
-    return '{"idv": $idv, "idviaje": $idviaje, "cartaporte": $cartaporte, "vin": "$vin", "distrib_clave": $distrib_clave, "dest_nombre": $dest_nombre, "ruta_clave": $ruta_clave, "ruta_nombre": $ruta_nombre, "origen": "$origen", "destino": "$destino", "modelo": $modelo, "marca": $marca, "posicion": $posicion, "orientacion": "$orientacion", "compra": $compra, "fecha_carga": $fecha_carga, "fecha_creacion": "$fecha_creacion", "fecha_sync": $fecha_sync, "danos": $danos}';
+    return '{"idv": $idv, "idviaje": $idviaje, "cartaporte": $cartaporte, "vin": "$vin", "distrib_clave": $distrib_clave, "dest_nombre": $dest_nombre, "ruta_clave": $ruta_clave, "ruta_nombre": $ruta_nombre, "origen": "$origen", "destino": "$destino", "modelo": $modelo, "marca": $marca, "posicion": $posicion, "orientacion": "$orientacion", "compra": $compra, "fecha_carga": "$fecha_carga", "fecha_creacion": "$fecha_creacion", "fecha_sync": $fecha_sync, "danos": $danos}';
   }
 
   factory Vin.fromMap(Map<String, dynamic> map) => Vin(
