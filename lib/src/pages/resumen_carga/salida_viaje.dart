@@ -566,7 +566,7 @@ class _ResumenViajeState extends State<ResumenViaje> {
                   dato.area == null ? _encabezadosVin('Estado: ', '${dato.registroTipo}') : const SizedBox(),
 
                   dato.area == null ? const SizedBox() : _encabezadosVin('Codificacion: ', '${dato.area}-${dato.tipo}-${dato.severidad}'),
-                  _encabezadosVin('Notas: ', dato.nota != '' ?  '${dato.nota}' : 'Sin notas'),
+                  _encabezadosVin('Notas: ', dato.notas != '' ?  '${dato.notas}' : 'Sin notas'),
                   _encabezadosVin('Evidencias: ', ''),
     
                   _evidenciasDano(dato.evidencias)

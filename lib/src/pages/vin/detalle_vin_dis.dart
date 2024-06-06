@@ -306,7 +306,7 @@ class _DetalleVinState extends State<DetalleVin> {
                   dato['area'] == null ? _encabezados('Estado: ', '${dato['registroTipo']}') : const SizedBox(),
 
                   dato['area'] == null ? const SizedBox() : _encabezados('Codificacion: ', '${dato['area']}-${dato['tipo']}-${dato['severidad']}'),
-                  _encabezadosCard('Notas: ', dato['notas'] != '' ?  '${dato['nota']}' : 'Sin notas'),
+                  _encabezadosCard('Notas: ', dato['notas'] != '' ?  '${dato['notas']}' : 'Sin notas'),
                   _encabezados('Evidencias: ', ''),
     
                   _evidenciasDano(dato['evidencias'])

@@ -55,8 +55,6 @@ class VinsParaViajeState extends State<VinsParaViaje> {
     setState(() {
       vinsComprados = vc;
       vins = vinsComprados;
-
-      log(vc.toString());
     });
   }
 

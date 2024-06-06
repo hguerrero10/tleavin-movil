@@ -283,8 +283,6 @@ class _ViajesParaEnviarState extends State<ViajesParaEnviar> {
 
     var limpio = datos.toString().replaceAll('"{', "{").replaceAll('}"', "}");
 
-    log(limpio.toString());
-
     try{
       http.Response response = await http.post(Uri.parse(urlEnvioViaje), body: limpio, headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"});
 

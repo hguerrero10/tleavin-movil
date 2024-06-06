@@ -58,8 +58,6 @@ class _LoginFormState extends State<LoginForm> {
                 
                 await DatabaseProvider.db.insertarUsuario(usuarioInsertList!);
               }
-                      var d = await DatabaseProvider.db.obtenerUsuarios();
-                      log(d.toString());
 
               final snackBar = SnackBar(
                   showCloseIcon: true,
@@ -311,8 +309,6 @@ class _LoginFormState extends State<LoginForm> {
 
   login() async {
     DatabaseProvider.db.login(_userController.text.trim(), _passwordController.text.trim()).then((value)  {
-
-      log(value.toString());
       if(value.numeroEmpleado == null) {
         itemP.addError();
 

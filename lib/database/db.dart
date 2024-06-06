@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:tleavin_mobil/model/vin.dart';
@@ -87,20 +86,7 @@ class DatabaseProvider {
 
   // PRUEBAS
   
-  Future paraPruebas() async {
-    Database db = await database;
-    List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM evidencia WHERE ide = 1");
 
-    for(var i in result) {
-      Evidencia vi = Evidencia.fromMap(i);
-
-      var arc = vi.archivo?.trim();
-      var edn = arc?.replaceAll("\\s{2,}", "");
-       
-      log(edn.toString());
-    }
-    return result;
-  }
 
   // CRUD USUARIOS
 
