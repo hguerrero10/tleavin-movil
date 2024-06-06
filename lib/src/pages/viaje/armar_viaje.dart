@@ -470,7 +470,7 @@ class _ArmarViajeState extends State<ArmarViaje> {
               idviaje: value,
               origen: _origenTextController.text,
               destino: _destinoTextController.text,
-              fecha_carga: fecha,
+              fecha_carga: fecha
             );
 
             await DatabaseProvider.db.asignarVinViaje(vinsviaje).then((value) {

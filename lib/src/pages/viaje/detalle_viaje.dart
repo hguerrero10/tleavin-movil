@@ -164,10 +164,12 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
   }
 
   Widget _vinsCard(evi) {
-    var inf ;
+    var inf;
+
     for(var di in evi) {
       inf = di;
     }
+    
     return ListView.builder(
       shrinkWrap: true,
       itemCount: inf.length,
@@ -175,6 +177,7 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
       itemBuilder: (context, index) {
         var posi = inf[index]['posicion'] ?? 'Sin Asignar';
         var orie = inf[index]['orientacion'] ?? 'Sin Asignar';
+
         return GestureDetector(
           onTap: () => _dialogBuilder(context, inf[index]['vin']),
           child: SizedBox(
@@ -309,8 +312,8 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
                         fontSize: 16,
                         fontWeight: FontWeight.bold
                       )
-                    ),
-                  ],
+                    )
+                  ]
                 ),
                 TextField(
                   controller: _posicionTextController,
@@ -386,7 +389,6 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
                 );
 
                 vinsasiganadosylisos.add(vinsPoOr);
-
                 Navigator.of(context).pop();
               }
             )

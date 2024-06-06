@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
@@ -21,14 +20,12 @@ class _ViajesArmadosState extends State<ViajesArmados> {
 
     setState(() {
       listaViajes = data;
-
-      log(listaViajes.toString());
-      log(listaViajes.length.toString());
     });
   }
 
   obtenerViaje(infviaje) async {
     var data = await DatabaseProvider.db.obtenerInfoViaje(infviaje);
+
     setState(() {
       informacionDelViaje = data;
     });
@@ -82,7 +79,6 @@ class _ViajesArmadosState extends State<ViajesArmados> {
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         final dato = listaViajes[index];
-
         return GestureDetector(
           onTap: () async => await obtenerViaje('${dato.idviaje}'),
           child: Container(
@@ -126,7 +122,7 @@ class _ViajesArmadosState extends State<ViajesArmados> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Icon(
-            Icons.route, 
+            Icons.route,
             color: Colors.grey[300],
             size: 60
           ),
