@@ -76,7 +76,7 @@ class _ViajesArmadosState extends State<ViajesArmados> {
     return listaViajes.isNotEmpty ? ListView.builder(
       shrinkWrap: true,
       itemCount: listaViajes.length,
-      physics: const NeverScrollableScrollPhysics(),
+      // physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         final dato = listaViajes[index];
         return GestureDetector(

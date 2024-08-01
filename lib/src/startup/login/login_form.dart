@@ -22,7 +22,7 @@ class _LoginFormState extends State<LoginForm> {
   
   Usuario nuevousuario = Usuario();
 
-  String urlUsuariosAppServer = 'http://api-pruebas.tlea.online/obtenerUsuarios';
+  String urlUsuariosAppServer = 'https://parapruebas.tlea.online/obtenerUsuarios';
   Usuario? usuarioInsertList;
 
   final TextEditingController _userController = TextEditingController();
@@ -34,7 +34,7 @@ class _LoginFormState extends State<LoginForm> {
   Future obtenerUsuariosAppServer() async {
     var responseData;
     try{
-      final result = await InternetAddress.lookup('api-pruebas.tlea.online');
+      final result = await InternetAddress.lookup('parapruebas.tlea.online');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
 
         try{
@@ -225,6 +225,7 @@ class _LoginFormState extends State<LoginForm> {
   @override
   void initState() {
     super.initState();
+    // crearUsuario();
     obtenerUsuariosAppServer();
   }
 
@@ -357,6 +358,26 @@ class _LoginFormState extends State<LoginForm> {
     ],
   );
 
+  crearUsuario() async {
+    nuevousuario = Usuario(
+      numeroEmpleado: 2044,
+      nombre: 'Usuario Prueba',
+      usuario: 'usuario_2044', 
+      password: 'qwerty123', 
+      isLogged: 0,
+      cargo: 'Pruebas',
+      locacion: 'Salinas',
+      estado: 'A'
+    );
+
+    try{
+      await DatabaseProvider.db.insertarUsuario(nuevousuario);
+      log('insertado');
+    } 
+    catch (e) {
+      log('error => $e');
+    }
+  }
   Widget _input(String placeholder, String mensaje, TextInputType tipo, TextEditingController controller, IconData icon, [bool isPassword = false, bool isfocus = false]) {
     return Container(
       width: MediaQuery.of(context).size.width,

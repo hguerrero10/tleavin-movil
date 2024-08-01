@@ -14,12 +14,12 @@ if (localPropertiesFile.exists()) {
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
+    flutterVersionCode = '2'
 }
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
+    flutterVersionName = '2.0'
 }
 
 android {
@@ -69,4 +69,7 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+// dependencies {
+//     implementation platform('com.google.firebase:firebase-bom:33.1.0')
+//     implementation 'com.google.firebase:firebase-analytics'
+// }

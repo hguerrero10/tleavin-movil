@@ -51,7 +51,7 @@ class _ViajesParaEnviarState extends State<ViajesParaEnviar> {
           return snapshot.data!.isNotEmpty ? ListView.builder(
             shrinkWrap: true,
             itemCount: snapshot.data!.length,
-            physics: const NeverScrollableScrollPhysics(),
+            // physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               final dato = snapshot.data![index];
               return Stack(
@@ -327,11 +327,12 @@ class _ViajesParaEnviarState extends State<ViajesParaEnviar> {
           });
       } 
       else {
-          setState(() {
-            enviando = false;
-          });
+        setState(() {
+          enviando = false;
+        });
+
         Fluttertoast.showToast(
-          msg: "Favor de comunicarse a soporte (Error: ${response.statusCode}) $response'",
+          msg: "Favor de comunicarse a soporte (Error: ${response.statusCode}) ${response.reasonPhrase}'",
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "503998716165",
+    "project_id": "tleavin-93aad",
+    "storage_bucket": "tleavin-93aad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:503998716165:android:f733b2cba363b8d1323f6c",
+        "android_client_info": {
+          "package_name": "com.example.tleavin_mobil"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCXsPKFT0G3UZ9d5OEVNt0u1c1ugPiHfk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": ""
+}

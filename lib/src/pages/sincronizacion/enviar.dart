@@ -31,7 +31,7 @@ class _SincronizarState extends State<Sincronizar> {
   String urlSeveridadServer = 'http://api-pruebas.tlea.online/obtenerSeveridad';
   Severidad? severidadInsertList;
   
-  String urlClienteServer = 'http://api-pruebas.tlea.online/obtenerCliente';
+  String urlClienteServer = 'https://parapruebas.tlea.online/obtenerCliente';
   Cliente? clienteInsertList;
 
   obtenerAreaDanoServer() async {
@@ -540,7 +540,6 @@ class _SincronizarState extends State<Sincronizar> {
       )
     );
   }
-
 
   Future<void> _dialogBuilder(BuildContext context) {
     return showDialog<void>(

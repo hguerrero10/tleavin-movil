@@ -623,7 +623,6 @@ class _RegistroDanoState extends State<RegistroDano> {
       );
 
       await DatabaseProvider.db.insertarDano(dano!).then((value) async {
-        log('dano insertado');
         itemP.addBoton();
         itemP.deleteBoton();
         
@@ -637,7 +636,6 @@ class _RegistroDanoState extends State<RegistroDano> {
           );
 
           await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) {
-            log('evidencia insertado');
           }).timeout(const Duration(seconds: 60), onTimeout: () {
             itemP.addError();
           });
