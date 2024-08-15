@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,6 @@ import 'package:tleavin_mobil/model/cliente.dart';
 import 'package:tleavin_mobil/model/severidad.dart';
 import 'package:tleavin_mobil/model/tipo_dano.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
-import 'package:tleavin_mobil/src/pages/sincronizacion/enviar_viaje.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 
 class Sincronizar extends StatefulWidget {
@@ -21,6 +21,8 @@ class Sincronizar extends StatefulWidget {
 }
 
 class _SincronizarState extends State<Sincronizar> {
+
+  String urlEnviarData = 'http://192.168.12.209:3888/guardarVIN';
 
   String urlAreaDanoServer = 'http://api-pruebas.tlea.online/obtenerAreaDano';
   AreaDano? areaDanoInsertList;
@@ -438,42 +440,49 @@ class _SincronizarState extends State<Sincronizar> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const Cuerpo(),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: ElevatedButton(
-                onPressed: () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => const ViajesParaEnviar())),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
-                  padding: const EdgeInsets.all(30),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                  elevation: 5,
-                ),
-                child: const Row(
-                  children: [
-                    Icon(
-                      Icons.route,
-                      color: Colors.black,
-                      size: 40
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      'Sincronizar Viajes',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black
-                      )
-                    )
-                  ]
-                )
-              )
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(16),
+            //   child: ElevatedButton(
+            //     onPressed: () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => const ViajesParaEnviar())),
+            //     style: ElevatedButton.styleFrom(
+            //       backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
+            //       padding: const EdgeInsets.all(30),
+            //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            //       elevation: 5,
+            //     ),
+            //     child: const Row(
+            //       children: [
+            //         Icon(
+            //           Icons.route,
+            //           color: Colors.black,
+            //           size: 40
+            //         ),
+            //         SizedBox(width: 10),
+            //         Text(
+            //           'Sincronizar Viajes',
+            //           style: TextStyle(
+            //             fontSize: 20,
+            //             color: Colors.black
+            //           )
+            //         )
+            //       ]
+            //     )
+            //   )
+            // ),
 
             const SizedBox(height: 40),
 
+            botonSincronizar(Icons.people, 'Sincronizar VINES', () => enviarData()),
+
+
+            const SizedBox(height: 40),
+
+
             botonSincronizar(Icons.people, 'Sincronizar Clientes', () => obtenerClienteServer()),
-            botonSincronizar(Icons.dangerous_outlined, 'Sincronizar Area Daños', () => obtenerAreaDanoServer()),
-            botonSincronizar(Icons.list, 'Sincronizar Tipo Daños', () => obtenerTipoDanoServer()),
-            botonSincronizar(Icons.warning, 'Sincronizar Severidad', () => obtenerSeveridadServer()),
+
+            // botonSincronizar(Icons.dangerous_outlined, 'Sincronizar Area Daños', () => obtenerAreaDanoServer()),
+            // botonSincronizar(Icons.list, 'Sincronizar Tipo Daños', () => obtenerTipoDanoServer()),
+            // botonSincronizar(Icons.warning, 'Sincronizar Severidad', () => obtenerSeveridadServer()),
 
             Padding(
               padding: const EdgeInsets.all(16),
@@ -599,5 +608,60 @@ class _SincronizarState extends State<Sincronizar> {
         );
       }
     );
+  }
+
+  Future enviarData() async {
+    var vines = await DatabaseProvider.db.fetchVINES();
+
+    try{
+      http.Response response = await http.post(Uri.parse(urlEnviarData), body: vines.toString(), headers: {"Content-Type": "application/json"});
+      if(response.statusCode == 200) {
+        final snackBar = SnackBar(
+          showCloseIcon: true,
+          backgroundColor: Colors.green,
+          content: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10)
+            ),
+            child: const Row(
+              children: [
+                Icon(
+                  Icons.check_circle,
+                  color: Colors.white,
+                  size: 20
+                ),
+                SizedBox(width: 10),
+                Text(
+                  'ViNES Sincronizado al Servidor', 
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold, 
+                    fontSize: 20
+                  )
+                )
+              ]
+            )
+          )
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      } 
+      else {
+        log(response.body.toString());
+        Fluttertoast.showToast(
+          msg: "Favor de comunicarse a soporte (Error: ${response.statusCode}) ${response.reasonPhrase}'",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 20
+        );
+
+        itemP.addError();
+      }
+    }
+    catch (e) {
+      log(e.toString());
+    }
   }
 }

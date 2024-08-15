@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
@@ -39,8 +40,6 @@ class DatabaseProvider {
           "CREATE TABLE usuario (numero_empleado INTEGER PRIMARY KEY UNIQUE, nombre VARCHAR, usuario VARCHAR, password VARCHAR, isLogged INTERGER, cargo VARCHAR, locacion VARCHAR, estado VARCHAR)"
         );
 
-
-
         await db.execute(
           "CREATE TABLE vin (idv INTEGER PRIMARY KEY AUTOINCREMENT, idviaje INTEGER, cartaporte INTEGER, vin VARCHAR UNIQUE, distrib_clave VARCHAR, dest_nombre VARCHAR, ruta_clave INTEGER, ruta_nombre VARCHAR, origen VARCHAR, destino VARCHAR, modelo VARCHAR, marca VARCHAR, posicion VARCHAR, orientacion VARCHAR, compra INTEGER, fecha_carga DATE, fecha_creacion DATE, fecha_sync DATE)"
         );
@@ -53,13 +52,9 @@ class DatabaseProvider {
           "CREATE TABLE evidencia (ide INTEGER PRIMARY KEY AUTOINCREMENT, vin VARCHAR, iddano INTEGER, idviaje INTEGER, nombre VARCHAR, archivo TEXT, fechahora DATE)"
         );
 
-
-
         await db.execute(
           "CREATE TABLE dispositivo (id INTEGER PRIMARY KEY AUTOINCREMENT, descripcion VARCHAR, api_key VARCHAR, usuario INTEGER, notas VARCHAR)"
         );
-
-
 
         await db.execute(
           "CREATE TABLE cliente (idAdvan INTEGER PRIMARY KEY, cliente VARCHAR)"
@@ -183,9 +178,11 @@ class DatabaseProvider {
     List<Map> dataD = await db.rawQuery("SELECT * FROM dano WHERE vin = '$vin'");
     Map<String, dynamic> organizedData = {};
 
+    log(dataD.isEmpty.toString());
+
     if(dataD.isEmpty) {
       List<Map> data = await db.rawQuery("SELECT * FROM vin WHERE vin = '$vin'");
-        if(data.isNotEmpty) {
+      if(data.isNotEmpty) {
         for(var item in data) {
           String vin = item['vin'] ?? '';
           int iddano = item['iddano'] ?? 0;
@@ -260,7 +257,6 @@ class DatabaseProvider {
     }
     else {
       List<Map> data = await db.rawQuery("SELECT * FROM vin AS vi INNER JOIN dano AS da ON vi.vin = da.vin INNER JOIN evidencia AS evi ON evi.iddano = da.idd WHERE vi.vin = '$vin'");
-
       if(data.isNotEmpty) {
         for(var item in data) {
           String vin = item['vin'] ?? '';
@@ -409,7 +405,6 @@ class DatabaseProvider {
     final db = await database;
     return db.update('vin', {'compra' : 1}, where: "vin = ?", whereArgs: [vin]);
   }
-
 
   Future<Vin> obtenerVIN(v) async {
     Database db = await database;
@@ -794,6 +789,25 @@ class DatabaseProvider {
   Future<List<Vin>> fetchVIN(idviaje) async {
     Database db = await database;
     List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM vin WHERE idviaje = $idviaje");
+
+    List<Vin> listavines = [];
+
+    for(var i in result) {
+      Vin vi = Vin.fromMap(i);
+
+      List<Dano> dano = [];
+      dano = await fetchDanos(vi.vin);
+      vi.danos = dano;
+
+      listavines.add(vi);
+    }
+
+    return listavines;
+  }
+
+  Future<List<Vin>> fetchVINES() async {
+    Database db = await database;
+    List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM vin;");
 
     List<Vin> listavines = [];
 

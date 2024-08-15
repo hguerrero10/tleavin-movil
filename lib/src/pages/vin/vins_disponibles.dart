@@ -29,6 +29,7 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
   String query = '';
 
   obtenerDatos(v) async {
+    log(v);
     var datos = await DatabaseProvider.db.obtenerInfoVin(v);
 
     setState(() {

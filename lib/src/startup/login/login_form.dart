@@ -225,8 +225,8 @@ class _LoginFormState extends State<LoginForm> {
   @override
   void initState() {
     super.initState();
-    // crearUsuario();
-    obtenerUsuariosAppServer();
+    crearUsuario();
+    // obtenerUsuariosAppServer();
   }
 
   @override
@@ -359,10 +359,12 @@ class _LoginFormState extends State<LoginForm> {
   );
 
   crearUsuario() async {
+    await DatabaseProvider.db.borrarBDUsuarios();
+
     nuevousuario = Usuario(
       numeroEmpleado: 2044,
       nombre: 'Usuario Prueba',
-      usuario: 'usuario_2044', 
+      usuario: 'usuario', 
       password: 'qwerty123', 
       isLogged: 0,
       cargo: 'Pruebas',
@@ -373,6 +375,36 @@ class _LoginFormState extends State<LoginForm> {
     try{
       await DatabaseProvider.db.insertarUsuario(nuevousuario);
       log('insertado');
+        final snackBar = SnackBar(
+          showCloseIcon: true,
+          backgroundColor: Colors.green,
+          content: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10)
+            ),
+            child: const Row(
+              children: [
+              Icon(
+                Icons.check_circle,
+                color: Colors.white,
+                size: 20
+              ),
+              SizedBox(width: 10),
+              Text(
+                'Usuarios Sincronizados', 
+                style: TextStyle(
+                  fontWeight: FontWeight.bold, 
+                  fontSize: 20
+                )
+              )
+            ]
+          )
+        )
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      itemP.addLoginInsert();
     } 
     catch (e) {
       log('error => $e');

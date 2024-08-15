@@ -48,7 +48,6 @@ class _CompraVinState extends State<CompraVin> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

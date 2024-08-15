@@ -99,7 +99,6 @@ class _DetalleVinState extends State<DetalleVin> {
     return ListView.builder(
       itemCount: vi.length,
       itemBuilder: (context, index) {
-     
       vinSeleccionado = vi[index]['vinp']['vin'];
       
         return SingleChildScrollView(
@@ -141,8 +140,8 @@ class _DetalleVinState extends State<DetalleVin> {
                 _encabezados('Marca: ', vi[index]['vinp']['marca'] != null ? '${vi[index]['vinp']['marca']}' : 'Sin Identificar'),
                 _encabezados('Modelo: ', vi[index]['vinp']['modelo'] != null ? '${vi[index]['vinp']['modelo']}' : 'Sin Identificar'),
                 _encabezados('Comprado: ', vi[index]['vinp']['compra'] == 0 ? 'No' : 'Si'),
-                _encabezados('Viaje: ', vi[index]['vinp']['idviaje'] != null ? ' ${vi[index]['vinp']['idviaje']}' : 'Sin Asignar'),
-                _encabezados('Fecha Carga: ', vi[index]['vinp']['fecha_carga'] != null ? ' ${vi[index]['vinp']['fecha_carga']}' : 'Sin Cargar'),
+                // _encabezados('Viaje: ', vi[index]['vinp']['idviaje'] != null ? ' ${vi[index]['vinp']['idviaje']}' : 'Sin Asignar'),
+                // _encabezados('Fecha Carga: ', vi[index]['vinp']['fecha_carga'] != null ? ' ${vi[index]['vinp']['fecha_carga']}' : 'Sin Cargar'),
                 _encabezados('Posicion: ', vi[index]['vinp']['posicion'] != null ? ' ${vi[index]['vinp']['posicion']}' : 'Sin Asignar'),
                 _encabezados('Orientacion: ', vi[index]['vinp']['orientacion'] != null ? ' ${vi[index]['vinp']['orientacion']}' : 'Sin Asignar'),
                 _encabezados('Fecha de registro: ', vi[index]['vinp']['fecha_creacion']),
@@ -339,9 +338,6 @@ class _DetalleVinState extends State<DetalleVin> {
   }
 
   Future<void> _dialogBuilder(BuildContext context, vi, idd, da, onpress) {
-    // final _posicionTextController = TextEditingController();
-    // var orientacionSeleccionada;
-
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -444,5 +440,4 @@ class _DetalleVinState extends State<DetalleVin> {
       }
     );
   }
-
 }

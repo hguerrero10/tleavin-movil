@@ -20,6 +20,8 @@ class ItemsProvider {
   String? firmaOperador;
 
   String? clienteSeleccionado;
+  String? destinoSeleccionado;
+  String? orientacionSeleccionado;
 
   Usuario? usuario;
   String? ubicacion;
@@ -369,6 +371,27 @@ class ItemsProvider {
   void deleteClienteSeleccionado() {
     itemP.clienteSeleccionado = null;
     itemP.itemStreamController.sink.add(clienteSeleccionado);
+  }
+
+
+  void addDestinoSeleccionado(item) {
+    itemP.destinoSeleccionado = item;
+    itemP.itemStreamController.sink.add(destinoSeleccionado);
+  }
+
+  void deleteDestinoSeleccionado() {
+    itemP.destinoSeleccionado = null;
+    itemP.itemStreamController.sink.add(destinoSeleccionado);
+  }
+
+  void addOrientacionSeleccionado(item) {
+    itemP.orientacionSeleccionado = item;
+    itemP.itemStreamController.sink.add(orientacionSeleccionado);
+  }
+
+  void deleteOrientacionSeleccionado() {
+    itemP.orientacionSeleccionado = null;
+    itemP.itemStreamController.sink.add(orientacionSeleccionado);
   }
 
 }
