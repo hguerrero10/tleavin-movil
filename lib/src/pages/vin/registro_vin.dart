@@ -275,7 +275,6 @@ class _CompraVinState extends State<CompraVin> {
     );
 
     await DatabaseProvider.db.insertarVin(vin!).then((value) async {
-      log('vin insertado');
       itemP.addBoton();
       itemP.deleteBoton();
       

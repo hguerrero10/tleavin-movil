@@ -21,6 +21,7 @@ class VentaDanos extends StatefulWidget {
 
 class _VentaDanosState extends State<VentaDanos> {
 
+  final _formKey = GlobalKey<FormState>();
   final _areaTextController = TextEditingController();
   final _tipoTextController = TextEditingController();
   final _severidadTextController = TextEditingController();
@@ -54,192 +55,103 @@ class _VentaDanosState extends State<VentaDanos> {
         )
       ),
       body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column( 
-                children: <Widget>[
-                  const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      const Text(
-                        'VIN: ',
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold
-                        )
-                      ),
-                      Text(
-                        widget.vin,
-                        style: const TextStyle(
-                          fontSize: 25
-                        )
-                      )
-                    ]
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    controller: _areaTextController,
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if(value == null || value.isEmpty) {
-                        return 'Favor de llenar el Area';
-                      }
-                      return null;
-                    },
-                    decoration: const InputDecoration(
-                      hintText: '* Escriba el Area',
-                      hintStyle: TextStyle(
-                        color: Colors.grey
-                      )
-                    )
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    controller: _tipoTextController,
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if(value == null || value.isEmpty) {
-                        return 'Favor de llenar el Tipo';
-                      }
-                      return null;
-                    },
-                    decoration: const InputDecoration(
-                      hintText: '* Escriba el Tipo',
-                      hintStyle: TextStyle(
-                        color: Colors.grey
-                      )
-                    )
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    controller: _severidadTextController,
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if(value == null || value.isEmpty) {
-                        return 'Favor de llenar la Severidad';
-                      }
-                      return null;
-                    },
-                    decoration: const InputDecoration(
-                      hintText: '* Escriba la Severidad',
-                      hintStyle: TextStyle(
-                        color: Colors.grey
-                      )
-                    )
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    controller: _notasTextController,
-                    keyboardType: TextInputType.text,
-                    // validator: (value) {
-                    //   if(value == null || value.isEmpty) {
-                    //     return 'Favor de llenar la Posicion';
-                    //   }
-                    //   return null;
-                    // },
-                    decoration: const InputDecoration(
-                      hintText: 'Comentarios',
-                      hintStyle: TextStyle(
-                        color: Colors.grey
-                      )
-                    )
-                  ),
-                  const SizedBox(height: 30),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () => getCamara(1),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(10)),
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16)
-                            )
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column( 
+                  children: <Widget>[
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        const Text(
+                          'VIN: ',
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold
                           )
                         ),
-                        child: const SizedBox(
-                          width: 150,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.add,
-                                color: Colors.white,
-                                size: 30,
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                'Fotografia',
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  color: Colors.white
-                                )
-                              )
-                            ]
+                        Text(
+                          widget.vin,
+                          style: const TextStyle(
+                            fontSize: 25
                           )
                         )
-                      ),
-                      SizedBox(
-                        width: 150,
-                        child: Column(
-                          children: [
-                            const Text('Fotos'),
-                            
-                            Text('${evidenciasDano.length}')
-                          ]
+                      ]
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: _areaTextController,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if(value == null || value.isEmpty) {
+                          return 'Favor de llenar el Area';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        hintText: '* Escriba el Area',
+                        hintStyle: TextStyle(
+                          color: Colors.grey
                         )
                       )
-                    ]
-                  ),  
-                  const SizedBox(height: 30),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () => getCamara(2),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(10)),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16)
-                          )
-                        )
-                      ),
-                      child: const SizedBox(
-                        width: 250,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.camera,
-                              color: Colors.white,
-                              size: 30,
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              'Fotografia de Tarja',
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                color: Colors.white
-                              )
-                            )
-                          ]
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: _tipoTextController,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if(value == null || value.isEmpty) {
+                          return 'Favor de llenar el Tipo';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        hintText: '* Escriba el Tipo',
+                        hintStyle: TextStyle(
+                          color: Colors.grey
                         )
                       )
-                    )
-                  ),
-                  const SizedBox(height: 30),
-                  Center(
-                    child: Column(
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: _severidadTextController,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if(value == null || value.isEmpty) {
+                          return 'Favor de llenar la Severidad';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        hintText: '* Escriba la Severidad',
+                        hintStyle: TextStyle(
+                          color: Colors.grey
+                        )
+                      )
+                    ),
+                    const SizedBox(height: 10),
+                    TextFormField(
+                      controller: _notasTextController,
+                      keyboardType: TextInputType.text,
+                      decoration: const InputDecoration(
+                        hintText: 'Comentarios',
+                        hintStyle: TextStyle(
+                          color: Colors.grey
+                        )
+                      )
+                    ),
+                    const SizedBox(height: 30),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ElevatedButton(
-                          onPressed: () => nuevoDano(),
+                          onPressed: () => getCamara(1),
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(Colors.yellow),
+                            backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
                             padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(10)),
                             shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
@@ -248,71 +160,128 @@ class _VentaDanosState extends State<VentaDanos> {
                             )
                           ),
                           child: const SizedBox(
-                            width: 350,
-                            height: 40,
+                            width: 150,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
-                                  Icons.save,
-                                  color: Colors.black,
-                                  size: 30
-                                ),
-                                SizedBox(width: 10),
-                                Text(
-                                  'Guardar Daño',
-                                  style: TextStyle(
-                                    fontSize: 21,
-                                    color: Colors.black
-                                  )
-                                )
-                              ]
-                            )
-                          )
-                        ),
-                        const SizedBox(height: 15),
-                        ElevatedButton(
-                          onPressed: () => Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const InicioScreen()), (Route<dynamic> route) => false),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(Colors.blueGrey),
-                            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(10)),
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16)
-                              )
-                            )
-                          ),
-                          child: const SizedBox(
-                            width: 350,
-                            height: 40,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.check,
+                                  Icons.add,
                                   color: Colors.white,
-                                  size: 30
+                                  size: 30,
                                 ),
                                 SizedBox(width: 10),
                                 Text(
-                                  'Guardar y Finalizar',
+                                  'Fotografia',
                                   style: TextStyle(
-                                    fontSize: 21,
+                                    fontSize: 18.0,
                                     color: Colors.white
                                   )
                                 )
                               ]
                             )
                           )
+                        ),
+                        SizedBox(
+                          width: 150,
+                          child: Column(
+                            children: [
+                              const Text('Fotos'),
+                              
+                              Text('${evidenciasDano.length}')
+                            ]
+                          )
                         )
                       ]
-                    )
-                  ),
-                  const SizedBox(height: 30)
-                ]
+                    ),
+                    const SizedBox(height: 30),
+                    Center(
+                      child: Column(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () => nuevoDano(),
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.yellow),
+                              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(10)),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16)
+                                )
+                              )
+                            ),
+                            child: const SizedBox(
+                              width: 350,
+                              height: 40,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.save,
+                                    color: Colors.black,
+                                    size: 30
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    'Guardar Daño',
+                                    style: TextStyle(
+                                      fontSize: 21,
+                                      color: Colors.black
+                                    )
+                                  )
+                                ]
+                              )
+                            )
+                          ),
+                          const SizedBox(height: 15),
+                          ElevatedButton(
+                            onPressed: () {
+                              if(evidenciasDano.isNotEmpty) {
+                                _dialogBuilder(context);
+                              }
+                              else {
+                                Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const InicioScreen()), (Route<dynamic> route) => false);
+                              }
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(Colors.blueGrey),
+                              padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(10)),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16)
+                                )
+                              )
+                            ),
+                            child: const SizedBox(
+                              width: 350,
+                              height: 40,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.check,
+                                    color: Colors.white,
+                                    size: 30
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    'Finalizar',
+                                    style: TextStyle(
+                                      fontSize: 21,
+                                      color: Colors.white
+                                    )
+                                  )
+                                ]
+                              )
+                            )
+                          )
+                        ]
+                      )
+                    ),
+                    const SizedBox(height: 30)
+                  ]
+                )
               )
-            )
-          ]
+            ]
+          ),
         )
       ) 
     );
@@ -363,53 +332,79 @@ class _VentaDanosState extends State<VentaDanos> {
     var formato = DateFormat('yyyy-MM-dd hh:mm:ss'); 
     var fecha = formato.format(DateTime.now());
 
-     dano = Dano(
-      vin: widget.vin,
-      panel: null,
-      registroTipo: 'Regular',
-      area: int.parse(_areaTextController.text.trim()),
-      tipo: int.parse(_tipoTextController.text.trim()),
-      severidad: _severidadTextController.text.trim(),
-      notas: _notasTextController.text,
-      estado: 'A',
-      fecha_creacion: fecha
-    );
-
-
-    await DatabaseProvider.db.insertarDano(dano!).then((value) async {
-      itemP.addBoton();
-      itemP.deleteBoton();
-      
-      for(var ed in evidenciasDano) {
-        evidencia = Evidencia(
+    if(_formKey.currentState!.validate()) {
+      if(evidenciasDano.isNotEmpty) {
+        dano = Dano(
           vin: widget.vin,
-          iddano: value,
-          nombre: null,
-          archivo: ed,
-          fechahora: fecha
+          panel: null,
+          registroTipo: 'Regular',
+          area: int.parse(_areaTextController.text.trim()),
+          tipo: int.parse(_tipoTextController.text.trim()),
+          severidad: _severidadTextController.text.trim(),
+          notas: _notasTextController.text,
+          estado: 'A',
+          fecha_creacion: fecha
         );
 
-        await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) {
+        await DatabaseProvider.db.insertarDano(dano!).then((value) async {
+          itemP.addBoton();
+          itemP.deleteBoton();
+          
+          for(var ed in evidenciasDano) {
+            evidencia = Evidencia(
+              vin: widget.vin,
+              iddano: value,
+              nombre: null,
+              archivo: ed,
+              fechahora: fecha
+            );
+
+            await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) {
+            }).timeout(const Duration(seconds: 60), onTimeout: () {
+              itemP.addError();
+            });
+          }
+
+          Fluttertoast.showToast(
+            msg: "Daño guardado con Exito!",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.green,
+            textColor: Colors.white,
+            fontSize: 20
+          );
+
+          paraLimpiar();
+
         }).timeout(const Duration(seconds: 60), onTimeout: () {
-          itemP.addError();
+        
+        itemP.addError();
         });
       }
-
+      else {
+        Fluttertoast.showToast(
+          msg: "Agregar una Fotografia",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 20
+        );
+      }
+    }
+    else {
       Fluttertoast.showToast(
-        msg: "Daño guardado con Exito!",
+        msg: "Complete la informacion",
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.red,
         textColor: Colors.white,
         fontSize: 20
       );
-
-      paraLimpiar();
-
-    }).timeout(const Duration(seconds: 60), onTimeout: () {
-      itemP.addError();
-    });
+    }
   }
 
   paraLimpiar() {
@@ -422,5 +417,61 @@ class _VentaDanosState extends State<VentaDanos> {
       evidenciasDano = [];
     });
 
+  }
+
+  Future<void> _dialogBuilder(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Column(
+            children: [
+              Text(
+                'Salir Sin Guardar',
+                style: TextStyle(
+                  fontSize: 15
+                )
+              ),
+              Divider(
+                color: Colors.black,
+                thickness: 1.0
+              ),
+              Text(
+                '¿Seguro que quieres Salir Sin Guardar?',
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold
+                )
+              ),
+              SizedBox(height: 10),
+              Text(
+                'No se guardara el daño que esta en proceso',
+                style: TextStyle(
+                  fontSize: 16,
+                )
+              )
+            ]
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge
+              ),
+              child: const Text('Cancelar'),
+              onPressed: () => Navigator.of(context).pop()
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge
+              ),
+              child: const Text('Salir'),
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const InicioScreen()), (Route<dynamic> route) => false);
+              }
+            )
+          ]
+        );
+      }
+    );
   }
 }

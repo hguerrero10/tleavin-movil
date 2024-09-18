@@ -20,6 +20,7 @@ class ItemsProvider {
   String? firmaOperador;
 
   String? clienteSeleccionado;
+  String? modeloSeleccionado;
   String? destinoSeleccionado;
   String? orientacionSeleccionado;
 
@@ -41,6 +42,14 @@ class ItemsProvider {
   bool clienteInsert = false;
   bool clienteInsertTimeOut = false;
   bool registroCliente = false;
+
+  bool modeloInsert = false;
+  bool modeloInsertTimeOut = false;
+  bool registroModelo = false;
+
+  bool destinoInsert = false;
+  bool destinoInsertTimeOut = false;
+  bool registroDestino = false;
 
   var vinesSeleccionadosParaViaje = [];
 
@@ -327,10 +336,67 @@ class ItemsProvider {
 
 
 
+  void addModeloInsert() {
+    itemP.modeloInsert = true;
+    itemP.itemStreamController.sink.add(modeloInsert);
+  }
+
+  void deleteModeloInsert() {
+    itemP.modeloInsert = false;
+    itemP.itemStreamController.sink.add(modeloInsert);
+  }
+
+  void addModeloInsertTimeOut() {
+    itemP.modeloInsertTimeOut = true;
+    itemP.itemStreamController.sink.add(modeloInsertTimeOut);
+  }
+
+  void deleteModeloInsertTimeOut() {
+    itemP.modeloInsertTimeOut = false;
+    itemP.itemStreamController.sink.add(modeloInsertTimeOut);
+  }
+
+  void addRegistroModelo() {
+    itemP.registroModelo = true;
+    itemP.itemStreamController.sink.add(registroModelo);
+  }
+
+  void deleteRegistroModelo() {
+    itemP.registroModelo = false;
+    itemP.itemStreamController.sink.add(registroModelo);
+  }
 
 
 
+  void addDestinoInsert() {
+    itemP.destinoInsert = true;
+    itemP.itemStreamController.sink.add(destinoInsert);
+  }
 
+  void deleteDestinoInsert() {
+    itemP.destinoInsert = false;
+    itemP.itemStreamController.sink.add(destinoInsert);
+  }
+
+  void addDestinoInsertTimeOut() {
+    itemP.destinoInsertTimeOut = true;
+    itemP.itemStreamController.sink.add(destinoInsertTimeOut);
+  }
+
+  void deleteDestinoInsertTimeOut() {
+    itemP.destinoInsertTimeOut = false;
+    itemP.itemStreamController.sink.add(destinoInsertTimeOut);
+  }
+
+  void addRegistroDestino() {
+    itemP.registroDestino = true;
+    itemP.itemStreamController.sink.add(registroDestino);
+  }
+
+  void deleteRegistroDestino() {
+    itemP.registroDestino = false;
+    itemP.itemStreamController.sink.add(registroDestino);
+  }
 
 
 
@@ -371,6 +437,17 @@ class ItemsProvider {
   void deleteClienteSeleccionado() {
     itemP.clienteSeleccionado = null;
     itemP.itemStreamController.sink.add(clienteSeleccionado);
+  }
+
+
+  void addModeloSeleccionado(item) {
+    itemP.modeloSeleccionado = item;
+    itemP.itemStreamController.sink.add(modeloSeleccionado);
+  }
+
+  void deleteModeloSeleccionado() {
+    itemP.modeloSeleccionado = null;
+    itemP.itemStreamController.sink.add(modeloSeleccionado);
   }
 
 

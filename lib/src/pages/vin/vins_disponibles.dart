@@ -220,7 +220,7 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                                         children: [
                                           Expanded(
                                             child: Text(
-                                              '${listadevines[index].modelo}' != 'null' ? '${listadevines[index].modelo}' : 'Sin Identicar',
+                                              '${listadevines[index].marca}' != 'null' ? '${listadevines[index].marca}' : 'Sin Identicar',
                                               overflow: TextOverflow.fade,
                                               style: const TextStyle(
                                                 fontSize: 16,
@@ -237,7 +237,7 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                                               softWrap: false,
                                               overflow: TextOverflow.fade,
                                               TextSpan(
-                                                text: 'Marca: ',
+                                                text: 'Modelo: ',
                                                 style: const TextStyle(
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w500,
@@ -245,7 +245,7 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                                                 ),
                                                 children: <InlineSpan>[
                                                   TextSpan(
-                                                    text: '${listadevines[index].marca}' != 'null' ? '${listadevines[index].marca}' : 'Sin Identicar',
+                                                    text: '${listadevines[index].modelo}' != 'null' ? '${listadevines[index].modelo}' : 'Sin Identicar',
                                                     style: const TextStyle(
                                                       fontSize: 12,
                                                       fontWeight: FontWeight.w700,

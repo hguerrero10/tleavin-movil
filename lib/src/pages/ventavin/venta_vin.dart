@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -12,6 +13,8 @@ import 'package:tleavin_mobil/src/home/inicio.dart';
 import 'package:tleavin_mobil/src/pages/ventavin/venta_danos.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 
+import '../dano/listas.dart';
+
 class VentaVin extends StatefulWidget {
   const VentaVin({super.key});
 
@@ -19,15 +22,18 @@ class VentaVin extends StatefulWidget {
   State<VentaVin> createState() => _VentaVinState();
 }
 
+final _formKey = GlobalKey<FormState>();
 final _qrTextController = TextEditingController();
-var qrbar = '';
-var vinExistente = 0;
-
 final _posicionTextController = TextEditingController();
 
-Vin? vin;                                
+var qrbar = '';
+var vinExistente = 0;  
 
+Vin? vin;         
 
+List<ListasA> listaCliente = [];
+List<ListasM> listaModelo = [];
+List<ListasD> listaDestino = [];
 class _VentaVinState extends State<VentaVin> {
   @override
   void initState() {
@@ -35,6 +41,8 @@ class _VentaVinState extends State<VentaVin> {
 
     _qrTextController.clear();
     _posicionTextController.clear();
+
+    getListas();
 
     super.initState();
   }
@@ -57,34 +65,108 @@ class _VentaVinState extends State<VentaVin> {
         )
       ),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const Cuerpo(),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const SizedBox(height: 10),
-                  TextField(
-                    controller: _qrTextController,
-                    maxLength: 17,
-                    keyboardType: TextInputType.text,
-                    textAlign: TextAlign.center,
-                    textCapitalization: TextCapitalization.characters,
-                    decoration: const InputDecoration(
-                      hintText: 'VIN',
-                      hintStyle: TextStyle(
-                        color: Colors.grey
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const Cuerpo(),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: _qrTextController,
+                      maxLength: 17,
+                      keyboardType: TextInputType.text,
+                      textAlign: TextAlign.center,
+                      textCapitalization: TextCapitalization.characters,
+                      decoration: const InputDecoration(
+                        hintText: 'VIN',
+                        hintStyle: TextStyle(
+                          color: Colors.grey
+                        )
                       )
-                    )
-                  ),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () => scanQR(),
+                    ),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () => scanQR(),
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(10)),
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16)
+                            )
+                          )
+                        ),
+                        child: const SizedBox(
+                          width: 200,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.qr_code_2_outlined,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                'Escanear VIN',
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                  color: Colors.white
+                                )
+                              )
+                            ]
+                          )
+                        )
+                      )
+                    ),
+                    const SizedBox(height: 20),
+                    _dropDownDestino(),
+                    _dropDownCliente(),
+                    _dropDownModelo(),
+                    const SizedBox(height: 10),
+                    _dropDownOrientacion(),
+                    TextFormField(
+                      controller: _posicionTextController,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if(value == null || value.isEmpty) {
+                          return 'Favor de llenar la Posicion';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        hintText: '* Escriba La Posicion',
+                        hintStyle: TextStyle(
+                          color: Colors.grey
+                        )
+                      )
+                    ),
+                    const SizedBox(height: 40),
+                    ElevatedButton(
+                      onPressed: () {
+                        if(_qrTextController.text.isNotEmpty && _qrTextController.text.length >= 17 && _qrTextController.text.length <= 17) {
+                          guardarVin();
+                        }
+                        else{
+                          Fluttertoast.showToast(
+                            msg: "Escanea o Escribe el VIN",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 20
+                          );
+                        }
+                      },
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.blueGrey),
                         padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(10)),
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
@@ -93,20 +175,21 @@ class _VentaVinState extends State<VentaVin> {
                         )
                       ),
                       child: const SizedBox(
-                        width: 200,
+                        width: 350,
+                        height: 40,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              Icons.qr_code_2_outlined,
+                              Icons.check,
                               color: Colors.white,
-                              size: 30,
+                              size: 30
                             ),
                             SizedBox(width: 10),
                             Text(
-                              'Escanear VIN',
+                              'Registrar Danos',
                               style: TextStyle(
-                                fontSize: 18.0,
+                                fontSize: 21,
                                 color: Colors.white
                               )
                             )
@@ -114,67 +197,11 @@ class _VentaVinState extends State<VentaVin> {
                         )
                       )
                     )
-                  ),
-                  const SizedBox(height: 20),
-                  _dropDownDestino(),
-                  _dropDownCliente(),
-                  const SizedBox(height: 10),
-                  _dropDownOrientacion(),
-                  TextFormField(
-                    controller: _posicionTextController,
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if(value == null || value.isEmpty) {
-                        return 'Favor de llenar la Posicion';
-                      }
-                      return null;
-                    },
-                    decoration: const InputDecoration(
-                      hintText: '* Escriba La Posicion',
-                      hintStyle: TextStyle(
-                        color: Colors.grey
-                      )
-                    )
-                  ),
-                  const SizedBox(height: 40),
-                  ElevatedButton(
-                    onPressed: () => guardarVin(),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.blueGrey),
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(10)),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16)
-                        )
-                      )
-                    ),
-                    child: const SizedBox(
-                      width: 350,
-                      height: 40,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.check,
-                            color: Colors.white,
-                            size: 30
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            'Registrar Danos',
-                            style: TextStyle(
-                              fontSize: 21,
-                              color: Colors.white
-                            )
-                          )
-                        ]
-                      )
-                    )
-                  )
-                ]
+                  ]
+                )
               )
-            )
-          ]
+            ]
+          ),
         )
       )
     );
@@ -183,28 +210,73 @@ class _VentaVinState extends State<VentaVin> {
   Widget _dropDownCliente() {
     return Container(
       height: 60,
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery.of(context).size.width * 2,
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(5)
       ),
-      child: DropdownSearch<String>(
-        popupProps: const PopupProps.menu(
-          showSelectedItems: true
-        ),
-        items: const ['GM','AUDI', 'MAZDA', 'MG'],
-        dropdownDecoratorProps: const  DropDownDecoratorProps(
+      child: DropdownSearch<ListasA>(
+          items: listaCliente,
+          dropdownDecoratorProps: const DropDownDecoratorProps(
           dropdownSearchDecoration: InputDecoration(
-            hintText: "* Selecciona Marca",
+            hintText: "Seleccione Cliente",
             hintStyle: TextStyle(
               color: Colors.grey
             )
           )
         ),
-        onChanged: (cl) {
+        onChanged: (ListasA? item) {
+
+          getListaModelo(item?.valor);
           setState(() {
-            itemP.addClienteSeleccionado(cl);
+            // selectArea = (item?.valor);
+            itemP.addClienteSeleccionado(item?.texto);
           });
-        }
+        },
+        itemAsString: (ListasA item) => item.texto,
+        validator: (value) {
+          if(value == null) {
+            return 'Favor de Seleccionar Cliente';
+          }
+
+          return null;
+        },
+      )
+    );
+  }
+
+   Widget _dropDownModelo() {
+    return Container(
+      height: 60,
+      width: MediaQuery.of(context).size.width * 2,
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5)
+      ),
+      child: DropdownSearch<ListasM>(
+          items: listaModelo,
+          dropdownDecoratorProps: const DropDownDecoratorProps(
+          dropdownSearchDecoration: InputDecoration(
+            hintText: "Seleccione Modelo",
+            hintStyle: TextStyle(
+              color: Colors.grey
+            )
+          )
+        ),
+        onChanged: (ListasM? item) {
+          setState(() {
+            // selectArea = (item?.valor);
+            itemP.addModeloSeleccionado(item?.texto);
+          });
+        },
+        itemAsString: (ListasM item) => item.texto,
+        validator: (value) {
+          if(value == null) {
+            return 'Favor de Seleccionar Modelo';
+          }
+
+          return null;
+        },
       )
     );
   }
@@ -212,28 +284,35 @@ class _VentaVinState extends State<VentaVin> {
   Widget _dropDownDestino() {
     return Container(
       height: 60,
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery.of(context).size.width * 2,
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(5)
       ),
-      child: DropdownSearch<String>(
-        popupProps: const PopupProps.menu(
-          showSelectedItems: true
-        ),
-        items: const ['Puerto','Silao', 'San Luis Potosi', 'Lazaro'],
-        dropdownDecoratorProps: const  DropDownDecoratorProps(
+      child: DropdownSearch<ListasD>(
+          items: listaDestino,
+          dropdownDecoratorProps: const DropDownDecoratorProps(
           dropdownSearchDecoration: InputDecoration(
-            hintText: "* Selecciona Destino",
+            hintText: "Seleccione Destino",
             hintStyle: TextStyle(
               color: Colors.grey
             )
           )
         ),
-        onChanged: (cl) {
+        onChanged: (ListasD? item) {
           setState(() {
-            itemP.addDestinoSeleccionado(cl);
+            // selectArea = (item?.valor);
+            itemP.addDestinoSeleccionado(item?.texto);
           });
-        }
+        },
+        itemAsString: (ListasD item) => item.texto,
+        validator: (value) {
+          if(value == null) {
+            return 'Favor de Seleccionar Destino';
+          }
+
+          return null;
+        },
       )
     );
   }
@@ -252,7 +331,7 @@ class _VentaVinState extends State<VentaVin> {
         items: const ['Frente','Reversa'],
         dropdownDecoratorProps: const  DropDownDecoratorProps(
           dropdownSearchDecoration: InputDecoration(
-            hintText: "* Selecciona Orientacion",
+            hintText: "* Seleccione Orientacion",
             hintStyle: TextStyle(
               color: Colors.grey
             )
@@ -262,7 +341,14 @@ class _VentaVinState extends State<VentaVin> {
           setState(() {
             itemP.addOrientacionSeleccionado(cl);
           });
-        }
+        },
+        validator: (value) {
+          if(value == null || value.isEmpty) {
+            return 'Favor de Seleccionar Orientacion';
+          }
+
+          return null;
+        },
       )
     );
   }
@@ -289,47 +375,95 @@ class _VentaVinState extends State<VentaVin> {
   guardarVin() async {
     var formato = DateFormat('yyyy-MM-dd hh:mm:ss'); 
     var fecha = formato.format(DateTime.now());
-    
-    vin = Vin(
-      idviaje: null,
-      cartaporte: null,
-      vin: _qrTextController.text,
-      distrib_clave: null,
-      dest_nombre: null,
-      ruta_clave: null,
-      ruta_nombre: null,
-      origen: itemP.usuario!.locacion!,
-      destino: itemP.destinoSeleccionado,
-      modelo: null,
-      marca: itemP.clienteSeleccionado,
-      posicion: _posicionTextController.text.trim(),
-      orientacion: itemP.orientacionSeleccionado,
-      compra: 1,
-      fecha_carga: null,
-      fecha_creacion: fecha,
-      fecha_sync: null
-    );
+    if(_formKey.currentState!.validate()) {
+      vin = Vin(
+        idviaje: null,
+        cartaporte: null,
+        vin: _qrTextController.text,
+        distrib_clave: null,
+        dest_nombre: null,
+        ruta_clave: null,
+        ruta_nombre: null,
+        origen: itemP.usuario!.locacion!,
+        destino: itemP.destinoSeleccionado,
+        modelo: itemP.modeloSeleccionado,
+        marca: itemP.clienteSeleccionado,
+        posicion: _posicionTextController.text.trim(),
+        orientacion: itemP.orientacionSeleccionado,
+        compra: 1,
+        fecha_carga: null,
+        fecha_creacion: fecha,
+        fecha_sync: null
+      );
 
-    log(vin.toString());
+      await DatabaseProvider.db.insertarVin(vin!).then((value) async {
+        itemP.addBoton();
+        itemP.deleteBoton();
 
-    await DatabaseProvider.db.insertarVin(vin!).then((value) async {
-      itemP.addBoton();
-      itemP.deleteBoton();
+        Fluttertoast.showToast(
+          msg: "VIN guardado con Exito!",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 20
+        );
 
+        Navigator.push(context, MaterialPageRoute(builder: (context) => VentaDanos(vin: _qrTextController.text)));        
+
+      }).timeout(const Duration(seconds: 30), onTimeout: () {
+        itemP.addError();
+      });
+    }
+    else {
       Fluttertoast.showToast(
-        msg: "VIN guardado con Exito!",
+        msg: "Complete la informacion",
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.red,
         textColor: Colors.white,
         fontSize: 20
       );
+    }
+  }
 
-      Navigator.push(context, MaterialPageRoute(builder: (context) => VentaDanos(vin: _qrTextController.text)));        
+  Future<List<ListasA>> getListas() async {
+    List<ListasA> resultados = [];
+    try {
+      await DatabaseProvider.db.obtenerCliente().then((value) {
+        setState(() {
+          listaCliente = value.map((item) => ListasA(valor: item.idAdvan.toString(), texto: '${item.cliente}')).toList();
+        });
+      });
 
-    }).timeout(const Duration(seconds: 30), onTimeout: () {
-      itemP.addError();
-    });
+      await DatabaseProvider.db.obtenerDestino().then((value) {
+        setState(() {
+          listaDestino = value.map((item) => ListasD(valor: item.id_destino.toString(), texto: '${item.destino}')).toList();
+        });
+      });
+    } 
+    catch (e) {
+      log('error => $e');
+    }
+
+    return resultados;
+  }
+
+  Future<List<ListasA>> getListaModelo(id) async {
+    List<ListasA> resultados = [];
+    try {
+      await DatabaseProvider.db.obtenerModeloXMarca(id).then((value) {
+        setState(() {
+          listaModelo = value.map((item) => ListasM(valor: item.id_modelo.toString(), texto: '${item.modelo}')).toList();
+        });
+      });
+    } 
+    catch (e) {
+      log('error => $e');
+    }
+
+    return resultados;
   }
 }

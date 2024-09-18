@@ -6,11 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:tleavin_mobil/database/db.dart';
-import 'package:tleavin_mobil/model/areaDano.dart';
 import 'package:tleavin_mobil/model/cliente.dart';
+import 'package:tleavin_mobil/model/destinos.dart';
+import 'package:tleavin_mobil/model/modelo.dart';
 import 'package:tleavin_mobil/model/severidad.dart';
-import 'package:tleavin_mobil/model/tipo_dano.dart';
+// import 'package:tleavin_mobil/model/areaDano.dart';
+// import 'package:tleavin_mobil/model/tipo_dano.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
+import 'package:tleavin_mobil/src/pages/sincronizacion/enviar_ventas.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 
 class Sincronizar extends StatefulWidget {
@@ -22,406 +25,20 @@ class Sincronizar extends StatefulWidget {
 
 class _SincronizarState extends State<Sincronizar> {
 
-  String urlEnviarData = 'http://192.168.12.209:3888/guardarVIN';
+  String urlEnviarData = 'https://parapruebas.tlea.online/guardarVIN';
 
-  String urlAreaDanoServer = 'http://api-pruebas.tlea.online/obtenerAreaDano';
-  AreaDano? areaDanoInsertList;
-
-  String urlTipoDanoServer = 'http://api-pruebas.tlea.online/obtenertipoDano';
-  TipoDano? tipoDanoInsertList;
-
-  String urlSeveridadServer = 'http://api-pruebas.tlea.online/obtenerSeveridad';
-  Severidad? severidadInsertList;
-  
   String urlClienteServer = 'https://parapruebas.tlea.online/obtenerCliente';
   Cliente? clienteInsertList;
 
-  obtenerAreaDanoServer() async {
-    var responseData;
-    try{
-      final result = await InternetAddress.lookup('api-pruebas.tlea.online');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+  String urlModeloServer = 'https://parapruebas.tlea.online/obtenerModelos';
+  Modelo? modeloInsertList;
 
-        try{
-          await http.get(Uri.parse(urlAreaDanoServer),headers: {"Content-Type" : "application/json"}).then((value) async {
-            if(value.statusCode == 200) {
-              responseData = json.decode(value.body);
-              await DatabaseProvider.db.borrarBDAreaDano();
+  String urlDestinoServer = 'https://parapruebas.tlea.online/obtenerDestinos';
+  Destino? destinoInsertList;
 
-              for(var value in responseData['AreaDanos']) {
-                areaDanoInsertList = null;
-                areaDanoInsertList = AreaDano(
-                  id: value['id'], 
-                  codigo: value['codigo'], 
-                  area: value['area'], 
-                  descripcion: value['descripcion']
-                );
-                
-                await DatabaseProvider.db.insertarAreaDano(areaDanoInsertList!);
-              }
-
-              Fluttertoast.showToast(
-                msg: "${responseData['AreaDanos'].length} Areas Daños Sincronizados",
-                toastLength: Toast.LENGTH_LONG,
-                gravity: ToastGravity.CENTER,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.green,
-                textColor: Colors.white,
-                fontSize: 20
-              );
-
-              itemP.addDanoAreaInsert();
-            } 
-            else {
-              itemP.addAreaDanoInsertTimeOut();
-              itemP.addRegistroAreaDano();
-              Fluttertoast.showToast(
-                msg: "Conexion sin Exito al Servidor",
-                toastLength: Toast.LENGTH_LONG,
-                gravity: ToastGravity.BOTTOM,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.red,
-                textColor: Colors.white,
-                fontSize: 20
-              );
-            }
-          }).timeout(const Duration(seconds: 15), onTimeout: () {
-            itemP.addAreaDanoInsertTimeOut();
-            itemP.addRegistroAreaDano();
-            Fluttertoast.showToast(
-              msg: "Conexion sin Exito al Servidor",
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 20
-            );
-          });
-        } 
-        catch (e) {
-          Fluttertoast.showToast(
-            msg: "Conexion sin Exito al Servidor",
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 20
-          );
-          itemP.addRegistroAreaDano();
-          itemP.addAreaDanoInsertTimeOut();
-        }
-      }
-    } on SocketException catch (_) {
-      itemP.addAreaDanoInsertTimeOut();
-      itemP.addRegistroAreaDano();
-      Fluttertoast.showToast(
-        msg: "Conexion sin Exito al Servidor",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 20
-      );
-    }
-  }
-
-  obtenerTipoDanoServer() async {
-    var responseData;
-    try{
-      final result = await InternetAddress.lookup('api-pruebas.tlea.online');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-
-        try{
-          await http.get(Uri.parse(urlTipoDanoServer),headers: {"Content-Type" : "application/json"}).then((value) async {
-            if(value.statusCode == 200) {
-
-              responseData = json.decode(value.body);
-              await DatabaseProvider.db.borrarBDTipoDano();
-
-              for(var value in responseData['TiposDano']) {
-                tipoDanoInsertList = null;
-                tipoDanoInsertList = TipoDano(
-                  id: value['id'], 
-                  descripcion: value['descripcion']
-                );
-                
-                await DatabaseProvider.db.insertarTipoDano(tipoDanoInsertList!);
-              }
-
-              Fluttertoast.showToast(
-                msg: "${responseData['TiposDano'].length} Tipos Daños Sincronizados",
-                toastLength: Toast.LENGTH_LONG,
-                gravity: ToastGravity.CENTER,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.green,
-                textColor: Colors.white,
-                fontSize: 20
-              );
-
-              itemP.addTipoDanoInsert();
-            } 
-            else {
-              itemP.addTipoDanoInsertTimeOut();
-              itemP.addRegistroTipoDano();
-              Fluttertoast.showToast(
-                msg: "Conexion sin Exito al Servidor",
-                toastLength: Toast.LENGTH_LONG,
-                gravity: ToastGravity.BOTTOM,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.red,
-                textColor: Colors.white,
-                fontSize: 20
-              );
-            }
-          }).timeout(const Duration(seconds: 15), onTimeout: () {
-            itemP.addTipoDanoInsertTimeOut();
-            itemP.addRegistroTipoDano();
-            Fluttertoast.showToast(
-              msg: "Conexion sin Exito al Servidor",
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 20
-            );
-          });
-        } 
-        catch (e) {
-          Fluttertoast.showToast(
-            msg: "Conexion sin Exito al Servidor",
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 20
-          );
-          itemP.addRegistroTipoDano();
-          itemP.addTipoDanoInsertTimeOut();
-        }
-      }
-    } on SocketException catch (_) {
-      itemP.addTipoDanoInsertTimeOut();
-      itemP.addRegistroTipoDano();
-      Fluttertoast.showToast(
-        msg: "Conexion sin Exito al Servidor",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 20
-      );
-    }
-  }
-
-  obtenerSeveridadServer() async {
-    var responseData;
-    try{
-      final result = await InternetAddress.lookup('api-pruebas.tlea.online');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-
-        try{
-          await http.get(Uri.parse(urlSeveridadServer),headers: {"Content-Type" : "application/json"}).then((value) async {
-            if(value.statusCode == 200) {
-              responseData = json.decode(value.body);
-              await DatabaseProvider.db.borrarBDSeveridad();
-
-              for(var value in responseData['Severidades']) {
-                severidadInsertList = null;
-                severidadInsertList = Severidad(
-                  id: value['id'],
-                  tipo: value['tipo'],
-                  descripcion: value['descripcion']
-                );
-
-                await DatabaseProvider.db.insertarSeveridad(severidadInsertList!);
-              }
-
-              Fluttertoast.showToast(
-                msg: "${responseData['Severidades'].length} Severidades Sincronizadas",
-                toastLength: Toast.LENGTH_LONG,
-                gravity: ToastGravity.CENTER,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.green,
-                textColor: Colors.white,
-                fontSize: 20
-              );
-
-              itemP.addSeveridadInsert();
-            } 
-            else {
-              itemP.addSeveridadInsertTimeOut();
-              itemP.addRegistroSeveridad();
-              Fluttertoast.showToast(
-                msg: "Conexion sin Exito al Servidor",
-                toastLength: Toast.LENGTH_LONG,
-                gravity: ToastGravity.BOTTOM,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.red,
-                textColor: Colors.white,
-                fontSize: 20
-              );
-            }
-          }).timeout(const Duration(seconds: 15), onTimeout: () {
-            itemP.addSeveridadInsertTimeOut();
-            itemP.addRegistroSeveridad();
-            Fluttertoast.showToast(
-              msg: "Conexion sin Exito al Servidor",
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 20
-            );
-          });
-        } 
-        catch (e) {
-          Fluttertoast.showToast(
-            msg: "Conexion sin Exito al Servidor",
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 20
-          );
-          itemP.addRegistroSeveridad();
-          itemP.addSeveridadInsertTimeOut();
-        }
-      }
-    } on SocketException catch (_) {
-      itemP.addSeveridadInsertTimeOut();
-      itemP.addRegistroSeveridad();
-      Fluttertoast.showToast(
-        msg: "Conexion sin Exito al Servidor",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 20
-      );
-    }
-  }
-
-  obtenerClienteServer() async {
-    var responseData;
-    try{
-      final result = await InternetAddress.lookup('api-pruebas.tlea.online');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-
-        try{
-          await http.get(Uri.parse(urlClienteServer),headers: {"Content-Type" : "application/json"}).then((value) async {
-            if(value.statusCode == 200) {
-              responseData = json.decode(value.body);
-              await DatabaseProvider.db.borrarBDCliente();
-
-              for(var value in responseData['Clientes']) {
-                clienteInsertList = null;
-                clienteInsertList = Cliente(
-                  idAdvan: value['idAdvan'],
-                  cliente: value['cliente']
-                );
-
-                await DatabaseProvider.db.insertarCliente(clienteInsertList!);
-              }
-
-              Fluttertoast.showToast(
-                msg: "${responseData['Clientes'].length} Clientes Sincronizados",
-                toastLength: Toast.LENGTH_LONG,
-                gravity: ToastGravity.CENTER,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.green,
-                textColor: Colors.white,
-                fontSize: 20
-              );
-
-              itemP.addClienteInsert();
-            } 
-            else {
-              itemP.addClienteInsertTimeOut();
-              itemP.addRegistroCliente();
-              Fluttertoast.showToast(
-                msg: "Conexion sin Exito al Servidor",
-                toastLength: Toast.LENGTH_LONG,
-                gravity: ToastGravity.BOTTOM,
-                timeInSecForIosWeb: 1,
-                backgroundColor: Colors.red,
-                textColor: Colors.white,
-                fontSize: 20
-              );
-            }
-          }).timeout(const Duration(seconds: 15), onTimeout: () {
-            itemP.addClienteInsertTimeOut();
-            itemP.addRegistroCliente();
-            Fluttertoast.showToast(
-              msg: "Conexion sin Exito al Servidor",
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 20
-            );
-          });
-        } 
-        catch (e) {
-          Fluttertoast.showToast(
-            msg: "Conexion sin Exito al Servidor",
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 20
-          );
-          itemP.addRegistroCliente();
-          itemP.addClienteInsertTimeOut();
-        }
-      }
-    } on SocketException catch (_) {
-      itemP.addClienteInsertTimeOut();
-      itemP.addRegistroCliente();
-      Fluttertoast.showToast(
-        msg: "Conexion sin Exito al Servidor",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 20
-      );
-    }
-  }
-
-  borrarTodaBD() async {
-    var datos = await  DatabaseProvider.db.obtenerViajesParaSincronizar();
-
-    if(datos.isEmpty) {
-      await DatabaseProvider.db.borrarBDViaje();
-      await DatabaseProvider.db.borrarBDVINES();
-      await DatabaseProvider.db.borrarBDDanos();
-      await DatabaseProvider.db.borrarBDEvidencia();
-    }
-    else {
-      Fluttertoast.showToast(
-        msg: "Existen Viajes Sin Sincronizar",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 20
-      );
-    }
-  }
-
+  String urlSeveridadServer = 'https://parapruebas.tlea.online/obtenerSeveridad';
+  Severidad? severidadInsertList;
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -470,9 +87,46 @@ class _SincronizarState extends State<Sincronizar> {
             //   )
             // ),
 
-            const SizedBox(height: 40),
+            // const SizedBox(height: 40),
 
-            botonSincronizar(Icons.people, 'Sincronizar VINES', () => enviarData()),
+            botonSincronizar(Icons.people, 'Sincronizar VINES', () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => const EnviarVentaVin()))),
+
+            // Center(
+            //   child: ElevatedButton(
+            //     // onPressed: () => getCamara(2),
+            //     onPressed: () => {},
+            //     style: ButtonStyle(
+            //       backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+            //       padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(10)),
+            //       shape: MaterialStateProperty.all(
+            //         RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.circular(16)
+            //         )
+            //       )
+            //     ),
+            //     child: const SizedBox(
+            //       width: 250,
+            //       child: Row(
+            //         mainAxisAlignment: MainAxisAlignment.center,
+            //         children: [
+            //           Icon(
+            //             Icons.camera,
+            //             color: Colors.white,
+            //             size: 30,
+            //           ),
+            //           SizedBox(width: 10),
+            //           Text(
+            //             'Fotografia de Tarja',
+            //             style: TextStyle(
+            //               fontSize: 18.0,
+            //               color: Colors.white
+            //             )
+            //           )
+            //         ]
+            //       )
+            //     )
+            //   )
+            // ),
 
 
             const SizedBox(height: 40),
@@ -480,8 +134,10 @@ class _SincronizarState extends State<Sincronizar> {
 
             botonSincronizar(Icons.people, 'Sincronizar Clientes', () => obtenerClienteServer()),
 
-            // botonSincronizar(Icons.dangerous_outlined, 'Sincronizar Area Daños', () => obtenerAreaDanoServer()),
-            // botonSincronizar(Icons.list, 'Sincronizar Tipo Daños', () => obtenerTipoDanoServer()),
+            botonSincronizar(Icons.dangerous_outlined, 'Sincronizar Modelos', () => obtenerModelos()),
+
+            botonSincronizar(Icons.list, 'Sincronizar Destinos', () => obtenerDestinos()),
+
             // botonSincronizar(Icons.warning, 'Sincronizar Severidad', () => obtenerSeveridadServer()),
 
             Padding(
@@ -662,6 +318,386 @@ class _SincronizarState extends State<Sincronizar> {
     }
     catch (e) {
       log(e.toString());
+    }
+  }
+
+  obtenerClienteServer() async {
+    var responseData;
+    try{
+      final result = await InternetAddress.lookup('api-pruebas.tlea.online');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+
+        try{
+          await http.get(Uri.parse(urlClienteServer),headers: {"Content-Type" : "application/json"}).then((value) async {
+            if(value.statusCode == 200) {
+              responseData = json.decode(value.body);
+              await DatabaseProvider.db.borrarBDCliente();
+
+              for(var value in responseData['Clientes']) {
+                clienteInsertList = null;
+                clienteInsertList = Cliente(
+                  idAdvan: value['idAdvan'],
+                  cliente: value['cliente']
+                );
+
+                await DatabaseProvider.db.insertarCliente(clienteInsertList!);
+              }
+
+              Fluttertoast.showToast(
+                msg: "${responseData['Clientes'].length} Clientes Sincronizados",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+                fontSize: 20
+              );
+
+              itemP.addClienteInsert();
+            } 
+            else {
+              itemP.addClienteInsertTimeOut();
+              itemP.addRegistroCliente();
+              Fluttertoast.showToast(
+                msg: "Conexion sin Exito al Servidor",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+                fontSize: 20
+              );
+            }
+          }).timeout(const Duration(seconds: 15), onTimeout: () {
+            itemP.addClienteInsertTimeOut();
+            itemP.addRegistroCliente();
+            Fluttertoast.showToast(
+              msg: "Conexion sin Exito al Servidor",
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 20
+            );
+          });
+        } 
+        catch (e) {
+          Fluttertoast.showToast(
+            msg: "Conexion sin Exito al Servidor",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 20
+          );
+          itemP.addRegistroCliente();
+          itemP.addClienteInsertTimeOut();
+        }
+      }
+    } on SocketException catch (_) {
+      itemP.addClienteInsertTimeOut();
+      itemP.addRegistroCliente();
+      Fluttertoast.showToast(
+        msg: "Conexion sin Exito al Servidor",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 20
+      );
+    }
+  }
+
+  obtenerModelos() async {
+    var responseData;
+    try{
+      final result = await InternetAddress.lookup('api-pruebas.tlea.online');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+
+        try{
+          await http.get(Uri.parse(urlModeloServer),headers: {"Content-Type" : "application/json"}).then((value) async {
+            if(value.statusCode == 200) {
+              responseData = json.decode(value.body);
+              await DatabaseProvider.db.borrarBDModelo();
+
+              for(var value in responseData['Modelos']) {
+                modeloInsertList = null;
+                modeloInsertList = Modelo(
+                  id_modelo: value['id_modelo'], 
+                  id_cliente: value['id_cliente'], 
+                  modelo: value['modelo']
+                );
+                
+                await DatabaseProvider.db.insertarModelo(modeloInsertList!);
+              }
+
+              Fluttertoast.showToast(
+                msg: "${responseData['Modelos'].length} Modelos Sincronizados",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+                fontSize: 20
+              );
+
+              itemP.addModeloInsert();
+            } 
+            else {
+              itemP.addModeloInsertTimeOut();
+              itemP.addRegistroModelo();
+              Fluttertoast.showToast(
+                msg: "Conexion sin Exito al Servidor",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+                fontSize: 20
+              );
+            }
+          }).timeout(const Duration(seconds: 15), onTimeout: () {
+            itemP.addModeloInsertTimeOut();
+            itemP.addRegistroModelo();
+            Fluttertoast.showToast(
+              msg: "Conexion sin Exito al Servidor",
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 20
+            );
+          });
+        } 
+        catch (e) {
+          Fluttertoast.showToast(
+            msg: "Conexion sin Exito al Servidor",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 20
+          );
+          itemP.addRegistroModelo();
+          itemP.addModeloInsertTimeOut();
+        }
+      }
+    } on SocketException catch (_) {
+      itemP.addModeloInsertTimeOut();
+      itemP.addRegistroModelo();
+      Fluttertoast.showToast(
+        msg: "Conexion sin Exito al Servidor",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 20
+      );
+    }
+  }
+
+  obtenerDestinos() async {
+    var responseData;
+    try{
+      final result = await InternetAddress.lookup('api-pruebas.tlea.online');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+
+        try{
+          await http.get(Uri.parse(urlDestinoServer),headers: {"Content-Type" : "application/json"}).then((value) async {
+            if(value.statusCode == 200) {
+
+              responseData = json.decode(value.body);
+              await DatabaseProvider.db.borrarBDDestino();
+
+              for(var value in responseData['Destinos']) {
+                destinoInsertList = null;
+                destinoInsertList = Destino(
+                  id_destino: value['id_destino'], 
+                  destino: value['destino']
+                );
+                
+                await DatabaseProvider.db.insertarDestino(destinoInsertList!);
+              }
+
+              Fluttertoast.showToast(
+                msg: "${responseData['Destinos'].length} Destinos Sincronizados",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+                fontSize: 20
+              );
+
+              itemP.addDestinoInsert();
+            } 
+            else {
+              itemP.addDestinoInsertTimeOut();
+              itemP.addRegistroDestino();
+              Fluttertoast.showToast(
+                msg: "Conexion sin Exito al Servidor",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+                fontSize: 20
+              );
+            }
+          }).timeout(const Duration(seconds: 15), onTimeout: () {
+            itemP.addDestinoInsertTimeOut();
+            itemP.addRegistroDestino();
+            Fluttertoast.showToast(
+              msg: "Conexion sin Exito al Servidor",
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 20
+            );
+          });
+        } 
+        catch (e) {
+          Fluttertoast.showToast(
+            msg: "Conexion sin Exito al Servidor",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 20
+          );
+          itemP.addRegistroDestino();
+          itemP.addDestinoInsertTimeOut();
+        }
+      }
+    } on SocketException catch (_) {
+      itemP.addDestinoInsertTimeOut();
+      itemP.addRegistroDestino();
+      Fluttertoast.showToast(
+        msg: "Conexion sin Exito al Servidor",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 20
+      );
+    }
+  }
+
+  // obtenerSeveridadServer() async {
+  //   var responseData;
+  //   try{
+  //     final result = await InternetAddress.lookup('api-pruebas.tlea.online');
+  //     if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+  //       try{
+  //         await http.get(Uri.parse(urlSeveridadServer),headers: {"Content-Type" : "application/json"}).then((value) async {
+  //           if(value.statusCode == 200) {
+  //             responseData = json.decode(value.body);
+  //             await DatabaseProvider.db.borrarBDSeveridad();
+  //             for(var value in responseData['Severidades']) {
+  //               severidadInsertList = null;
+  //               severidadInsertList = Severidad(
+  //                 id: value['id'],
+  //                 tipo: value['tipo'],
+  //                 descripcion: value['descripcion']
+  //               );
+  //               await DatabaseProvider.db.insertarSeveridad(severidadInsertList!);
+  //             }
+  //             Fluttertoast.showToast(
+  //               msg: "${responseData['Severidades'].length} Severidades Sincronizadas",
+  //               toastLength: Toast.LENGTH_LONG,
+  //               gravity: ToastGravity.CENTER,
+  //               timeInSecForIosWeb: 1,
+  //               backgroundColor: Colors.green,
+  //               textColor: Colors.white,
+  //               fontSize: 20
+  //             );
+  //             itemP.addSeveridadInsert();
+  //           } 
+  //           else {
+  //             itemP.addSeveridadInsertTimeOut();
+  //             itemP.addRegistroSeveridad();
+  //             Fluttertoast.showToast(
+  //               msg: "Conexion sin Exito al Servidor",
+  //               toastLength: Toast.LENGTH_LONG,
+  //               gravity: ToastGravity.BOTTOM,
+  //               timeInSecForIosWeb: 1,
+  //               backgroundColor: Colors.red,
+  //               textColor: Colors.white,
+  //               fontSize: 20
+  //             );
+  //           }
+  //         }).timeout(const Duration(seconds: 15), onTimeout: () {
+  //           itemP.addSeveridadInsertTimeOut();
+  //           itemP.addRegistroSeveridad();
+  //           Fluttertoast.showToast(
+  //             msg: "Conexion sin Exito al Servidor",
+  //             toastLength: Toast.LENGTH_LONG,
+  //             gravity: ToastGravity.BOTTOM,
+  //             timeInSecForIosWeb: 1,
+  //             backgroundColor: Colors.red,
+  //             textColor: Colors.white,
+  //             fontSize: 20
+  //           );
+  //         });
+  //       } 
+  //       catch (e) {
+  //         Fluttertoast.showToast(
+  //           msg: "Conexion sin Exito al Servidor",
+  //           toastLength: Toast.LENGTH_LONG,
+  //           gravity: ToastGravity.BOTTOM,
+  //           timeInSecForIosWeb: 1,
+  //           backgroundColor: Colors.red,
+  //           textColor: Colors.white,
+  //           fontSize: 20
+  //         );
+  //         itemP.addRegistroSeveridad();
+  //         itemP.addSeveridadInsertTimeOut();
+  //       }
+  //     }
+  //   } on SocketException catch (_) {
+  //     itemP.addSeveridadInsertTimeOut();
+  //     itemP.addRegistroSeveridad();
+  //     Fluttertoast.showToast(
+  //       msg: "Conexion sin Exito al Servidor",
+  //       toastLength: Toast.LENGTH_LONG,
+  //       gravity: ToastGravity.BOTTOM,
+  //       timeInSecForIosWeb: 1,
+  //       backgroundColor: Colors.red,
+  //       textColor: Colors.white,
+  //       fontSize: 20
+  //     );
+  //   }
+  // }
+
+  borrarTodaBD() async {
+    var datos = await  DatabaseProvider.db.obtenerViajesParaSincronizar();
+
+    if(datos.isEmpty) {
+      await DatabaseProvider.db.borrarBDViaje();
+      await DatabaseProvider.db.borrarBDVINES();
+      await DatabaseProvider.db.borrarBDDanos();
+      await DatabaseProvider.db.borrarBDEvidencia();
+    }
+    else {
+      Fluttertoast.showToast(
+        msg: "Existen Viajes Sin Sincronizar",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 20
+      );
     }
   }
 }

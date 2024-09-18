@@ -225,8 +225,8 @@ class _LoginFormState extends State<LoginForm> {
   @override
   void initState() {
     super.initState();
-    crearUsuario();
-    // obtenerUsuariosAppServer();
+    // crearUsuario();
+    obtenerUsuariosAppServer();
   }
 
   @override
@@ -410,6 +410,7 @@ class _LoginFormState extends State<LoginForm> {
       log('error => $e');
     }
   }
+  
   Widget _input(String placeholder, String mensaje, TextInputType tipo, TextEditingController controller, IconData icon, [bool isPassword = false, bool isfocus = false]) {
     return Container(
       width: MediaQuery.of(context).size.width,

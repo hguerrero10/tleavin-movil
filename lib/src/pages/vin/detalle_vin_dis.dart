@@ -4,7 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/home/inicio.dart';
-import 'package:tleavin_mobil/src/pages/vin/inspeccion_vin.dart';
+import 'package:tleavin_mobil/src/pages/ventavin/venta_danos.dart';
 import 'package:widget_zoom/widget_zoom.dart';
 import 'package:flutter/services.dart';
 
@@ -69,7 +69,6 @@ class _DetalleVinState extends State<DetalleVin> {
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
@@ -86,7 +85,7 @@ class _DetalleVinState extends State<DetalleVin> {
         )
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => InspeccionVin(vin: vinSeleccionado))),
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => VentaDanos(vin: vinSeleccionado))),
         foregroundColor: Colors.black,
         backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
         child: const Icon(Icons.note_add_rounded)

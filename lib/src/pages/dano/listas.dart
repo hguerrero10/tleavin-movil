@@ -18,3 +18,17 @@ class ListasS {
 
   ListasS({required this.valor, required this.texto});
 }
+
+class ListasM {
+  final String valor;
+  final String texto;
+
+  ListasM({required this.valor, required this.texto});
+}
+
+class ListasD {
+  final String valor;
+  final String texto;
+
+  ListasD({required this.valor, required this.texto});
+}
