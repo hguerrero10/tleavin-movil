@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -413,7 +411,6 @@ class _DetalleDeViajeState extends State<DetalleDeViaje> {
         );
 
         await DatabaseProvider.db.asignarPoOrVIN(vinsPoOr).then((value) {
-          log('vin asignado PoOr');
         }).timeout(const Duration(seconds: 30), onTimeout: () {
           itemP.addError();
         });

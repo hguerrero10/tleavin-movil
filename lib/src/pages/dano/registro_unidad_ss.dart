@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_saver/gallery_saver.dart';
@@ -72,28 +70,24 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
       if(foto == 1) {
         base64Foto1 = null;
         base64Foto1 = base64Encode(imageData);
-        // log(base64Foto1.toString());
         evidenciasDano.add(base64Foto1);
       }
 
       if(foto == 2) {
         base64Foto2 = null;
         base64Foto2 = base64Encode(imageData);
-        // log(base64Foto2.toString());
         evidenciasDano.add(base64Foto2);
       }
 
       if(foto == 3) {
         base64Foto3 = null;
         base64Foto3 = base64Encode(imageData);
-        // log(base64Foto3.toString());
         evidenciasDano.add(base64Foto3);
       }
 
       if(foto == 4) {
         base64Foto4 = null;
         base64Foto4 = base64Encode(imageData);
-        // log(base64Foto4.toString());
         evidenciasDano.add(base64Foto4);
       }
     }
@@ -441,7 +435,6 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
     );
 
     await DatabaseProvider.db.insertarDano(dano!).then((value) async {
-      log('dano insertado');
       itemP.addBoton();
       itemP.deleteBoton();
 
@@ -455,7 +448,6 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
         );
 
         await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) async {
-          log('evidencia insertado');
         }).timeout(const Duration(seconds: 30), onTimeout: () {
           itemP.addError();
         });

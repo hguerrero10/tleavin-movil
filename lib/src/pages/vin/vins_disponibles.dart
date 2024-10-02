@@ -29,7 +29,6 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
   String query = '';
 
   obtenerDatos(v) async {
-    log(v);
     var datos = await DatabaseProvider.db.obtenerInfoVin(v);
 
     setState(() {
@@ -169,7 +168,7 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     const Text(
-                                      'Fecha Compra',
+                                      'Fecha',
                                       style: TextStyle(
                                         fontSize: 12,
                                         fontWeight: FontWeight.w500,
@@ -246,6 +245,35 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                                                 children: <InlineSpan>[
                                                   TextSpan(
                                                     text: '${listadevines[index].modelo}' != 'null' ? '${listadevines[index].modelo}' : 'Sin Identicar',
+                                                    style: const TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.w700,
+                                                      color: Colors.black
+                                                    )
+                                                  )
+                                                ]
+                                              )
+                                            )
+                                          ),
+                                          const SizedBox(width: 16),
+                                        ]
+                                      ),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text.rich(
+                                              softWrap: false,
+                                              overflow: TextOverflow.fade,
+                                              TextSpan(
+                                                text: 'Destino: ',
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w500,
+                                                  color: Colors.grey
+                                                ),
+                                                children: <InlineSpan>[
+                                                  TextSpan(
+                                                    text: '${listadevines[index].destino}' != 'null' ? '${listadevines[index].destino}' : 'Sin Identicar',
                                                     style: const TextStyle(
                                                       fontSize: 12,
                                                       fontWeight: FontWeight.w700,

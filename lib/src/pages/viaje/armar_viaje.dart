@@ -213,7 +213,6 @@ class _ArmarViajeState extends State<ArmarViaje> {
             Padding(
               padding: const EdgeInsets.only(left: 16, right: 16),
               child: ElevatedButton(
-                // onPressed: () => scanQR(),
                 onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VinsParaViaje())),
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
@@ -460,8 +459,6 @@ class _ArmarViajeState extends State<ArmarViaje> {
         );
 
         await DatabaseProvider.db.insertarViaje(viaje!).then((value) async {
-          log('viaje insertado');
-
           listaVinsViaje = itemP.vinesSeleccionadosParaViaje;
 
           for(var ed in listaVinsViaje) {
@@ -474,7 +471,6 @@ class _ArmarViajeState extends State<ArmarViaje> {
             );
 
             await DatabaseProvider.db.asignarVinViaje(vinsviaje).then((value) {
-              log('vin asignado');
             }).timeout(const Duration(seconds: 30), onTimeout: () {
               itemP.addError();
             });

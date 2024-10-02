@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -12,7 +11,6 @@ import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/home/inicio.dart';
 import 'package:tleavin_mobil/src/pages/ventavin/venta_danos.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
-
 import '../dano/listas.dart';
 
 class VentaVin extends StatefulWidget {
@@ -126,26 +124,28 @@ class _VentaVinState extends State<VentaVin> {
                       )
                     ),
                     const SizedBox(height: 20),
-                    _dropDownDestino(),
                     _dropDownCliente(),
                     _dropDownModelo(),
-                    const SizedBox(height: 10),
+                    _dropDownDestino(),
                     _dropDownOrientacion(),
-                    TextFormField(
-                      controller: _posicionTextController,
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if(value == null || value.isEmpty) {
-                          return 'Favor de llenar la Posicion';
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                        hintText: '* Escriba La Posicion',
-                        hintStyle: TextStyle(
-                          color: Colors.grey
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+                      child: TextFormField(
+                        controller: _posicionTextController,
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if(value == null || value.isEmpty) {
+                            return 'Favor de llenar la Posicion';
+                          }
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                          hintText: '* Escriba La Posicion',
+                          hintStyle: TextStyle(
+                            color: Colors.grey
+                          )
                         )
-                      )
+                      ),
                     ),
                     const SizedBox(height: 40),
                     ElevatedButton(
@@ -207,6 +207,25 @@ class _VentaVinState extends State<VentaVin> {
     );
   }
 
+  Future<void> scanQR() async {
+    String barcodeScanRes;
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode("#ff6666", "Cancelar", true, ScanMode.QR);
+      _qrTextController.text = barcodeScanRes;
+    } 
+    catch (e) {
+      Fluttertoast.showToast(
+        msg: "Error al escanear: $e",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.yellow,
+        textColor: Colors.white,
+        fontSize: 20
+      );
+    }
+  }
+  
   Widget _dropDownCliente() {
     return Container(
       height: 60,
@@ -219,18 +238,18 @@ class _VentaVinState extends State<VentaVin> {
           items: listaCliente,
           dropdownDecoratorProps: const DropDownDecoratorProps(
           dropdownSearchDecoration: InputDecoration(
-            hintText: "Seleccione Cliente",
+            hintText: "* Seleccione Cliente",
             hintStyle: TextStyle(
               color: Colors.grey
             )
           )
         ),
         onChanged: (ListasA? item) {
-
-          getListaModelo(item?.valor);
           setState(() {
-            // selectArea = (item?.valor);
             itemP.addClienteSeleccionado(item?.texto);
+
+            getListaModelo(item?.valor);
+            getListaDestino(item?.valor);
           });
         },
         itemAsString: (ListasA item) => item.texto,
@@ -245,7 +264,7 @@ class _VentaVinState extends State<VentaVin> {
     );
   }
 
-   Widget _dropDownModelo() {
+  Widget _dropDownModelo() {
     return Container(
       height: 60,
       width: MediaQuery.of(context).size.width * 2,
@@ -257,7 +276,7 @@ class _VentaVinState extends State<VentaVin> {
           items: listaModelo,
           dropdownDecoratorProps: const DropDownDecoratorProps(
           dropdownSearchDecoration: InputDecoration(
-            hintText: "Seleccione Modelo",
+            hintText: "* Seleccione Modelo",
             hintStyle: TextStyle(
               color: Colors.grey
             )
@@ -265,7 +284,6 @@ class _VentaVinState extends State<VentaVin> {
         ),
         onChanged: (ListasM? item) {
           setState(() {
-            // selectArea = (item?.valor);
             itemP.addModeloSeleccionado(item?.texto);
           });
         },
@@ -293,7 +311,7 @@ class _VentaVinState extends State<VentaVin> {
           items: listaDestino,
           dropdownDecoratorProps: const DropDownDecoratorProps(
           dropdownSearchDecoration: InputDecoration(
-            hintText: "Seleccione Destino",
+            hintText: "* Seleccione Destino",
             hintStyle: TextStyle(
               color: Colors.grey
             )
@@ -301,7 +319,6 @@ class _VentaVinState extends State<VentaVin> {
         ),
         onChanged: (ListasD? item) {
           setState(() {
-            // selectArea = (item?.valor);
             itemP.addDestinoSeleccionado(item?.texto);
           });
         },
@@ -320,7 +337,8 @@ class _VentaVinState extends State<VentaVin> {
   Widget _dropDownOrientacion() {
     return Container(
       height: 60,
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery.of(context).size.width * 2,
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5),
       ),
@@ -353,25 +371,57 @@ class _VentaVinState extends State<VentaVin> {
     );
   }
 
-  Future<void> scanQR() async {
-    String barcodeScanRes;
+  Future<List<ListasA>> getListas() async {
+    List<ListasA> resultados = [];
+    
     try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode("#ff6666", "Cancelar", true, ScanMode.QR);
-      _qrTextController.text = barcodeScanRes;
+      await DatabaseProvider.db.obtenerCliente().then((value) {
+        setState(() {
+          listaCliente = value.map((item) => ListasA(valor: item.idAdvan.toString(), texto: '${item.cliente}')).toList();
+        });
+      });
     } 
     catch (e) {
-      Fluttertoast.showToast(
-        msg: "Error al escanear: $e",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.yellow,
-        textColor: Colors.white,
-        fontSize: 20
-      );
+      log('error => $e');
     }
+
+    return resultados;
   }
-  
+
+  Future<List<ListasA>> getListaModelo(id) async {
+    List<ListasA> resultados = [];
+
+    try {
+      await DatabaseProvider.db.obtenerModeloXMarca(id).then((value) {
+        setState(() {
+          listaModelo = value.map((item) => ListasM(valor: item.id_modelo.toString(), texto: '${item.modelo}')).toList();
+        });
+      });
+    } 
+    catch (e) {
+      log('error => $e');
+    }
+
+    return resultados;
+  }
+
+  Future<List<ListasD>> getListaDestino(id) async {
+    List<ListasD> resultados = [];
+
+    try {
+      await DatabaseProvider.db.obtenerDestinoXMarca(id).then((value) {
+        setState(() {
+          listaDestino = value.map((item) => ListasD(valor: item.id_destino.toString(), texto: '${item.destino}')).toList();
+        });
+      });
+    } 
+    catch (e) {
+      log('error => $e');
+    }
+
+    return resultados;
+  }
+
   guardarVin() async {
     var formato = DateFormat('yyyy-MM-dd hh:mm:ss'); 
     var fecha = formato.format(DateTime.now());
@@ -427,43 +477,5 @@ class _VentaVinState extends State<VentaVin> {
         fontSize: 20
       );
     }
-  }
-
-  Future<List<ListasA>> getListas() async {
-    List<ListasA> resultados = [];
-    try {
-      await DatabaseProvider.db.obtenerCliente().then((value) {
-        setState(() {
-          listaCliente = value.map((item) => ListasA(valor: item.idAdvan.toString(), texto: '${item.cliente}')).toList();
-        });
-      });
-
-      await DatabaseProvider.db.obtenerDestino().then((value) {
-        setState(() {
-          listaDestino = value.map((item) => ListasD(valor: item.id_destino.toString(), texto: '${item.destino}')).toList();
-        });
-      });
-    } 
-    catch (e) {
-      log('error => $e');
-    }
-
-    return resultados;
-  }
-
-  Future<List<ListasA>> getListaModelo(id) async {
-    List<ListasA> resultados = [];
-    try {
-      await DatabaseProvider.db.obtenerModeloXMarca(id).then((value) {
-        setState(() {
-          listaModelo = value.map((item) => ListasM(valor: item.id_modelo.toString(), texto: '${item.modelo}')).toList();
-        });
-      });
-    } 
-    catch (e) {
-      log('error => $e');
-    }
-
-    return resultados;
   }
 }

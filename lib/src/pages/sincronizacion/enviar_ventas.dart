@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gallery_saver/gallery_saver.dart';
@@ -9,7 +9,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/evidencia.dart';
+import 'package:tleavin_mobil/model/tarja.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
+import 'package:tleavin_mobil/src/pages/dano/listas.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,20 +24,84 @@ class EnviarVentaVin extends StatefulWidget {
 
 class _EnviarVentaVinState extends State<EnviarVentaVin> {
 
-  String urlEnviarData = 'https://parapruebas.tlea.online/guardarVIN';
+  String urlEnviarData = 'http://192.168.12.15:3888/guardarVIN';
+  // String urlEnviarData = 'https://parapruebas.tlea.online/guardarVIN';
 
-  var fotosTarja = [];
   final ImagePicker picker = ImagePicker();
+  var fotosTarja = [];
 
   String? base64Foto;
   Evidencia? evidencia;
   var todosVins = [];
 
-  obtenerlistaCompletaVins() async {
-    var datos = await DatabaseProvider.db.obtenerListaVINESDisponibles();
+  var click = 0;
+
+  List<ListasA> listaCliente = [];
+  List<ListasD> listaDestino = [];
+
+  var verBotonTarja = false;
+
+  var verBotonEnviar = false;
+
+  var iddetarja = 0;
+
+  Future<List<ListasA>> getListas() async {
+    List<ListasA> resultados = [];
+    
+    try {
+      await DatabaseProvider.db.obtenerCliente().then((value) {
+        setState(() {
+          listaCliente = value.map((item) => ListasA(valor: item.idAdvan.toString(), texto: '${item.cliente}')).toList();
+        });
+      });
+    } 
+    catch (e) {
+      log('error => $e');
+    }
+
+    return resultados;
+  }
+
+  Future<List<ListasD>> getListaDestino(id) async {
+    List<ListasD> resultados = [];
+
+    try {
+      await DatabaseProvider.db.obtenerDestinoXMarca(id).then((value) {
+        setState(() {
+          listaDestino = value.map((item) => ListasD(valor: item.id_destino.toString(), texto: '${item.destino}')).toList();
+        });
+      });
+    } 
+    catch (e) {
+      log('error => $e');
+    }
+
+    return resultados;
+  }
+
+
+  obtenerlistaCompletaVins(marca, destino) async {
+    var datos = await DatabaseProvider.db.obtenerListaVINESDisponiblesDestino(marca, destino);
     
     setState(() {
       todosVins = datos;
+
+      if(todosVins.isEmpty) {
+        Fluttertoast.showToast(
+          msg: "No se encontraron VINES para Destino: ${itemP.destinoSeleccionado}",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.yellow,
+          textColor: Colors.black,
+          fontSize: 20
+        );
+
+        verBotonTarja = false;
+      }
+      else {
+        verBotonTarja = true;
+      }
     });
   }
 
@@ -43,7 +109,7 @@ class _EnviarVentaVinState extends State<EnviarVentaVin> {
   void initState() {
     super.initState();
     
-    obtenerlistaCompletaVins();
+    getListas();
   }
 
   @override
@@ -66,7 +132,12 @@ class _EnviarVentaVinState extends State<EnviarVentaVin> {
             const Cuerpo(),
             const SizedBox(height: 20),
 
-            Row(
+            _dropDownCliente(),
+            _dropDownDestino(),
+
+            const SizedBox(height: 40),
+
+            verBotonTarja != false ? Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
@@ -84,10 +155,9 @@ class _EnviarVentaVinState extends State<EnviarVentaVin> {
                   )
                 )
               ]
-            ),
-            const SizedBox(height: 20),
-      
-             Row(
+            ) : const SizedBox(),
+            const SizedBox(height: 30),
+            verBotonTarja != false ? Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
@@ -116,7 +186,7 @@ class _EnviarVentaVinState extends State<EnviarVentaVin> {
                           'Tarja',
                           style: TextStyle(
                             fontSize: 18.0,
-                            color: Colors.white
+                            color: Colors.white 
                           )
                         )
                       ]
@@ -134,11 +204,19 @@ class _EnviarVentaVinState extends State<EnviarVentaVin> {
                   )
                 )
               ]
-            ),
+            ) : const SizedBox(),
+            const SizedBox(height: 30),
+            verBotonTarja != false ? botonSincronizar(
+              Icons.save,
+              'Guardar Fotos',
+              () {
+                guardarFotosTarja();
+              }
+            ) : const SizedBox(),
 
-            const SizedBox(height: 40),
+            const SizedBox(height: 200),
 
-            botonSincronizar(
+            verBotonEnviar != false ? botonSincronizarVin(
               Icons.send,
               'Enviar VINES',
               () {
@@ -157,6 +235,38 @@ class _EnviarVentaVinState extends State<EnviarVentaVin> {
                   );
                 }
               }
+            ) : const SizedBox()
+          ]
+        )
+      )
+    );
+  }
+
+  Widget botonSincronizarVin(ico, titulo, onpress) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+      child: ElevatedButton(
+        onPressed: onpress,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.black,
+          padding: const EdgeInsets.all(16),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          elevation: 5,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              ico,
+              color: Colors.white
+            ),
+            const SizedBox(width: 10),
+            Text(
+              titulo,
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.white
+              )
             )
           ]
         )
@@ -166,7 +276,7 @@ class _EnviarVentaVinState extends State<EnviarVentaVin> {
 
   Widget botonSincronizar(ico, titulo, onpress) {
     return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+      padding: const EdgeInsets.only(left: 80, right: 80, bottom: 16),
       child: ElevatedButton(
         onPressed: onpress,
         style: ElevatedButton.styleFrom(
@@ -215,17 +325,16 @@ class _EnviarVentaVinState extends State<EnviarVentaVin> {
   }
 
   convertirBase64(value, foto) async {
-    var click = 0;
     if(value != null) {
       final imageData = await File(value).readAsBytes();
       
       if(foto == 1) {
         base64Foto = null;
         base64Foto = base64Encode(imageData);
-        click +  1;
+        click + 1;
 
         setState(() {
-          fotosTarja.add(base64Foto);
+          // fotosTarja.add(base64Foto);
           fotosTarja.add({'nombre': 'foto_tarja_$click', 'b64': base64Foto});
         });
       }
@@ -235,28 +344,154 @@ class _EnviarVentaVinState extends State<EnviarVentaVin> {
   guardarFotosTarja() async {
     var formato = DateFormat('yyyy-MM-dd hh:mm:ss'); 
     var fecha = formato.format(DateTime.now());
+
+    var tarja = Tarja(
+      destino: itemP.destinoSeleccionado,
+      vines: todosVins.length,
+      registro: fecha,
+      registrado_por: itemP.usuario!.usuario!
+    );
     
-    for(var ed in fotosTarja) {
-      evidencia = Evidencia(
-        vin: null,
-        iddano: null,
-        nombre: ed['nombre'],
-        archivo: ed['b64'],
-        fechahora: fecha
+    await DatabaseProvider.db.insertarTarja(tarja).then((value) async {
+      for(var ed in todosVins) {
+        var vines = (
+          vin: ed.vin,
+          idviaje: value
+        );
+
+        await DatabaseProvider.db.asignarTarja(vines).then((value) {}).timeout(const Duration(seconds: 30), onTimeout: () {
+          itemP.addError();
+        });
+      }
+
+      for(var ft in fotosTarja) {
+        evidencia = Evidencia(
+          vin: null,
+          iddano: null,
+          idviaje: value,
+          nombre: ft['nombre'],
+          archivo: ft['b64'],
+          fechahora: fecha
+        );
+
+        await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) {}).timeout(const Duration(seconds: 60), onTimeout: () {
+          itemP.addError();
+        });
+
+        setState(() {
+          verBotonEnviar = true;
+          iddetarja = value;
+        });
+      }
+    }).timeout(const Duration(seconds: 30), onTimeout: () {
+      itemP.addError();
+    });
+  }
+  
+  pruebafor() async {
+    var formato = DateFormat('yyyy-MM-dd hh:mm:ss'); 
+    var fecha = formato.format(DateTime.now());
+
+    for(var ed in todosVins) {
+      var vines = (
+        vin: ed.vin,
+        fecha_sync: fecha
       );
 
-      await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) {}).timeout(const Duration(seconds: 60), onTimeout: () {
+      await DatabaseProvider.db.marcarComoSincronizado(vines).then((value) {}).timeout(const Duration(seconds: 30), onTimeout: () {
         itemP.addError();
       });
     }
   }
 
+  
+
+  Widget _dropDownCliente() {
+    return Container(
+      height: 60,
+      width: MediaQuery.of(context).size.width * 2,
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5)
+      ),
+      child: DropdownSearch<ListasA>(
+          items: listaCliente,
+          dropdownDecoratorProps: const DropDownDecoratorProps(
+          dropdownSearchDecoration: InputDecoration(
+            hintText: "* Seleccione Cliente",
+            hintStyle: TextStyle(
+              color: Colors.grey
+            )
+          )
+        ),
+        onChanged: (ListasA? item) {
+          setState(() {
+            itemP.addClienteSeleccionado(item?.texto);
+
+            getListaDestino(item?.valor);
+          });
+        },
+        itemAsString: (ListasA item) => item.texto,
+        validator: (value) {
+          if(value == null) {
+            return 'Favor de Seleccionar Cliente';
+          }
+
+          return null;
+        },
+      )
+    );
+  }
+
+  Widget _dropDownDestino() {
+    return Container(
+      height: 60,
+      width: MediaQuery.of(context).size.width * 2,
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5)
+      ),
+      child: DropdownSearch<ListasD>(
+          items: listaDestino,
+          dropdownDecoratorProps: const DropDownDecoratorProps(
+          dropdownSearchDecoration: InputDecoration(
+            hintText: "* Seleccione Destino",
+            hintStyle: TextStyle(
+              color: Colors.grey
+            )
+          )
+        ),
+        onChanged: (ListasD? item) {
+          setState(() {
+            itemP.addDestinoSeleccionado(item?.texto);
+            obtenerlistaCompletaVins(itemP.clienteSeleccionado, item?.texto);
+          });
+        },
+        itemAsString: (ListasD item) => item.texto,
+        validator: (value) {
+          if(value == null) {
+            return 'Favor de Seleccionar Destino';
+          }
+
+          return null;
+        },
+      )
+    );
+  }
+
+
+
   Future enviarData() async {
-    var vines = await DatabaseProvider.db.fetchVINES();
+    var vines = await DatabaseProvider.db.fetchVINES(itemP.clienteSeleccionado, itemP.destinoSeleccionado, iddetarja);
+
+    log(vines.toString());
 
     try{
       http.Response response = await http.post(Uri.parse(urlEnviarData), body: vines.toString(), headers: {"Content-Type": "application/json"});
+
       if(response.statusCode == 200) {
+        pruebafor();
+      
         final snackBar = SnackBar(
           showCloseIcon: true,
           backgroundColor: Colors.green,
@@ -273,7 +508,7 @@ class _EnviarVentaVinState extends State<EnviarVentaVin> {
                 ),
                 SizedBox(width: 10),
                 Text(
-                  'ViNES Sincronizado al Servidor', 
+                  'VINES Sincronizados', 
                   style: TextStyle( 
                     fontWeight: FontWeight.bold, 
                     fontSize: 20

@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:tleavin_mobil/database/db.dart';
-import 'package:tleavin_mobil/model/dano.dart';
-import 'package:tleavin_mobil/model/evidencia.dart';
 import 'dart:io';
 import 'dart:convert';
+import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
+import 'package:tleavin_mobil/model/dano.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:tleavin_mobil/database/db.dart';
 import 'package:gallery_saver/gallery_saver.dart';
-import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/home/inicio.dart';
+import 'package:tleavin_mobil/model/evidencia.dart';
+import 'package:tleavin_mobil/provider/items_provider.dart';
 
 class VentaDanos extends StatefulWidget {
   final vin;
@@ -20,7 +20,6 @@ class VentaDanos extends StatefulWidget {
 }
 
 class _VentaDanosState extends State<VentaDanos> {
-
   final _formKey = GlobalKey<FormState>();
   final _areaTextController = TextEditingController();
   final _tipoTextController = TextEditingController();
@@ -36,6 +35,8 @@ class _VentaDanosState extends State<VentaDanos> {
   String? base64Foto1;
 
   var evidenciasDano = [];
+
+  var verFinalizar = false;
 
   @override
   Widget build(BuildContext context) {
@@ -232,7 +233,7 @@ class _VentaDanosState extends State<VentaDanos> {
                             )
                           ),
                           const SizedBox(height: 15),
-                          ElevatedButton(
+                          verFinalizar == true ? ElevatedButton(
                             onPressed: () {
                               if(evidenciasDano.isNotEmpty) {
                                 _dialogBuilder(context);
@@ -272,7 +273,7 @@ class _VentaDanosState extends State<VentaDanos> {
                                 ]
                               )
                             )
-                          )
+                          ) : const SizedBox()
                         ]
                       )
                     ),
@@ -281,7 +282,7 @@ class _VentaDanosState extends State<VentaDanos> {
                 )
               )
             ]
-          ),
+          )
         )
       ) 
     );
@@ -377,6 +378,10 @@ class _VentaDanosState extends State<VentaDanos> {
 
           paraLimpiar();
 
+          setState(() {
+            verFinalizar = true;
+          });
+
         }).timeout(const Duration(seconds: 60), onTimeout: () {
         
         itemP.addError();
@@ -416,7 +421,6 @@ class _VentaDanosState extends State<VentaDanos> {
     setState(() {
       evidenciasDano = [];
     });
-
   }
 
   Future<void> _dialogBuilder(BuildContext context) {

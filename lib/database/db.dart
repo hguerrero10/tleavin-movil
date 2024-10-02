@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
@@ -6,6 +5,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:tleavin_mobil/model/destinos.dart';
 import 'package:tleavin_mobil/model/modelo.dart';
+import 'package:tleavin_mobil/model/tarja.dart';
 import 'package:tleavin_mobil/model/vin.dart';
 import 'package:tleavin_mobil/model/dano.dart';
 import 'package:tleavin_mobil/model/viaje.dart';
@@ -89,11 +89,17 @@ class DatabaseProvider {
 
 
         await db.execute(
+          "CREATE TABLE tarja (id_tarja INTEGER PRIMARY KEY AUTOINCREMENT, destino VARCHAR, vines INTEGER, registro VARCHAR, registrado_por VARCHAR)"
+        );
+
+
+
+        await db.execute(
           "CREATE TABLE modelo (id_modelo INTEGER PRIMARY KEY AUTOINCREMENT, id_cliente INTEGER, modelo VARCHAR)"
         );
 
         await db.execute(
-          "CREATE TABLE destino (id_destino INTEGER PRIMARY KEY AUTOINCREMENT, destino VARCHAR)"
+          "CREATE TABLE destino (id_destino INTEGER PRIMARY KEY AUTOINCREMENT, id_cliente INTEGER, destino VARCHAR)"
         );
       }
     );
@@ -200,7 +206,6 @@ class DatabaseProvider {
     List<Map> dataD = await db.rawQuery("SELECT * FROM dano WHERE vin = '$vin'");
 
     if(dataD.isEmpty) {
-      log('entre aqui');
       List<Map> data = await db.rawQuery("SELECT * FROM vin WHERE vin = '$vin'");
       if(data.isNotEmpty) {
         for(var item in data) {
@@ -291,7 +296,6 @@ class DatabaseProvider {
           };
 
           if(organizedData.containsKey(vin)) {
-                    log('entre aqui2');
             bool found = false;
             for(var dano in organizedData[vin]!['danoos']) {
               if(dano['iddano'] == iddano) {
@@ -322,7 +326,6 @@ class DatabaseProvider {
             }
           } 
           else {
-                    log('entre aca2');
             var obvin = {
               "idv": item['idv'],
               'idviaje': item['idviaje'],
@@ -443,7 +446,7 @@ class DatabaseProvider {
   Future<List<Vin>> obtenerListaVINESDisponibles() async {
     final db = await database;
     List<Vin> listaVins;
-    var res = await db.rawQuery("SELECT * FROM vin WHERE fecha_sync ISNULL");
+    var res = await db.rawQuery("SELECT * FROM vin;");
 
     if(res.isNotEmpty) {
       listaVins =  res.map((v) => Vin.fromMap(v)).toList();
@@ -454,6 +457,35 @@ class DatabaseProvider {
 
     return listaVins;
   }
+
+  Future<List<Vin>> obtenerListaVINESDisponiblesDestino(marca, destino) async {
+    final db = await database;
+    List<Vin> listaVins;
+    var res = await db.rawQuery("SELECT * FROM vin WHERE marca = '$marca' AND destino = '$destino' AND fecha_sync ISNULL;");
+
+    if(res.isNotEmpty) {
+      listaVins =  res.map((v) => Vin.fromMap(v)).toList();
+    } 
+    else {
+      listaVins = [];
+    }
+
+    return listaVins;
+  }
+
+
+  marcarComoSincronizado(vv) async {
+    final db = await database;
+    return db.update('vin', {'fecha_sync': vv.fecha_sync}, where: "vin = ?", whereArgs: [vv.vin]);
+  }
+
+
+  asignarTarja(vv) async {
+    final db = await database;
+    return db.update('vin', {'idviaje': vv.idviaje}, where: "vin = ?", whereArgs: [vv.vin]);
+  }
+
+
 
   // CRUD DAÑO 
 
@@ -828,7 +860,7 @@ class DatabaseProvider {
 
   Future<List<Vin>> fetchVIN(idviaje) async {
     Database db = await database;
-    List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM vin WHERE idviaje = $idviaje");
+    List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM vin WHERE idviaje = $idviaje AND fecha_sync ISNULL");
 
     List<Vin> listavines = [];
 
@@ -836,7 +868,7 @@ class DatabaseProvider {
       Vin vi = Vin.fromMap(i);
 
       List<Dano> dano = [];
-      dano = await fetchDanos(vi.vin);
+      dano = await fetchDanos(vi.vin, idviaje);
       vi.danos = dano;
 
       listavines.add(vi);
@@ -845,9 +877,14 @@ class DatabaseProvider {
     return listavines;
   }
 
-  Future<List<Vin>> fetchVINES() async {
+
+
+
+
+  Future<List<Vin>> fetchVINES(marca, destino, idviaje) async {
     Database db = await database;
-    List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM vin;");
+    List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM vin WHERE marca = '$marca' AND destino = '$destino' AND fecha_sync ISNULL;");
+    // List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM vin WHERE fecha_sync ISNULL;");
 
     List<Vin> listavines = [];
 
@@ -855,7 +892,7 @@ class DatabaseProvider {
       Vin vi = Vin.fromMap(i);
 
       List<Dano> dano = [];
-      dano = await fetchDanos(vi.vin);
+      dano = await fetchDanos(vi.vin, idviaje);
       vi.danos = dano;
 
       listavines.add(vi);
@@ -864,7 +901,7 @@ class DatabaseProvider {
     return listavines;
   }
 
-  Future<List<Dano>> fetchDanos(vin) async {
+  Future<List<Dano>> fetchDanos(vin, idviaje) async {
     Database db = await database;
     List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM dano WHERE vin = '$vin'");
 
@@ -874,7 +911,7 @@ class DatabaseProvider {
       Dano dano = Dano.fromMap(i);
 
       List<Evidencia> evidencia = [];
-      evidencia = await fetchEvidecias(dano.idd);
+      evidencia = await fetchEvidecias(dano.idd, idviaje);
       dano.evidencias = evidencia;
 
       listaDanos.add(dano);
@@ -883,9 +920,10 @@ class DatabaseProvider {
     return listaDanos;
   }
 
-  Future<List<Evidencia>> fetchEvidecias(idd) async {
+  Future<List<Evidencia>> fetchEvidecias(idd, idviaje) async {
     Database db = await database;
     List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM evidencia WHERE iddano = $idd");
+    List<Map<String, dynamic>> resultTarja = await db.rawQuery("SELECT * FROM evidencia WHERE idviaje = $idviaje");
 
     List<Evidencia> evidencia = [];
  
@@ -895,10 +933,30 @@ class DatabaseProvider {
       evidencia.add(evidencias);
     }
 
+    for(var i in resultTarja){
+      Evidencia evidencias = Evidencia.fromMap(i);
+
+      evidencia.add(evidencias);
+    }
+
     return evidencia;
   }
 
   Future<List<Evidencia>> fetchEvideciasViaje(idviaje) async {
+    Database db = await database;
+    List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM evidencia WHERE idviaje = $idviaje");
+
+    List<Evidencia> evidencia = [];
+ 
+    for(var i in result){
+      Evidencia evidencias = Evidencia.fromMap(i);
+      evidencia.add(evidencias);
+    }
+
+    return evidencia;
+  }
+  
+  Future<List<Evidencia>> fetchEvideciasTarja(idviaje) async {
     Database db = await database;
     List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM evidencia WHERE idviaje = $idviaje");
 
@@ -942,7 +1000,7 @@ class DatabaseProvider {
     List<Modelo> lista;
     var res = await db.rawQuery("SELECT * FROM modelo WHERE id_cliente = $idcliente");
 
-    if (res.isNotEmpty) {
+    if(res.isNotEmpty) {
       lista = res.map((u) => Modelo.fromMap(u)).toList();
     } 
     else {
@@ -958,10 +1016,20 @@ class DatabaseProvider {
     return res;
   }
 
-  Future borrarBDModelo() async {
+
+
+  Future<List<Destino>> obtenerDestinoXMarca(idcliente) async {
     final db = await database;
-    
-    return db.delete('modelo');
+    List<Destino> lista;
+    var res = await db.rawQuery("SELECT * FROM destino WHERE id_cliente = $idcliente");
+
+    if(res.isNotEmpty) {
+      lista = res.map((u) => Destino.fromMap(u)).toList();
+    } 
+    else {
+      lista = [];
+    }
+    return lista;
   }
 
   Future<List<Destino>> obtenerDestino() async {
@@ -985,20 +1053,17 @@ class DatabaseProvider {
     return res;
   }
 
-  Future borrarBDDestino() async {
-    final db = await database;
-    
-    return db.delete('destino');
+
+
+
+
+
+  Future<int> insertarTarja(Tarja nuevoRegistro) async {
+    var db = await database;
+    int res = await db.insert("tarja", nuevoRegistro.toMap());
+
+    return res;
   }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1008,21 +1073,38 @@ class DatabaseProvider {
 
   Future borrarBDViaje() async {
     final db = await database;
+
     return db.delete('viaje');
   }
 
   Future borrarBDVINES() async {
     final db = await database;
+
     return db.delete('vin');
   }
 
   Future borrarBDDanos() async {
     final db = await database;
+
     return db.delete('dano');
   }
 
   Future borrarBDEvidencia() async {
     final db = await database;
+
     return db.delete('evidencia');
+  }
+  
+
+  Future borrarBDModelo() async {
+    final db = await database;
+    
+    return db.delete('modelo');
+  }
+
+  Future borrarBDDestino() async {
+    final db = await database;
+    
+    return db.delete('destino');
   }
 } 

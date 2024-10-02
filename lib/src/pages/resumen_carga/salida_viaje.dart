@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:core';
-import 'dart:developer';
 import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -92,7 +91,7 @@ class _ResumenViajeState extends State<ResumenViaje> {
 
   obtenerDanos(v) async {
     List<Dano>? data;
-    data = await DatabaseProvider.db.fetchDanos(v);
+    data = await DatabaseProvider.db.fetchDanos(v,'');
 
     setState(() {
       dataDano = data;
@@ -597,7 +596,6 @@ class _ResumenViajeState extends State<ResumenViaje> {
         );
 
         await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) {
-          log('evidencia insertada');
         }).timeout(const Duration(seconds: 60), onTimeout: () {
           itemP.addError();
         });

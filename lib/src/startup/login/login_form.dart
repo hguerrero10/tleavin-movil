@@ -374,7 +374,6 @@ class _LoginFormState extends State<LoginForm> {
 
     try{
       await DatabaseProvider.db.insertarUsuario(nuevousuario);
-      log('insertado');
         final snackBar = SnackBar(
           showCloseIcon: true,
           backgroundColor: Colors.green,

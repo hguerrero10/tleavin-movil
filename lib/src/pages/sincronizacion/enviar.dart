@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +8,7 @@ import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/cliente.dart';
 import 'package:tleavin_mobil/model/destinos.dart';
 import 'package:tleavin_mobil/model/modelo.dart';
-import 'package:tleavin_mobil/model/severidad.dart';
+// import 'package:tleavin_mobil/model/severidad.dart';
 // import 'package:tleavin_mobil/model/areaDano.dart';
 // import 'package:tleavin_mobil/model/tipo_dano.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
@@ -36,8 +35,8 @@ class _SincronizarState extends State<Sincronizar> {
   String urlDestinoServer = 'https://parapruebas.tlea.online/obtenerDestinos';
   Destino? destinoInsertList;
 
-  String urlSeveridadServer = 'https://parapruebas.tlea.online/obtenerSeveridad';
-  Severidad? severidadInsertList;
+  // String urlSeveridadServer = 'https://parapruebas.tlea.online/obtenerSeveridad';
+  // Severidad? severidadInsertList;
   
   @override
   Widget build(BuildContext context) {
@@ -128,8 +127,7 @@ class _SincronizarState extends State<Sincronizar> {
             //   )
             // ),
 
-
-            const SizedBox(height: 40),
+            const SizedBox(height: 20),
 
 
             botonSincronizar(Icons.people, 'Sincronizar Clientes', () => obtenerClienteServer()),
@@ -140,6 +138,8 @@ class _SincronizarState extends State<Sincronizar> {
 
             // botonSincronizar(Icons.warning, 'Sincronizar Severidad', () => obtenerSeveridadServer()),
 
+            const SizedBox(height: 20),   
+            
             Padding(
               padding: const EdgeInsets.all(16),
               child: ElevatedButton(
@@ -236,7 +236,7 @@ class _SincronizarState extends State<Sincronizar> {
             child: const Column(
               children: [
                 Text(
-                  'Se borrara toda la informacion de la Base de Datos de este Dispositivo',
+                  'Se borrara toda la informacion de la Base de Datos de ESTE Dispositivo',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold
@@ -266,65 +266,64 @@ class _SincronizarState extends State<Sincronizar> {
     );
   }
 
-  Future enviarData() async {
-    var vines = await DatabaseProvider.db.fetchVINES();
+  // Future enviarData() async {
+  //   var vines = await DatabaseProvider.db.fetchVINES();
 
-    try{
-      http.Response response = await http.post(Uri.parse(urlEnviarData), body: vines.toString(), headers: {"Content-Type": "application/json"});
-      if(response.statusCode == 200) {
-        final snackBar = SnackBar(
-          showCloseIcon: true,
-          backgroundColor: Colors.green,
-          content: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10)
-            ),
-            child: const Row(
-              children: [
-                Icon(
-                  Icons.check_circle,
-                  color: Colors.white,
-                  size: 20
-                ),
-                SizedBox(width: 10),
-                Text(
-                  'ViNES Sincronizado al Servidor', 
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold, 
-                    fontSize: 20
-                  )
-                )
-              ]
-            )
-          )
-        );
+  //   try{
+  //     http.Response response = await http.post(Uri.parse(urlEnviarData), body: vines.toString(), headers: {"Content-Type": "application/json"});
+  //     if(response.statusCode == 200) {
+  //       final snackBar = SnackBar(
+  //         showCloseIcon: true,
+  //         backgroundColor: Colors.green,
+  //         content: Container(
+  //           decoration: BoxDecoration(
+  //             borderRadius: BorderRadius.circular(10)
+  //           ),
+  //           child: const Row(
+  //             children: [
+  //               Icon(
+  //                 Icons.check_circle,
+  //                 color: Colors.white,
+  //                 size: 20
+  //               ),
+  //               SizedBox(width: 10),
+  //               Text(
+  //                 'VINES Sincronizado al Servidor', 
+  //                 style: TextStyle(
+  //                   fontWeight: FontWeight.bold, 
+  //                   fontSize: 20
+  //                 )
+  //               )
+  //             ]
+  //           )
+  //         )
+  //       );
 
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      } 
-      else {
-        log(response.body.toString());
-        Fluttertoast.showToast(
-          msg: "Favor de comunicarse a soporte (Error: ${response.statusCode}) ${response.reasonPhrase}'",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 20
-        );
+  //       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  //     } 
+  //     else {
+  //       Fluttertoast.showToast(
+  //         msg: "Favor de comunicarse a soporte (Error: ${response.statusCode}) ${response.reasonPhrase}'",
+  //         toastLength: Toast.LENGTH_LONG,
+  //         gravity: ToastGravity.BOTTOM,
+  //         timeInSecForIosWeb: 1,
+  //         backgroundColor: Colors.red,
+  //         textColor: Colors.white,
+  //         fontSize: 20
+  //       );
 
-        itemP.addError();
-      }
-    }
-    catch (e) {
-      log(e.toString());
-    }
-  }
+  //       itemP.addError();
+  //     }
+  //   }
+  //   catch (e) {
+  //     log(e.toString());
+  //   }
+  // }
 
   obtenerClienteServer() async {
     var responseData;
     try{
-      final result = await InternetAddress.lookup('api-pruebas.tlea.online');
+      final result = await InternetAddress.lookup('parapruebas.tlea.online');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
 
         try{
@@ -414,7 +413,9 @@ class _SincronizarState extends State<Sincronizar> {
   obtenerModelos() async {
     var responseData;
     try{
-      final result = await InternetAddress.lookup('api-pruebas.tlea.online');
+      final result = await InternetAddress.lookup('parapruebas.tlea.online');
+
+      
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
 
         try{
@@ -430,7 +431,7 @@ class _SincronizarState extends State<Sincronizar> {
                   id_cliente: value['id_cliente'], 
                   modelo: value['modelo']
                 );
-                
+
                 await DatabaseProvider.db.insertarModelo(modeloInsertList!);
               }
 
@@ -505,7 +506,7 @@ class _SincronizarState extends State<Sincronizar> {
   obtenerDestinos() async {
     var responseData;
     try{
-      final result = await InternetAddress.lookup('api-pruebas.tlea.online');
+      final result = await InternetAddress.lookup('parapruebas.tlea.online');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
 
         try{
@@ -518,7 +519,8 @@ class _SincronizarState extends State<Sincronizar> {
               for(var value in responseData['Destinos']) {
                 destinoInsertList = null;
                 destinoInsertList = Destino(
-                  id_destino: value['id_destino'], 
+                  id_destino: value['id_destino'],
+                  id_cliente: value['id_cliente'],
                   destino: value['destino']
                 );
                 
@@ -596,7 +598,7 @@ class _SincronizarState extends State<Sincronizar> {
   // obtenerSeveridadServer() async {
   //   var responseData;
   //   try{
-  //     final result = await InternetAddress.lookup('api-pruebas.tlea.online');
+  //     final result = await InternetAddress.lookup('parapruebas.tlea.online');
   //     if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
   //       try{
   //         await http.get(Uri.parse(urlSeveridadServer),headers: {"Content-Type" : "application/json"}).then((value) async {

@@ -143,7 +143,8 @@ class _DetalleVinState extends State<DetalleVin> {
                 // _encabezados('Fecha Carga: ', vi[index]['vinp']['fecha_carga'] != null ? ' ${vi[index]['vinp']['fecha_carga']}' : 'Sin Cargar'),
                 _encabezados('Posicion: ', vi[index]['vinp']['posicion'] != null ? ' ${vi[index]['vinp']['posicion']}' : 'Sin Asignar'),
                 _encabezados('Orientacion: ', vi[index]['vinp']['orientacion'] != null ? ' ${vi[index]['vinp']['orientacion']}' : 'Sin Asignar'),
-                _encabezados('Fecha de registro: ', vi[index]['vinp']['fecha_creacion']),
+                _encabezados('Fecha de Registro: ', vi[index]['vinp']['fecha_creacion']),
+                _encabezados('Sincronizacion: ', vi[index]['vinp']['fecha_sync'] != null ? '${vi[index]['vinp']['fecha_sync']}' : 'Sin Sincronizar'),
                 const SizedBox(height: 10),
                 vi[index]['vinp']['compra'] == 0 ? Padding(
                   padding: const EdgeInsets.only(left: 16, right: 16),
