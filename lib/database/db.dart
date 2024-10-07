@@ -458,21 +458,6 @@ class DatabaseProvider {
     return listaVins;
   }
 
-  Future<List<Vin>> obtenerListaVINESDisponiblesDestino(marca, destino) async {
-    final db = await database;
-    List<Vin> listaVins;
-    var res = await db.rawQuery("SELECT * FROM vin WHERE marca = '$marca' AND destino = '$destino' AND fecha_sync ISNULL;");
-
-    if(res.isNotEmpty) {
-      listaVins =  res.map((v) => Vin.fromMap(v)).toList();
-    } 
-    else {
-      listaVins = [];
-    }
-
-    return listaVins;
-  }
-
 
   marcarComoSincronizado(vv) async {
     final db = await database;
@@ -881,10 +866,46 @@ class DatabaseProvider {
 
 
 
+
+    
+  Future<Tarja> enviarConTarja(marca, destino, idtarja) async {
+    Database db = await database;
+    List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM tarja WHERE id_tarja = $idtarja");
+
+    Tarja tarja = Tarja.fromMap(result[0]);
+    List<Vin> vins = [];
+    List<Evidencia> fotosT = [];
+
+    vins = await fetchVINES(marca, destino, tarja.id_tarja);
+    tarja.vinesList = vins;
+
+    fotosT = await fetchEvideciasTarja(tarja.id_tarja);
+    tarja.fotos = fotosT;
+    
+    return tarja;
+  }
+
+
+  Future<List<Vin>> obtenerListaVINESDisponiblesDestino(marca, destino) async {
+    final db = await database;
+    List<Vin> listaVins;
+    var res = await db.rawQuery("SELECT * FROM vin WHERE marca = '$marca' AND destino = '$destino' AND fecha_sync ISNULL;");
+    // var res = await db.rawQuery("SELECT * FROM vin WHERE marca = '$marca' AND destino = '$destino';");
+
+    if(res.isNotEmpty) {
+      listaVins =  res.map((v) => Vin.fromMap(v)).toList();
+    } 
+    else {
+      listaVins = [];
+    }
+
+    return listaVins;
+  }
+
   Future<List<Vin>> fetchVINES(marca, destino, idviaje) async {
     Database db = await database;
-    List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM vin WHERE marca = '$marca' AND destino = '$destino' AND fecha_sync ISNULL;");
-    // List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM vin WHERE fecha_sync ISNULL;");
+    List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM vin WHERE marca = '$marca' AND destino = '$destino' AND idviaje = $idviaje AND fecha_sync ISNULL;");
+    // List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM vin WHERE marca = '$marca' AND destino = '$destino' AND idviaje = $idviaje;");
 
     List<Vin> listavines = [];
 
@@ -923,17 +944,9 @@ class DatabaseProvider {
   Future<List<Evidencia>> fetchEvidecias(idd, idviaje) async {
     Database db = await database;
     List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM evidencia WHERE iddano = $idd");
-    List<Map<String, dynamic>> resultTarja = await db.rawQuery("SELECT * FROM evidencia WHERE idviaje = $idviaje");
-
     List<Evidencia> evidencia = [];
  
     for(var i in result){
-      Evidencia evidencias = Evidencia.fromMap(i);
-
-      evidencia.add(evidencias);
-    }
-
-    for(var i in resultTarja){
       Evidencia evidencias = Evidencia.fromMap(i);
 
       evidencia.add(evidencias);

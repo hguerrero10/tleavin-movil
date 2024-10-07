@@ -268,7 +268,6 @@ class _SincronizarState extends State<Sincronizar> {
 
   // Future enviarData() async {
   //   var vines = await DatabaseProvider.db.fetchVINES();
-
   //   try{
   //     http.Response response = await http.post(Uri.parse(urlEnviarData), body: vines.toString(), headers: {"Content-Type": "application/json"});
   //     if(response.statusCode == 200) {
@@ -298,7 +297,6 @@ class _SincronizarState extends State<Sincronizar> {
   //           )
   //         )
   //       );
-
   //       ScaffoldMessenger.of(context).showSnackBar(snackBar);
   //     } 
   //     else {
@@ -311,7 +309,6 @@ class _SincronizarState extends State<Sincronizar> {
   //         textColor: Colors.white,
   //         fontSize: 20
   //       );
-
   //       itemP.addError();
   //     }
   //   }
