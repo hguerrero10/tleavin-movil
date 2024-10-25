@@ -32,6 +32,13 @@ Vin? vin;
 List<ListasA> listaCliente = [];
 List<ListasM> listaModelo = [];
 List<ListasD> listaDestino = [];
+
+String? _searchingWithQuery;
+late Iterable<String> _lastOptions = <String>[];
+const Duration fakeAPIDuration = Duration(seconds: 1);
+
+List<String> listaC = [];
+
 class _VentaVinState extends State<VentaVin> {
   @override
   void initState() {
@@ -124,7 +131,8 @@ class _VentaVinState extends State<VentaVin> {
                       )
                     ),
                     const SizedBox(height: 20),
-                    _dropDownCliente(),
+                    // _dropDownCliente(),
+                    _autoCompleteCliente(),
                     _dropDownModelo(),
                     _dropDownDestino(),
                     _dropDownOrientacion(),
@@ -334,6 +342,26 @@ class _VentaVinState extends State<VentaVin> {
     );
   }
 
+  Widget _autoCompleteCliente() {
+    return Autocomplete<String>(
+      optionsBuilder: (TextEditingValue textEditingValue) async {
+        _searchingWithQuery = textEditingValue.text;
+        final Iterable<String> options = await search(_searchingWithQuery!);
+
+        if(_searchingWithQuery != textEditingValue.text) {
+          return _lastOptions;
+        }
+
+        _lastOptions = options;
+        return options;
+      },
+      onSelected: (String selection) {
+        debugPrint('You just selected $selection');
+      },
+    );
+  }
+  
+  
   Widget _dropDownOrientacion() {
     return Container(
       height: 60,
@@ -373,11 +401,18 @@ class _VentaVinState extends State<VentaVin> {
 
   Future<List<ListasA>> getListas() async {
     List<ListasA> resultados = [];
+    List<String> result = [];
     
     try {
       await DatabaseProvider.db.obtenerCliente().then((value) {
         setState(() {
           listaCliente = value.map((item) => ListasA(valor: item.idAdvan.toString(), texto: '${item.cliente}')).toList();
+
+          for(var i = 0; i < value.length; i++) {
+            result.add(value[i].cliente.toString());
+          }
+
+          listaC = result;
         });
       });
     } 
@@ -390,11 +425,18 @@ class _VentaVinState extends State<VentaVin> {
 
   Future<List<ListasA>> getListaModelo(id) async {
     List<ListasA> resultados = [];
+    List<String> result = [];
 
     try {
       await DatabaseProvider.db.obtenerModeloXMarca(id).then((value) {
         setState(() {
           listaModelo = value.map((item) => ListasM(valor: item.id_modelo.toString(), texto: '${item.modelo}')).toList();
+
+          for(var i = 0; i < value.length; i++) {
+            result.add(value[i].modelo.toString());
+          }
+          
+          listaC = result;
         });
       });
     } 
@@ -407,11 +449,18 @@ class _VentaVinState extends State<VentaVin> {
 
   Future<List<ListasD>> getListaDestino(id) async {
     List<ListasD> resultados = [];
+    List<String> result = [];
 
     try {
       await DatabaseProvider.db.obtenerDestinoXMarca(id).then((value) {
         setState(() {
           listaDestino = value.map((item) => ListasD(valor: item.id_destino.toString(), texto: '${item.destino}')).toList();
+
+          for(var i = 0; i < value.length; i++) {
+            result.add(value[i].destino.toString());
+          }
+          
+          listaC = result;
         });
       });
     } 
@@ -477,5 +526,16 @@ class _VentaVinState extends State<VentaVin> {
         fontSize: 20
       );
     }
+  }
+
+  Future<Iterable<String>> search(String query) async {
+    await Future<void>.delayed(fakeAPIDuration);
+    if(query == '') {
+      return const Iterable<String>.empty();
+    }
+    
+    return listaC.where((String option) {
+      return option.contains(query.toLowerCase());
+    });
   }
 }
