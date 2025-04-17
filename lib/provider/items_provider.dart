@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:tleavin_mobil/model/usuario.dart';
 
 class ItemsProvider {
-
   final itemStreamController = StreamController.broadcast();
 
   Stream get getStream => itemStreamController.stream;
@@ -470,7 +469,6 @@ class ItemsProvider {
     itemP.orientacionSeleccionado = null;
     itemP.itemStreamController.sink.add(orientacionSeleccionado);
   }
-
 }
 
 final itemP = ItemsProvider();

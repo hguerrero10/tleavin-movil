@@ -1,17 +1,17 @@
-import 'dart:developer';
-import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/material.dart';
+import 'package:tleavin_mobil/src/pages/ventavin/venta_danos.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:tleavin_mobil/provider/items_provider.dart';
+import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
+import 'package:dropdown_search/dropdown_search.dart';
+import 'package:tleavin_mobil/src/home/inicio.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/vin.dart';
-import 'package:tleavin_mobil/provider/items_provider.dart';
-import 'package:tleavin_mobil/src/home/inicio.dart';
-import 'package:tleavin_mobil/src/pages/ventavin/venta_danos.dart';
-import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../dano/listas.dart';
+import 'dart:developer';
 
 class VentaVin extends StatefulWidget {
   const VentaVin({super.key});
@@ -38,6 +38,8 @@ late Iterable<String> _lastOptions = <String>[];
 const Duration fakeAPIDuration = Duration(seconds: 1);
 
 List<String> listaC = [];
+List<String> listaM = [];
+List<String> listaD = [];
 
 class _VentaVinState extends State<VentaVin> {
   @override
@@ -133,8 +135,10 @@ class _VentaVinState extends State<VentaVin> {
                     const SizedBox(height: 20),
                     // _dropDownCliente(),
                     _autoCompleteCliente(),
-                    _dropDownModelo(),
-                    _dropDownDestino(),
+                    // _dropDownModelo(),
+                    _autoCompleteModelo(),
+                    // _dropDownDestino(),
+                    _autoCompleteDestino(),
                     _dropDownOrientacion(),
                     Padding(
                       padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
@@ -153,7 +157,7 @@ class _VentaVinState extends State<VentaVin> {
                             color: Colors.grey
                           )
                         )
-                      ),
+                      )
                     ),
                     const SizedBox(height: 40),
                     ElevatedButton(
@@ -182,27 +186,29 @@ class _VentaVinState extends State<VentaVin> {
                           )
                         )
                       ),
-                      child: const SizedBox(
-                        width: 350,
-                        height: 40,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.check,
-                              color: Colors.white,
-                              size: 30
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              'Registrar Danos',
-                              style: TextStyle(
-                                fontSize: 21,
-                                color: Colors.white
+                      child: const Center(
+                        child: SizedBox(
+                          width: 350,
+                          height: 40,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.check,
+                                color: Colors.white,
+                                size: 30
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                'Registrar Daños',
+                                style: TextStyle(
+                                  fontSize: 21,
+                                  color: Colors.white
+                                )
                               )
-                            )
-                          ]
-                        )
+                            ]
+                          )
+                        ),
                       )
                     )
                   ]
@@ -343,24 +349,118 @@ class _VentaVinState extends State<VentaVin> {
   }
 
   Widget _autoCompleteCliente() {
-    return Autocomplete<String>(
-      optionsBuilder: (TextEditingValue textEditingValue) async {
-        _searchingWithQuery = textEditingValue.text;
-        final Iterable<String> options = await search(_searchingWithQuery!);
+    return Container(
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+      child: Autocomplete<String>(
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          _searchingWithQuery = textEditingValue.text.toLowerCase();
+          return listaC.where((String option) => option.toLowerCase().contains(_searchingWithQuery!));
+        },
+        onSelected: (String selection) {
+          setState(() {
+            var uno = selection.split('-')[1];
+            var dos = selection.split('-')[0];
 
-        if(_searchingWithQuery != textEditingValue.text) {
-          return _lastOptions;
+            itemP.addClienteSeleccionado(uno);
+            getListaModelo(dos);
+            getListaDestino(dos);
+          });
+        },
+        fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
+          return TextFormField(
+            controller: controller,
+            focusNode: focusNode,
+            decoration: const InputDecoration(
+              labelText: '* Ingrese Cliente',
+              hintText: 'Seleccione Cliente',
+              hintStyle: TextStyle(
+                color: Colors.grey
+              )
+            ),
+            validator: (value) {
+              if(value == null || value.isEmpty) {
+                return 'Favor de llenar el Cliente';
+              }
+              return null;
+            },
+          );
         }
-
-        _lastOptions = options;
-        return options;
-      },
-      onSelected: (String selection) {
-        debugPrint('You just selected $selection');
-      },
+      )
     );
   }
-  
+
+  Widget _autoCompleteModelo() {
+    return Container(
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+      child: Autocomplete<String>(
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          _searchingWithQuery = textEditingValue.text.toLowerCase();
+          return listaM.where((String option) => option.toLowerCase().contains(_searchingWithQuery!));
+        },
+        onSelected: (String selection) {
+          setState(() {
+            itemP.addModeloSeleccionado(selection);
+          });
+        },
+        fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
+          return TextFormField(
+            controller: controller,
+            focusNode: focusNode,
+            decoration: const InputDecoration(
+              labelText: '* Ingrese Modelo',
+              hintText: 'Seleccione Modelo',
+              hintStyle: TextStyle(
+                color: Colors.grey
+              )
+            ),
+            validator: (value) {
+              if(value == null || value.isEmpty) {
+                return 'Favor de llenar el Modelo';
+              }
+              return null;
+            }
+          );
+        }
+      )
+    );
+  }
+
+  Widget _autoCompleteDestino() {
+    return Container(
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+      child: Autocomplete<String>(
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          _searchingWithQuery = textEditingValue.text.toLowerCase();
+          return listaD.where((String option) => option.toLowerCase().contains(_searchingWithQuery!));
+        },
+        onSelected: (String selection) {
+          setState(() {
+            itemP.addDestinoSeleccionado(selection);
+          });
+        },
+
+        fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
+          return TextFormField(
+            controller: controller,
+            focusNode: focusNode,
+            decoration: const InputDecoration(
+              labelText: '* Ingrese Destino',
+              hintText: 'Seleccione Destino',
+              hintStyle: TextStyle(
+                color: Colors.grey
+              )
+            ),
+            validator: (value) {
+              if(value == null || value.isEmpty) {
+                return 'Favor de llenar el Destino';
+              }
+              return null;
+            }
+          );
+        }
+      )
+    );
+  }
   
   Widget _dropDownOrientacion() {
     return Container(
@@ -409,7 +509,7 @@ class _VentaVinState extends State<VentaVin> {
           listaCliente = value.map((item) => ListasA(valor: item.idAdvan.toString(), texto: '${item.cliente}')).toList();
 
           for(var i = 0; i < value.length; i++) {
-            result.add(value[i].cliente.toString());
+            result.add('${value[i].idAdvan.toString()}-${value[i].cliente.toString()}');
           }
 
           listaC = result;
@@ -436,7 +536,7 @@ class _VentaVinState extends State<VentaVin> {
             result.add(value[i].modelo.toString());
           }
           
-          listaC = result;
+          listaM = result;
         });
       });
     } 
@@ -460,7 +560,7 @@ class _VentaVinState extends State<VentaVin> {
             result.add(value[i].destino.toString());
           }
           
-          listaC = result;
+          listaD = result;
         });
       });
     } 
@@ -526,16 +626,5 @@ class _VentaVinState extends State<VentaVin> {
         fontSize: 20
       );
     }
-  }
-
-  Future<Iterable<String>> search(String query) async {
-    await Future<void>.delayed(fakeAPIDuration);
-    if(query == '') {
-      return const Iterable<String>.empty();
-    }
-    
-    return listaC.where((String option) {
-      return option.contains(query.toLowerCase());
-    });
   }
 }

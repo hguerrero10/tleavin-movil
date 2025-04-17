@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/model/dano.dart';
@@ -10,6 +11,7 @@ import 'package:gallery_saver/gallery_saver.dart';
 import 'package:tleavin_mobil/src/home/inicio.dart';
 import 'package:tleavin_mobil/model/evidencia.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
+import 'package:tleavin_mobil/src/pages/dano/listas.dart';
 
 class VentaDanos extends StatefulWidget {
   final vin;
@@ -19,7 +21,6 @@ class VentaDanos extends StatefulWidget {
   State<VentaDanos> createState() => _VentaDanosState();
 }
 
-class _VentaDanosState extends State<VentaDanos> {
   final _formKey = GlobalKey<FormState>();
   final _areaTextController = TextEditingController();
   final _tipoTextController = TextEditingController();
@@ -38,10 +39,25 @@ class _VentaDanosState extends State<VentaDanos> {
 
   var verFinalizar = false;
 
+  String? _searchingWithQuery;
+  late Iterable<String> _lastOptions = <String>[];
+  const Duration fakeAPIDuration = Duration(seconds: 1);
+
+  List<String> listaA = [];
+  List<String> listaT = [];
+  List<String> listaS = [];
+class _VentaDanosState extends State<VentaDanos> {
+  @override
+  void initState() {
+    getListas();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+      appBar: AppBar(
         backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
         title: const Text(
           'Registro de Daños',
@@ -84,56 +100,59 @@ class _VentaDanosState extends State<VentaDanos> {
                       ]
                     ),
                     const SizedBox(height: 10),
-                    TextFormField(
-                      controller: _areaTextController,
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if(value == null || value.isEmpty) {
-                          return 'Favor de llenar el Area';
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                        hintText: '* Escriba el Area',
-                        hintStyle: TextStyle(
-                          color: Colors.grey
-                        )
-                      )
-                    ),
+                    // TextFormField(
+                    //   controller: _areaTextController,
+                    //   keyboardType: TextInputType.number,
+                    //   validator: (value) {
+                    //     if(value == null || value.isEmpty) {
+                    //       return 'Favor de llenar el Area';
+                    //     }
+                    //     return null;
+                    //   },
+                    //   decoration: const InputDecoration(
+                    //     hintText: '* Escriba el Area',
+                    //     hintStyle: TextStyle(
+                    //       color: Colors.grey
+                    //     )
+                    //   )
+                    // ),
+                    _autoCompleteArea(),
                     const SizedBox(height: 10),
-                    TextFormField(
-                      controller: _tipoTextController,
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if(value == null || value.isEmpty) {
-                          return 'Favor de llenar el Tipo';
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                        hintText: '* Escriba el Tipo',
-                        hintStyle: TextStyle(
-                          color: Colors.grey
-                        )
-                      )
-                    ),
+                    // TextFormField(
+                    //   controller: _tipoTextController,
+                    //   keyboardType: TextInputType.number,
+                    //   validator: (value) {
+                    //     if(value == null || value.isEmpty) {
+                    //       return 'Favor de llenar el Tipo';
+                    //     }
+                    //     return null;
+                    //   },
+                    //   decoration: const InputDecoration(
+                    //     hintText: '* Escriba el Tipo',
+                    //     hintStyle: TextStyle(
+                    //       color: Colors.grey
+                    //     )
+                    //   )
+                    // ),
+                    _autoCompleteTipo(),
                     const SizedBox(height: 10),
-                    TextFormField(
-                      controller: _severidadTextController,
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if(value == null || value.isEmpty) {
-                          return 'Favor de llenar la Severidad';
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                        hintText: '* Escriba la Severidad',
-                        hintStyle: TextStyle(
-                          color: Colors.grey
-                        )
-                      )
-                    ),
+                    // TextFormField(
+                    //   controller: _severidadTextController,
+                    //   keyboardType: TextInputType.number,
+                    //   validator: (value) {
+                    //     if(value == null || value.isEmpty) {
+                    //       return 'Favor de llenar la Severidad';
+                    //     }
+                    //     return null;
+                    //   },
+                    //   decoration: const InputDecoration(
+                    //     hintText: '* Escriba la Severidad',
+                    //     hintStyle: TextStyle(
+                    //       color: Colors.grey
+                    //     )
+                    //   )
+                    // ),
+                    _autoCompleteSeveridad(),
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: _notasTextController,
@@ -288,24 +307,6 @@ class _VentaDanosState extends State<VentaDanos> {
     );
   }
 
-  Future<void> getCamara(foto) async {
-    final List<XFile> pickedFileList = <XFile>[];
-    final photo = await picker.pickImage(
-      source: ImageSource.camera,
-      maxHeight: 720,
-      maxWidth: 1280,
-      imageQuality: 100
-    );
-
-    if(photo != null) {
-      await GallerySaver.saveImage(photo.path, albumName: 'TLEAVIN');
-      setState(() {
-        pickedFileList.add(XFile(photo.path));
-        convertirBase64(photo.path, foto);
-      });
-    }
-  }
-
   convertirBase64(value, foto) async {
     if(value != null) {
       final imageData = await File(value).readAsBytes();
@@ -333,15 +334,19 @@ class _VentaDanosState extends State<VentaDanos> {
     var formato = DateFormat('yyyy-MM-dd hh:mm:ss'); 
     var fecha = formato.format(DateTime.now());
 
+    var _area = _areaTextController.text.split('-')[0];
+    var _tipo = _tipoTextController.text.split('-')[0];
+    var _severidad = _severidadTextController.text.split('-')[0];
+
     if(_formKey.currentState!.validate()) {
       if(evidenciasDano.isNotEmpty) {
         dano = Dano(
           vin: widget.vin,
           panel: null,
           registroTipo: 'Regular',
-          area: int.parse(_areaTextController.text.trim()),
-          tipo: int.parse(_tipoTextController.text.trim()),
-          severidad: _severidadTextController.text.trim(),
+          area: int.parse(_area),
+          tipo: int.parse(_tipo),
+          severidad: _severidad,
           notas: _notasTextController.text,
           estado: 'A',
           fecha_creacion: fecha
@@ -423,6 +428,24 @@ class _VentaDanosState extends State<VentaDanos> {
     });
   }
 
+  Future<void> getCamara(foto) async {
+    final List<XFile> pickedFileList = <XFile>[];
+    final photo = await picker.pickImage(
+      source: ImageSource.camera,
+      maxHeight: 720,
+      maxWidth: 1280,
+      imageQuality: 100
+    );
+
+    if(photo != null) {
+      await GallerySaver.saveImage(photo.path, albumName: 'TLEAVIN');
+      setState(() {
+        pickedFileList.add(XFile(photo.path));
+        convertirBase64(photo.path, foto);
+      });
+    }
+  }
+
   Future<void> _dialogBuilder(BuildContext context) {
     return showDialog<void>(
       context: context,
@@ -476,6 +499,163 @@ class _VentaDanosState extends State<VentaDanos> {
           ]
         );
       }
+    );
+  }
+
+  Future<List<ListasA>> getListas() async {
+    List<ListasA> resultados = [];
+    List<String> result = [];
+    List<String> result1 = [];
+    List<String> result2 = [];
+    
+    try {
+      await DatabaseProvider.db.obtenerAreaDano().then((value) {
+        setState(() {
+
+          for(var i = 0; i < value.length; i++) {
+            result.add('${value[i].codigo.toString()}-${value[i].descripcion.toString()}');
+          }
+
+          listaA = result;
+
+          log(listaA.toString());
+        });
+      });
+
+      await DatabaseProvider.db.obtenerTipoDano().then((value) {
+        setState(() {
+
+          for(var i = 0; i < value.length; i++) {
+            result1.add('${value[i].id.toString()}-${value[i].descripcion.toString()}');
+          }
+
+          listaT = result1;
+        });
+      });
+
+      await DatabaseProvider.db.obtenerSeveridad().then((value) {
+        setState(() {
+
+          for(var i = 0; i < value.length; i++) {
+            result2.add('${value[i].id.toString()}-${value[i].descripcion.toString()}');
+          }
+
+          listaS = result2;
+        });
+      });
+    } 
+    catch (e) {
+      log('error => $e');
+    }
+
+    return resultados;
+  }
+
+  Widget _autoCompleteArea() {
+    return Container(
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+      child: Autocomplete<String>(
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          _searchingWithQuery = textEditingValue.text.toLowerCase();
+          return listaA.where((String option) => option.toLowerCase().contains(_searchingWithQuery!));
+        },
+        onSelected: (String selection) {
+          setState(() {
+            _areaTextController.text = selection;
+          });
+        },
+        fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
+          return TextFormField(
+            controller: controller,
+            focusNode: focusNode,
+            decoration: const InputDecoration(
+              labelText: '* Ingrese Area',
+              hintText: 'Seleccione Area',
+              hintStyle: TextStyle(
+                color: Colors.grey
+              )
+            ),
+            validator: (value) {
+              if(value == null || value.isEmpty) {
+                return 'Favor de llenar el Area';
+              }
+              return null;
+            }
+          );
+        }
+      )
+    );
+  }
+
+  Widget _autoCompleteTipo() {
+    return Container(
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+      child: Autocomplete<String>(
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          _searchingWithQuery = textEditingValue.text.toLowerCase();
+          return listaT.where((String option) => option.toLowerCase().contains(_searchingWithQuery!));
+        },
+        onSelected: (String selection) {
+          setState(() {
+            _tipoTextController.text = selection;
+          });
+        },
+        fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
+          return TextFormField(
+            controller: controller,
+            focusNode: focusNode,
+            decoration: const InputDecoration(
+              labelText: '* Ingrese Tipo',
+              hintText: 'Seleccione Tipo',
+              hintStyle: TextStyle(
+                color: Colors.grey
+              )
+            ),
+            validator: (value) {
+              if(value == null || value.isEmpty) {
+                return 'Favor de llenar el Tipo';
+              }
+              return null;
+            }
+          );
+        }
+      )
+    );
+  }
+
+  Widget _autoCompleteSeveridad() {
+    return Container(
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+      child: Autocomplete<String>(
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          _searchingWithQuery = textEditingValue.text.toLowerCase();
+          return listaS.where((String option) => option.toLowerCase().contains(_searchingWithQuery!));
+        },
+        onSelected: (String selection) {
+          setState(() {
+            _severidadTextController.text = selection;
+          });
+        },
+        fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
+          return TextFormField(
+            controller: controller,
+            focusNode: focusNode,
+            decoration: const InputDecoration(
+              labelText: '* Ingrese Severidad',
+              hintText: 'Seleccione Severidad',
+              hintStyle: TextStyle(
+                color: Colors.grey
+              )
+            ),
+            validator: (value) {
+              if(value == null || value.isEmpty) {
+                return 'Favor de llenar la Severidad';
+              }
+              return null;
+            }
+          );
+        }
+      )
     );
   }
 }

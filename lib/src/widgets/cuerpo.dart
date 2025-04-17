@@ -43,7 +43,7 @@ class _CuerpoState extends State<Cuerpo> {
                   GestureDetector(
                     onDoubleTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const InfoApp())),
                     child: Text(
-                      'Version: 1.2.0',
+                      'Version: 1.2.6',
                       style:  TextStyle(
                         fontSize: 12,
                         color: Colors.grey[400]
@@ -76,14 +76,14 @@ class _CuerpoState extends State<Cuerpo> {
                   const Text(
                     'Fecha: ',
                     style: TextStyle(
-                      fontSize: 19,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold
                     )
                   ),
                   Text(
                     dateString,
                     style: const TextStyle(
-                      fontSize: 19
+                      fontSize: 18
                     )
                   )
                 ]
@@ -94,14 +94,14 @@ class _CuerpoState extends State<Cuerpo> {
                   const Text(
                     'Ubicacion: ',
                     style: TextStyle(
-                      fontSize: 19,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold
                     )
                   ),
                   Text(
                     itemP.usuario!.locacion!,
                     style: const TextStyle(
-                      fontSize: 19
+                      fontSize: 18
                     )
                   )
                 ]

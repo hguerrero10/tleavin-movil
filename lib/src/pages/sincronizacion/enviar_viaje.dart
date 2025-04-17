@@ -15,7 +15,7 @@ class ViajesParaEnviar extends StatefulWidget {
 }
 
 class _ViajesParaEnviarState extends State<ViajesParaEnviar> {
-  String urlEnvioViaje = 'http://tleavin.tlea.online/movil/viaje';
+  String urlEnvioViaje = 'http://10.1.2.6:9088/movil/viaje';
   var _stream;
   var enviando = false;
 

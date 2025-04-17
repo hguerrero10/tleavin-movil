@@ -1,19 +1,21 @@
-import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/cupertino.dart';
 import 'package:tleavin_mobil/database/db.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:tleavin_mobil/model/modelo.dart';
 import 'package:tleavin_mobil/model/cliente.dart';
 import 'package:tleavin_mobil/model/destinos.dart';
-import 'package:tleavin_mobil/model/modelo.dart';
-// import 'package:tleavin_mobil/model/severidad.dart';
-// import 'package:tleavin_mobil/model/areaDano.dart';
-// import 'package:tleavin_mobil/model/tipo_dano.dart';
+import 'package:tleavin_mobil/model/areaDano.dart';
+import 'package:tleavin_mobil/model/tipo_dano.dart';
+import 'package:tleavin_mobil/model/severidad.dart';
+import 'package:tleavin_mobil/src/pages/sincronizacion/enviar_viaje.dart';
+import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/pages/sincronizacion/enviar_ventas.dart';
-import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 
 class Sincronizar extends StatefulWidget {
   const Sincronizar({super.key});
@@ -35,8 +37,15 @@ class _SincronizarState extends State<Sincronizar> {
   String urlDestinoServer = 'https://parapruebas.tlea.online/obtenerDestinos';
   Destino? destinoInsertList;
 
-  // String urlSeveridadServer = 'https://parapruebas.tlea.online/obtenerSeveridad';
-  // Severidad? severidadInsertList;
+
+  String urlAreaDanoServer = 'https://parapruebas.tlea.online/obtenerAreaDano';
+  AreaDano? areaDanoInsertList;
+
+  String urlTipoDanoServer = 'https://parapruebas.tlea.online/obtenertipoDano';
+  TipoDano? tipoDanoInsertList;
+
+  String urlSeveridadServer = 'https://parapruebas.tlea.online/obtenerSeveridad';
+  Severidad? severidadInsertList;
   
   @override
   Widget build(BuildContext context) {
@@ -56,79 +65,43 @@ class _SincronizarState extends State<Sincronizar> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const Cuerpo(),
-            // Padding(
-            //   padding: const EdgeInsets.all(16),
-            //   child: ElevatedButton(
-            //     onPressed: () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => const ViajesParaEnviar())),
-            //     style: ElevatedButton.styleFrom(
-            //       backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
-            //       padding: const EdgeInsets.all(30),
-            //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            //       elevation: 5,
-            //     ),
-            //     child: const Row(
-            //       children: [
-            //         Icon(
-            //           Icons.route,
-            //           color: Colors.black,
-            //           size: 40
-            //         ),
-            //         SizedBox(width: 10),
-            //         Text(
-            //           'Sincronizar Viajes',
-            //           style: TextStyle(
-            //             fontSize: 20,
-            //             color: Colors.black
-            //           )
-            //         )
-            //       ]
-            //     )
-            //   )
-            // ),
+            const SizedBox(height: 10),
 
-            // const SizedBox(height: 40),
-
-            botonSincronizar(Icons.people, 'Sincronizar VINES', () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => const EnviarVentaVin()))),
-
-            // Center(
-            //   child: ElevatedButton(
-            //     // onPressed: () => getCamara(2),
-            //     onPressed: () => {},
-            //     style: ButtonStyle(
-            //       backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
-            //       padding: MaterialStateProperty.all<EdgeInsetsGeometry>(const EdgeInsets.all(10)),
-            //       shape: MaterialStateProperty.all(
-            //         RoundedRectangleBorder(
-            //           borderRadius: BorderRadius.circular(16)
-            //         )
-            //       )
-            //     ),
-            //     child: const SizedBox(
-            //       width: 250,
-            //       child: Row(
-            //         mainAxisAlignment: MainAxisAlignment.center,
-            //         children: [
-            //           Icon(
-            //             Icons.camera,
-            //             color: Colors.white,
-            //             size: 30,
-            //           ),
-            //           SizedBox(width: 10),
-            //           Text(
-            //             'Fotografia de Tarja',
-            //             style: TextStyle(
-            //               fontSize: 18.0,
-            //               color: Colors.white
-            //             )
-            //           )
-            //         ]
-            //       )
-            //     )
-            //   )
-            // ),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: ElevatedButton(
+                onPressed: () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => const ViajesParaEnviar())),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
+                  padding: const EdgeInsets.all(30),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  elevation: 5,
+                ),
+                child: const Row(
+                  children: [
+                    Icon(
+                      Icons.route,
+                      color: Colors.black,
+                      size: 40
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      'Sincronizar Viajes',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black
+                      )
+                    )
+                  ]
+                )
+              )
+            ),
 
             const SizedBox(height: 20),
 
+            botonSincronizar(Icons.car_rental, 'Enviar VINES Venta', () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => const EnviarVentaVin()))),
+
+            const SizedBox(height: 20),
 
             botonSincronizar(Icons.people, 'Sincronizar Clientes', () => obtenerClienteServer()),
 
@@ -136,7 +109,13 @@ class _SincronizarState extends State<Sincronizar> {
 
             botonSincronizar(Icons.list, 'Sincronizar Destinos', () => obtenerDestinos()),
 
-            // botonSincronizar(Icons.warning, 'Sincronizar Severidad', () => obtenerSeveridadServer()),
+            const SizedBox(height: 20),   
+
+            botonSincronizar(Icons.warning, 'Sincronizar Areas', () => obtenerAreaDanoServer()),
+            
+            botonSincronizar(Icons.warning, 'Sincronizar Tipos', () => obtenerTipoDanoServer()),
+
+            botonSincronizar(Icons.warning, 'Sincronizar Severidad', () => obtenerSeveridadServer()),
 
             const SizedBox(height: 20),   
             
@@ -167,37 +146,6 @@ class _SincronizarState extends State<Sincronizar> {
                     )
                   ]
                 )
-              )
-            )
-          ]
-        )
-      )
-    );
-  }
-
-  Widget botonSincronizar(ico, titulo, onpress) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-      child: ElevatedButton(
-        onPressed: onpress,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.black,
-          padding: const EdgeInsets.all(16),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          elevation: 5,
-        ),
-        child: Row(
-          children: [
-            Icon(
-              ico,
-              color: Colors.white
-            ),
-            const SizedBox(width: 10),
-            Text(
-              titulo,
-              style: const TextStyle(
-                fontSize: 20,
-                color: Colors.white
               )
             )
           ]
@@ -267,7 +215,7 @@ class _SincronizarState extends State<Sincronizar> {
   }
 
   // Future enviarData() async {
-  //   var vines = await DatabaseProvider.db.fetchVINES();
+  //   var vines = await DatabaseProvider.db.fetchVIN();
   //   try{
   //     http.Response response = await http.post(Uri.parse(urlEnviarData), body: vines.toString(), headers: {"Content-Type": "application/json"});
   //     if(response.statusCode == 200) {
@@ -592,91 +540,276 @@ class _SincronizarState extends State<Sincronizar> {
     }
   }
 
-  // obtenerSeveridadServer() async {
-  //   var responseData;
-  //   try{
-  //     final result = await InternetAddress.lookup('parapruebas.tlea.online');
-  //     if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-  //       try{
-  //         await http.get(Uri.parse(urlSeveridadServer),headers: {"Content-Type" : "application/json"}).then((value) async {
-  //           if(value.statusCode == 200) {
-  //             responseData = json.decode(value.body);
-  //             await DatabaseProvider.db.borrarBDSeveridad();
-  //             for(var value in responseData['Severidades']) {
-  //               severidadInsertList = null;
-  //               severidadInsertList = Severidad(
-  //                 id: value['id'],
-  //                 tipo: value['tipo'],
-  //                 descripcion: value['descripcion']
-  //               );
-  //               await DatabaseProvider.db.insertarSeveridad(severidadInsertList!);
-  //             }
-  //             Fluttertoast.showToast(
-  //               msg: "${responseData['Severidades'].length} Severidades Sincronizadas",
-  //               toastLength: Toast.LENGTH_LONG,
-  //               gravity: ToastGravity.CENTER,
-  //               timeInSecForIosWeb: 1,
-  //               backgroundColor: Colors.green,
-  //               textColor: Colors.white,
-  //               fontSize: 20
-  //             );
-  //             itemP.addSeveridadInsert();
-  //           } 
-  //           else {
-  //             itemP.addSeveridadInsertTimeOut();
-  //             itemP.addRegistroSeveridad();
-  //             Fluttertoast.showToast(
-  //               msg: "Conexion sin Exito al Servidor",
-  //               toastLength: Toast.LENGTH_LONG,
-  //               gravity: ToastGravity.BOTTOM,
-  //               timeInSecForIosWeb: 1,
-  //               backgroundColor: Colors.red,
-  //               textColor: Colors.white,
-  //               fontSize: 20
-  //             );
-  //           }
-  //         }).timeout(const Duration(seconds: 15), onTimeout: () {
-  //           itemP.addSeveridadInsertTimeOut();
-  //           itemP.addRegistroSeveridad();
-  //           Fluttertoast.showToast(
-  //             msg: "Conexion sin Exito al Servidor",
-  //             toastLength: Toast.LENGTH_LONG,
-  //             gravity: ToastGravity.BOTTOM,
-  //             timeInSecForIosWeb: 1,
-  //             backgroundColor: Colors.red,
-  //             textColor: Colors.white,
-  //             fontSize: 20
-  //           );
-  //         });
-  //       } 
-  //       catch (e) {
-  //         Fluttertoast.showToast(
-  //           msg: "Conexion sin Exito al Servidor",
-  //           toastLength: Toast.LENGTH_LONG,
-  //           gravity: ToastGravity.BOTTOM,
-  //           timeInSecForIosWeb: 1,
-  //           backgroundColor: Colors.red,
-  //           textColor: Colors.white,
-  //           fontSize: 20
-  //         );
-  //         itemP.addRegistroSeveridad();
-  //         itemP.addSeveridadInsertTimeOut();
-  //       }
-  //     }
-  //   } on SocketException catch (_) {
-  //     itemP.addSeveridadInsertTimeOut();
-  //     itemP.addRegistroSeveridad();
-  //     Fluttertoast.showToast(
-  //       msg: "Conexion sin Exito al Servidor",
-  //       toastLength: Toast.LENGTH_LONG,
-  //       gravity: ToastGravity.BOTTOM,
-  //       timeInSecForIosWeb: 1,
-  //       backgroundColor: Colors.red,
-  //       textColor: Colors.white,
-  //       fontSize: 20
-  //     );
-  //   }
-  // }
+
+  obtenerAreaDanoServer() async {
+    var responseData;
+    try{
+      final result = await InternetAddress.lookup('parapruebas.tlea.online');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+
+        try{
+          await http.get(Uri.parse(urlAreaDanoServer),headers: {"Content-Type" : "application/json"}).then((value) async {
+            if(value.statusCode == 200) {
+              responseData = json.decode(value.body);
+              await DatabaseProvider.db.borrarBDAreaDano();
+
+              for(var value in responseData['AreaDanos']) {
+                areaDanoInsertList = null;
+                areaDanoInsertList = AreaDano(
+                  id: value['id'], 
+                  codigo: value['codigo'], 
+                  area: value['area'], 
+                  descripcion: value['descripcion']
+                );
+                
+                await DatabaseProvider.db.insertarAreaDano(areaDanoInsertList!);
+              }
+
+              Fluttertoast.showToast(
+                msg: "${responseData['AreaDanos'].length} Areas Daños Sincronizados",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+                fontSize: 20
+              );
+
+              itemP.addDanoAreaInsert();
+            } 
+            else {
+              itemP.addAreaDanoInsertTimeOut();
+              itemP.addRegistroAreaDano();
+              Fluttertoast.showToast(
+                msg: "Conexion sin Exito al Servidor",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+                fontSize: 20
+              );
+            }
+          }).timeout(const Duration(seconds: 15), onTimeout: () {
+            itemP.addAreaDanoInsertTimeOut();
+            itemP.addRegistroAreaDano();
+            Fluttertoast.showToast(
+              msg: "Conexion sin Exito al Servidor",
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 20
+            );
+          });
+        } 
+        catch (e) {
+          Fluttertoast.showToast(
+            msg: "Conexion sin Exito al Servidor",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 20
+          );
+          itemP.addRegistroAreaDano();
+          itemP.addAreaDanoInsertTimeOut();
+        }
+      }
+    } on SocketException catch (_) {
+      itemP.addAreaDanoInsertTimeOut();
+      itemP.addRegistroAreaDano();
+      Fluttertoast.showToast(
+        msg: "Conexion sin Exito al Servidor",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 20
+      );
+    }
+  }
+
+  obtenerTipoDanoServer() async {
+    var responseData;
+    try{
+      final result = await InternetAddress.lookup('parapruebas.tlea.online');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+
+        try{
+          await http.get(Uri.parse(urlTipoDanoServer),headers: {"Content-Type" : "application/json"}).then((value) async {
+            if(value.statusCode == 200) {
+
+              responseData = json.decode(value.body);
+              await DatabaseProvider.db.borrarBDTipoDano();
+
+              for(var value in responseData['TiposDano']) {
+                tipoDanoInsertList = null;
+                tipoDanoInsertList = TipoDano(
+                  id: value['id'], 
+                  descripcion: value['descripcion']
+                );
+                
+                await DatabaseProvider.db.insertarTipoDano(tipoDanoInsertList!);
+              }
+
+              Fluttertoast.showToast(
+                msg: "${responseData['TiposDano'].length} Tipos Daños Sincronizados",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+                fontSize: 20
+              );
+
+              itemP.addTipoDanoInsert();
+            } 
+            else {
+              itemP.addTipoDanoInsertTimeOut();
+              itemP.addRegistroTipoDano();
+              Fluttertoast.showToast(
+                msg: "Conexion sin Exito al Servidor",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+                fontSize: 20
+              );
+            }
+          }).timeout(const Duration(seconds: 15), onTimeout: () {
+            itemP.addTipoDanoInsertTimeOut();
+            itemP.addRegistroTipoDano();
+            Fluttertoast.showToast(
+              msg: "Conexion sin Exito al Servidor",
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 20
+            );
+          });
+        } 
+        catch (e) {
+          Fluttertoast.showToast(
+            msg: "Conexion sin Exito al Servidor",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 20
+          );
+          itemP.addRegistroTipoDano();
+          itemP.addTipoDanoInsertTimeOut();
+        }
+      }
+    } on SocketException catch (_) {
+      itemP.addTipoDanoInsertTimeOut();
+      itemP.addRegistroTipoDano();
+      Fluttertoast.showToast(
+        msg: "Conexion sin Exito al Servidor",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 20
+      );
+    }
+  }
+
+  obtenerSeveridadServer() async {
+    var responseData;
+    try{
+      final result = await InternetAddress.lookup('parapruebas.tlea.online');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        try{
+          await http.get(Uri.parse(urlSeveridadServer),headers: {"Content-Type" : "application/json"}).then((value) async {
+            if(value.statusCode == 200) {
+              responseData = json.decode(value.body);
+              await DatabaseProvider.db.borrarBDSeveridad();
+              for(var value in responseData['Severidades']) {
+                severidadInsertList = null;
+                severidadInsertList = Severidad(
+                  id: value['id'],
+                  tipo: value['tipo'],
+                  descripcion: value['descripcion']
+                );
+                await DatabaseProvider.db.insertarSeveridad(severidadInsertList!);
+              }
+              Fluttertoast.showToast(
+                msg: "${responseData['Severidades'].length} Severidades Sincronizadas",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.CENTER,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.green,
+                textColor: Colors.white,
+                fontSize: 20
+              );
+              itemP.addSeveridadInsert();
+            } 
+            else {
+              itemP.addSeveridadInsertTimeOut();
+              itemP.addRegistroSeveridad();
+              Fluttertoast.showToast(
+                msg: "Conexion sin Exito al Servidor",
+                toastLength: Toast.LENGTH_LONG,
+                gravity: ToastGravity.BOTTOM,
+                timeInSecForIosWeb: 1,
+                backgroundColor: Colors.red,
+                textColor: Colors.white,
+                fontSize: 20
+              );
+            }
+          }).timeout(const Duration(seconds: 15), onTimeout: () {
+            itemP.addSeveridadInsertTimeOut();
+            itemP.addRegistroSeveridad();
+            Fluttertoast.showToast(
+              msg: "Conexion sin Exito al Servidor",
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 20
+            );
+          });
+        } 
+        catch (e) {
+          Fluttertoast.showToast(
+            msg: "Conexion sin Exito al Servidor",
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 20
+          );
+          itemP.addRegistroSeveridad();
+          itemP.addSeveridadInsertTimeOut();
+        }
+      }
+    } on SocketException catch (_) {
+      itemP.addSeveridadInsertTimeOut();
+      itemP.addRegistroSeveridad();
+      Fluttertoast.showToast(
+        msg: "Conexion sin Exito al Servidor",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 20
+      );
+    }
+  }
+
 
   borrarTodaBD() async {
     var datos = await  DatabaseProvider.db.obtenerViajesParaSincronizar();
@@ -698,5 +831,36 @@ class _SincronizarState extends State<Sincronizar> {
         fontSize: 20
       );
     }
+  }
+
+  Widget botonSincronizar(ico, titulo, onpress) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+      child: ElevatedButton(
+        onPressed: onpress,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.black,
+          padding: const EdgeInsets.all(16),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          elevation: 5,
+        ),
+        child: Row(
+          children: [
+            Icon(
+              ico,
+              color: Colors.white
+            ),
+            const SizedBox(width: 10),
+            Text(
+              titulo,
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.white
+              )
+            )
+          ]
+        )
+      )
+    );
   }
 }

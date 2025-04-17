@@ -3,15 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/usuario.dart';
 import 'package:tleavin_mobil/src/pages/ventavin/venta_vin.dart';
+import 'package:tleavin_mobil/src/pages/viaje/armar_viaje.dart';
+import 'package:tleavin_mobil/src/pages/viaje/viajes_armados.dart';
+import 'package:tleavin_mobil/src/pages/vin/registro_vin.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/pages/sincronizacion/enviar.dart';
-// import 'package:tleavin_mobil/src/pages/viaje/armar_viaje.dart';
-// import 'package:tleavin_mobil/src/pages/viaje/viajes_armados.dart';
-// import 'package:tleavin_mobil/src/pages/vin/registro_vin.dart';
 import 'package:tleavin_mobil/src/pages/vin/vins_disponibles.dart';
 import 'package:tleavin_mobil/src/startup/login/login_form.dart';
-// import 'package:tleavin_mobil/src/widgets/drawer.dart';
 
 class InicioScreen extends StatefulWidget {
   const InicioScreen({super.key});
@@ -109,11 +108,13 @@ class _InicioScreenState extends State<InicioScreen> {
                       ]
                     )
                   ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 10),
                   _cuadricula1(),
                   const SizedBox(height: 10),
                   _cuadricula2(),
                   const SizedBox(height: 20),
+                  _cuadricula3(),
+                  const SizedBox(height: 110),
                   Padding(
                     padding: const EdgeInsets.only(left: 16, right: 16),
                     child: ElevatedButton(
@@ -214,9 +215,8 @@ class _InicioScreenState extends State<InicioScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          // _panel(CupertinoIcons.car_detailed, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CompraVin())), 'Comprar VIN'),
+          _panel(CupertinoIcons.car_detailed, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CompraVin())), 'Comprar VIN'),
           _panel(CupertinoIcons.car_detailed, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VentaVin())), 'Venta de VINES'),
-          _panel(CupertinoIcons.list_bullet_below_rectangle, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VinsDisponibles())), 'VINES Disponibles'),
         ]
       )
     );
@@ -229,6 +229,20 @@ class _InicioScreenState extends State<InicioScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           // _panel(Icons.route_outlined, () {Navigator.push(context,MaterialPageRoute(builder: (context) => const ArmarViaje())); itemP.deleteVSPV();}, 'Armar Viaje'),
+          _panel(CupertinoIcons.list_bullet_below_rectangle, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VinsDisponibles())), 'VINES Disponibles'),
+          _panel(Icons.list_alt_sharp, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ViajesArmados())), 'Viajes')
+        ]
+      )
+    );
+  }
+
+  Widget _cuadricula3() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _panel(Icons.route_outlined, () {Navigator.push(context,MaterialPageRoute(builder: (context) => const ArmarViaje())); itemP.deleteVSPV();}, 'Armar Viaje'),
           // _panel(Icons.list_alt_sharp, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ViajesArmados())), 'Viajes')
         ]
       )

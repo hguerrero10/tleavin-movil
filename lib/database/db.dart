@@ -620,7 +620,7 @@ class DatabaseProvider {
     List<AreaDano> lista;
     var res = await db.rawQuery("SELECT * FROM area_dano ORDER BY codigo ASC");
 
-    if (res.isNotEmpty) {
+    if(res.isNotEmpty) {
       lista =  res.map((u) => AreaDano.fromMap(u)).toList();
     } 
     else {
@@ -641,7 +641,7 @@ class DatabaseProvider {
     List<TipoDano> lista;
     var res = await db.query("tipo_dano");
 
-    if (res.isNotEmpty) {
+    if(res.isNotEmpty) {
       lista =  res.map((u) => TipoDano.fromMap(u)).toList();
     } 
     else {
@@ -662,7 +662,7 @@ class DatabaseProvider {
     List<Severidad> lista;
     var res = await db.query("severidad");
 
-    if (res.isNotEmpty) {
+    if(res.isNotEmpty) {
       lista =  res.map((u) => Severidad.fromMap(u)).toList();
     } 
     else {

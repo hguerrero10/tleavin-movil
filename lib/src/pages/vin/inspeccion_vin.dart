@@ -103,8 +103,8 @@ class _InspeccionVinState extends State<InspeccionVin> {
               const SizedBox(height: 20),
               Center(
                 child: Container(
-                  width: 360,
-                  height: 440,
+                  width: 460,
+                  height: 540,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/img/inspeccion_vehiculo.jpg'),
@@ -113,28 +113,28 @@ class _InspeccionVinState extends State<InspeccionVin> {
                   ),
                   child: Stack(
                     children: [
-                      _boton(30, 115, 'Frente', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'FRENTE')))),
+                      _boton(60, 167, 'Frente', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'FRENTE')))),
 
-                      _boton(140, 115, 'Interior', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'INTERIOR')))), 
+                      _boton(170, 165, 'Interior', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'INTERIOR')))), 
                       
-                      _botonVertical(150, 40, 1, 'L-Izquierdo', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'L-IZQUIERDO')))),
+                      _botonVertical(205, 60, 1, 'L-Izquierdo', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'L-IZQUIERDO')))),
                      
-                      _boton(230, 115, 'P-Superior', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'P-SUPERIOR')))),
+                      _boton(290, 165, 'P-Superior', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'P-SUPERIOR')))),
                       
-                      _botonVertical(150, 290, 3, 'L-Derecho', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'L-DERECHO')))),
+                      _botonVertical(205, 375, 3, 'L-Derecho', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'L-DERECHO')))),
                       
-                      _boton(390, 115, 'P-Tracera', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'P-TRACERA')))),
+                      _boton(475, 167, 'P-Tracera', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'P-TRACERA')))),
                       
-                      _boton(350, 10, 'B-Vehiculo', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'B-VEHICULO')))),
+                      _boton(390, 10, 'B-Vehiculo', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'B-VEHICULO')))),
                       
-                      _boton(330, 205, 'Accesorios', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'ACCESORIOS'))))
+                      _boton(420, 275, 'Accesorios', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'ACCESORIOS'))))
                     ]
                   )
                 )
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 40),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ElevatedButton(
                     onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroUnidadSS(vin: widget.vin, tipo: 'Unidad Sucia'))),

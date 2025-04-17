@@ -36,8 +36,8 @@ class _InfoAppState extends State<InfoApp> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               SizedBox(
-                height: 100,
-                width: 100,
+                height: 125,
+                width: 125,
                 child: Image.asset(
                   'assets/img/logo_tlea.png'
                 )
@@ -51,8 +51,8 @@ class _InfoAppState extends State<InfoApp> {
                 )
               ),
               SizedBox(
-                height: 75,
-                width: 75,
+                height: 85,
+                width: 85,
                 child: Image.asset(
                   'assets/img/logopp.png'
                 )
@@ -106,7 +106,7 @@ class _InfoAppState extends State<InfoApp> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Versión: 1.2.0',
+                'Versión: 1.2.6',
                 style: TextStyle(
                   color: Color(0xfbb5bac9)
                 )
