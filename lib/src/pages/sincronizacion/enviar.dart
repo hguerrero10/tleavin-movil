@@ -26,7 +26,7 @@ class Sincronizar extends StatefulWidget {
 
 class _SincronizarState extends State<Sincronizar> {
 
-  String urlEnviarData = 'https://parapruebas.tlea.online/guardarVIN';
+  String urlEnviarData = 'https://parapruebas.tlea.online/guardarVenta';
 
   String urlClienteServer = 'https://parapruebas.tlea.online/obtenerCliente';
   Cliente? clienteInsertList;

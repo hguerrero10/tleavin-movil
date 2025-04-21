@@ -24,8 +24,7 @@ class EnviarVentaVin extends StatefulWidget {
 }
 
 class _EnviarVentaVinState extends State<EnviarVentaVin> {
-  // String urlEnviarData = 'http://192.168.12.176:3888/guardarVIN';
-  String urlEnviarData = 'https://parapruebas.tlea.online/guardarVIN';
+  String urlEnviarData = 'https://parapruebas.tlea.online/guardarVenta';
 
   final ImagePicker picker = ImagePicker();
 
@@ -504,6 +503,7 @@ class _EnviarVentaVinState extends State<EnviarVentaVin> {
   Future enviarData() async {
     // var vines = await DatabaseProvider.db.fetchVINES(itemP.clienteSeleccionado, itemP.destinoSeleccionado, iddetarja);
     var vines = await DatabaseProvider.db.enviarConTarja(itemP.clienteSeleccionado, itemP.destinoSeleccionado, iddetarja);
+    
     try{
       http.Response response = await http.post(Uri.parse(urlEnviarData), body: vines.toString(), headers: {"Content-Type": "application/json"});
 

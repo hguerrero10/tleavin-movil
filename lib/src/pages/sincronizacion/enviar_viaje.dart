@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/viaje.dart';
 import 'package:http/http.dart' as http;
@@ -15,7 +18,7 @@ class ViajesParaEnviar extends StatefulWidget {
 }
 
 class _ViajesParaEnviarState extends State<ViajesParaEnviar> {
-  String urlEnvioViaje = 'http://10.1.2.6:9088/movil/viaje';
+  String urlEnvioViaje = 'https://parapruebas.tlea.online/guardarCompra';
   var _stream;
   var enviando = false;
 
@@ -42,6 +45,22 @@ class _ViajesParaEnviarState extends State<ViajesParaEnviar> {
       body: lista()
     );
   }
+
+  //   pruebafor() async {
+  //   var formato = DateFormat('yyyy-MM-dd hh:mm:ss'); 
+  //   var fecha = formato.format(DateTime.now());
+
+  //   for(var ed in todosVins) {
+  //     var vines = (
+  //       vin: ed.vin,
+  //       fecha_sync: fecha
+  //     );
+
+  //     await DatabaseProvider.db.marcarComoSincronizado(vines).then((value) {}).timeout(const Duration(seconds: 30), onTimeout: () {
+  //       itemP.addError();
+  //     });
+  //   }
+  // }
 
   Widget lista() {
     return StreamBuilder<List<Viaje>>(
@@ -282,6 +301,11 @@ class _ViajesParaEnviarState extends State<ViajesParaEnviar> {
     String token = "83c44c8cf9264486e94906844090e30b89a21715";
 
     var limpio = datos.toString().replaceAll('"{', "{").replaceAll('}"', "}");
+
+    // final directory = await getExternalStorageDirectory();
+    // final file = File('${directory!.path}/viaje_data.txt');
+    // await file.writeAsString(limpio);
+    // log('Data saved to: ${file.path}');
 
     try{
       http.Response response = await http.post(Uri.parse(urlEnvioViaje), body: limpio, headers: {"Content-Type": "application/json", "Authorization": "Bearer $token"});
