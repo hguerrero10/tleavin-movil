@@ -1,9 +1,7 @@
-import 'dart:developer';
 import 'dart:io';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter/cupertino.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tleavin_mobil/model/modelo.dart';
@@ -101,7 +99,7 @@ class _SincronizarState extends State<Sincronizar> {
 
             botonSincronizar(Icons.car_rental, 'Enviar VINES Venta', () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => const EnviarVentaVin()))),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 40),
 
             botonSincronizar(Icons.people, 'Sincronizar Clientes', () => obtenerClienteServer()),
 
@@ -109,7 +107,6 @@ class _SincronizarState extends State<Sincronizar> {
 
             botonSincronizar(Icons.list, 'Sincronizar Destinos', () => obtenerDestinos()),
 
-            const SizedBox(height: 20),   
 
             botonSincronizar(Icons.warning, 'Sincronizar Areas', () => obtenerAreaDanoServer()),
             

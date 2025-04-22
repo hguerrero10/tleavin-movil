@@ -27,10 +27,9 @@ class _ViajesArmadosState extends State<ViajesArmados> {
     var data = await DatabaseProvider.db.obtenerInfoViaje(infviaje);
 
     setState(() {
-      informacionDelViaje = data;
+      // informacionDelViaje = data;
+      Navigator.push(context, MaterialPageRoute(builder: (context) => DetalleDeViaje(viaje: data)));
     });
-
-    Navigator.push(context, MaterialPageRoute(builder: (context) => DetalleDeViaje(viaje: informacionDelViaje)));
   }
 
   @override
