@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
@@ -416,10 +417,47 @@ class DatabaseProvider {
     return jsonString;
   }
 
-  asignarVinViaje(vv) async {
-    final db = await database;
-    return db.update('vin', {'idviaje' : vv.idviaje, 'origen' : vv.origen, 'destino' : vv.destino, 'fecha_carga': vv.fecha_carga}, where: "vin = ?", whereArgs: [vv.vin]);
+
+
+Future<int> asignarVinViaje(vv) async {
+  if(vv.idviaje == null || vv.idv == null) {
+    throw ArgumentError('idviaje y vin no pueden ser nulos');
+    
   }
+
+  try {
+    log('Actualizando VIN: ${vv.idv}, idviaje: ${vv.idviaje}');
+    final db = await database;
+    final rowsAffected = await db.update(
+      'vin',
+      {
+        'idviaje': vv.idviaje,
+        'origen': vv.origen,
+        'destino': vv.destino,
+        'fecha_carga': vv.fecha_carga,
+      },
+      where: "idv = ?",
+      whereArgs: [vv.idv],
+    );
+
+    if(rowsAffected == 0) {
+      log('No se actualizó ningún registro para el VIN ${vv.idv}');
+    }
+
+    return rowsAffected;
+  } catch (e) {
+    log('Error al actualizar el VIN: $e');
+    rethrow;
+  }
+}
+
+
+
+  // asignarVinViaje(vv) async {
+  //   log(vv.idviaje.toString());
+  //   final db = await database;
+  //   return db.update('vin', {'idviaje' : vv.idviaje, 'origen' : vv.origen, 'destino' : vv.destino, 'fecha_carga': vv.fecha_carga}, where: "vin = ?", whereArgs: [vv.vin]);
+  // }
   
   asignarPoOrVIN(vv) async {
     final db = await database;
@@ -739,12 +777,26 @@ class DatabaseProvider {
     return res;
   }
 
+
+
+
+
+
+
+
+
+
+
+
   Future<List> obtenerInfoViaje(idvia) async {
     Database db = await database;
 
+    // List<Map> data = await db.rawQuery("SELECT vi.idv, vi.idviaje, vi.cartaporte, vi.vin, vi.distrib_clave, vi.dest_nombre, vi.ruta_clave, vi.ruta_nombre, vi.origen, vi.destino, vi.modelo, vi.marca, vi.posicion, vi.orientacion, vi.compra, vi.fecha_carga, vi.fecha_creacion, vi.fecha_sync FROM vin as vi");
+    // List<Map> data2 = await db.rawQuery("SELECT via.idviaje, via.supervisor, via.folio_bitacora, via.cartaporte, via.bitacora_fecha_carga, via.num_eco_unidad, via.nombre_operador, via.cliente_clave, via.cliente_nombre, via.ruta_clave, via.ruta_nombre, via.origen, via.destino, via.etiqueta, via.status_carga, via.notas, via.registrada_por, via.tipo_viaje, via.semana, via.estadoViaje, via.fecha_creacion, via.fecha_sync FROM viaje AS via");
     List<Map> data = await db.rawQuery("SELECT via.idviaje, via.supervisor, via.folio_bitacora, via.cartaporte, via.bitacora_fecha_carga, via.num_eco_unidad, via.nombre_operador, via.cliente_clave, via.cliente_nombre, via.ruta_clave, via.ruta_nombre, via.origen, via.destino, via.etiqueta, via.status_carga, via.notas, via.registrada_por, via.tipo_viaje, via.semana, via.estadoViaje, via.fecha_creacion, via.fecha_sync, vi.idv, vi.idviaje, vi.cartaporte, vi.vin, vi.distrib_clave, vi.dest_nombre, vi.ruta_clave, vi.ruta_nombre, vi.origen, vi.destino, vi.modelo, vi.marca, vi.posicion, vi.orientacion, vi.compra, vi.fecha_carga, vi.fecha_creacion, vi.fecha_sync FROM viaje AS via INNER JOIN vin AS vi on vi.idviaje = via.idviaje WHERE via.idviaje = $idvia");
     Map<String, dynamic> viajesAgrupados = {};
     Map<String, dynamic> viajesAgrupadosfafg = {};
+
     if(data.isNotEmpty) {
       for (var viaje in data) {
         final idViaje = viaje['idviaje'];
@@ -804,10 +856,13 @@ class DatabaseProvider {
         viajesAgrupadosfafg[idViaje.toString()] = {'viaje': obviaje};
       }
     }
-      
     return viajesAgrupadosfafg.values.toList();
   }
-  
+
+
+
+
+
   actualizarEstadoViaje(idviaje) async {
     final db = await database;
 

@@ -245,8 +245,8 @@ class _ViajesParaEnviarState extends State<ViajesParaEnviar> {
                   enviando != false ? Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
-                      height: 315,
-                      width: 370,
+                      height: 615,
+                      width: 670,
                       decoration: BoxDecoration(
                         color: Colors.white54,
                         borderRadius: BorderRadius.circular(8),

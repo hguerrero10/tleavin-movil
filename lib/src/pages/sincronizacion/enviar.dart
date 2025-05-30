@@ -10,6 +10,7 @@ import 'package:tleavin_mobil/model/destinos.dart';
 import 'package:tleavin_mobil/model/areaDano.dart';
 import 'package:tleavin_mobil/model/tipo_dano.dart';
 import 'package:tleavin_mobil/model/severidad.dart';
+import 'package:tleavin_mobil/src/pages/sincronizacion/enviar_compras.dart';
 import 'package:tleavin_mobil/src/pages/sincronizacion/enviar_viaje.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
@@ -68,6 +69,7 @@ class _SincronizarState extends State<Sincronizar> {
             Padding(
               padding: const EdgeInsets.all(16),
               child: ElevatedButton(
+                // onPressed: () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => const EnviarCompraVin())),
                 onPressed: () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => const ViajesParaEnviar())),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromRGBO(242, 211, 0, 1),

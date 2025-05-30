@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -110,7 +111,7 @@ class _ArmarViajeState extends State<ArmarViaje> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
-                          width: 100,
+                          width: 315,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5)
                           ),
@@ -287,14 +288,14 @@ class _ArmarViajeState extends State<ArmarViaje> {
                   ),
                   enviando != false ? Container(
                     height: 60,
-                    width: 370,
+                    width: 670,
                     decoration: BoxDecoration(
                       color: Colors.white54,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const SizedBox(
                       height: 120,
-                      width: 120,
+                      width: 680,
                       child: Center(
                         child: CircularProgressIndicator(
                           backgroundColor: Colors.black,
@@ -431,88 +432,142 @@ class _ArmarViajeState extends State<ArmarViaje> {
     ) : const SizedBox();
   }
 
-  crearViaje() async {
-    if(_formKey.currentState!.validate()) {
-      if(itemP.vinesSeleccionadosParaViaje.isNotEmpty) {
-        viaje = Viaje(
-          supervisor: itemP.usuario!.nombre!,
-          folio_bitacora: null ,
-          cartaporte: null,
-          bitacora_fecha_carga: null,
-          num_eco_unidad: tipoEco != 'OTRO' ? '$tipoEco-${_ecoTextController.text.trim().toUpperCase()}' : _ecoTextController.text.trim().toUpperCase(),
-          nombre_operador: _nombreOpTextController.text.trim().toUpperCase(),
-          cliente_clave: int.parse(selectClie.toString()),
-          cliente_nombre: selectClieText,
-          ruta_clave: null,
-          ruta_nombre: null,
-          origen: _origenTextController.text.trim().toUpperCase(),
-          destino: _destinoTextController.text.trim().toUpperCase(),
-          etiqueta: null,
-          status_carga: 0,
-          notas: _notaTextController.text,
-          registrada_por: itemP.usuario!.usuario!,
-          tipo_viaje: null,
-          semana: null,
-          estadoViaje: 'En Proceso',
-          fecha_creacion: fecha,
-          fecha_sync: null
-        );
+crearViaje() async {
+  if (_formKey.currentState!.validate()) {
+    if (itemP.vinesSeleccionadosParaViaje.isNotEmpty) {
+      viaje = Viaje(
+        supervisor: itemP.usuario!.nombre!,
+        folio_bitacora: null,
+        cartaporte: null,
+        bitacora_fecha_carga: null,
+        num_eco_unidad: tipoEco != 'OTRO' ? '$tipoEco-${_ecoTextController.text.trim().toUpperCase()}' : _ecoTextController.text.trim().toUpperCase(),
+        nombre_operador: _nombreOpTextController.text.trim().toUpperCase(),
+        cliente_clave: int.parse(selectClie.toString()),
+        cliente_nombre: selectClieText,
+        ruta_clave: null,
+        ruta_nombre: null,
+        origen: _origenTextController.text.trim().toUpperCase(),
+        destino: _destinoTextController.text.trim().toUpperCase(),
+        etiqueta: null,
+        status_carga: 0,
+        notas: _notaTextController.text,
+        registrada_por: itemP.usuario!.usuario!,
+        tipo_viaje: null,
+        semana: null,
+        estadoViaje: 'En Proceso',
+        fecha_creacion: fecha,
+        fecha_sync: null,
+      );
 
-        await DatabaseProvider.db.insertarViaje(viaje!).then((value) async {
-          listaVinsViaje = itemP.vinesSeleccionadosParaViaje;
+      try {
+        // Registro del viaje
+        final value = await DatabaseProvider.db.insertarViaje(viaje!);
+        listaVinsViaje = itemP.vinesSeleccionadosParaViaje;
 
-          for(var ed in listaVinsViaje) {
-            var vinsviaje = (
-              vin: ed,
-              idviaje: value,
-              origen: _origenTextController.text,
-              destino: _destinoTextController.text,
-              fecha_carga: fecha
-            );
-
-            await DatabaseProvider.db.asignarVinViaje(vinsviaje).then((value) {
-            }).timeout(const Duration(seconds: 30), onTimeout: () {
-              itemP.addError();
-            });
-          }
-
-          Fluttertoast.showToast( 
-            msg: "Viaje armado con Exito!",
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.green,
-            textColor: Colors.white,
-            fontSize: 20
+        for (var ed in listaVinsViaje) {
+          var vinsviaje = (
+            idv: ed['idv'],
+            idviaje: value,
+            origen: _origenTextController.text,
+            destino: _destinoTextController.text,
+             fecha_carga: fecha
           );
 
-          itemP.deleteVSPV();
+          try {
+            log("Asignando VIN: ${vinsviaje.idv} al viaje ID: ${vinsviaje.idviaje}");
+            await DatabaseProvider.db.asignarVinViaje(vinsviaje).timeout(
+              const Duration(seconds: 60),
+              onTimeout: () {
+                log("Timeout al asignar VIN: ${vinsviaje.idv}");
+                itemP.addError();
+                    setState(() {
+      enviando = false;
+    });
+                throw TimeoutException("Operation timed out");
+              },
+            );
+          } catch (e, stackTrace) {
+                setState(() {
+      enviando = false;
+    });
+            Fluttertoast.showToast(
+              msg: "Error al asignar VIN: $e",
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 20,
+            );
+          }
+        }
 
-          Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => const InicioScreen()), (Route<dynamic> route) => false);
-        }).timeout(const Duration(seconds: 30), onTimeout: () {
-          itemP.addError();
+        // Mostrar diálogo de éxito
+        Future.delayed(const Duration(seconds: 2), () {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text("Éxito"),
+                content: const Text("¡Viaje armado con éxito!"),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      itemP.deleteVSPV();
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const InicioScreen(),
+                        ),
+                        (Route<dynamic> route) => false,
+                      );
+                    },
+                    child: const Text("OK"),
+                  ),
+                ],
+              );
+            },
+          );
         });
-      }
-      else {
-        setState(() {
-          enviando = true;
-        });
-
+      } catch (e, stackTrace) {
+        log("$e");
+        log("$stackTrace");
         Fluttertoast.showToast(
-          msg: "Seleccione VINES",
+          msg: "$e",
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.red,
           textColor: Colors.white,
-          fontSize: 20
+          fontSize: 20,
         );
+            setState(() {
+      enviando = false;
+    });
       }
-    }
-    else {
+    } else {
       setState(() {
-        enviando = false;
+        enviando = true;
       });
+
+      Fluttertoast.showToast(
+        msg: "Seleccione VINES",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 20,
+      );
     }
+  } 
+  else {
+    setState(() {
+      enviando = false;
+    });
   }
+}
+
+
 }

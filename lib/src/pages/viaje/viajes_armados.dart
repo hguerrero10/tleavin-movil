@@ -25,11 +25,30 @@ class _ViajesArmadosState extends State<ViajesArmados> {
 
   obtenerViaje(infviaje) async {
     var data = await DatabaseProvider.db.obtenerInfoViaje(infviaje);
+        Future.delayed(const Duration(seconds: 1), () {
 
-    setState(() {
-      // informacionDelViaje = data;
-      Navigator.push(context, MaterialPageRoute(builder: (context) => DetalleDeViaje(viaje: data)));
-    });
+              // showDialog(
+              //   context: context,
+              //   barrierDismissible: false,
+              //   builder: (BuildContext context) {
+              //     return AlertDialog(
+              //   title: const Text("Éxito"),
+              //   content:  Text("$data"),
+              //   actions: [
+              //     TextButton(
+              //       onPressed: () {
+                      setState(() {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => DetalleDeViaje(viaje: data)));
+                      });
+                //     },
+                //     child: const Text("OK")
+                //   )
+                // ]
+              // );
+            // }
+          // );
+   });
+
   }
 
   @override
@@ -79,7 +98,7 @@ class _ViajesArmadosState extends State<ViajesArmados> {
       itemBuilder: (context, index) {
         final dato = listaViajes[index];
         return GestureDetector(
-          onTap: () async => await obtenerViaje('${dato.idviaje}'),
+          onTap: () => obtenerViaje('${dato.idviaje}'),
           child: Container(
             height: 190,
             width: 300,
@@ -107,7 +126,7 @@ class _ViajesArmadosState extends State<ViajesArmados> {
                     _encabezadosCard('Nombre Op.: ', '${dato.nombre_operador}'),
                     _encabezadosCard('Origen: ', '${dato.origen}'),
                     _encabezadosCard('Destino: ', '${dato.destino}'),
-                    _encabezadosCard('Estado: ', '${dato.estadoViaje}')
+                    // _encabezadosCard('Estado: ', '${dato.estadoViaje}')
                   ]
                 )
               )
