@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/usuario.dart';
 import 'package:tleavin_mobil/src/pages/ventavin/venta_vin.dart';
-import 'package:tleavin_mobil/src/pages/viaje/armar_viaje.dart';
+// import 'package:tleavin_mobil/src/pages/viaje/armar_viaje.dart';
 import 'package:tleavin_mobil/src/pages/viaje/viajes_armados.dart';
 import 'package:tleavin_mobil/src/pages/vin/registro_vin.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
@@ -113,7 +113,7 @@ class _InicioScreenState extends State<InicioScreen> {
                   const SizedBox(height: 10),
                   _cuadricula2(),
                   const SizedBox(height: 20),
-                  _cuadricula3(),
+                  // _cuadricula3(),
                   const SizedBox(height: 110),
                   Padding(
                     padding: const EdgeInsets.only(left: 16, right: 16),
@@ -215,8 +215,8 @@ class _InicioScreenState extends State<InicioScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _panel(CupertinoIcons.car_detailed, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CompraVin())), 'Compra \nVIN'),
-          _panel(CupertinoIcons.car_detailed, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VentaVin())), 'Venta \nVIN'),
+          _panel(CupertinoIcons.car_detailed, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const CompraVin())), 'Compra'),
+          _panel(CupertinoIcons.car_detailed, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VentaVin())), 'Venta'),
         ]
       )
     );
@@ -230,7 +230,7 @@ class _InicioScreenState extends State<InicioScreen> {
         children: [
           // _panel(Icons.route_outlined, () {Navigator.push(context,MaterialPageRoute(builder: (context) => const ArmarViaje())); itemP.deleteVSPV();}, 'Armar Viaje'),
           _panel(CupertinoIcons.list_bullet_below_rectangle, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VinsDisponibles())), 'VINES Disponibles'),
-          _panel(Icons.route_outlined, () {Navigator.push(context,MaterialPageRoute(builder: (context) => const ArmarViaje())); itemP.deleteVSPV();}, 'Armar Viaje'),
+          // _panel(Icons.route_outlined, () {Navigator.push(context,MaterialPageRoute(builder: (context) => const ArmarViaje())); itemP.deleteVSPV();}, 'Armar Viaje'),
         ]
       )
     );
@@ -250,6 +250,65 @@ class _InicioScreenState extends State<InicioScreen> {
   }
 
   Widget _panel(icono, onPress, text) {
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.4),
+            spreadRadius: 1,
+            blurRadius: 5,
+            offset: const Offset(0, 3)
+          )
+        ]
+      ),
+      child: SizedBox(
+        height: 140,
+        width: MediaQuery.of(context).size.width * 0.4,
+        child: ElevatedButton(
+          onPressed: onPress,
+          style: ButtonStyle(
+            shadowColor: MaterialStateProperty.all<Color>(Colors.black),
+            overlayColor: MaterialStateProperty.all<Color>(Colors.black12),
+            backgroundColor: MaterialStateProperty.all<Color>(const Color.fromRGBO(242, 211, 0, 3)),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20))
+              )
+            ),
+            textStyle: MaterialStateProperty.all<TextStyle>(
+              const TextStyle(
+                color: Colors.black,
+              )
+            )
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icono,
+                size: 50,
+                color: Colors.black
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold
+                  )
+                )
+              )
+            ]
+          )
+        )
+      )
+    );
+  }
+
+  Widget _panelimg(icono, onPress, text) {
     return Container(
       decoration: BoxDecoration(
         boxShadow: [

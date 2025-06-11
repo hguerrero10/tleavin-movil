@@ -200,6 +200,29 @@ class DatabaseProvider {
     return listaVins;
   }
 
+
+
+
+  Future<List<Vin>> obtenerListaVinsSinSincronizar() async {
+    final db = await database;
+    List<Vin> listaVins;
+    var res = await db.rawQuery("SELECT * FROM vin WHERE compra = 1 AND fecha_sync IS NULL");
+
+    if(res.isNotEmpty) {
+      listaVins =  res.map((v) => Vin.fromMap(v)).toList();
+    } 
+    else {
+      listaVins = [];
+    }
+
+    return listaVins;
+  }
+
+
+
+
+
+
   Future<List> obtenerInfoVin(vin) async {
     Database db = await database;
     Map<String, dynamic> organizedData = {};
@@ -776,6 +799,64 @@ Future<int> asignarVinViaje(vv) async {
 
     return res;
   }
+
+
+
+
+
+
+
+
+
+// envio de vines  de compra 
+
+
+Future<List<Vin>> fetchVINServer(vin, idviaje) async {
+  Database db = await database;
+  List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM vin WHERE vin = '$vin'");
+
+  List<Vin> listavines = [];
+
+  for(var i in result) {
+    Vin vi = Vin.fromMap(i);
+
+    List<Dano> dano = [];
+    dano = await fetchDanos(vi.vin, idviaje);
+    vi.danos = dano;
+
+    listavines.add(vi);
+  }
+
+  return listavines;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

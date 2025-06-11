@@ -69,8 +69,8 @@ class _SincronizarState extends State<Sincronizar> {
             Padding(
               padding: const EdgeInsets.all(16),
               child: ElevatedButton(
-                // onPressed: () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => const EnviarCompraVin())),
-                onPressed: () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => const ViajesParaEnviar())),
+                onPressed: () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => const EnviarCompraVin())),
+                // onPressed: () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => const ViajesParaEnviar())),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromRGBO(242, 211, 0, 1),
                   padding: const EdgeInsets.all(30),
@@ -86,7 +86,8 @@ class _SincronizarState extends State<Sincronizar> {
                     ),
                     SizedBox(width: 10),
                     Text(
-                      'Sincronizar Viajes',
+                      // 'Sincronizar Viajes',
+                      'Sincronizar VINES Compra',
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.black
@@ -97,9 +98,46 @@ class _SincronizarState extends State<Sincronizar> {
               )
             ),
 
-            const SizedBox(height: 20),
+            // const SizedBox(height: 20),
 
-            botonSincronizar(Icons.car_rental, 'Enviar VINES Venta', () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => const EnviarVentaVin()))),
+            // botonSincronizar(Icons.car_rental, 'Enviar VINES Venta', () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => const EnviarVentaVin()))),
+
+
+
+
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: ElevatedButton(
+                onPressed: () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => const EnviarVentaVin())),
+                // onPressed: () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => const ViajesParaEnviar())),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+                  padding: const EdgeInsets.all(30),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  elevation: 5,
+                ),
+                child: const Row(
+                  children: [
+                    Icon(
+                      Icons.car_rental,
+                      color: Colors.white,
+                      size: 40
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      // 'Sincronizar Viajes',
+                      'Sincronizar VINES Venta',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white
+                      )
+                    )
+                  ]
+                )
+              )
+            ),
+
+
 
             const SizedBox(height: 40),
 

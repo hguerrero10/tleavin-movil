@@ -68,6 +68,10 @@ class _RegistroDanoState extends State<RegistroDano> {
   var queryT;
   var queryS;
 
+  List<String> listaA = [];
+  List<String> listaT = [];
+  List<String> listaS = [];
+
   var enviando = true;
   var otroenviando = true;
     
@@ -120,6 +124,8 @@ class _RegistroDanoState extends State<RegistroDano> {
   }
 
   var resumen;
+
+  String? _searchingWithQuery;
 
   @override
   void initState() {
@@ -226,70 +232,118 @@ class _RegistroDanoState extends State<RegistroDano> {
                           _titulo('* Area:'),
                           // Autocomplete<String>(
                           //   optionsBuilder: (TextEditingValue textEditingValue) {
-                          //     if (textEditingValue.text == '') {
+                          //     if(textEditingValue.text == '') {
                           //       return const Iterable<String>.empty();
-                          //     }
-                          //     return listaAreaDanos.where(( option) {
-                          //       return option.contains(textEditingValue.text.toLowerCase());
-                          //     });
+                          //     }   
+                          //     print(listaAreaDanos.map((item) => item.texto).where((option) => option.toLowerCase().contains(textEditingValue.text.toLowerCase())));
+                          //     return listaAreaDanos.map((item) => item.texto).where((option) => option.toLowerCase().contains(textEditingValue.text.toLowerCase()));
                           //   },
                           //   onSelected: (String selection) {
                           //     debugPrint('You just selected $selection');
-                          //   },
+                          //   }
                           // ),
+
+
+
+                        //  Autocomplete<String>(
+                        //     optionsBuilder: (TextEditingValue textEditingValue) {
+                        //       if (textEditingValue.text == '') {
+                        //         return const Iterable<String>.empty();
+                        //       }
+                        //       return listaAreaDanos.where(( option) {
+                        //         return option.contains(textEditingValue.text.toLowerCase());
+                        //       });
+                        //     },
+                        //     onSelected: (String selection) {
+                        //       debugPrint('You just selected $selection');
+                        //     },
+                        //   ),
                           // _dropDownArea(),
-                          TextFormField(
-                            controller: _areaTextController,
-                            keyboardType: TextInputType.number,
-                            validator: (value) {
-                              if(value == null || value.isEmpty) {
-                                return 'Favor de llenar el Area';
-                              }
-                              return null;
-                            },
-                            decoration: const InputDecoration(
-                              hintText: 'Escriba el Area',
-                              hintStyle: TextStyle(
-                                color: Colors.grey
-                              )
-                            )
-                          ),
+ 
+
+                          _autoCompleteArea(),
+                          // _dropDownArea(),
+                          // TextFormField(
+                          //   controller: _areaTextController,
+                          //   keyboardType: TextInputType.number,
+                          //   validator: (value) {
+                          //     if(value == null || value.isEmpty) {
+                          //       return 'Favor de llenar el Area';
+                          //     }
+                          //     return null;
+                          //   },
+                          //   decoration: const InputDecoration(
+                          //     hintText: 'Escriba el Area',
+                          //     hintStyle: TextStyle(
+                          //       color: Colors.grey
+                          //     )
+                          //   )
+                          // ),
                           const SizedBox(height: 10),
+
+
                           _titulo('* Tipo:'),
-                          TextFormField(
-                            controller: _tipoTextController,
-                            keyboardType: TextInputType.number,
-                            validator: (value) {
-                              if(value == null || value.isEmpty) {
-                                return 'Favor de llenar el Tipo';
-                              }
-                              return null;
-                            },
-                            decoration: const InputDecoration(
-                              hintText: 'Escriba el Tipo',
-                              hintStyle: TextStyle(
-                                color: Colors.grey
-                              )
-                            )
-                          ),
+                          // Autocomplete<String>(
+                          //   optionsBuilder: (TextEditingValue textEditingValue) {
+                          //     if (textEditingValue.text == '') {
+                          //     return const Iterable<String>.empty();
+                          //     }
+                          //     return listaTipoDanos.map((item) => item.texto).where((option) => option.toLowerCase().contains(textEditingValue.text.toLowerCase()));
+                          //   },
+                          //   onSelected: (String selection) {
+                          //     debugPrint('You just selected $selection');
+                          //   }
+                          // ),
+                          // TextFormField(
+                          //   controller: _tipoTextController,
+                          //   keyboardType: TextInputType.number,
+                          //   validator: (value) {
+                          //     if(value == null || value.isEmpty) {
+                          //       return 'Favor de llenar el Tipo';
+                          //     }
+                          //     return null;
+                          //   },
+                          //   decoration: const InputDecoration(
+                          //     hintText: 'Escriba el Tipo',
+                          //     hintStyle: TextStyle(
+                          //       color: Colors.grey
+                          //     )
+                          //   )
+                          // ),
+
+                          _autoCompleteTipo(),
                           const SizedBox(height: 10),
+
+
                           _titulo('* Severidad:'),
-                          TextFormField(
-                            controller: _severidadTextController,
-                            keyboardType: TextInputType.number,
-                            validator: (value) {
-                              if(value == null || value.isEmpty) {
-                                return 'Favor de llenar la Severidad';
-                              }
-                              return null;
-                            },
-                            decoration: const InputDecoration(
-                              hintText: 'Escriba la Severidad',
-                              hintStyle: TextStyle(
-                                color: Colors.grey
-                              )
-                            )
-                          )
+                          // Autocomplete<String>(
+                          //   optionsBuilder: (TextEditingValue textEditingValue) {
+                          //     if (textEditingValue.text == '') {
+                          //     return const Iterable<String>.empty();
+                          //     }
+                          //     return listaSeveridad.map((item) => item.texto).where((option) => option.toLowerCase().contains(textEditingValue.text.toLowerCase()));
+                          //   },
+                          //   onSelected: (String selection) {
+                          //     debugPrint('You just selected $selection');
+                          //   }
+                          // ),
+                          // TextFormField(
+                          //   controller: _severidadTextController,
+                          //   keyboardType: TextInputType.number,
+                          //   validator: (value) {
+                          //     if(value == null || value.isEmpty) {
+                          //       return 'Favor de llenar la Severidad';
+                          //     }
+                          //     return null;
+                          //   },
+                          //   decoration: const InputDecoration(
+                          //     hintText: 'Escriba la Severidad',
+                          //     hintStyle: TextStyle(
+                          //       color: Colors.grey
+                          //     )
+                          //   )
+                          // )
+                      _autoCompleteSeveridad()
                         ]
                       )
                     ),
@@ -313,7 +367,7 @@ class _RegistroDanoState extends State<RegistroDano> {
                                           height: 40,
                                         ),
                                         const Text(
-                                          'Lejos',
+                                          '1m de Distancia',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold
                                           )
@@ -340,7 +394,7 @@ class _RegistroDanoState extends State<RegistroDano> {
                                           height: 40
                                         ),
                                         const Text(
-                                          'Angulo 1',
+                                          '15 cm de Distancia',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold
                                           )
@@ -367,7 +421,7 @@ class _RegistroDanoState extends State<RegistroDano> {
                                           height: 40,
                                         ),
                                         const Text(
-                                          'Angulo 2',
+                                          '45 Grados Izq.',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold
                                           )
@@ -394,7 +448,7 @@ class _RegistroDanoState extends State<RegistroDano> {
                                           height: 40
                                         ),
                                         const Text(
-                                          'Angulo 3',
+                                          '45 Grados Der.',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold
                                           )
@@ -479,25 +533,71 @@ class _RegistroDanoState extends State<RegistroDano> {
     );
   }
 
+  // Future<List<ListasA>> getListas() async {
+  //   List<ListasA> resultados = [];
+  //   try {
+  //     await DatabaseProvider.db.obtenerAreaDano().then((value) {
+  //       setState(() {
+  //         listaAreaDanos = value.map((item) => ListasA(valor: item.codigo.toString(), texto: '${item.codigo} : ${item.descripcion}')).toList();
+  //       });
+  //     });
+  //     await DatabaseProvider.db.obtenerTipoDano().then((value) {
+  //       setState(() {
+  //         listaTipoDanos = value.map((item) => ListasT(valor: item.id.toString(), texto: '${item.id} : ${item.descripcion}')).toList();
+  //       });
+  //     });
+  //     await DatabaseProvider.db.obtenerSeveridad().then((value) {
+  //       setState(() {
+  //         listaSeveridad = value.map((item) => ListasS(valor: item.id.toString(), texto: '${item.id} : ${item.tipo}')).toList();
+  //       });
+  //     });
+  //   } 
+  //   catch (e) {
+  //     log('error => $e');
+  //   }
+  //   return resultados;
+  // }
+
+
   Future<List<ListasA>> getListas() async {
     List<ListasA> resultados = [];
-
+    List<String> result = [];
+    List<String> result1 = [];
+    List<String> result2 = [];
+    
     try {
       await DatabaseProvider.db.obtenerAreaDano().then((value) {
         setState(() {
-          listaAreaDanos = value.map((item) => ListasA(valor: item.codigo.toString(), texto: '${item.codigo} : ${item.descripcion}')).toList();
+
+          for(var i = 0; i < value.length; i++) {
+            result.add('${value[i].codigo.toString()}-${value[i].descripcion.toString()}');
+          }
+
+          listaA = result;
+
+          log(listaA.toString());
         });
       });
 
       await DatabaseProvider.db.obtenerTipoDano().then((value) {
         setState(() {
-          listaTipoDanos = value.map((item) => ListasT(valor: item.id.toString(), texto: '${item.id} : ${item.descripcion}')).toList();
+
+          for(var i = 0; i < value.length; i++) {
+            result1.add('${value[i].id.toString()}-${value[i].descripcion.toString()}');
+          }
+
+          listaT = result1;
         });
       });
 
       await DatabaseProvider.db.obtenerSeveridad().then((value) {
         setState(() {
-          listaSeveridad = value.map((item) => ListasS(valor: item.id.toString(), texto: '${item.id} : ${item.tipo}')).toList();
+
+          for(var i = 0; i < value.length; i++) {
+            result2.add('${value[i].id.toString()}-${value[i].descripcion.toString()}');
+          }
+
+          listaS = result2;
         });
       });
     } 
@@ -507,6 +607,7 @@ class _RegistroDanoState extends State<RegistroDano> {
 
     return resultados;
   }
+
 
   Widget _titulo(String titulo) {
     return Row(
@@ -604,9 +705,138 @@ class _RegistroDanoState extends State<RegistroDano> {
     );
   }
 
+
+
+
+
+
+
+
+
+
+  Widget _autoCompleteArea() {
+    return Container(
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+      child: Autocomplete<String>(
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          _searchingWithQuery = textEditingValue.text.toLowerCase();
+          return listaA.where((String option) => option.toLowerCase().contains(_searchingWithQuery!));
+        },
+        onSelected: (String selection) {
+          setState(() {
+            _areaTextController.text = selection;
+          });
+        },
+        fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
+          return TextFormField(
+            controller: controller,
+            focusNode: focusNode,
+            decoration: const InputDecoration(
+              labelText: '* Ingrese Area',
+              hintText: 'Seleccione Area',
+              hintStyle: TextStyle(
+                color: Colors.grey
+              )
+            ),
+            validator: (value) {
+              if(value == null || value.isEmpty) {
+                return 'Favor de llenar el Area';
+              }
+              return null;
+            }
+          );
+        }
+      )
+    );
+  }
+
+  Widget _autoCompleteTipo() {
+    return Container(
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+      child: Autocomplete<String>(
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          _searchingWithQuery = textEditingValue.text.toLowerCase();
+          return listaT.where((String option) => option.toLowerCase().contains(_searchingWithQuery!));
+        },
+        onSelected: (String selection) {
+          setState(() {
+            _tipoTextController.text = selection;
+          });
+        },
+        fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
+          return TextFormField(
+            controller: controller,
+            focusNode: focusNode,
+            decoration: const InputDecoration(
+              labelText: '* Ingrese Tipo',
+              hintText: 'Seleccione Tipo',
+              hintStyle: TextStyle(
+                color: Colors.grey
+              )
+            ),
+            validator: (value) {
+              if(value == null || value.isEmpty) {
+                return 'Favor de llenar el Tipo';
+              }
+              return null;
+            }
+          );
+        }
+      )
+    );
+  }
+
+  Widget _autoCompleteSeveridad() {
+    return Container(
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+      child: Autocomplete<String>(
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          _searchingWithQuery = textEditingValue.text.toLowerCase();
+          return listaS.where((String option) => option.toLowerCase().contains(_searchingWithQuery!));
+        },
+        onSelected: (String selection) {
+          setState(() {
+            _severidadTextController.text = selection;
+          });
+        },
+        fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
+          return TextFormField(
+            controller: controller,
+            focusNode: focusNode,
+            decoration: const InputDecoration(
+              labelText: '* Ingrese Severidad',
+              hintText: 'Seleccione Severidad',
+              hintStyle: TextStyle(
+                color: Colors.grey
+              )
+            ),
+            validator: (value) {
+              if(value == null || value.isEmpty) {
+                return 'Favor de llenar la Severidad';
+              }
+              return null;
+            }
+          );
+        }
+      )
+    );
+  }
+
+
+
+
+
+
+
+
   guardarDano(tipo) async {
     if(_formKey.currentState!.validate()) {
-      if(evidenciasDano.length >= 4) {
+      if(evidenciasDano.length >= 2) {
+
+      var _area = _areaTextController.text.split('-')[0];
+      var _tipo = _tipoTextController.text.split('-')[0];
+      var _severidad = _severidadTextController.text.split('-')[0];
+
       dano = Dano(
         vin: widget.vin,
         panel: widget.panel,
@@ -614,9 +844,12 @@ class _RegistroDanoState extends State<RegistroDano> {
         // area: int.parse(selectArea.toString()),
         // tipo: int.parse(selectTipo.toString()),
         // severidad: selectSeve.toString(),
-        area: int.parse(_areaTextController.text.trim()),
-        tipo: int.parse(_tipoTextController.text.trim()),
-        severidad: _severidadTextController.text.trim(),
+        // area: int.parse(_areaTextController.text.trim()),
+        // tipo: int.parse(_tipoTextController.text.trim()),
+        // severidad: _severidadTextController.text.trim(),
+        area: int.parse(_area),
+        tipo: int.parse(_tipo),
+        severidad: _severidad,
         notas: _notasTextController.text,
         estado: 'A',
         fecha_creacion: fecha
