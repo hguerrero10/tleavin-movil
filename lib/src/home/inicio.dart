@@ -114,7 +114,7 @@ class _InicioScreenState extends State<InicioScreen> {
                   _cuadricula2(),
                   const SizedBox(height: 20),
                   // _cuadricula3(),
-                  const SizedBox(height: 110),
+                  const SizedBox(height: 290),
                   Padding(
                     padding: const EdgeInsets.only(left: 16, right: 16),
                     child: ElevatedButton(
@@ -295,7 +295,7 @@ class _InicioScreenState extends State<InicioScreen> {
                   text,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 20,
                     color: Colors.black,
                     fontWeight: FontWeight.bold
                   )

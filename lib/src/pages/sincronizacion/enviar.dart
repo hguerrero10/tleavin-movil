@@ -11,7 +11,7 @@ import 'package:tleavin_mobil/model/areaDano.dart';
 import 'package:tleavin_mobil/model/tipo_dano.dart';
 import 'package:tleavin_mobil/model/severidad.dart';
 import 'package:tleavin_mobil/src/pages/sincronizacion/enviar_compras.dart';
-import 'package:tleavin_mobil/src/pages/sincronizacion/enviar_viaje.dart';
+// import 'package:tleavin_mobil/src/pages/sincronizacion/enviar_viaje.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/pages/sincronizacion/enviar_ventas.dart';

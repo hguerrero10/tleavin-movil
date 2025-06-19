@@ -1,3 +1,5 @@
+import 'package:flutter/scheduler.dart';
+
 import '../dano/registro_dano.dart';
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/src/home/inicio.dart';
@@ -14,11 +16,30 @@ class InspeccionVin extends StatefulWidget {
 }
 
 class _InspeccionVinState extends State<InspeccionVin> {
+  final stopwatch = Stopwatch();
+  late final Ticker _ticker;
+  String tiempoFormateado = "00:00";
 
   @override
   void initState() {
-
     super.initState();
+    stopwatch.start();
+    _ticker = Ticker((_) {
+      setState(() {
+        final duration = stopwatch.elapsed;
+        final minutos = duration.inMinutes.remainder(60).toString().padLeft(2, '0');
+        final segundos = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
+        tiempoFormateado = "$minutos:$segundos";
+      });
+    })..start();
+  }
+
+  @override
+  void dispose() {
+    _ticker.dispose();
+    stopwatch.stop();
+    
+    super.dispose();
   }
 
   @override
@@ -65,16 +86,40 @@ class _InspeccionVinState extends State<InspeccionVin> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               const Cuerpo(),
-              const Padding(
-                padding: EdgeInsets.all(10),
-                child: Text(
-                  'Registro de Daños',
-                  style: TextStyle(
-                    fontSize: 23,
-                    fontWeight: FontWeight.bold
-                  )
+                 Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  children: [
+                    const Text(
+                      'Registro de Daños',
+                      style: TextStyle(
+                      fontSize: 23,
+                      fontWeight: FontWeight.bold
+                      )
+                    ),
+                    const SizedBox(width: 20),
+                    const Icon(
+                      Icons.timer, 
+                      color: Colors.red
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      tiempoFormateado.toString(),
+                      style: const TextStyle(
+                        color: Colors.red
+                      ),
+                    )
+                  ],
                 )
-              ),
+                ),
+                const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: Row(
+                  children: [
+          
+                  ],
+                ),
+                ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Column(
@@ -113,21 +158,21 @@ class _InspeccionVinState extends State<InspeccionVin> {
                   ),
                   child: Stack(
                     children: [
-                      _boton(60, 167, 'Frente', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'FRENTE')))),
+                      _boton(60, 167, 'Frente', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'FRENTE', stopw: stopwatch,)))),
 
-                      _boton(170, 165, 'Interior', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'INTERIOR')))), 
+                      _boton(170, 165, 'Interior', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'INTERIOR', stopw: stopwatch,)))), 
                       
-                      _botonVertical(205, 60, 1, 'L-Izquierdo', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'L-IZQUIERDO')))),
+                      _botonVertical(205, 60, 1, 'L-Izquierdo', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'L-IZQUIERDO', stopw: stopwatch,)))),
                      
-                      _boton(290, 165, 'P-Superior', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'P-SUPERIOR')))),
+                      _boton(290, 165, 'P-Superior', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'P-SUPERIOR', stopw: stopwatch,)))),
                       
-                      _botonVertical(205, 375, 3, 'L-Derecho', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'L-DERECHO')))),
+                      _botonVertical(205, 375, 3, 'L-Derecho', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'L-DERECHO', stopw: stopwatch,)))),
                       
-                      _boton(475, 167, 'P-Tracera', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'P-TRACERA')))),
+                      _boton(475, 167, 'P-Tracera', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'P-TRACERA', stopw: stopwatch,)))),
                       
-                      _boton(390, 10, 'B-Vehiculo', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'B-VEHICULO')))),
+                      _boton(390, 10, 'B-Vehiculo', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'B-VEHICULO', stopw: stopwatch,)))),
                       
-                      _boton(420, 275, 'Accesorios', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'ACCESORIOS'))))
+                      _boton(420, 275, 'Accesorios', () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin, panel: 'ACCESORIOS', stopw: stopwatch,))))
                     ]
                   )
                 )
@@ -246,4 +291,6 @@ class _InspeccionVinState extends State<InspeccionVin> {
       )
     );
   }
+
+
 }

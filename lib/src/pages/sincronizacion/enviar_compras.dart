@@ -3,10 +3,10 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:tleavin_mobil/database/db.dart';
-import 'package:tleavin_mobil/model/evidencia.dart';
-import 'package:tleavin_mobil/src/home/inicio.dart';
+// import 'package:image_picker/image_picker.dart';
+// import 'package:tleavin_mobil/model/evidencia.dart';
+// import 'package:tleavin_mobil/src/home/inicio.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:tleavin_mobil/src/pages/dano/listas.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
@@ -318,6 +318,7 @@ class _EnviarCompraVinState extends State<EnviarCompraVin> {
         if (limpio.endsWith(']')) {
           limpio = limpio.substring(0, limpio.length - 1);
         }
+
 
         http.Response response = await http.post(Uri.parse(urlEnviarData), body: limpio, headers: {"Content-Type": "application/json"});
 

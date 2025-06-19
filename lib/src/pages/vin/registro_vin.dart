@@ -261,7 +261,7 @@ class _CompraVinState extends State<CompraVin> {
       distrib_clave: null,
       dest_nombre: null,
       ruta_clave: null,
-      ruta_nombre: null,
+      ruta_nombre: itemP.usuario!.usuario!,
       origen: itemP.usuario!.locacion!,
       destino: null,
       modelo: null,

@@ -342,7 +342,7 @@ class _VentaDanosState extends State<VentaDanos> {
       if(evidenciasDano.isNotEmpty) {
         dano = Dano(
           vin: widget.vin,
-          panel: null,
+          panel: 'Venta',
           registroTipo: 'Regular',
           area: int.parse(_area),
           tipo: int.parse(_tipo),

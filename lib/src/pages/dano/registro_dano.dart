@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:core';
 import 'dart:convert';
 import 'dart:developer';
+// import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:tleavin_mobil/model/dano.dart';
@@ -21,8 +22,9 @@ import 'package:tleavin_mobil/src/pages/vin/inspeccion_vin.dart';
 class RegistroDano extends StatefulWidget {
   final vin;
   final panel;
+  final stopw;
 
-  const RegistroDano({super.key, this.vin, this.panel});
+  const RegistroDano({super.key, this.vin, this.panel, this.stopw});
 
   @override
   State<RegistroDano> createState() => _RegistroDanoState();
@@ -126,9 +128,12 @@ class _RegistroDanoState extends State<RegistroDano> {
   var resumen;
 
   String? _searchingWithQuery;
+    // late final Ticker _ticker;
+  String tiempoFormateado = "00:00";
 
   @override
   void initState() {
+    super.initState();
     initializeDateFormatting();
 
     formato = DateFormat('yyyy-MM-dd hh:mm:ss'); 
@@ -137,8 +142,16 @@ class _RegistroDanoState extends State<RegistroDano> {
     fechaH = formatWH.format(DateTime.now());
 
     getListas();
+
+    //     _ticker = Ticker((_) {
+    //   setState(() {
+    //     final duration = widget.stopw.elapsed;
+    //     final minutos = duration.inMinutes.remainder(60).toString().padLeft(2, '0');
+    //     final segundos = duration.inSeconds.remainder(60).toString().padLeft(2, '0');
+    //     tiempoFormateado = "$minutos:$segundos";
+    //   });
+    // })..start();
     
-    super.initState();
   }
 
   @override
@@ -420,11 +433,22 @@ class _RegistroDanoState extends State<RegistroDano> {
                                           width: 40,
                                           height: 40,
                                         ),
-                                        const Text(
-                                          '45 Grados Izq.',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold
-                                          )
+                                          const Column(
+                                            children: [
+                                              Text(
+                                                '45 Grados Izq.',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold
+                                                )
+                                              ),
+                                              Text(
+                                                '(Opcional)',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.red
+                                                )
+                                              )
+                                          ]
                                         )
                                       ]
                                     ),
@@ -447,11 +471,22 @@ class _RegistroDanoState extends State<RegistroDano> {
                                           width: 40,
                                           height: 40
                                         ),
-                                        const Text(
-                                          '45 Grados Der.',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold
-                                          )
+                                        const Column(
+                                          children: [
+                                             Text(
+                                              '45 Grados Der.',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold
+                                              )
+                                            ),
+                                            Text(
+                                                '(Opcional)',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.red
+                                                )
+                                              )
+                                          ]
                                         )
                                       ]
                                     ),
@@ -839,7 +874,7 @@ class _RegistroDanoState extends State<RegistroDano> {
 
       dano = Dano(
         vin: widget.vin,
-        panel: widget.panel,
+        panel: 'Compra',
         registroTipo: 'Regular',
         // area: int.parse(selectArea.toString()),
         // tipo: int.parse(selectTipo.toString()),
