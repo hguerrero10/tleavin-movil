@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/usuario.dart';
 import 'package:tleavin_mobil/src/pages/ventavin/venta_vin.dart';
@@ -21,18 +23,91 @@ class InicioScreen extends StatefulWidget {
 
 class _InicioScreenState extends State<InicioScreen> {
 
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
   Usuario usuario = Usuario();
+
+  var escargaAutomatica = [];
+
+  void _scheduleCargaAutomatica() {
+    final now = DateTime.now();
+    final target = DateTime(now.year, now.month, now.day, 10, 20); // 9:26 AM
+    Duration initialDelay;
+    if (now.isAfter(target)) {
+      // If it's already past 9:26 AM, schedule for tomorrow
+      initialDelay = target.add(const Duration(days: 1)).difference(now);
+      print('PA MA;ANA');
+    } 
+    else {
+      initialDelay = target.difference(now);
+      print('es hora');
+    }
+
+    Future.delayed(initialDelay, () async {
+      // Push notification a las 9:26 AM
+      await _showPushNotification('Carga automática', 'Son las 9:26 AM, se cargarán los VINS disponibles');
+      await cargaAutomatica();
+      // Schedule again for the next day
+      _scheduleCargaAutomatica();
+    });
+  }
+
+
+
+
+
+  // Método para mostrar push notification local
+  Future<void> _showPushNotification(String title, String body) async {
+    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+      'channel_id',
+      'channel_name',
+      channelDescription: 'Notificaciones de carga automática',
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+    const NotificationDetails notificationDetails = NotificationDetails(android: androidDetails);
+
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      title,
+      body,
+      notificationDetails,
+    );
+  }
+
+  cargaAutomatica() async {
+    escargaAutomatica = await DatabaseProvider.db.obtenerListaVinsSinSincronizar();
+    setState(() {});
+  }
 
   @override
   void initState() {
     super.initState();
+
+    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
+    flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+    );
+
+    // Solicitar permisos de notificaciones (Android 13+)
+    flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+      ?.requestNotificationsPermission();
+
+    _scheduleCargaAutomatica();
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        bool confirmExit = await showDialog(
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool confirmExit) async {
+        if(confirmExit) {
+          return;
+        }
+
+        final bool shouldPop = await showDialog(
           context: context,
           builder: (context) => AlertDialog(
             title: const Text('¿Quieres salir de la aplicación?'),
@@ -51,9 +126,11 @@ class _InicioScreenState extends State<InicioScreen> {
               )
             ]
           )
-        );
-        
-        return confirmExit;
+        ) ?? false;
+
+        if(context.mounted && shouldPop) {
+          Navigator.pop(context);
+        }
       },
       child: Scaffold(
         // drawer: MenuDrawer(),
