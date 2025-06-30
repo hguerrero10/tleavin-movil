@@ -306,7 +306,6 @@ class _EnviarCompraVinState extends State<EnviarCompraVin> {
     for (var element in vins) {
       var formato = DateFormat('yyyy-MM-dd hh:mm:ss');
       var fecha = formato.format(DateTime.now());
-      log(element['vin']);
       var vines = await DatabaseProvider.db.fetchVINServer(element['vin'].toString(), iddetarja);
 
       try {

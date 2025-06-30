@@ -40,6 +40,8 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
 
   obtenerlistaCompletaVins() async {
     var datos = await DatabaseProvider.db.obtenerListaVins();
+
+    log(datos.toString());
     
     setState(() {
       todosVins = datos;

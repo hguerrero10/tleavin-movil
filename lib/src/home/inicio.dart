@@ -1,16 +1,18 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/usuario.dart';
+import 'package:tleavin_mobil/src/home/vines_nube.dart';
 import 'package:tleavin_mobil/src/pages/ventavin/venta_vin.dart';
-// import 'package:tleavin_mobil/src/pages/viaje/armar_viaje.dart';
 import 'package:tleavin_mobil/src/pages/viaje/viajes_armados.dart';
 import 'package:tleavin_mobil/src/pages/vin/registro_vin.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/pages/sincronizacion/enviar.dart';
+import 'package:http/http.dart' as http;
 import 'package:tleavin_mobil/src/pages/vin/vins_disponibles.dart';
 import 'package:tleavin_mobil/src/startup/login/login_form.dart';
 
@@ -23,40 +25,34 @@ class InicioScreen extends StatefulWidget {
 
 class _InicioScreenState extends State<InicioScreen> {
 
+  String urlEnviarData = 'https://parapruebas.tlea.online/guardarVINCompra';
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   Usuario usuario = Usuario();
 
   var escargaAutomatica = [];
+  var vins = [];
+  var vinsComprados = [];
+
 
   void _scheduleCargaAutomatica() {
     final now = DateTime.now();
-    final target = DateTime(now.year, now.month, now.day, 10, 20); // 9:26 AM
+    final target = DateTime(now.year, now.month, now.day, 22, 10); // 9:15 AM
     Duration initialDelay;
-    if (now.isAfter(target)) {
-      // If it's already past 9:26 AM, schedule for tomorrow
+    if(now.isAfter(target)) {
       initialDelay = target.add(const Duration(days: 1)).difference(now);
-      print('PA MA;ANA');
     } 
     else {
       initialDelay = target.difference(now);
-      print('es hora');
     }
 
     Future.delayed(initialDelay, () async {
-      // Push notification a las 9:26 AM
-      await _showPushNotification('Carga automática', 'Son las 9:26 AM, se cargarán los VINS disponibles');
+      log('Carga automática iniciada a las 10:10 AM');
       await cargaAutomatica();
-      // Schedule again for the next day
       _scheduleCargaAutomatica();
     });
   }
 
-
-
-
-
-  // Método para mostrar push notification local
   Future<void> _showPushNotification(String title, String body) async {
     const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
       'channel_id',
@@ -77,7 +73,18 @@ class _InicioScreenState extends State<InicioScreen> {
 
   cargaAutomatica() async {
     escargaAutomatica = await DatabaseProvider.db.obtenerListaVinsSinSincronizar();
-    setState(() {});
+    var vc = [];
+
+    for(var d in escargaAutomatica) {
+      vc.add({'vin': d.vin, 'idv': d.idv}); // Guardar tanto vin como idv
+    }
+
+    setState(() {
+      vinsComprados = vc;
+      vins = vinsComprados;
+    });
+
+    vins.isNotEmpty ? enviarData() : await _showPushNotification('Carga automática', 'No hay VINES para Sincronizar.');
   }
 
   @override
@@ -90,10 +97,7 @@ class _InicioScreenState extends State<InicioScreen> {
       initializationSettings,
     );
 
-    // Solicitar permisos de notificaciones (Android 13+)
-    flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
-      ?.requestNotificationsPermission();
+    flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.requestNotificationsPermission();
 
     _scheduleCargaAutomatica();
   }
@@ -307,7 +311,7 @@ class _InicioScreenState extends State<InicioScreen> {
         children: [
           // _panel(Icons.route_outlined, () {Navigator.push(context,MaterialPageRoute(builder: (context) => const ArmarViaje())); itemP.deleteVSPV();}, 'Armar Viaje'),
           _panel(CupertinoIcons.list_bullet_below_rectangle, () => Navigator.push(context, MaterialPageRoute(builder: (context) => const VinsDisponibles())), 'VINES Disponibles'),
-          // _panel(Icons.route_outlined, () {Navigator.push(context,MaterialPageRoute(builder: (context) => const ArmarViaje())); itemP.deleteVSPV();}, 'Armar Viaje'),
+          _panel(Icons.cloud, () {Navigator.push(context,MaterialPageRoute(builder: (context) => const VistaCloud())); itemP.deleteVSPV();}, 'Sincronizados'),
         ]
       )
     );
@@ -444,4 +448,51 @@ class _InicioScreenState extends State<InicioScreen> {
     );
   }
 
+
+ Future enviarData() async {
+
+  _showPushNotification('Carga automática', 'Hay ${vins.length} VINES para Sincronizar.');
+    int sincronizados = 0;
+    for (var element in vins) {
+      var formato = DateFormat('yyyy-MM-dd hh:mm:ss');
+      var fecha = formato.format(DateTime.now());
+      var vines = await DatabaseProvider.db.fetchVINServer(element['vin'].toString(), 4);
+
+      try {
+        var limpio = vines.toString();
+        if (limpio.startsWith('[')) {
+          limpio = limpio.substring(1);
+        }
+
+        if (limpio.endsWith(']')) {
+          limpio = limpio.substring(0, limpio.length - 1);
+        }
+
+        http.Response response = await http.post(Uri.parse(urlEnviarData), body: limpio, headers: {"Content-Type": "application/json"});
+
+        if (response.statusCode == 200) {
+          var vinsin = (
+            vin: element['vin'],
+            fecha_sync: fecha
+          );
+
+          await DatabaseProvider.db.marcarComoSincronizado(vinsin).then((value) {}).timeout(const Duration(seconds: 30), onTimeout: () {
+            itemP.addError();
+          });
+
+          sincronizados++;
+          await _showPushNotification('Carga automática', 'Son las 10:20 PM, se cargaron $sincronizados VIN.');
+        } 
+        else {
+          await _showPushNotification('Carga automática', 'Favor de comunicarse a soporte (Error: ${response.statusCode}) ${response.reasonPhrase}');
+
+          itemP.addError();
+        }
+      } catch (e) {
+        log(e.toString());
+      }
+
+      await Future.delayed(const Duration(seconds: 2));
+    }
+  }
 }

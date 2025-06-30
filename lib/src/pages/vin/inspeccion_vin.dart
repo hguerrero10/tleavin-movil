@@ -292,5 +292,4 @@ class _InspeccionVinState extends State<InspeccionVin> {
     );
   }
 
-
 }

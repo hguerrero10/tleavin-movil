@@ -365,11 +365,19 @@ class _VentaDanosState extends State<VentaDanos> {
               fechahora: fecha
             );
 
-            await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) {
-            }).timeout(const Duration(seconds: 60), onTimeout: () {
+            await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) {}).timeout(const Duration(seconds: 60), onTimeout: () {
               itemP.addError();
             });
           }
+          
+          setState(() {
+            // _areaTextController.text = '';
+            // _tipoTextController.clear();
+            // _severidadTextController.clear();
+            // _notasTextController.clear();
+            // evidenciasDano.clear();
+            verFinalizar = true;
+          });
 
           Fluttertoast.showToast(
             msg: "Daño guardado con Exito!",
@@ -381,16 +389,18 @@ class _VentaDanosState extends State<VentaDanos> {
             fontSize: 20
           );
 
-          paraLimpiar();
+        }).timeout(const Duration(seconds: 60), onTimeout: () {
+          itemP.addError();
+        });
 
           setState(() {
-            verFinalizar = true;
+            _areaTextController.text = '';
+            _tipoTextController.clear();
+            _severidadTextController.clear();
+            _notasTextController.clear();
+            evidenciasDano.clear();
+            // verFinalizar = true;
           });
-
-        }).timeout(const Duration(seconds: 60), onTimeout: () {
-        
-        itemP.addError();
-        });
       }
       else {
         Fluttertoast.showToast(
@@ -417,16 +427,6 @@ class _VentaDanosState extends State<VentaDanos> {
     }
   }
 
-  paraLimpiar() {
-    _areaTextController.clear();
-    _tipoTextController.clear();
-    _severidadTextController.clear();
-    _notasTextController.clear();
-
-    setState(() {
-      evidenciasDano = [];
-    });
-  }
 
   Future<void> getCamara(foto) async {
     final List<XFile> pickedFileList = <XFile>[];
@@ -550,7 +550,6 @@ class _VentaDanosState extends State<VentaDanos> {
 
     return resultados;
   }
-
   Widget _autoCompleteArea() {
     return Container(
       padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
@@ -565,6 +564,18 @@ class _VentaDanosState extends State<VentaDanos> {
           });
         },
         fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
+          // Sincroniza el valor del controller del Autocomplete con el _areaTextController
+          controller.addListener(() {
+            if (_areaTextController.text != controller.text) {
+              _areaTextController.text = controller.text;
+            }
+          });
+          // Si el _areaTextController se limpia desde fuera, también limpia el controller del Autocomplete
+          _areaTextController.addListener(() {
+            if (_areaTextController.text.isEmpty && controller.text.isNotEmpty) {
+              controller.text = '';
+            }
+          });
           return TextFormField(
             controller: controller,
             focusNode: focusNode,
@@ -601,6 +612,17 @@ class _VentaDanosState extends State<VentaDanos> {
           });
         },
         fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
+                      controller.addListener(() {
+            if (_tipoTextController.text != controller.text) {
+              _tipoTextController.text = controller.text;
+            }
+          });
+          // Si el _tipoTextController se limpia desde fuera, también limpia el controller del Autocomplete
+          _tipoTextController.addListener(() {
+            if (_tipoTextController.text.isEmpty && controller.text.isNotEmpty) {
+              controller.text = '';
+            }
+          });
           return TextFormField(
             controller: controller,
             focusNode: focusNode,
@@ -637,6 +659,17 @@ class _VentaDanosState extends State<VentaDanos> {
           });
         },
         fieldViewBuilder: (context, controller, focusNode, onEditingComplete) {
+                    controller.addListener(() {
+            if (_severidadTextController.text != controller.text) {
+              _severidadTextController.text = controller.text;
+            }
+          });
+          // Si el _severidadTextController se limpia desde fuera, también limpia el controller del Autocomplete
+          _severidadTextController.addListener(() {
+            if (_severidadTextController.text.isEmpty && controller.text.isNotEmpty) {
+              controller.text = '';
+            }
+          });
           return TextFormField(
             controller: controller,
             focusNode: focusNode,
