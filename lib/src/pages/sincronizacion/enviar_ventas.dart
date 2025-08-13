@@ -271,7 +271,7 @@ class _EnviarVentaVinState extends State<EnviarVentaVin> {
                   padding: const EdgeInsets.all(0),
                   child: Container(
                     height: 80,
-                    width: 410,
+                    width: 810,
                     decoration: BoxDecoration(
                       color: Colors.white38,
                       borderRadius: BorderRadius.circular(8),

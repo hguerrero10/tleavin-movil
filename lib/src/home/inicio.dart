@@ -449,9 +449,8 @@ class _InicioScreenState extends State<InicioScreen> {
   }
 
 
- Future enviarData() async {
-
-  _showPushNotification('Carga automática', 'Hay ${vins.length} VINES para Sincronizar.');
+  Future enviarData() async {
+    _showPushNotification('Carga automática', 'Hay ${vins.length} VINES para Sincronizar.');
     int sincronizados = 0;
     for (var element in vins) {
       var formato = DateFormat('yyyy-MM-dd hh:mm:ss');

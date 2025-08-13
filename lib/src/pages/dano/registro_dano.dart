@@ -17,7 +17,7 @@ import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:tleavin_mobil/src/pages/dano/listas.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/pages/dano/resumen_dano.dart';
-import 'package:tleavin_mobil/src/pages/vin/inspeccion_vin.dart';
+// import 'package:tleavin_mobil/src/pages/vin/inspeccion_vin.dart';
 
 class RegistroDano extends StatefulWidget {
   final vin;
@@ -220,23 +220,23 @@ class _RegistroDanoState extends State<RegistroDano> {
                         )
                       ]
                     ),
-                    Row(
-                      children: [
-                        const Text(
-                          'Panel Seleccionado: ',
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold
-                          )
-                        ),
-                        Text(
-                          widget.panel,
-                          style: const TextStyle(
-                            fontSize: 17
-                          )
-                        )
-                      ]
-                    ),
+                    // Row(
+                    //   children: [
+                    //     const Text(
+                    //       'Panel Seleccionado: ',
+                    //       style: TextStyle(
+                    //         fontSize: 17,
+                    //         fontWeight: FontWeight.bold
+                    //       )
+                    //     ),
+                    //     Text(
+                    //       widget.panel,
+                    //       style: const TextStyle(
+                    //         fontSize: 17
+                    //       )
+                    //     )
+                    //   ]
+                    // ),
                     const SizedBox(height: 10),
                     Form(
                       key: _formKey,
@@ -274,7 +274,26 @@ class _RegistroDanoState extends State<RegistroDano> {
                           // _dropDownArea(),
  
 
-                          _autoCompleteArea(),
+                          // _autoCompleteArea(),
+                          TextFormField(
+                            controller: _areaTextController,
+                            keyboardType: TextInputType.number,
+                            textCapitalization: TextCapitalization.sentences,
+                            validator: (value) {
+                              if(value == null || value.isEmpty) {
+                                return 'Favor de llenar el Area';
+                              }
+                              return null;
+                            },
+                            decoration: const InputDecoration(
+                              hintText: 'Escriba el Area',
+                              hintStyle: TextStyle(
+                                color: Colors.grey
+                              )
+                            )
+                          ),
+
+
                           // _dropDownArea(),
                           // TextFormField(
                           //   controller: _areaTextController,
@@ -324,7 +343,27 @@ class _RegistroDanoState extends State<RegistroDano> {
                           //   )
                           // ),
 
-                          _autoCompleteTipo(),
+                          // _autoCompleteTipo(),
+
+
+                                       TextFormField(
+                            controller: _tipoTextController,
+                            keyboardType: TextInputType.number,
+                            textCapitalization: TextCapitalization.sentences,
+                            validator: (value) {
+                              if(value == null || value.isEmpty) {
+                                return 'Favor de llenar el Tipo';
+                              }
+                              return null;
+                            },
+                            decoration: const InputDecoration(
+                              hintText: 'Escriba el Tipo',
+                              hintStyle: TextStyle(
+                                color: Colors.grey
+                              )
+                            )
+                          ),
+
                           const SizedBox(height: 10),
 
 
@@ -356,7 +395,26 @@ class _RegistroDanoState extends State<RegistroDano> {
                           //     )
                           //   )
                           // )
-                      _autoCompleteSeveridad()
+                      // _autoCompleteSeveridad()
+
+                                   TextFormField(
+                            controller: _severidadTextController,
+                            keyboardType: TextInputType.number,
+                            textCapitalization: TextCapitalization.sentences,
+                            validator: (value) {
+                              if(value == null || value.isEmpty) {
+                                return 'Favor de llenar el Severidad';
+                              }
+                              return null;
+                            },
+                            decoration: const InputDecoration(
+                              hintText: 'Escriba el Severidad',
+                              hintStyle: TextStyle(
+                                color: Colors.grey
+                              )
+                            )
+                          ),
+
                         ]
                       )
                     ),
@@ -866,78 +924,91 @@ class _RegistroDanoState extends State<RegistroDano> {
 
   guardarDano(tipo) async {
     if(_formKey.currentState!.validate()) {
-      if(evidenciasDano.length >= 2) {
+      // if(evidenciasDano.length >= 2) {
 
-      var _area = _areaTextController.text.split('-')[0];
-      var _tipo = _tipoTextController.text.split('-')[0];
-      var _severidad = _severidadTextController.text.split('-')[0];
+        // var _area = _areaTextController.text.split('-')[0];
+        // var _tipo = _tipoTextController.text.split('-')[0];
+        // var _severidad = _severidadTextController.text.split('-')[0];
 
-      dano = Dano(
-        vin: widget.vin,
-        panel: 'Compra',
-        registroTipo: 'Regular',
-        // area: int.parse(selectArea.toString()),
-        // tipo: int.parse(selectTipo.toString()),
-        // severidad: selectSeve.toString(),
-        // area: int.parse(_areaTextController.text.trim()),
-        // tipo: int.parse(_tipoTextController.text.trim()),
-        // severidad: _severidadTextController.text.trim(),
-        area: int.parse(_area),
-        tipo: int.parse(_tipo),
-        severidad: _severidad,
-        notas: _notasTextController.text,
-        estado: 'A',
-        fecha_creacion: fecha
-      );
-
-      await DatabaseProvider.db.insertarDano(dano!).then((value) async {
-        itemP.addBoton();
-        itemP.deleteBoton();
-        
-        for(var ed in evidenciasDano) {
-          evidencia = Evidencia(
-            vin: widget.vin,
-            iddano: value,
-            nombre: null,
-            archivo: ed,
-            fechahora: fechaH
-          );
-
-          await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) {
-          }).timeout(const Duration(seconds: 60), onTimeout: () {
-            itemP.addError();
-          });
-        }                          
-      }).timeout(const Duration(seconds: 60), onTimeout: () {
-        itemP.addError();
-      });
-
-      if(tipo == 'OtroDano') {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => InspeccionVin(vin: widget.vin))
+        dano = Dano(
+          vin: widget.vin,
+          panel: 'Compra',
+          registroTipo: 'Regular',
+          // area: int.parse(selectArea.toString()),
+          // tipo: int.parse(selectTipo.toString()),
+          // severidad: selectSeve.toString(),
+          area: int.parse(_areaTextController.text.trim()),
+          tipo: int.parse(_tipoTextController.text.trim()),
+          severidad: _severidadTextController.text.trim(),
+          // area: int.parse(_areaTextController.text.trim()),
+          // tipo: int.parse(_tipoTextController.text.trim()),
+          // severidad: _severidadTextController.text.trim(),
+          // area: int.parse(_area),
+          // tipo: int.parse(_tipo),
+          // severidad: _severidad,
+          notas: _notasTextController.text,
+          estado: 'A',
+          fecha_creacion: fecha
         );
-      }
-      else {
-        var datos = await DatabaseProvider.db.obtenerInfoVin(widget.vin);
-        setState(() {
-          resumen = datos;
+
+        await DatabaseProvider.db.insertarDano(dano!).then((value) async {
+          itemP.addBoton();
+          itemP.deleteBoton();
+          
+          for(var ed in evidenciasDano) {
+            evidencia = Evidencia(
+              vin: widget.vin,
+              iddano: value,
+              nombre: null,
+              archivo: ed,
+              fechahora: fechaH
+            );
+
+            await DatabaseProvider.db.insertarEvidencia(evidencia!).then((value) {
+            }).timeout(const Duration(seconds: 60), onTimeout: () {
+              itemP.addError();
+            });
+          }       
+
+
+                Fluttertoast.showToast(
+              msg: "Guardado con Exito!",
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.green,
+              textColor: Colors.white,
+              fontSize: 20
+            );                   
+        }).timeout(const Duration(seconds: 60), onTimeout: () {
+          itemP.addError();
         });
 
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenDano(resu: resumen)), (Route<dynamic> route) => false);
-      }
-      }
-      else {
-        Fluttertoast.showToast(
-          msg: "Tome las 4 fotografia",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 20
-        );
-      }
+        if(tipo == 'OtroDano') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => RegistroDano(vin: widget.vin))
+          );
+        }
+        else {
+          var datos = await DatabaseProvider.db.obtenerInfoVin(widget.vin);
+          setState(() {
+            resumen = datos;
+          });
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => ResumenDano(resu: resumen)), (Route<dynamic> route) => false);
+        }
+      // }
+      // else {
+      //   Fluttertoast.showToast(
+      //     msg: "Tome las 2 fotografia",
+      //     toastLength: Toast.LENGTH_LONG,
+      //     gravity: ToastGravity.BOTTOM,
+      //     timeInSecForIosWeb: 1,
+      //     backgroundColor: Colors.red,
+      //     textColor: Colors.white,
+      //     fontSize: 20
+      //   );
+      // }
     }
     else {
       Fluttertoast.showToast(

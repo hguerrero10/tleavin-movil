@@ -100,59 +100,59 @@ class _VentaDanosState extends State<VentaDanos> {
                       ]
                     ),
                     const SizedBox(height: 10),
-                    // TextFormField(
-                    //   controller: _areaTextController,
-                    //   keyboardType: TextInputType.number,
-                    //   validator: (value) {
-                    //     if(value == null || value.isEmpty) {
-                    //       return 'Favor de llenar el Area';
-                    //     }
-                    //     return null;
-                    //   },
-                    //   decoration: const InputDecoration(
-                    //     hintText: '* Escriba el Area',
-                    //     hintStyle: TextStyle(
-                    //       color: Colors.grey
-                    //     )
-                    //   )
-                    // ),
-                    _autoCompleteArea(),
+                    TextFormField(
+                      controller: _areaTextController,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if(value == null || value.isEmpty) {
+                          return 'Favor de llenar el Area';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        hintText: '* Escriba el Area',
+                        hintStyle: TextStyle(
+                          color: Colors.grey
+                        )
+                      )
+                    ),
+                    // _autoCompleteArea(),
                     const SizedBox(height: 10),
-                    // TextFormField(
-                    //   controller: _tipoTextController,
-                    //   keyboardType: TextInputType.number,
-                    //   validator: (value) {
-                    //     if(value == null || value.isEmpty) {
-                    //       return 'Favor de llenar el Tipo';
-                    //     }
-                    //     return null;
-                    //   },
-                    //   decoration: const InputDecoration(
-                    //     hintText: '* Escriba el Tipo',
-                    //     hintStyle: TextStyle(
-                    //       color: Colors.grey
-                    //     )
-                    //   )
-                    // ),
-                    _autoCompleteTipo(),
+                    TextFormField(
+                      controller: _tipoTextController,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if(value == null || value.isEmpty) {
+                          return 'Favor de llenar el Tipo';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        hintText: '* Escriba el Tipo',
+                        hintStyle: TextStyle(
+                          color: Colors.grey
+                        )
+                      )
+                    ),
+                    // _autoCompleteTipo(),
                     const SizedBox(height: 10),
-                    // TextFormField(
-                    //   controller: _severidadTextController,
-                    //   keyboardType: TextInputType.number,
-                    //   validator: (value) {
-                    //     if(value == null || value.isEmpty) {
-                    //       return 'Favor de llenar la Severidad';
-                    //     }
-                    //     return null;
-                    //   },
-                    //   decoration: const InputDecoration(
-                    //     hintText: '* Escriba la Severidad',
-                    //     hintStyle: TextStyle(
-                    //       color: Colors.grey
-                    //     )
-                    //   )
-                    // ),
-                    _autoCompleteSeveridad(),
+                    TextFormField(
+                      controller: _severidadTextController,
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if(value == null || value.isEmpty) {
+                          return 'Favor de llenar la Severidad';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        hintText: '* Escriba la Severidad',
+                        hintStyle: TextStyle(
+                          color: Colors.grey
+                        )
+                      )
+                    ),
+                    // _autoCompleteSeveridad(),
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: _notasTextController,
@@ -334,19 +334,19 @@ class _VentaDanosState extends State<VentaDanos> {
     var formato = DateFormat('yyyy-MM-dd hh:mm:ss'); 
     var fecha = formato.format(DateTime.now());
 
-    var _area = _areaTextController.text.split('-')[0];
-    var _tipo = _tipoTextController.text.split('-')[0];
-    var _severidad = _severidadTextController.text.split('-')[0];
+    // var _area = _areaTextController.text.split('-')[0];
+    // var _tipo = _tipoTextController.text.split('-')[0];
+    // var _severidad = _severidadTextController.text.split('-')[0];
 
     if(_formKey.currentState!.validate()) {
-      if(evidenciasDano.isNotEmpty) {
+      // if(evidenciasDano.isNotEmpty) {
         dano = Dano(
           vin: widget.vin,
           panel: 'Venta',
           registroTipo: 'Regular',
-          area: int.parse(_area),
-          tipo: int.parse(_tipo),
-          severidad: _severidad,
+          area: int.parse(_areaTextController.text),
+          tipo: int.parse(_tipoTextController.text),
+          severidad: _severidadTextController.text,
           notas: _notasTextController.text,
           estado: 'A',
           fecha_creacion: fecha
@@ -401,18 +401,18 @@ class _VentaDanosState extends State<VentaDanos> {
             evidenciasDano.clear();
             // verFinalizar = true;
           });
-      }
-      else {
-        Fluttertoast.showToast(
-          msg: "Agregar una Fotografia",
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 20
-        );
-      }
+      // }
+      // else {
+      //   Fluttertoast.showToast(
+      //     msg: "Agregar una Fotografia",
+      //     toastLength: Toast.LENGTH_LONG,
+      //     gravity: ToastGravity.BOTTOM,
+      //     timeInSecForIosWeb: 1,
+      //     backgroundColor: Colors.red,
+      //     textColor: Colors.white,
+      //     fontSize: 20
+      //   );
+      // }
     }
     else {
       Fluttertoast.showToast(

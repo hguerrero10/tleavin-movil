@@ -7,7 +7,8 @@ import 'package:tleavin_mobil/database/db.dart';
 import 'package:tleavin_mobil/model/vin.dart';
 import 'package:tleavin_mobil/provider/items_provider.dart';
 import 'package:tleavin_mobil/src/home/inicio.dart';
-import 'package:tleavin_mobil/src/pages/vin/inspeccion_vin.dart';
+import 'package:tleavin_mobil/src/pages/dano/registro_dano.dart';
+// import 'package:tleavin_mobil/src/pages/vin/inspeccion_vin.dart';
 import 'package:tleavin_mobil/src/widgets/cuerpo.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'dart:developer';
@@ -76,8 +77,8 @@ class _CompraVinState extends State<CompraVin> {
               child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  _dropDownCliente(),
-                  const SizedBox(height: 10),
+                  // _dropDownCliente(),
+                  // const SizedBox(height: 10),
                   TextField(
                     controller: _qrTextController,
                     maxLength: 17,
@@ -132,7 +133,7 @@ class _CompraVinState extends State<CompraVin> {
                     onPressed: () async {
                       qrbar = _qrTextController.text;
 
-                      if(itemP.clienteSeleccionado != null){
+                      // if(itemP.clienteSeleccionado != null){
                         if(_qrTextController.text.isNotEmpty && (_qrTextController.text.length >= 17)) {
                           await checarVinExistente(qrbar);
 
@@ -162,18 +163,18 @@ class _CompraVinState extends State<CompraVin> {
                             fontSize: 20
                           );
                         }
-                      }
-                      else {
-                        Fluttertoast.showToast(
-                          msg: "Seleccione el Cliente",
-                          toastLength: Toast.LENGTH_LONG,
-                          gravity: ToastGravity.BOTTOM,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          fontSize: 20
-                        );
-                      }
+                      // }
+                      // else {
+                      //   Fluttertoast.showToast(
+                      //     msg: "Seleccione el Cliente",
+                      //     toastLength: Toast.LENGTH_LONG,
+                      //     gravity: ToastGravity.BOTTOM,
+                      //     timeInSecForIosWeb: 1,
+                      //     backgroundColor: Colors.red,
+                      //     textColor: Colors.white,
+                      //     fontSize: 20
+                      //   );
+                      // }
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
@@ -259,7 +260,7 @@ class _CompraVinState extends State<CompraVin> {
       cartaporte: null,
       vin: valorvin,
       distrib_clave: null,
-      dest_nombre: null,
+      dest_nombre: 'Compra',
       ruta_clave: null,
       ruta_nombre: itemP.usuario!.usuario!,
       origen: itemP.usuario!.locacion!,
@@ -278,7 +279,7 @@ class _CompraVinState extends State<CompraVin> {
       itemP.addBoton();
       itemP.deleteBoton();
       
-      Navigator.push(context, MaterialPageRoute(builder: (context) => InspeccionVin(vin: valorvin)));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => RegistroDano(vin: valorvin)));
     }).timeout(const Duration(seconds: 30), onTimeout: () {
       itemP.addError();
     });

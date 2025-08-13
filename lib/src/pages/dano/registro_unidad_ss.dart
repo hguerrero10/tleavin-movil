@@ -97,7 +97,7 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
 
   obtenerResumen(v) async {
     if(itemP.clienteSeleccionado != "GM") {
-      if(evidenciasDano.length >= 4) {
+      if(evidenciasDano.length >= 2) {
         await guardarDano();
         
         var datos = await DatabaseProvider.db.obtenerInfoVin(v);
@@ -236,12 +236,12 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
                     child: TextFormField(
                       controller: _severidadTextController,
                       keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if(value == null || value.isEmpty) {
-                          return 'Favor de llenar la Severidad';
-                        }
-                        return null;
-                      },
+                      // validator: (value) {
+                      //   if(value == null || value.isEmpty) {
+                      //     return 'Favor de llenar la Severidad';
+                      //   }
+                      //   return null;
+                      // },
                       decoration: const InputDecoration(
                         hintText: 'Escriba la Severidad',
                         hintStyle: TextStyle(
@@ -252,7 +252,7 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
                   ) : const SizedBox(),
                   const SizedBox(height: 20),
                   const Text(
-                    'Adjunte 4 fotografía por cada lado de la unidad.',
+                    'Adjunte 2 fotografía de la unidad.',
                     style: TextStyle(
                       fontSize: 15
                     )
@@ -325,16 +325,29 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
                                 children: <Widget> [
                                   Column(
                                     children: [
+                                         const SizedBox(height: 10),
                                       Image.asset(
                                         'assets/img/camara.png',
                                         width: 40,
                                         height: 40
                                       ),
-                                      const Text(
-                                        'Angulo 2',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold
-                                        )
+                                      const Column(
+                                        children: [
+                                          Text(
+                                            'Angulo 2',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold
+                                            )
+                                          ),
+                                          Text(
+                                            '(Opcional)',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.red,
+                                              fontSize: 12
+                                            )
+                                          )
+                                        ]
                                       )
                                     ]
                                   ),
@@ -352,16 +365,29 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
                                 children: <Widget>[
                                   Column(
                                     children: [
+                                      const SizedBox(height: 10),
                                       Image.asset(
                                         'assets/img/camara.png',
                                         width: 40,
                                         height: 40,
                                       ),
-                                      const Text(
-                                        'Angulo 3',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold
-                                        )
+                                       const Column(
+                                        children: [
+                                          Text(
+                                            'Angulo 3',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold
+                                            )
+                                          ),
+                                          Text(
+                                            '(Opcional)',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.red,
+                                              fontSize: 12
+                                            )
+                                          )
+                                        ]
                                       )
                                     ]
                                   ),
@@ -424,11 +450,11 @@ class _RegistroUnidadSSState extends State<RegistroUnidadSS> {
   guardarDano() async {
     dano = Dano(
       vin: widget.vin,
-      panel: null,
+      panel: 'Compra',
       registroTipo: widget.tipo,
-      area: null,
-      tipo: null,
-      severidad: itemP.clienteSeleccionado == 'GM' ? _severidadTextController.text : null,
+      area: 0,
+      tipo: 0,
+      severidad: '0',
       notas: _notasTextController.text,
       estado: 'A',
       fecha_creacion: fecha
