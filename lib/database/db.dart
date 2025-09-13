@@ -991,7 +991,7 @@ Future<int> asignarVinViaje(vv) async {
 
 
 
-Future<List<Vin>> fetchVINServer(vin, idviaje) async {
+Future<List<Vin>> fetchVINServer(vin, tipo, idviaje) async {
   Database db = await database;
   List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM vin WHERE vin = '$vin'");
 
@@ -1001,7 +1001,7 @@ Future<List<Vin>> fetchVINServer(vin, idviaje) async {
     Vin vi = Vin.fromMap(i);
 
     List<Dano> dano = [];
-    dano = await fetchDanos(vi.vin, idviaje);
+    dano = await fetchDanos(vi.vin, tipo, idviaje);
     vi.danos = dano;
 
     listavines.add(vi);
@@ -1169,7 +1169,7 @@ Future<List<Vin>> fetchVINServer(vin, idviaje) async {
       Vin vi = Vin.fromMap(i);
 
       List<Dano> dano = [];
-      dano = await fetchDanos(vi.vin, idviaje);
+      dano = await fetchDanos(vi.vin,'', idviaje);
       vi.danos = dano;
 
       listavines.add(vi);
@@ -1229,7 +1229,7 @@ Future<List<Vin>> fetchVINServer(vin, idviaje) async {
       Vin vi = Vin.fromMap(i);
 
       List<Dano> dano = [];
-      dano = await fetchDanos(vi.vin, idviaje);
+      dano = await fetchDanos(vi.vin,'Venta', idviaje);
       vi.danos = dano;
 
       listavines.add(vi);
@@ -1238,9 +1238,9 @@ Future<List<Vin>> fetchVINServer(vin, idviaje) async {
     return listavines;
   }
 
-  Future<List<Dano>> fetchDanos(vin, idviaje) async {
+  Future<List<Dano>> fetchDanos(vin, tipo, idviaje) async {
     Database db = await database;
-    List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM dano WHERE vin = '$vin'");
+    List<Map<String, dynamic>> result = await db.rawQuery("SELECT * FROM dano WHERE vin = '$vin' and panel = '$tipo'");
 
     List<Dano> listaDanos = [];
 

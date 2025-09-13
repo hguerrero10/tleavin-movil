@@ -91,7 +91,7 @@ class _ResumenViajeState extends State<ResumenViaje> {
 
   obtenerDanos(v) async {
     List<Dano>? data;
-    data = await DatabaseProvider.db.fetchDanos(v,'');
+    data = await DatabaseProvider.db.fetchDanos(v,'', '');
 
     setState(() {
       dataDano = data;

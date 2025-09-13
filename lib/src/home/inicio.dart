@@ -455,7 +455,7 @@ class _InicioScreenState extends State<InicioScreen> {
     for (var element in vins) {
       var formato = DateFormat('yyyy-MM-dd hh:mm:ss');
       var fecha = formato.format(DateTime.now());
-      var vines = await DatabaseProvider.db.fetchVINServer(element['vin'].toString(), 4);
+      var vines = await DatabaseProvider.db.fetchVINServer(element['vin'].toString(),'', 4);
 
       try {
         var limpio = vines.toString();

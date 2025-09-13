@@ -289,7 +289,7 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                                           const SizedBox(width: 16),
                                         ]
                                       ),
-                                      const SizedBox(height: 12),
+                                      const SizedBox(height: 9),
                                       Row(
                                         children: [
                                           Expanded(
@@ -317,7 +317,36 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                                             )
                                           )
                                         ]
-                                      )
+                                      ),
+                                      const SizedBox(height: 12),
+                                                     Row(
+                              children: [
+                                Expanded(
+                                  child: Text.rich(
+                                    softWrap: false,
+                                    overflow: TextOverflow.fade,
+                                    TextSpan(
+                                      text: 'Sincronizado: ',
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.grey
+                                      ),
+                                      children: <InlineSpan>[
+                                        TextSpan(
+                                          text: listadevines[index].fecha_sync == 'null' ? 'Sin Sincronizar' : listadevines[index].fecha_sync,
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.black
+                                          )
+                                        )
+                                      ]
+                                    )
+                                  )
+                                )
+                              ]
+                            )
                                     ]
                                   )
                                 )
@@ -540,7 +569,7 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                                 const SizedBox(width: 16),
                               ]
                             ),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 9),
                             Row(
                               children: [
                                 Expanded(
@@ -557,6 +586,35 @@ class _VinsDisponiblesState extends State<VinsDisponibles> {
                                       children: <InlineSpan>[
                                         TextSpan(
                                           text: da[index].compra == 1 ? 'Si' : 'No',
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.black
+                                          )
+                                        )
+                                      ]
+                                    )
+                                  )
+                                )
+                              ]
+                            ),
+                            const SizedBox(height: 12),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text.rich(
+                                    softWrap: false,
+                                    overflow: TextOverflow.fade,
+                                    TextSpan(
+                                      text: 'Sincronizado: ',
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.grey
+                                      ),
+                                      children: <InlineSpan>[
+                                        TextSpan(
+                                          text: da[index].fecha_sync,
                                           style: const TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.w700,

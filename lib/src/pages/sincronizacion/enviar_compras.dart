@@ -656,7 +656,7 @@ class _EnviarCompraVinState extends State<EnviarCompraVin> {
 
       var formato = DateFormat('yyyy-MM-dd hh:mm:ss');
       var fecha = formato.format(DateTime.now());
-      var vines = await DatabaseProvider.db.fetchVINServer(element['vin'].toString(), idunico);
+      var vines = await DatabaseProvider.db.fetchVINServer(element['vin'].toString(), 'Compra', idunico);
 
       try {
         var limpio = vines.toString();
@@ -668,6 +668,8 @@ class _EnviarCompraVinState extends State<EnviarCompraVin> {
         if(limpio.endsWith(']')) {
           limpio = limpio.substring(0, limpio.length - 1);
         }
+
+        log(limpio);
 
         http.Response response = await http.post(Uri.parse(urlEnviarData), body: limpio, headers: {"Content-Type": "application/json"});
 
@@ -723,7 +725,6 @@ class _EnviarCompraVinState extends State<EnviarCompraVin> {
             textColor: Colors.white,
             fontSize: 20
           );
-
           itemP.addError();
         }
       } 
