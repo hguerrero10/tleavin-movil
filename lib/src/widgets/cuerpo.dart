@@ -43,7 +43,7 @@ class _CuerpoState extends State<Cuerpo> {
                   GestureDetector(
                     onDoubleTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const InfoApp())),
                     child: Text(
-                      'Version: 2.2.0',
+                      'Version: 2.3.0',
                       style:  TextStyle(
                         fontSize: 12,
                         color: Colors.grey[400]

@@ -430,22 +430,56 @@ class _VentaDanosState extends State<VentaDanos> {
 
   Future<void> getCamara(foto) async {
     final List<XFile> pickedFileList = <XFile>[];
-    final photo = await picker.pickImage(
-      source: ImageSource.camera,
-      maxHeight: 720,
-      maxWidth: 1280,
-      imageQuality: 100
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+      return SafeArea(
+        child: Wrap(
+        children: <Widget>[
+          ListTile(
+          leading: const Icon(Icons.camera_alt),
+          title: const Text('Tomar foto'),
+          onTap: () async {
+            Navigator.of(context).pop();
+            final photo = await picker.pickImage(
+            source: ImageSource.camera,
+            maxHeight: 720,
+            maxWidth: 1280,
+            imageQuality: 100,
+            );
+            if (photo != null) {
+            await GallerySaver.saveImage(photo.path, albumName: 'TLEAVIN');
+            setState(() {
+              pickedFileList.add(XFile(photo.path));
+              convertirBase64(photo.path, foto);
+            });
+            }
+          },
+          ),
+          ListTile(
+          leading: const Icon(Icons.photo_library),
+          title: const Text('Elegir de galería'),
+          onTap: () async {
+            Navigator.of(context).pop();
+            final List<XFile>? photos = await picker.pickMultiImage();
+            if (photos != null && photos.isNotEmpty) {
+            for (var i = 0; i < photos.length; i++) {
+              await GallerySaver.saveImage(photos[i].path, albumName: 'TLEAVIN');
+              setState(() {
+              pickedFileList.add(photos[i]);
+              convertirBase64(photos[i].path, foto);
+              });
+            }
+            }
+          },
+          ),
+        ],
+        ),
+      );
+      },
     );
-
-    if(photo != null) {
-      await GallerySaver.saveImage(photo.path, albumName: 'TLEAVIN');
-      setState(() {
-        pickedFileList.add(XFile(photo.path));
-        convertirBase64(photo.path, foto);
-      });
-    }
   }
-
+  
   Future<void> _dialogBuilder(BuildContext context) {
     return showDialog<void>(
       context: context,
@@ -550,6 +584,7 @@ class _VentaDanosState extends State<VentaDanos> {
 
     return resultados;
   }
+  
   Widget _autoCompleteArea() {
     return Container(
       padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
